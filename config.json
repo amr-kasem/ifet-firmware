@@ -1,0 +1,160 @@
+
+{
+    "device_id": "device1",
+    "status": "idle",
+    "current_speed": 0,
+    "toggleBtn": "static_load",
+    "mqtt": {
+        "broker_host": "10.1.10.185",
+        "broker_port": 1883,
+        "username": "",
+        "password": ""
+    },
+    "sensors": [
+        {
+            "name": "1",
+            "port": "/dev/ttyACM0",
+            "address": "1",
+            "baudrate": 9600,
+            "bytesize": 8,
+            "parity": "PARITY_NONE",
+            "stopbits": 1,
+            "timeout": 1,
+            "mode": "MODE_RTU",
+            "clear_buffers_before_each_transaction": true,
+            "close_port_after_each_call": true,
+            "debug": false,
+            "frequency": 20,
+            "value": "",
+            "active":true,
+            "type": "pressure"
+        },
+        {
+            "name": "2",
+            "port": "/dev/ttyACM0",
+            "address": "2",
+            "baudrate": 9600,
+            "bytesize": 8,
+            "parity": "PARITY_NONE",
+            "stopbits": 1,
+            "timeout": 1,
+            "mode": "MODE_RTU",
+            "clear_buffers_before_each_transaction": true,
+            "close_port_after_each_call": true,
+            "debug": false,
+            "frequency": 20,
+            "value": "",
+            "active":true,
+            "type": "pressure"
+
+        },
+        {
+            "name": "3",
+            "port": "/dev/ttyACM0",
+            "address": "3",
+            "baudrate": 9600,
+            "bytesize": 8,
+            "parity": "PARITY_NONE",
+            "stopbits": 1,
+            "timeout": 1,
+            "mode": "MODE_RTU",
+            "clear_buffers_before_each_transaction": true,
+            "close_port_after_each_call": true,
+            "debug": false,
+            "frequency": 20,
+            "value": "",
+            "active":true,
+            "type": "pressure"
+        },
+        {
+            "name": "Flow",
+            "port": "/dev/ttyACM0",
+            "address": "11",
+            "baudrate": 9600,
+            "bytesize": 8,
+            "parity": "PARITY_NONE",
+            "stopbits": 1,
+            "timeout": 1,
+            "mode": "MODE_RTU",
+            "clear_buffers_before_each_transaction": true,
+            "close_port_after_each_call": true,
+            "debug": false,
+            "frequency": 20,
+            "value": "",
+            "active":false,
+            "type": "flow",
+            "pressure_sensor_device_id": "device1",
+            "pressure_sensor_address": 2
+        }
+    ],
+
+    "vdf": {
+        "name": "vfd1",
+        "port": "/dev/ttyACM0",
+        "address": "5",
+        "baudrate": 9600,
+        "bytesize": 8,
+        "parity": "PARITY_NONE",
+        "stopbits": 1,
+        "timeout": 1,
+        "mode": "MODE_RTU",
+        "clear_buffers_before_each_transaction": true,
+        "close_port_after_each_call": true,
+        "debug": false,
+        "frequency": 20
+    },
+
+    "valves": [
+    {
+        "name": "1",
+        "pin": 13,
+        "role": ["ACTIVE", "POSITIVE"],
+        "value": 0,
+        "address": "1"
+    },
+    {
+        "name": "2",
+        "pin": 35,
+        "role": ["ACTIVE", "NEGATIVE"],
+        "value": 0,
+        "address": "2"
+    },
+    {
+        "name": "3",
+        "pin": 31,
+        "role": ["ACTIVE", "POSITIVE", "NEGATIVE_RELEASE"],
+        "value": 0,
+        "address": "3"
+    },
+    {
+        "name": "4",
+        "pin": 15,
+        "role": ["ACTIVE", "NEGATIVE", "POSITIVE_RELEASE"],
+        "value": 0,
+        "address": "4"
+    },
+    {
+        "name": "5",
+        "pin": 11,
+        "role": ["FORCE", "ALWAYSON", "MANUAL"],
+        "value": 0,
+        "address": "17"
+    },
+    {
+        "name": "6",
+        "pin": 37,
+        "role": ["FORCE", "ALWAYSOFF", "MANUAL"],
+        "value": 0,
+        "address": "26"
+    }
+    ],
+    "valves_status": {
+        "valve1": 1,
+        "valve2": 1,
+        "valve3": 1,
+        "valve4": 1,
+        "valve5": 1,
+        "valve6": 1
+    }
+}
+

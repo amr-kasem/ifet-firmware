@@ -1,0 +1,13 @@
+[Unit]
+Description=Firmware Sensors Service
+After=network.target mosquitto.service
+
+[Service]
+User=labadm
+Group=labadm
+WorkingDirectory=/home/labadm/firmware
+ExecStart=/usr/bin/python3 /home/labadm/firmware/sensors_node/sensor_node.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
