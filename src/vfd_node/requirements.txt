@@ -1,0 +1,4 @@
+minimalmodbus
+pyserial
+paho-mqtt
+asyncio

@@ -1,11 +1,11 @@
-import minimalmodbus
-import serial
 import os
 import time
 import logging
 import struct
 import math
 import paho.mqtt.client as mqtt
+import minimalmodbus
+import serial
 
 
 class Sensor:

@@ -1,0 +1,26 @@
+services:
+  sensors_service:
+    build: ./src/sensors_node/
+    volumes:
+      - ./deployment/config.json:/app/config.json
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+  
+  state_machine_service:
+    build: ./src/state_machine/
+    volumes:
+      - ./deployment/config.json:/app/config.json
+  
+  valves_service:
+    build: ./src/valves_node/
+    volumes:
+      - ./deployment/config.json:/app/config.json
+    devices:
+      - /dev/gpiomem:/dev/gpiomem
+  
+  vfd_service:
+    build: ./src/vfd_node/
+    volumes:
+      - ./deployment/config.json:/app/config.json
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
