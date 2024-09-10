@@ -5,18 +5,20 @@ services:
       - ./deployment/config.json:/app/config.json
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
+    restart: always
   
   state_machine_service:
     build: ./src/state_machine/
     volumes:
       - ./deployment/config.json:/app/config.json
+    restart: always
   
   valves_service:
     build: ./src/valves_node/
+    privileged: true
     volumes:
       - ./deployment/config.json:/app/config.json
-    devices:
-      - /dev/gpiomem:/dev/gpiomem
+    restart: always
   
   vfd_service:
     build: ./src/vfd_node/
@@ -24,3 +26,4 @@ services:
       - ./deployment/config.json:/app/config.json
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
+    restart: always
