@@ -1,3 +1,9 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath("/app"))
+# Get the current working directory
+current_dir = os.getcwd()
+print(f"Current working directory: {current_dir}")
 from vfd_handler.vfd_node import VFDController
 from sensors_handler.sensor_node import SensorHandler
 from serial_com.serial_com import SerialCom

@@ -1,19 +1,22 @@
 import minimalmodbus
 import serial
+import json
 from typing import Union
 
 class SerialCom:
-    def __init__(self, config):
-        self.port = config["port"]
-        self.address = int(config["address"])
-        self.baudrate = config["baudrate"]
-        self.bytesize = config["bytesize"]
-        self.parity = getattr(serial, config["parity"])
-        self.stopbits = config["stopbits"]
-        self.timeout = config["timeout"]
-        self.mode = getattr(minimalmodbus, config["mode"])
-        self.clear_buffers_before_each_transaction = config["clear_buffers_before_each_transaction"]
-        self.close_port_after_each_call = config["close_port_after_each_call"]
+    def __init__(self, config_file):
+        with open(config_file) as f:
+            config = json.load(f)
+            self.port = config["port"]
+            self.address = int(config["address"])
+            self.baudrate = config["baudrate"]
+            self.bytesize = config["bytesize"]
+            self.parity = getattr(serial, config["parity"])
+            self.stopbits = config["stopbits"]
+            self.timeout = config["timeout"]
+            self.mode = getattr(minimalmodbus, config["mode"])
+            self.clear_buffers_before_each_transaction = config["clear_buffers_before_each_transaction"]
+            self.close_port_after_each_call = config["close_port_after_each_call"]
         self.comport = minimalmodbus.Instrument(self.port, self.address)
         self.comport.serial.baudrate = self.baudrate
         self.comport.serial.bytesize = self.bytesize

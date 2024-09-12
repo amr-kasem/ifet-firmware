@@ -29,12 +29,10 @@ services:
   #     - /dev/ttyACM0:/dev/ttyACM0
   #   restart: always
 
-    serial_service:
-      build: ./src/serial_service/
-      volumes:
-        - ./deployment/config.json:/app/config.json
-      devices:
-        - /dev/ttyACM0:/dev/ttyACM0
-      restart: always
-
-
+  serial_service:
+    build: ./src/serial_service/
+    volumes:
+      - ./deployment/config.json:/app/config.json
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    restart: always

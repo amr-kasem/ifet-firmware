@@ -2,5 +2,5 @@ FROM python:3.9.20
 WORKDIR /app
 COPY ./requirements.txt ./requiments.txt
 RUN pip install -r requiments.txt
-COPY ./* ./
+ADD ./ ./
 CMD ["python", "sensor_node.py"]

@@ -3,8 +3,8 @@ import paho.mqtt.client as mqtt
 import logging
 import time
 
-from sensor import Sensor as PressureSensor
-from flow_sensor import Sensor as FlowSensor
+from sensors_handler.sensor import Sensor as PressureSensor
+from sensors_handler.flow_sensor import Sensor as FlowSensor
 
 class SensorHandler:
     def __init__(self, config_file):
