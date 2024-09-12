@@ -1,11 +1,11 @@
 services:
-  sensors_service:
-    build: ./src/sensors_node/
-    volumes:
-      - ./deployment/config.json:/app/config.json
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-    restart: always
+  # sensors_service:
+  #   build: ./src/sensors_node/
+  #   volumes:
+  #     - ./deployment/config.json:/app/config.json
+  #   devices:
+  #     - /dev/ttyACM0:/dev/ttyACM0
+  #   restart: always
   
   state_machine_service:
     build: ./src/state_machine/
@@ -20,12 +20,20 @@ services:
       - ./deployment/config.json:/app/config.json
     restart: always
   
-  vfd_service:
-    build: ./src/vfd_node/
-    volumes:
-      - ./deployment/config.json:/app/config.json
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-    restart: always
-    
+  # vfd_service:
+  #   build: ./src/vfd_node/
+  #   volumes:
+  #     - ./deployment/config.json:/app/config.json
+  #   devices:
+  #     - /dev/ttyACM0:/dev/ttyACM0
+  #   restart: always
+
+    serial_service:
+      build: ./src/serial_service/
+      volumes:
+        - ./deployment/config.json:/app/config.json
+      devices:
+        - /dev/ttyACM0:/dev/ttyACM0
+      restart: always
+
 
