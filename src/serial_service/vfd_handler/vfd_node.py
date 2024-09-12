@@ -40,6 +40,7 @@ class VFDController:
             config = json.load(f)
 
         self.device_id = config["device_id"]
+        self.address = config["address"]
 
         # MQTT configuration
         mqtt_config = config['mqtt']
@@ -93,7 +94,7 @@ class VFDController:
 
     def start_vfd(self):
         try:
-            self.serial_com.write_register(self.startstopAddr, self.startCmd, self.startDec, self.writeFC)
+            self.serial_com.write_register(self.address,self.startstopAddr, self.startCmd, self.startDec, self.writeFC)
         except Exception as e:
             self.logger.error(f"Ignored writing command: {e}")
 
@@ -101,7 +102,7 @@ class VFDController:
 
     def stop_vfd(self):
         try:
-            self.serial_com.write_register(self.startstopAddr, self.stopCmd, self.startDec, self.writeFC)
+            self.serial_com.write_register(self.address,self.startstopAddr, self.stopCmd, self.startDec, self.writeFC)
         except Exception as e:
             self.logger.error(f"Ignored writing command: {e}")
 
@@ -109,7 +110,7 @@ class VFDController:
 
     def set_frequency(self, frequency):
         try:
-            self.serial_com.write_register(self.setFreqAddr, frequency, self.setFreqDec, self.writeFC)
+            self.serial_com.write_register(self.address,self.setFreqAddr, frequency, self.setFreqDec, self.writeFC)
         except Exception as e:
             self.logger.error(f"Ignored writing command: {e}")
 
@@ -117,12 +118,12 @@ class VFDController:
 
     def emergency_stop(self):
         try:
-            self.serial_com.write_register(self.startstopAddr, self.stopCmd, self.startDec, self.writeFC)
+            self.serial_com.write_register(self.address,self.startstopAddr, self.stopCmd, self.startDec, self.writeFC)
         except Exception as e:
             self.logger.error(f"Ignored writing command: {e}")
         while True:
             try:
-                speed = self.serial_com.read_register(self.readFreqAddr, 2, self.readFC)
+                speed = self.serial_com.read_register(self.address,self.readFreqAddr, 2, self.readFC)
             except Exception as e:
                 self.logger.error(f"Ignored reading command: {e}")
             if speed == 0:
@@ -134,7 +135,7 @@ class VFDController:
     def publish_feedback(self):
         while True:
             try:
-                speed = self.serial_com.read_register(self.readFreqAddr, 2, self.readFC)
+                speed = self.serial_com.read_register(self.address,self.readFreqAddr, 2, self.readFC)
                 self.client.publish(f"{self.device_id}/vfd/feedback", speed)
             except Exception as e:
                 self.logger.error(f"Failed to read VFD feedback: {e}")

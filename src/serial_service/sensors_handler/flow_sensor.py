@@ -10,6 +10,7 @@ from serial_com.serial_com import SerialCom
 class Sensor:
     def __init__(self, config, serial_com:SerialCom):
         self.name = config["name"]
+        self.address = config["address"]
         self.debug = config["debug"]
         self.frequency = config["frequency"]
         self.serial_com = serial_com
@@ -49,7 +50,7 @@ class Sensor:
     def read_32bit_register_as_float(self,address):
         try:
             # Read two 16-bit registers (4 bytes) from the given address
-            registers = self.serial_com.read_registers(address, 2, functioncode=3)
+            registers = self.serial_com.read_registers(self.address, address, 2, functioncode=3)
             print(f"Raw register values: {registers}")
             # Convert the two 16-bit registers to a 32-bit float using IEEE 754 format
             packed_data = struct.pack('>HH', registers[0], registers[1])

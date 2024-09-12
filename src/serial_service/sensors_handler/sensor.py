@@ -7,8 +7,8 @@ from serial_com.serial_com import SerialCom
 class Sensor:
     def __init__(self, config, serial_com:SerialCom):
         self.serial_com = serial_com
-        self.release_lock()
         self.name = config["name"]
+        self.address = config["address"]
         self.debug = config["debug"]
         self.frequency = config["frequency"]
         self.logger = self.setup_logger()
@@ -26,10 +26,8 @@ class Sensor:
 
     def read(self):
         try:
-            self.last_t = self.serial_com.read_float(1028, 3) * 144
+            self.last_t = self.serial_com.read_float(self.address, 1028, 3) * 144
         except:
             self.logger.error('ignored writing [read] command')
         return self.last_t
     
-    def __del__(self):
-        self.release_lock()
