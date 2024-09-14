@@ -5,9 +5,11 @@ import time
 
 from sensors_handler.sensor import Sensor as PressureSensor
 from sensors_handler.flow_sensor import Sensor as FlowSensor
+from serial_com.serial_com import SerialCom
 
 class SensorHandler:
-    def __init__(self, config_file):
+    def __init__(self, config_file, serial_com : SerialCom):
+        self.serial_com = serial_com
         self.sensors: list = []
         self.load_config(config_file)
         self.mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
@@ -16,7 +18,6 @@ class SensorHandler:
         self.mqtt_connected = False
         self.logger = self.setup_logger()  # Initialize logger with class name
         self.connect_mqtt_broker()
-
                 
     def setup_logger(self):
         logger = logging.getLogger(self.__class__.__name__)
@@ -36,10 +37,10 @@ class SensorHandler:
 
     def add_sensor(self, sensor_config):
         if sensor_config['type'] == 'pressure':
-            sensor = PressureSensor(sensor_config)
+            sensor = PressureSensor(sensor_config,serial_com=self.serial_com)
             self.sensors.append(sensor)
         elif sensor_config['type'] == 'flow':
-            sensor = FlowSensor(sensor_config)
+            sensor = FlowSensor(sensor_config,serial_com=self.serial_com)
             self.sensors.append(sensor)
 
     def connect_mqtt_broker(self):
@@ -75,7 +76,8 @@ class SensorHandler:
             else:
                 self.logger.warning("MQTT broker not connected. Cannot publish reading.")
         except Exception as e:
-            self.logger.error(f"Error sending reading for {sensor.name}: {e}")
+            # self.logger.error(f"Error sending reading for {sensor.name}: {e}")
+            pass
 
     def run(self):
         while True:
