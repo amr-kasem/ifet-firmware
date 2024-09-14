@@ -1,0 +1,6 @@
+FROM python:3.9.20
+WORKDIR /app
+COPY ./requirements.txt ./requiments.txt
+RUN pip install -r requiments.txt
+ADD ./ ./
+CMD ["python", "fake_sensor_and_vfd.py"]
