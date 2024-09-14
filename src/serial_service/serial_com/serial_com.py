@@ -1,12 +1,15 @@
 import minimalmodbus
 import serial
 import json
+import threading
+import logging
 from typing import Union
 
 class SerialCom:
     def __init__(self, config_file):
+        self.lock = threading.Lock()
         with open(config_file) as f:
-            config = json.load(f)
+            config = json.load(f)["serial"]
             self.port = config["port"]
             self.baudrate = config["baudrate"]
             self.bytesize = config["bytesize"]
@@ -25,39 +28,44 @@ class SerialCom:
         self.comport.mode = self.mode
         self.comport.clear_buffers_before_each_transaction = self.clear_buffers_before_each_transaction
         self.comport.close_port_after_each_call = self.close_port_after_each_call
-        
-    def _set_address(self, address: int):
-        """Helper method to set the address for the instrument."""
-        self.comport.address = address
-    
+        logging.basicConfig(level=logging.INFO)
+
+    def _execute_with_lock(self, address: int, func, *args, **kwargs):
+        """Helper method to execute a function with address setting and locking."""
+        with self.lock:
+            logging.info(f"Acquiring lock and setting address to {address}")
+            self.comport.address = address
+            try:
+                result = func(*args, **kwargs)
+                logging.info(f"Operation successful for address {address}")
+                return result
+            except Exception as e:
+                logging.error(f"Error during operation at address {address}: {e}")
+                raise
+            finally:
+                logging.info(f"Releasing lock for address {address}")
+
     def read_float(self, address: int, register: int, number_of_registers: int):
-        self._set_address(address)
-        return self.comport.read_float(register, number_of_registers)
-    
+        return self._execute_with_lock(address, self.comport.read_float, register, number_of_registers)
+
     def read_int(self, address: int, register: int, number_of_registers: int):
-        self._set_address(address)
-        return self.comport.read_int(register, number_of_registers)
-    
+        return self._execute_with_lock(address, self.comport.read_int, register, number_of_registers)
+
     def read_string(self, address: int, register: int, number_of_registers: int):
-        self._set_address(address)
-        return self.comport.read_string(register, number_of_registers)
-    
+        return self._execute_with_lock(address, self.comport.read_string, register, number_of_registers)
+
     def write_float(self, address: int, register: int, value: float, number_of_decimals: int = 0):
-        self._set_address(address)
-        return self.comport.write_float(register, value, number_of_decimals=number_of_decimals)
-    
+        return self._execute_with_lock(address, self.comport.write_float, register, value, number_of_decimals)
+
     def write_int(self, address: int, register: int, value: int):
-        self._set_address(address)
-        return self.comport.write_int(register, value)
-    
+        return self._execute_with_lock(address, self.comport.write_int, register, value)
+
     def write_string(self, address: int, register: int, value: str):
-        self._set_address(address)
-        return self.comport.write_string(register, value)
-    
+        return self._execute_with_lock(address, self.comport.write_string, register, value)
+
     def read_register(self, address: int, register: int, number_of_registers: int, functioncode: int = 1):
-        self._set_address(address)
-        return self.comport.read_register(register, number_of_registers, functioncode)
-    
+        return self._execute_with_lock(address, self.comport.read_register, register, number_of_registers, functioncode)
+
     def write_register(
         self, 
         address: int, 
@@ -77,8 +85,7 @@ class SerialCom:
         :param functioncode: Modbus function code to use (default is 16).
         :param signed: Whether the value is signed (default is False).
         """
-        self._set_address(address)
-        try:
+        def write_func():
             if number_of_decimals > 0:
                 self.comport.write_register(
                     registeraddress, 
@@ -96,13 +103,12 @@ class SerialCom:
                     signed=signed
                 )
             print(f"Successfully wrote value {value} to register {registeraddress} at address {address}.")
-        except Exception as e:
-            print(f"Error writing to register {registeraddress} at address {address}: {e}")
+        
+        self._execute_with_lock(address, write_func)
 
     def read_block(self, address: int, register: int, number_of_registers: int):
-        self._set_address(address)
-        return self.comport.read_block(register, number_of_registers)
-    
+        return self._execute_with_lock(address, self.comport.read_block, register, number_of_registers)
+
     def close(self):
         self.comport.close()
         

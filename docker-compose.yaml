@@ -17,6 +17,7 @@ services:
 
   # sensors_service:
   #   build: ./src/sensors_node/
+  #   ipc: "host"
   #   volumes:
   #     - ./deployment/config.json:/app/config.json
   #   devices:

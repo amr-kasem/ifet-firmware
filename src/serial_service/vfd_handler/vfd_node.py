@@ -23,7 +23,6 @@ class VFDController:
 
         self.logger = self.setup_logger()
 
-        self.connect_vfd()
         self.setup_mqtt()
 
     def setup_logger(self):
@@ -40,7 +39,7 @@ class VFDController:
             config = json.load(f)
 
         self.device_id = config["device_id"]
-        self.address = config["address"]
+        self.address = int(config["vfd"]["address"])
 
         # MQTT configuration
         mqtt_config = config['mqtt']
