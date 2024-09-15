@@ -10,8 +10,15 @@ class FakeSensorAndVFD:
         self.vfd_running = False
         self.mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.setup_mqtt()
-        logging.basicConfig(level=logging.INFO)
+        
+        # Set up logging to file with max size of 1 MB and keep the latest 5 files
+        log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        log_handler = logging.handlers.RotatingFileHandler('logs/fake_sensor_and_vfd.log', maxBytes=1_000_000, backupCount=5)
+        log_handler.setFormatter(log_formatter)
+        
         self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+        self.logger.addHandler(log_handler)
 
     def setup_mqtt(self):
         self.mqtt_client.on_connect = self.on_connect

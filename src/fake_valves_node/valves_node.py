@@ -34,9 +34,11 @@ class FakeValveController:
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch = logging.StreamHandler()
         ch.setFormatter(formatter)
+        fh = logging.handlers.RotatingFileHandler('logs/fake_valve_controller.log', maxBytes=1_000_000, backupCount=5)
+        fh.setFormatter(formatter)
         logger.addHandler(ch)
+        logger.addHandler(fh)
         return logger
-
     def connect_mqtt(self):
         while True:
             try:
