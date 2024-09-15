@@ -1,7 +1,4 @@
 services:
-  
-
-
   state_machine_service:
     build: ./src/state_machine/
     volumes:
@@ -10,49 +7,31 @@ services:
       - ./deployment/logs/state_machine.log:/app/state_machine.log
     restart: always
   
-  # valves_service:
-  #   build: ./src/valves_node/
-  #   privileged: true
-  #   volumes:
-  #     - ./deployment/config.json:/app/config.json
-  #   restart: always
-
-  # sensors_service:
-  #   build: ./src/sensors_node/
-  #   ipc: "host"
-  #   volumes:
-  #     - ./deployment/config.json:/app/config.json
-  #   devices:
-  #     - /dev/ttyACM0:/dev/ttyACM0
-  #   restart: always
-  
-  
-  # vfd_service:
-  #   build: ./src/vfd_node/
-  #   volumes:
-  #     - ./deployment/config.json:/app/config.json
-  #   devices:
-  #     - /dev/ttyACM0:/dev/ttyACM0
-  #   restart: always
-
-  # serial_service:
-  #   build: ./src/serial_service/
-  #   volumes:
-  #     - ./deployment/config.json:/app/config.json
-  #   devices:
-  #     - /dev/ttyACM0:/dev/ttyACM0
-  #   restart: always
-
-  fake_serial_service:
-    build: ./src/fake_serial_service/
+  valves_service:
+    build: ./src/valves_node/
+    privileged: true
     volumes:
       - ./deployment/config/config.json:/app/config.json
     restart: always
 
-  fake_valves_service:
-    build: ./src/fake_valves_node/
+  serial_service:
+    build: ./src/serial_service/
     volumes:
       - ./deployment/config/config.json:/app/config.json
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
     restart: always
+
+  # fake_serial_service:
+  #   build: ./src/fake_serial_service/
+  #   volumes:
+  #     - ./deployment/config/config.json:/app/config.json
+  #   restart: always
+
+  # fake_valves_service:
+  #   build: ./src/fake_valves_node/
+  #   volumes:
+  #     - ./deployment/config/config.json:/app/config.json
+  #   restart: always
 
 

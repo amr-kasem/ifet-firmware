@@ -15,8 +15,13 @@ class ValveController:
     def __init__(self, config_file):
         self.logger = self.setup_logger()
 
-        with open(config_file) as f:
-            config = json.load(f)
+        try:
+            with open(config_file) as f:
+                config = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            self.logger.error(f"Error loading configuration file: {e}", exc_info=True)
+            raise
+
         self.valves = config.get('valves', [])
         self.device_id = config.get('device_id')
         mqtt_config = config.get('mqtt', {})
@@ -38,14 +43,19 @@ class ValveController:
         self.client.on_message = self.on_message
         self.client.on_disconnect = self.on_disconnect
         self.client.username_pw_set(self.username, self.password)
+
     def setup_logger(self):
         logger = logging.getLogger(self.__class__.__name__)
         logger.setLevel(logging.INFO)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch = logging.StreamHandler()
+        fh = logging.FileHandler('valve_controller.log')
         ch.setFormatter(formatter)
+        fh.setFormatter(formatter)
         logger.addHandler(ch)
+        logger.addHandler(fh)
         return logger
+
     def connect_mqtt(self):
         while True:
             try:
@@ -53,10 +63,10 @@ class ValveController:
                 self.client.loop_start()
                 break
             except Exception as e:
-                self.logger.error(f"MQTT connection failed: {e}")
+                self.logger.error(f"MQTT connection failed: {e}", exc_info=True)
                 time.sleep(5)  # Retry after 5 seconds
 
-    def on_connect(self, client, userdata, flags, rc,prop):
+    def on_connect(self, client, userdata, flags, rc, prop):
         self.logger.info(f"Connected to MQTT broker with result code {rc}")
         # Subscribe to valve control topics
         for valve in self.valves:
@@ -70,8 +80,7 @@ class ValveController:
             state = int(msg.payload)
             self.set_valve_state(topic, state)
         except Exception as e:
-            self.logger.error(f"Error processing MQTT message: {e}")
-        pass
+            self.logger.error(f"Error processing MQTT message: {e}", exc_info=True)
 
     def set_valve_state(self, valve_name, state):
         retry_count = 3
@@ -84,7 +93,7 @@ class ValveController:
                         self.logger.info(f"Valve '{valve_name}' state set to {state}")
                         break
             except Exception as e:
-                self.logger.error(f"Failed to set state for valve '{valve_name}': {e}")
+                self.logger.error(f"Failed to set state for valve '{valve_name}': {e}", exc_info=True)
                 time.sleep(1)  # Wait for 1 second before retrying
             else:
                 return
@@ -93,10 +102,12 @@ class ValveController:
     def run(self):
         self.connect_mqtt()
         while True:
-            self.client.publish(f'{self.device_id}/valves/status',json.dumps({v['name']: GPIO.input(v['pin']) for v in self.valves}))
-            time.sleep(0.2)  # Keep the script running to handle MQTT messages
+            try:
+                self.client.publish(f'{self.device_id}/valves/status', json.dumps({v['name']: GPIO.input(v['pin']) for v in self.valves}))
+                time.sleep(0.2)  # Keep the script running to handle MQTT messages
+            except Exception as e:
+                self.logger.error(f"Error during run loop: {e}", exc_info=True)
             
-    
     def cleanup(self):
         GPIO.cleanup()
         self.client.loop_stop()
