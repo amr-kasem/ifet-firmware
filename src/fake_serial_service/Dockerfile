@@ -3,4 +3,5 @@ WORKDIR /app
 COPY ./requirements.txt ./requiments.txt
 RUN pip install -r requiments.txt
 ADD ./ ./
+STOPSIGNAL SIGINT
 CMD ["python", "fake_sensor_and_vfd.py"]

@@ -72,10 +72,12 @@ class FakeValveController:
 
     def run(self):
         self.connect_mqtt()
-        while True:
-            self.client.publish(f'{self.device_id}/valves/status', json.dumps(self.valve_states))
-            time.sleep(0.2)
-
+        try:
+            while True:
+                self.client.publish(f'{self.device_id}/valves/status', json.dumps(self.valve_states))
+                time.sleep(0.2)
+        except KeyboardInterrupt:
+            self.logger.info("Keyboard interrupt detected. Stopping Service...")
     def cleanup(self):
         self.client.loop_stop()
         self.client.disconnect()

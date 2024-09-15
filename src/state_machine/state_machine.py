@@ -460,8 +460,11 @@ class ValveController:
         logger.warning("Disconnected from MQTT broker")
         self.force_stop = True
         self.exit = True
-        if self.task is not None: self.task.join()
-        if self.feedback_loop is not None: self.feedback_loop.join()
+        try:
+            if self.task is not None: self.task.join()
+            if self.feedback_loop is not None: self.feedback_loop.join()
+        except Exception as e:
+            logger.error(f"No threads to join: {e}")
         # self.retry_connect()
 
     def retry_connect(self):
@@ -510,8 +513,7 @@ class ValveController:
             self.trigger_event_flag = True
             
         elif topic_name == 'resume_cancel':
-            self.current_test_index = 0
-            self.test_index_wanted = 0
+            self.test_index_wanted = None
             self.cyclic_resume = False
             self.cycle_index = 0
             self.current_status = 'idle'
