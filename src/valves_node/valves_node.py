@@ -9,6 +9,7 @@ import RPi.GPIO as GPIO
 import json
 import logging
 import time
+import os
 import paho.mqtt.client as mqtt
 
 class ValveController:
@@ -46,7 +47,8 @@ class ValveController:
 
     def setup_logger(self):
         logger = logging.getLogger(self.__class__.__name__)
-        logger.setLevel(logging.ERROR)
+        self.logger.setLevel(logging.INFO)
+        os.makedirs('logs', exist_ok=True) 
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch = logging.StreamHandler()
         fh = logging.handlers.RotatingFileHandler('logs/valve_controller.log', maxBytes=1_000_000, backupCount=5)

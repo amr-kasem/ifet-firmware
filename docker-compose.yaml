@@ -4,7 +4,7 @@ services:
     volumes:
       - ./deployment/config/config.json:/app/config.json
       - ./deployment/config/variables.json:/app/variables.json
-      - ./deployment/logs/state_machine:/app/logs
+      - ./deployment/log:/app/logs
     restart: always
   
   # valves_service:
@@ -31,7 +31,7 @@ services:
     build: ./src/fake_serial_service/
     volumes:
       - ./deployment/config/config.json:/app/config.json
-      - ./deployment/logs/serial_service:/app/logs
+      - ./deployment/log:/app/logs
 
     restart: always
 
@@ -39,5 +39,5 @@ services:
     build: ./src/fake_valves_node/
     volumes:
       - ./deployment/config/config.json:/app/config.json
-      - ./deployment/logs/valve_controller:/app/logs
+      - ./deployment/log:/app/logs
     restart: always

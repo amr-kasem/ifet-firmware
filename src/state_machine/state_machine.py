@@ -6,7 +6,7 @@ import json
 import copy
 import threading
 import traceback
-
+import os
 from states.idle import IdleState
 from states.initialize import InitializeState
 from states.start_vfd import StartVDFState
@@ -20,8 +20,9 @@ class StateMachine:
     def __init__(self, config_file):
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.ERROR)
-        
+        self.logger.setLevel(logging.INFO)
+        os.makedirs('logs', exist_ok=True)
+
         fileHandler = logging.handlers.RotatingFileHandler('logs/state_machine.log', maxBytes=1_000_000, backupCount=5)
         fileHandler.setFormatter(formatter)
         
