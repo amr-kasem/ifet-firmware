@@ -18,7 +18,7 @@ from states.relief import ReliefValvesState
 
 class StateMachine:
     def __init__(self, config_file):
-        logging.basicConfig(level=logging.INFO, filename='state_machine.log', filemode='a', 
+        logging.basicConfig(level=logging.ERROR, filename='state_machine.log', filemode='a', 
                             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         self.logger = logging.getLogger(__name__)
         

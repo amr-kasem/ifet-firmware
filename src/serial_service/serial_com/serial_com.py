@@ -36,7 +36,7 @@ class SerialCom:
         
         # Setup logging to file
         logging.basicConfig(
-            level=logging.INFO,
+            level=logging.ERROR,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[
                 logging.FileHandler("serial_com.log"),
@@ -55,7 +55,7 @@ class SerialCom:
                 self.logger.info(f"Operation successful for address {address}")
                 return result
             except Exception as e:
-                self.logger.error(f"Error during operation at address {address}: {e}", exc_info=True)
+                self.logger.warn(f"Error during operation at address {address}: {e}", exc_info=True)
                 raise
             finally:
                 self.logger.info(f"Releasing lock for address {address}")

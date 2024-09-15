@@ -46,7 +46,7 @@ class ValveController:
 
     def setup_logger(self):
         logger = logging.getLogger(self.__class__.__name__)
-        logger.setLevel(logging.INFO)
+        logger.setLevel(logging.ERROR)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch = logging.StreamHandler()
         fh = logging.FileHandler('valve_controller.log')

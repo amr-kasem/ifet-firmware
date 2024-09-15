@@ -239,3 +239,26 @@ socket.timeout: timed out
 2024-09-15 11:57:12,099 - ValveController - INFO - Valve '4' state set to 1
 2024-09-15 11:57:12,101 - ValveController - INFO - Valve '5' state set to 0
 2024-09-15 11:57:12,103 - ValveController - INFO - Valve '6' state set to 1
+2024-09-15 12:00:18,054 - ValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-15 12:00:18,055 - ValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-15 12:00:18,055 - ValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-15 12:00:18,056 - ValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-15 12:00:18,057 - ValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-15 12:00:18,057 - ValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-15 12:00:18,058 - ValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-15 12:00:27,658 - ValveController - INFO - Valve '1' state set to 1
+2024-09-15 12:00:27,686 - ValveController - INFO - Valve '2' state set to 0
+2024-09-15 12:00:27,688 - ValveController - INFO - Valve '3' state set to 1
+2024-09-15 12:00:27,689 - ValveController - INFO - Valve '4' state set to 0
+2024-09-15 12:00:30,999 - ValveController - INFO - Valve '1' state set to 1
+2024-09-15 12:00:31,002 - ValveController - INFO - Valve '2' state set to 1
+2024-09-15 12:00:31,004 - ValveController - INFO - Valve '3' state set to 1
+2024-09-15 12:00:31,006 - ValveController - INFO - Valve '4' state set to 1
+2024-09-15 12:00:31,007 - ValveController - INFO - Valve '5' state set to 1
+2024-09-15 12:00:31,009 - ValveController - INFO - Valve '6' state set to 1
+2024-09-15 12:00:35,035 - ValveController - INFO - Valve '1' state set to 1
+2024-09-15 12:00:35,038 - ValveController - INFO - Valve '2' state set to 1
+2024-09-15 12:00:35,039 - ValveController - INFO - Valve '3' state set to 1
+2024-09-15 12:00:35,039 - ValveController - INFO - Valve '4' state set to 1
+2024-09-15 12:00:35,040 - ValveController - INFO - Valve '5' state set to 0
+2024-09-15 12:00:35,041 - ValveController - INFO - Valve '6' state set to 1

@@ -76,3 +76,40 @@
 2024-09-15 11:57:17,522 - state_machine - INFO - Exiting...
 2024-09-15 11:57:17,524 - state_machine - WARNING - Disconnected from MQTT broker
 2024-09-15 11:57:17,801 - state_machine - INFO - Disconnected from MQTT broker
+2024-09-15 12:00:18,037 - state_machine - INFO - Successfully loaded config from config.json
+2024-09-15 12:00:18,038 - state_machine - INFO - Connecting to MQTT broker at 10.1.10.185:1883
+2024-09-15 12:00:18,038 - state_machine - INFO - Device ID: device1
+2024-09-15 12:00:18,050 - state_machine - INFO - Successfully connected to MQTT broker
+2024-09-15 12:00:18,053 - state_machine - INFO - Connected to MQTT broker
+2024-09-15 12:00:18,054 - state_machine - INFO - subscribed to command topics
+2024-09-15 12:00:18,054 - state_machine - INFO - subscribed to device1/sensors/1
+2024-09-15 12:00:18,054 - state_machine - INFO - subscribed to device1/sensors/2
+2024-09-15 12:00:18,055 - state_machine - INFO - subscribed to device1/sensors/3
+2024-09-15 12:00:18,055 - state_machine - INFO - subscribed to device1/sensors/11
+2024-09-15 12:00:18,056 - state_machine - INFO - Entering state: IdleState
+2024-09-15 12:00:18,059 - state_machine - INFO - Valves RELIEVED.
+2024-09-15 12:00:27,655 - state_machine - INFO - -40.0 > -16.0 = False
+2024-09-15 12:00:27,655 - state_machine - INFO - Exiting state: IdleState
+2024-09-15 12:00:27,655 - state_machine - INFO - Entering state: InitializeState
+2024-09-15 12:00:27,655 - state_machine - INFO - Initializing valves...
+2024-09-15 12:00:27,967 - state_machine - INFO - Entering state: StartVDFState
+2024-09-15 12:00:27,967 - state_machine - INFO - Starting VDF...
+2024-09-15 12:00:27,968 - state_machine - INFO - VDF frequency set to 0.
+2024-09-15 12:00:27,968 - state_machine - INFO - VDF start command issued.
+2024-09-15 12:00:27,978 - state_machine - INFO - Exiting state: StartVDFState
+2024-09-15 12:00:27,978 - state_machine - INFO - Waiting for VDF to start...
+2024-09-15 12:00:27,979 - state_machine - INFO - VDF feedback is 0, VDF initialized successfully.
+2024-09-15 12:00:27,979 - state_machine - INFO - Entering state: AutomaticCyclingState
+2024-09-15 12:00:30,995 - state_machine - INFO - Exiting state: AutomaticCyclingState
+2024-09-15 12:00:30,995 - state_machine - INFO - Entering state: ReliefValvesState
+2024-09-15 12:00:30,997 - state_machine - INFO - Valves RELEIFED.
+2024-09-15 12:00:31,007 - state_machine - INFO - Exiting state: ReliefValvesState
+2024-09-15 12:00:31,009 - state_machine - INFO - Entering state: StoppingState
+2024-09-15 12:00:31,011 - state_machine - INFO - Stopping VDF...
+2024-09-15 12:00:31,022 - state_machine - INFO - Exiting state: StoppingState
+2024-09-15 12:00:35,029 - state_machine - INFO - Entering state: IdleState
+2024-09-15 12:00:35,029 - state_machine - WARNING - Task is safe to delete
+2024-09-15 12:00:35,030 - state_machine - INFO - Valves RELIEVED.
+2024-09-15 12:04:19,402 - state_machine - INFO - Exiting...
+2024-09-15 12:04:19,403 - state_machine - WARNING - Disconnected from MQTT broker
+2024-09-15 12:04:19,593 - state_machine - INFO - Disconnected from MQTT broker
