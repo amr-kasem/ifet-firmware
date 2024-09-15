@@ -7,39 +7,51 @@ services:
       - ./deployment/logs/state_machine:/app/logs
     restart: always
   
-  # vfd_service:
-  #   build: ./src/vfd_node/
+  # valves_service:
+  #   build: ./src/valves_node/
+  #   privileged: true
   #   volumes:
-  #     - ./deployment/config.json:/app/config.json
-  #   devices:
-  #     - /dev/ttyACM0:/dev/ttyACM0
+  #     - ./deployment/config/config.json:/app/config.json
+  #     - ./deployment/logs/valve_controller:/app/logs
+
   #   restart: always
 
   # serial_service:
   #   build: ./src/serial_service/
   #   volumes:
-  #     - ./deployment/config.json:/app/config.json
+  #     - ./deployment/config/config.json:/app/config.json
+  #     - ./deployment/logs/serial_com:/app/logs
+
   #   devices:
   #     - /dev/ttyACM0:/dev/ttyACM0
   #   restart: always
+
 
   fake_serial_service:
     build: ./src/fake_serial_service/
     volumes:
       - ./deployment/config/config.json:/app/config.json
-      - ./deployment/logs/valve_controller:/app/logs
+      - ./deployment/logs/serial_service:/app/logs
 
     restart: always
 
-  serial_service:
-    build: ./src/serial_service/
+  fake_valves_service:
+    build: ./src/fake_valves_node/
     volumes:
       - ./deployment/config/config.json:/app/config.json
-      - ./deployment/logs/serial_com:/app/logs
-
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+      - ./deployment/logs/valve_controller:/app/logs
     restart: always
+
+
+  # serial_service:
+  #   build: ./src/serial_service/
+  #   volumes:
+  #     - ./deployment/config/config.json:/app/config.json
+  #     - ./deployment/logs/serial_com:/app/logs
+
+  #   devices:
+  #     - /dev/ttyACM0:/dev/ttyACM0
+  #   restart: always
 
   # fake_serial_service:
   #   build: ./src/fake_serial_service/
@@ -47,10 +59,6 @@ services:
   #     - ./deployment/config/config.json:/app/config.json
   #   restart: always
 
-  # fake_valves_service:
-  #   build: ./src/fake_valves_node/
-  #   volumes:
-  #     - ./deployment/config/config.json:/app/config.json
-  #   restart: always
+
 
 
