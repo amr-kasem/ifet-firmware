@@ -12,12 +12,16 @@ services:
     privileged: true
     volumes:
       - ./deployment/config/config.json:/app/config.json
+      - ./deployment/logs/valve_controller.log:/app/valve_controller.log
+
     restart: always
 
   serial_service:
     build: ./src/serial_service/
     volumes:
       - ./deployment/config/config.json:/app/config.json
+      - ./deployment/logs/serial_com.log:/app/serial_com.log
+
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
     restart: always
