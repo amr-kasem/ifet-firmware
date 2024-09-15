@@ -1,3 +1,0 @@
-minimalmodbus
-pyserial
-paho-mqtt
