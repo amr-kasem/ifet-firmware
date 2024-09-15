@@ -1,7 +1,4 @@
 services:
-  
-
-
   state_machine_service:
     build: ./src/state_machine/
     volumes:
@@ -9,8 +6,6 @@ services:
       - ./deployment/config/variables.json:/app/variables.json
       - ./deployment/logs/state_machine.log:/app/state_machine.log
     restart: always
-  
-  
   
   # vfd_service:
   #   build: ./src/vfd_node/
