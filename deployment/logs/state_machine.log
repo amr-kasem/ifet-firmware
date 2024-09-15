@@ -1,0 +1,78 @@
+2024-09-15 11:43:18,524 - state_machine - INFO - Successfully loaded config from config.json
+2024-09-15 11:43:18,526 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:43:18,527 - state_machine - INFO - Device ID: device1
+2024-09-15 11:43:23,541 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:43:26,545 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:43:26,545 - state_machine - INFO - Device ID: device1
+2024-09-15 11:43:31,551 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:43:34,554 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:43:34,555 - state_machine - INFO - Device ID: device1
+2024-09-15 11:43:39,561 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:43:42,564 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:43:42,565 - state_machine - INFO - Device ID: device1
+2024-09-15 11:43:47,571 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:43:50,573 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:43:50,574 - state_machine - INFO - Device ID: device1
+2024-09-15 11:43:55,577 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:43:58,584 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:43:58,584 - state_machine - INFO - Device ID: device1
+2024-09-15 11:44:03,589 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:44:06,593 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:44:06,593 - state_machine - INFO - Device ID: device1
+2024-09-15 11:44:11,599 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:44:14,605 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:44:14,605 - state_machine - INFO - Device ID: device1
+2024-09-15 11:44:19,609 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:44:22,613 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:44:22,613 - state_machine - INFO - Device ID: device1
+2024-09-15 11:44:27,619 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:44:30,623 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:44:30,623 - state_machine - INFO - Device ID: device1
+2024-09-15 11:44:35,630 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:44:38,633 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:44:38,634 - state_machine - INFO - Device ID: device1
+2024-09-15 11:44:43,640 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:44:46,644 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:44:46,644 - state_machine - INFO - Device ID: device1
+2024-09-15 11:44:51,650 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:44:54,653 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:44:54,654 - state_machine - INFO - Device ID: device1
+2024-09-15 11:44:59,657 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:45:02,661 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:45:02,662 - state_machine - INFO - Device ID: device1
+2024-09-15 11:45:07,668 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:45:10,669 - state_machine - INFO - Connecting to MQTT broker at 192.168.1.16:1883
+2024-09-15 11:45:10,669 - state_machine - INFO - Device ID: device1
+2024-09-15 11:45:15,671 - state_machine - WARNING - Waiting for MQTT server: timed out
+2024-09-15 11:45:16,312 - state_machine - INFO - Exiting...
+2024-09-15 11:45:16,312 - state_machine - INFO - Disconnected from MQTT broker
+2024-09-15 11:45:58,620 - state_machine - INFO - Successfully loaded config from config.json
+2024-09-15 11:45:58,622 - state_machine - INFO - Connecting to MQTT broker at 10.1.10.185:1883
+2024-09-15 11:45:58,622 - state_machine - INFO - Device ID: device1
+2024-09-15 11:45:58,633 - state_machine - INFO - Successfully connected to MQTT broker
+2024-09-15 11:45:58,637 - state_machine - INFO - Connected to MQTT broker
+2024-09-15 11:45:58,638 - state_machine - INFO - subscribed to command topics
+2024-09-15 11:45:58,638 - state_machine - INFO - subscribed to device1/sensors/1
+2024-09-15 11:45:58,639 - state_machine - INFO - subscribed to device1/sensors/2
+2024-09-15 11:45:58,639 - state_machine - INFO - subscribed to device1/sensors/3
+2024-09-15 11:45:58,640 - state_machine - INFO - subscribed to device1/sensors/11
+2024-09-15 11:45:58,644 - state_machine - INFO - Entering state: IdleState
+2024-09-15 11:45:58,645 - state_machine - INFO - Valves RELIEVED.
+2024-09-15 11:56:55,558 - state_machine - INFO - Exiting...
+2024-09-15 11:56:55,560 - state_machine - WARNING - Disconnected from MQTT broker
+2024-09-15 11:56:55,707 - state_machine - INFO - Disconnected from MQTT broker
+2024-09-15 11:57:12,059 - state_machine - INFO - Successfully loaded config from config.json
+2024-09-15 11:57:12,060 - state_machine - INFO - Connecting to MQTT broker at 10.1.10.185:1883
+2024-09-15 11:57:12,060 - state_machine - INFO - Device ID: device1
+2024-09-15 11:57:12,069 - state_machine - INFO - Successfully connected to MQTT broker
+2024-09-15 11:57:12,071 - state_machine - INFO - Connected to MQTT broker
+2024-09-15 11:57:12,072 - state_machine - INFO - subscribed to command topics
+2024-09-15 11:57:12,072 - state_machine - INFO - subscribed to device1/sensors/1
+2024-09-15 11:57:12,072 - state_machine - INFO - subscribed to device1/sensors/2
+2024-09-15 11:57:12,072 - state_machine - INFO - subscribed to device1/sensors/3
+2024-09-15 11:57:12,073 - state_machine - INFO - subscribed to device1/sensors/11
+2024-09-15 11:57:12,074 - state_machine - INFO - Entering state: IdleState
+2024-09-15 11:57:12,075 - state_machine - INFO - Valves RELIEVED.
+2024-09-15 11:57:17,522 - state_machine - INFO - Exiting...
+2024-09-15 11:57:17,524 - state_machine - WARNING - Disconnected from MQTT broker
+2024-09-15 11:57:17,801 - state_machine - INFO - Disconnected from MQTT broker

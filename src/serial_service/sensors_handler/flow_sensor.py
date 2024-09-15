@@ -12,7 +12,6 @@ class Sensor:
         self.name = config["name"]
         self.address = int(config["address"])
         self.debug = config["debug"]
-        self.frequency = config["frequency"]
         self.serial_com = serial_com
         self.pressure_topic =  f"{config['pressure_sensor_device_id']}/sensors/{config['pressure_sensor_address']}"
         self.temprature_topic =  f"{config['pressure_sensor_device_id']}/sensors/temperature"
