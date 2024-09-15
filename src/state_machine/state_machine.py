@@ -18,9 +18,19 @@ from states.relief import ReliefValvesState
 
 class StateMachine:
     def __init__(self, config_file):
-        logging.basicConfig(level=logging.ERROR, filename='state_machine.log', filemode='a', 
-                            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.ERROR)
+        
+        fileHandler = logging.handlers.RotatingFileHandler('logs/state_machine.log', maxBytes=1_000_000, backupCount=5)
+        fileHandler.setFormatter(formatter)
+        
+        stream_handler = logging.StreamHandler()
+        stream_handler.setFormatter(formatter)
+        
+        self.logger.addHandler(fileHandler)
+        self.logger.addHandler(stream_handler)
+        
         
         try:
             with open(config_file, 'r') as f:

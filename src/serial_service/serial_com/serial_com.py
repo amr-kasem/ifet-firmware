@@ -3,6 +3,8 @@ import serial
 import json
 import threading
 import logging
+from logging.handlers import RotatingFileHandler
+
 from typing import Union
 
 class SerialCom:
@@ -34,12 +36,12 @@ class SerialCom:
         self.comport.clear_buffers_before_each_transaction = self.clear_buffers_before_each_transaction
         self.comport.close_port_after_each_call = self.close_port_after_each_call
         
-        # Setup logging to file
+
         logging.basicConfig(
             level=logging.ERROR,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[
-                logging.FileHandler("serial_com.log"),
+                logging.handlersRotatingFileHandler("logs/serial_com.log", maxBytes=1_000_000, backupCount=5),
                 logging.StreamHandler()
             ]
         )

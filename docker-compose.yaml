@@ -4,7 +4,7 @@ services:
     volumes:
       - ./deployment/config/config.json:/app/config.json
       - ./deployment/config/variables.json:/app/variables.json
-      - ./deployment/logs/state_machine.log:/app/state_machine.log
+      - ./deployment/logs/state_machine:/app/logs
     restart: always
   
   valves_service:
@@ -12,7 +12,7 @@ services:
     privileged: true
     volumes:
       - ./deployment/config/config.json:/app/config.json
-      - ./deployment/logs/valve_controller.log:/app/valve_controller.log
+      - ./deployment/logs/valve_controller:/app/logs
 
     restart: always
 
@@ -20,7 +20,7 @@ services:
     build: ./src/serial_service/
     volumes:
       - ./deployment/config/config.json:/app/config.json
-      - ./deployment/logs/serial_com.log:/app/serial_com.log
+      - ./deployment/logs/serial_com:/app/logs
 
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
