@@ -6,6 +6,7 @@ services:
     build: ./src/state_machine/
     volumes:
       - ./deployment/config/config.json:/app/config.json
+      - ./deployment/config/variables.json:/app/variables.json
       - ./deployment/logs/state_machine.log:/app/state_machine.log
     restart: always
   
@@ -45,13 +46,13 @@ services:
   fake_serial_service:
     build: ./src/fake_serial_service/
     volumes:
-      - ./deployment/config.json:/app/config.json
+      - ./deployment/config/config.json:/app/config.json
     restart: always
 
   fake_valves_service:
     build: ./src/fake_valves_node/
     volumes:
-      - ./deployment/config.json:/app/config.json
+      - ./deployment/config/config.json:/app/config.json
     restart: always
 
 
