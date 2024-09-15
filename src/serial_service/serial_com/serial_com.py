@@ -8,17 +8,22 @@ from typing import Union
 class SerialCom:
     def __init__(self, config_file):
         self.lock = threading.Lock()
-        with open(config_file) as f:
-            config = json.load(f)["serial"]
-            self.port = config["port"]
-            self.baudrate = config["baudrate"]
-            self.bytesize = config["bytesize"]
-            self.parity = getattr(serial, config["parity"])
-            self.stopbits = config["stopbits"]
-            self.timeout = config["timeout"]
-            self.mode = getattr(minimalmodbus, config["mode"])
-            self.clear_buffers_before_each_transaction = config["clear_buffers_before_each_transaction"]
-            self.close_port_after_each_call = config["close_port_after_each_call"]
+        try:
+            with open(config_file) as f:
+                config = json.load(f)["serial"]
+                self.port = config["port"]
+                self.baudrate = config["baudrate"]
+                self.bytesize = config["bytesize"]
+                self.parity = getattr(serial, config["parity"])
+                self.stopbits = config["stopbits"]
+                self.timeout = config["timeout"]
+                self.mode = getattr(minimalmodbus, config["mode"])
+                self.clear_buffers_before_each_transaction = config["clear_buffers_before_each_transaction"]
+                self.close_port_after_each_call = config["close_port_after_each_call"]
+        except (FileNotFoundError, KeyError, json.JSONDecodeError) as e:
+            logging.error(f"Error loading configuration: {e}", exc_info=True)
+            raise
+
         self.comport = minimalmodbus.Instrument(self.port, 1)  # Default address, will be changed in methods
         self.comport.serial.baudrate = self.baudrate
         self.comport.serial.bytesize = self.bytesize
@@ -28,22 +33,32 @@ class SerialCom:
         self.comport.mode = self.mode
         self.comport.clear_buffers_before_each_transaction = self.clear_buffers_before_each_transaction
         self.comport.close_port_after_each_call = self.close_port_after_each_call
-        logging.basicConfig(level=logging.INFO)
+        
+        # Setup logging to file
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler("serial_com.log"),
+                logging.StreamHandler()
+            ]
+        )
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     def _execute_with_lock(self, address: int, func, *args, **kwargs):
         """Helper method to execute a function with address setting and locking."""
         with self.lock:
-            logging.info(f"Acquiring lock and setting address to {address}")
+            self.logger.info(f"Acquiring lock and setting address to {address}")
             self.comport.address = address
             try:
                 result = func(*args, **kwargs)
-                logging.info(f"Operation successful for address {address}")
+                self.logger.info(f"Operation successful for address {address}")
                 return result
             except Exception as e:
-                logging.error(f"Error during operation at address {address}: {e}")
+                self.logger.error(f"Error during operation at address {address}: {e}", exc_info=True)
                 raise
             finally:
-                logging.info(f"Releasing lock for address {address}")
+                self.logger.info(f"Releasing lock for address {address}")
 
     def read_float(self, address: int, register: int, number_of_registers: int):
         return self._execute_with_lock(address, self.comport.read_float, register, number_of_registers)
@@ -102,7 +117,7 @@ class SerialCom:
                     functioncode=functioncode, 
                     signed=signed
                 )
-            print(f"Successfully wrote value {value} to register {registeraddress} at address {address}.")
+            self.logger.info(f"Successfully wrote value {value} to register {registeraddress} at address {address}.")
         
         self._execute_with_lock(address, write_func)
 

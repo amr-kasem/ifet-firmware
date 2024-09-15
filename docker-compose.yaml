@@ -10,21 +10,6 @@ services:
       - ./deployment/logs/state_machine.log:/app/state_machine.log
     restart: always
   
-  # valves_service:
-  #   build: ./src/valves_node/
-  #   privileged: true
-  #   volumes:
-  #     - ./deployment/config.json:/app/config.json
-  #   restart: always
-
-  # sensors_service:
-  #   build: ./src/sensors_node/
-  #   ipc: "host"
-  #   volumes:
-  #     - ./deployment/config.json:/app/config.json
-  #   devices:
-  #     - /dev/ttyACM0:/dev/ttyACM0
-  #   restart: always
   
   
   # vfd_service:
