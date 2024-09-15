@@ -4,4 +4,4 @@ COPY ./requirements.txt ./requiments.txt
 RUN pip install -r requiments.txt
 ADD ./ ./
 STOPSIGNAL SIGINT
-CMD ["python", "state_machine.py"]
+CMD ["python", "app.py"]

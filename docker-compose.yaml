@@ -5,7 +5,8 @@ services:
   state_machine_service:
     build: ./src/state_machine/
     volumes:
-      - ./deployment/config.json:/app/config.json
+      - ./deployment/config/config.json:/app/config.json
+      - ./deployment/logs/state_machine.log:/app/state_machine.log
     restart: always
   
   # valves_service:
