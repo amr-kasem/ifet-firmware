@@ -10,7 +10,6 @@ class Sensor:
         self.name = config["name"]
         self.address = int(config["address"])
         self.debug = config["debug"]
-        self.frequency = config["frequency"]
         self.logger = self.setup_logger()
         self.last_t = 0
         

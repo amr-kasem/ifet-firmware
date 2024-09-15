@@ -3,8 +3,19 @@
   "status": "idle",
   "current_speed": 0,
   "toggleBtn": "static_load",
+  "serial":{
+    "port": "/dev/ttyACM0",
+    "baudrate": 9600,
+    "bytesize": 8,
+    "parity": "PARITY_NONE",
+    "stopbits": 1,
+    "timeout": 0.05,
+    "mode": "MODE_RTU",
+    "clear_buffers_before_each_transaction": true,
+    "close_port_after_each_call": true
+  },
   "mqtt": {
-    "broker_host": "192.168.1.16",
+    "broker_host": "10.1.10.185",
     "broker_port": 1883,
     "username": "",
     "password": ""
@@ -48,7 +59,7 @@
     }
   ],
 
-  "vdf": {
+  "vfd": {
     "name": "vfd1",
     "address": "5",
     "debug": false,

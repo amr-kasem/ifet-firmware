@@ -83,7 +83,7 @@ class SensorHandler:
         while True:
             for sensor in self.sensors:
                 self.send_sensor_reading(sensor)
-            time.sleep( 1 / sensor.frequency )  # Adjust as needed
+            time.sleep( 1 / 50)  # Adjust as needed
 
     def stop(self):
         self.mqtt_client.disconnect()

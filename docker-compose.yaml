@@ -4,7 +4,7 @@ services:
     volumes:
       - ./deployment/config/config.json:/app/config.json
       - ./deployment/config/variables.json:/app/variables.json
-      - ./deployment/logs/state_machine.log:/app/state_machine.log
+      - ./deployment/logs/state_machine:/app/logs
     restart: always
   
   # vfd_service:
@@ -27,12 +27,30 @@ services:
     build: ./src/fake_serial_service/
     volumes:
       - ./deployment/config/config.json:/app/config.json
+      - ./deployment/logs/valve_controller:/app/logs
+
     restart: always
 
-  fake_valves_service:
-    build: ./src/fake_valves_node/
+  serial_service:
+    build: ./src/serial_service/
     volumes:
       - ./deployment/config/config.json:/app/config.json
+      - ./deployment/logs/serial_com:/app/logs
+
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
     restart: always
+
+  # fake_serial_service:
+  #   build: ./src/fake_serial_service/
+  #   volumes:
+  #     - ./deployment/config/config.json:/app/config.json
+  #   restart: always
+
+  # fake_valves_service:
+  #   build: ./src/fake_valves_node/
+  #   volumes:
+  #     - ./deployment/config/config.json:/app/config.json
+  #   restart: always
 
 
