@@ -3,9 +3,9 @@ import serial
 import json
 import threading
 import logging
+from logging.handlers import RotatingFileHandler
 import os
 
-from logging.handlers import RotatingFileHandler
 
 from typing import Union
 
@@ -43,7 +43,7 @@ class SerialCom:
             level=logging.INFO,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[
-                logging.handlersRotatingFileHandler("logs/serial_com.log", maxBytes=1_000_000, backupCount=5),
+                RotatingFileHandler("logs/serial_com.log", maxBytes=1_000_000, backupCount=5),
                 logging.StreamHandler()
             ]
         )

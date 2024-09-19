@@ -3,6 +3,8 @@ import random
 import json
 import paho.mqtt.client as mqtt
 import logging
+from logging.handlers import RotatingFileHandler
+
 class FakeSensorAndVFD:
     def __init__(self):
         self.vfd_frequency = 0
@@ -13,7 +15,7 @@ class FakeSensorAndVFD:
         
         # Set up logging to file with max size of 1 MB and keep the latest 5 files
         log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        log_handler = logging.handlers.RotatingFileHandler('logs/fake_sensor_and_vfd.log', maxBytes=1_000_000, backupCount=5)
+        log_handler = RotatingFileHandler('logs/fake_sensor_and_vfd.log', maxBytes=1_000_000, backupCount=5)
         log_handler.setFormatter(log_formatter)
         
         self.logger = logging.getLogger(__name__)
@@ -23,7 +25,7 @@ class FakeSensorAndVFD:
     def setup_mqtt(self):
         self.mqtt_client.on_connect = self.on_connect
         self.mqtt_client.on_message = self.on_message
-        self.mqtt_client.connect("192.168.1.16", 1883, 60)
+        self.mqtt_client.connect("172.17.0.1", 1883, 60)
         self.mqtt_client.loop_start()
 
     def on_connect(self, client, userdata, flags, rc,_):

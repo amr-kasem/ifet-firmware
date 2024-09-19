@@ -1,5 +1,6 @@
 import json
 import logging
+from logging.handlers import RotatingFileHandler
 import time
 import paho.mqtt.client as mqtt
 from threading import Thread
@@ -34,7 +35,7 @@ class FakeValveController:
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch = logging.StreamHandler()
         ch.setFormatter(formatter)
-        fh = logging.handlers.RotatingFileHandler('logs/fake_valve_controller.log', maxBytes=1_000_000, backupCount=5)
+        fh = RotatingFileHandler('logs/fake_valve_controller.log', maxBytes=1_000_000, backupCount=5)
         fh.setFormatter(formatter)
         logger.addHandler(ch)
         logger.addHandler(fh)

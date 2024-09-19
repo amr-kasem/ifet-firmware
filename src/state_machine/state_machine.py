@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import logging
+from logging.handlers import RotatingFileHandler
 import paho.mqtt.client as mqtt
 import time
 import json
@@ -23,7 +24,7 @@ class StateMachine:
         self.logger.setLevel(logging.INFO)
         os.makedirs('logs', exist_ok=True)
 
-        fileHandler = logging.handlers.RotatingFileHandler('logs/state_machine.log', maxBytes=1_000_000, backupCount=5)
+        fileHandler = RotatingFileHandler('logs/state_machine.log', maxBytes=1_000_000, backupCount=5)
         fileHandler.setFormatter(formatter)
         
         stream_handler = logging.StreamHandler()
@@ -219,6 +220,7 @@ class StateMachine:
     def publish_status(self):
         self.client.publish(f'{self.device_id}/status',self.current_status)
         self.client.publish(f'{self.device_id}/current_test_index',self.current_test_index)
+        self.logger.info(f'published current_test_index {self.current_test_index}')
         if self.cyclic_resume:
             self.client.publish(
                 f'{self.device_id}/resume_status',
@@ -321,6 +323,7 @@ class StateMachine:
                     # self.trigger_event(n_event)
                 elif event['mode'] == 'cyclic':
                     self.cyclic_mode = True
+                    self.logger.info(f'Command Test index: {event["test_index"]}')
                     self.test_index_wanted = event['test_index'] if 'test_index' in event else 0
                     self.store_variables(command=event)
                     

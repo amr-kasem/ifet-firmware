@@ -105,6 +105,7 @@ class AutomaticCyclingState(State):
         if self.machine.test_index_wanted is not None and  not self.machine.force_stop:
             self.machine.store_variables(current_test_index=self.machine.test_index_wanted)
             self.machine.current_test_index = self.machine.test_index_wanted
+            self.machine.logger.info(f'Test index wanted: {self.machine.test_index_wanted}')
         
         self.machine.cycle_index = 0
         self.machine.store_variables(cycle_index=0)    
