@@ -1,0 +1,2217 @@
+2024-09-15 21:54:36,683 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-15 21:54:36,683 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-15 21:54:36,684 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-15 21:54:36,684 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-15 21:54:36,684 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-15 21:54:36,684 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-15 21:54:36,684 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-15 21:57:00,658 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 21:57:00,692 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 21:57:00,693 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:00,693 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 21:57:01,797 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:02,599 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:03,402 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:04,203 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:05,003 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:05,805 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:06,608 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:07,408 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:08,210 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:09,010 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:09,812 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:10,614 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:11,416 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:12,217 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:13,020 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:13,820 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:14,623 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:15,424 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:16,225 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 21:57:17,027 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:17,828 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 21:57:17,869 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 21:57:17,870 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:17,870 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 21:57:17,871 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 21:57:17,871 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 21:57:17,871 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 21:57:17,871 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 21:57:17,872 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:17,872 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 21:57:17,872 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 21:57:17,872 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 21:57:18,855 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 21:57:18,856 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 21:57:18,856 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 21:57:18,856 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 21:57:18,857 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 21:57:18,857 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:02:41,709 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:02:41,709 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:02:41,709 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:02:41,710 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:02:41,710 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:02:41,710 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:02:56,805 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:02:56,806 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:02:56,806 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:02:56,807 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:02:58,010 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:02:58,811 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:02:59,613 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:03:00,414 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:01,217 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:03:02,019 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:02,830 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:03:03,623 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:04,426 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:03:05,227 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:06,029 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:03:06,830 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:07,632 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:03:08,433 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:09,237 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:03:10,052 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:10,841 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:03:11,642 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:12,471 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:03:13,246 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:14,047 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:03:14,048 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:03:14,048 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:14,048 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:03:14,049 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:03:14,089 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:03:14,089 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:03:14,090 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:03:14,090 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:14,091 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:03:14,091 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:03:14,092 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:03:15,075 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:03:15,076 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:03:15,077 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:03:15,077 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:03:15,078 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:03:15,078 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:04:15,126 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:04:15,126 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:04:15,126 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:04:15,127 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:04:15,127 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:04:15,127 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:09:01,408 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:09:01,408 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:09:01,408 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:09:01,408 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:09:01,408 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:09:01,408 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:09:47,717 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:09:47,717 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:09:47,717 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:09:47,717 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:09:48,856 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:09:49,657 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:09:50,459 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:09:51,261 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:09:52,062 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:09:52,863 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:09:53,664 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:09:53,705 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:09:53,705 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:09:53,706 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:09:53,706 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:09:53,706 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:09:53,706 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:09:53,706 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:09:53,707 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:09:53,707 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:09:53,707 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:09:53,707 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:09:54,692 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:09:54,732 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:09:54,733 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:09:54,733 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:09:54,733 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:09:54,733 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:12:16,406 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:12:16,406 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:12:16,406 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:12:16,406 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:12:16,406 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:12:16,406 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:12:37,550 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:12:37,591 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:12:37,591 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:12:37,592 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:12:38,787 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:12:39,588 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:12:40,390 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:12:41,192 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:12:41,992 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:12:42,017 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:12:42,018 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:12:42,018 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:12:42,018 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:12:42,019 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:12:42,019 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:12:42,019 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:12:42,020 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:12:42,020 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:12:42,020 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:12:42,021 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:12:43,021 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:12:43,022 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:12:43,022 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:12:43,023 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:12:43,023 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:12:43,024 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:17:44,539 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:17:44,577 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:17:44,578 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:17:44,578 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:17:45,688 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:17:46,482 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:17:47,284 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:17:48,115 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:17:48,887 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:17:48,925 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:17:48,925 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:17:48,926 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:17:48,926 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:17:48,927 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:17:48,927 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:17:48,927 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:17:48,928 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:17:48,928 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:17:48,928 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:17:48,929 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:17:49,930 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:17:49,931 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:17:49,932 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:17:49,932 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:17:49,933 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:17:49,933 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:18:01,908 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:18:01,949 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:18:01,950 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:01,951 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:18:03,150 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:03,951 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:04,753 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:05,555 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:06,357 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:07,159 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:07,961 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:08,762 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:09,565 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:10,366 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:11,168 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:11,970 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:18:11,971 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:18:11,972 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:12,011 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:18:12,011 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:18:12,012 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:18:12,012 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:18:12,012 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:18:12,013 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:12,013 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:18:12,013 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:18:12,014 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:18:22,094 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:18:22,094 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:18:22,095 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:22,095 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:18:23,235 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:24,036 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:24,839 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:25,641 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:26,443 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:27,244 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:28,046 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:28,847 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:29,649 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:30,450 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:31,261 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:32,053 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:32,855 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:33,681 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:34,459 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:18:35,261 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:18:35,298 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:18:35,299 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:35,299 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:18:35,300 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:18:35,300 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:18:35,300 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:18:35,301 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:18:35,301 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:18:35,301 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:18:35,302 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:18:35,302 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:19:00,647 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:19:00,665 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:19:00,666 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:00,666 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:19:01,790 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:19:02,591 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:03,393 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:19:04,194 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:19:04,195 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:19:04,195 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:04,195 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:19:04,195 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:19:04,195 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:19:04,218 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:19:04,218 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:19:04,219 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:04,219 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:19:04,259 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:19:04,260 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:19:18,599 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:19:18,640 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:19:18,640 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:18,641 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:19:19,837 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:19:20,638 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:21,441 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:19:22,252 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:19:22,252 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:19:22,253 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:22,253 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:19:22,253 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:19:22,253 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:19:22,264 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:19:22,264 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:19:22,265 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:22,265 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:19:22,265 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:19:22,265 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:19:27,796 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:19:27,836 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:19:27,836 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:27,837 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:19:29,034 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:19:29,064 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:19:29,065 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:29,065 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:19:29,066 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:19:29,066 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:19:30,074 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:19:30,074 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:19:30,075 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:19:30,075 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:19:30,075 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:19:30,075 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:20:16,399 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:20:16,441 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:20:16,442 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:20:16,443 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:20:17,638 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:20:18,440 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:20:18,481 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:20:18,482 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:20:18,482 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:20:18,483 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:20:18,483 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:20:19,466 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:20:19,506 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:20:19,507 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:20:19,508 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:20:19,508 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:20:19,509 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:20:25,220 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:20:25,261 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:20:25,262 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:20:25,263 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:20:26,478 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:20:26,479 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:20:26,480 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:20:26,481 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:20:26,482 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:20:26,483 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:20:26,483 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:20:26,523 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:20:26,523 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:20:26,524 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:20:26,524 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:20:26,524 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:20:31,832 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:20:31,875 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:20:31,875 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:20:31,876 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:20:33,072 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:20:33,872 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:20:33,913 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:20:33,913 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:20:33,914 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:20:33,914 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:20:33,915 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:20:33,915 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:20:33,915 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:20:33,916 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:20:33,916 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:20:33,917 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:20:33,917 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:21:22,719 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:21:22,737 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:21:22,737 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:21:22,737 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:21:23,961 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:21:24,762 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:21:25,566 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:21:26,366 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:21:27,168 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:21:27,989 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:21:28,770 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:21:28,796 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:21:28,796 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:21:28,797 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:21:28,797 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:21:28,797 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:21:28,798 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:21:28,798 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:21:28,799 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:21:28,799 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:21:28,799 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:21:28,800 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:28:36,619 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:28:36,649 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-15 22:28:36,650 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:36,651 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-15 22:28:37,760 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:38,562 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:39,364 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:40,170 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:40,968 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:41,768 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:42,571 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:43,372 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:44,175 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:44,975 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:45,777 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:46,578 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:47,379 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:48,180 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:48,983 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:49,783 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:50,585 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:51,386 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:52,188 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:52,989 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:53,791 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:54,592 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:55,394 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:56,195 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:56,997 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:57,798 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:28:58,600 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:28:59,401 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:00,204 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:01,005 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:01,807 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:02,609 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:03,410 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:04,211 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:05,014 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:05,815 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:06,617 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:07,418 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:08,220 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:09,022 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:09,823 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:10,624 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:11,426 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:12,227 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:13,029 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:13,831 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:14,632 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:15,434 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:16,236 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:17,037 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:17,840 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:18,641 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:19,443 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:20,244 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:21,047 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:21,848 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:22,650 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:23,451 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:24,254 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:25,055 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:25,856 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:26,658 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:27,460 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:28,260 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:29,088 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:29,864 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:30,666 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:31,467 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:32,269 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:33,070 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:33,872 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:34,673 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:35,475 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:36,276 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:37,077 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:37,878 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:38,684 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:39,482 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:40,283 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:41,086 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:41,886 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:42,686 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:43,494 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:44,289 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:45,092 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:45,893 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:46,696 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:47,497 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:48,299 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:49,100 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:49,902 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:50,703 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:51,505 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:52,307 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:53,109 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:53,910 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:54,712 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:55,513 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:56,315 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:57,117 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:57,919 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:29:58,720 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:29:59,522 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:00,323 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:01,125 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:01,926 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:02,728 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:03,529 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:04,330 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:05,131 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:05,933 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:06,747 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:07,536 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:08,337 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:09,161 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:09,941 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:10,743 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:11,574 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:12,346 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:13,147 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:13,987 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:14,750 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:15,552 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:16,353 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:17,155 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:17,956 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:18,759 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:19,559 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:20,361 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:21,162 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:21,964 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:22,766 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:23,567 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:24,369 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:25,171 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:25,972 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:26,774 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:27,575 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:28,376 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:29,177 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:29,978 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:30,780 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:31,582 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:32,382 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:33,184 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:33,985 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:34,787 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:35,588 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:36,390 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:37,191 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:37,993 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:38,793 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:39,595 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:40,396 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:41,198 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:41,999 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:42,801 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:43,603 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:44,405 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:45,206 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:46,008 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:46,808 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:47,610 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:48,411 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:49,213 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:50,014 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:50,816 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:51,618 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:52,420 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:53,220 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:54,022 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:54,823 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:55,625 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:56,426 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:57,228 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:58,029 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:30:58,831 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:30:59,632 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:00,434 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:01,234 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:02,037 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:02,843 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:03,640 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:04,441 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:05,268 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:06,044 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:06,845 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:07,681 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:08,448 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:09,249 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:10,051 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:10,852 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:11,653 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:12,454 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:13,256 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:14,056 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:14,859 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:15,661 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:16,463 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-15 22:31:17,264 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:18,065 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:31:18,096 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:31:18,097 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:18,097 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:31:18,098 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:31:18,098 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:31:18,098 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:31:18,098 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:31:18,099 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:18,099 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:31:18,099 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-15 22:31:18,100 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-15 22:31:19,093 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-15 22:31:19,106 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-15 22:31:19,106 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-15 22:31:19,106 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-15 22:31:19,107 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-15 22:31:19,107 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 05:27:50,034 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 05:27:50,051 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-16 05:27:50,052 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:27:50,053 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-16 05:27:51,172 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-16 05:27:51,973 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:27:52,775 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-16 05:27:53,576 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:27:54,377 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 05:27:54,392 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 05:27:54,392 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:27:54,393 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 05:27:54,393 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-16 05:27:54,394 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 05:27:54,394 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 05:27:54,395 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 05:27:54,395 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:27:54,396 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 05:27:54,396 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-16 05:27:54,396 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 05:27:55,407 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 05:27:55,408 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 05:27:55,448 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:27:55,448 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 05:27:55,448 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-16 05:27:55,448 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 05:29:14,474 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 05:29:14,514 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-16 05:29:14,514 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:29:14,514 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-16 05:29:15,614 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-16 05:29:16,447 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:29:17,217 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-16 05:29:18,018 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:29:18,858 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 05:29:18,859 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 05:29:18,859 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:29:18,860 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 05:29:18,860 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-16 05:29:18,861 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 05:29:18,861 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 05:29:18,862 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 05:29:18,862 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:29:18,862 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 05:29:18,863 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-16 05:29:18,863 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 05:29:19,844 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 05:29:19,845 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 05:29:19,845 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 05:29:19,846 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 05:29:19,846 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-16 05:29:19,846 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 05:46:35,483 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-16 08:45:55,605 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:46:05,611 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:46:15,621 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:46:25,628 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:46:35,639 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:46:45,650 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:46:55,660 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:47:05,669 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:47:15,676 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:47:25,688 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:47:35,699 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:47:45,711 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:47:55,721 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:48:05,733 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:48:15,744 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:48:25,752 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:48:35,764 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:48:45,775 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:48:55,784 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:49:05,797 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:49:15,809 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:49:25,821 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:49:35,834 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:49:45,846 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:49:55,858 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:50:05,871 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:50:15,883 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:50:25,894 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:50:35,905 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:50:45,918 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:50:55,927 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:51:05,940 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:51:15,951 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:51:25,961 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:51:35,973 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:51:45,985 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:51:55,994 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:52:06,006 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:52:16,018 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:52:26,030 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:52:36,043 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:52:46,055 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:52:56,066 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:53:06,078 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:53:16,087 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:53:26,099 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:53:36,107 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:53:46,119 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:53:56,126 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:54:06,137 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:54:16,149 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:54:26,158 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:54:36,170 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:54:46,178 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:54:56,190 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:55:06,196 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:55:16,207 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:55:26,218 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:55:36,230 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:55:46,240 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:55:56,251 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:56:06,262 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:56:16,274 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:56:26,285 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:56:36,296 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:56:46,307 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:56:56,319 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:57:06,330 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:57:16,342 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:57:26,355 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:57:36,367 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:57:46,380 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:57:56,387 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:58:06,400 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:58:16,409 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:58:26,420 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:58:36,429 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:58:46,440 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:58:56,451 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:59:06,463 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:59:16,474 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:59:26,486 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:59:36,494 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:59:46,506 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 08:59:56,517 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:00:06,528 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:00:16,539 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:00:26,550 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:00:36,562 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:00:46,574 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:00:56,585 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:01:06,598 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:01:16,610 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:01:26,622 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:01:36,634 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:01:46,646 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:01:56,656 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:02:06,667 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:02:16,678 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:02:26,689 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:02:36,700 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:02:46,712 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:02:56,724 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:03:06,736 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:03:16,749 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:03:26,762 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:03:36,774 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:03:46,785 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:03:56,796 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:04:06,809 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:04:16,822 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:04:26,834 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:04:36,847 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:04:46,859 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:04:56,867 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:05:06,878 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:05:16,888 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:05:26,900 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:05:36,913 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:05:46,926 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:05:56,938 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:06:06,948 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:06:16,960 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:06:26,972 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:06:36,983 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:06:46,991 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:06:57,002 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:07:07,012 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:07:17,024 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:07:27,036 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:07:37,047 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:07:47,059 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:07:57,069 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:08:07,080 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:08:17,091 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:08:27,104 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:08:37,116 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:08:47,128 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:08:57,139 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:09:07,151 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:09:17,162 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:09:27,174 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:09:37,183 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:09:47,192 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:09:57,202 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:10:07,212 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:10:17,222 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:10:27,232 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:10:37,244 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:10:47,256 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:10:57,264 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:11:07,274 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:11:17,286 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:11:27,298 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:11:37,310 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:11:47,322 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:11:57,334 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:12:07,346 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:12:17,358 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:12:27,370 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:12:37,381 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:12:47,393 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:12:57,403 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:13:07,414 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:13:17,426 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:13:27,438 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:13:37,449 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:13:47,458 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:13:57,470 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:14:07,482 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:14:17,494 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:14:27,505 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:14:37,516 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:14:47,527 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:14:57,539 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:15:07,549 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:15:17,559 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:15:27,569 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:15:37,581 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:15:47,592 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:15:57,604 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:16:07,614 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:16:17,626 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:16:27,638 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:16:37,650 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:16:47,656 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:16:57,668 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:17:07,680 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:17:17,692 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:17:27,700 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:17:37,710 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:17:47,722 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:17:57,729 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:18:07,741 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:18:17,752 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:18:27,764 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:18:37,775 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:18:47,785 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:18:57,796 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:19:07,808 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:19:17,819 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:19:27,831 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:19:37,840 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:19:47,851 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:19:57,857 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:20:07,868 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:20:17,879 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:20:27,891 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:20:37,903 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:20:47,911 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:20:57,919 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:21:07,931 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:21:17,944 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:21:27,955 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:21:37,967 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:21:47,978 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:21:57,989 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:22:08,001 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:22:18,013 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:22:28,026 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:22:38,038 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:22:48,050 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:22:58,061 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:23:08,072 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:23:18,082 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:23:28,093 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:23:38,102 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:23:48,113 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:23:58,124 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:24:08,135 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:24:18,146 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:24:28,157 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:24:38,167 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:24:48,175 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:24:58,187 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:25:08,199 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:25:18,211 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:25:28,223 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:25:38,234 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:25:48,243 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:25:58,254 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:26:08,265 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:26:18,276 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:26:28,287 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:26:38,299 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:26:48,308 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:26:58,319 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:27:08,330 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:27:18,341 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:27:28,353 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:27:38,364 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:27:48,374 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:27:58,384 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:28:08,396 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:28:18,407 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:28:28,418 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:28:35,473 - FakeValveController - ERROR - MQTT connection failed: [Errno 101] Network is unreachable
+2024-09-16 09:28:45,484 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:28:55,495 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:29:05,506 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:29:15,511 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:29:25,521 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:29:35,532 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:29:45,543 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:29:55,554 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:30:05,566 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:30:15,577 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:30:25,588 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:30:35,599 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:30:45,611 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:30:55,621 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:31:05,632 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:31:15,643 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:31:25,654 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:31:35,664 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:31:45,674 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:31:55,685 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:32:03,793 - FakeValveController - ERROR - MQTT connection failed: [Errno 101] Network is unreachable
+2024-09-16 09:32:13,798 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:32:23,809 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:32:33,818 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:32:43,830 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:32:53,841 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:33:03,852 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:33:13,864 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:33:23,872 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:33:33,883 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:33:43,894 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:33:53,905 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:34:03,916 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:34:13,926 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:34:23,937 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:34:33,948 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:34:42,207 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:34:52,219 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:35:02,228 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:35:12,239 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:35:22,249 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:35:32,259 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:35:42,270 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:35:52,282 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:36:02,292 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:36:12,303 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:36:22,315 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:36:32,326 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:36:42,336 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:36:52,347 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:37:02,354 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:37:12,366 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:37:22,376 - FakeValveController - ERROR - MQTT connection failed: timed out
+2024-09-16 09:37:25,262 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 09:37:25,262 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 09:37:25,262 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 09:37:25,262 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 09:37:25,262 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 09:37:25,262 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 09:37:25,262 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 09:37:40,396 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-16 09:37:41,117 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 09:37:41,117 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 09:37:41,117 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 09:37:41,117 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 09:37:41,117 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 09:37:41,117 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 09:37:41,117 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 09:37:41,200 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 09:37:41,200 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 09:37:41,201 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 09:37:41,201 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 09:37:41,201 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-16 09:37:41,202 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 09:38:58,618 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-16 09:38:59,377 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 09:38:59,377 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 09:38:59,378 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 09:38:59,378 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 09:38:59,378 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 09:38:59,378 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 09:38:59,378 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 09:38:59,463 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 09:38:59,463 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 09:38:59,464 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 09:38:59,464 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 09:38:59,465 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-16 09:38:59,465 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 09:39:48,691 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-16 09:39:49,301 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 09:39:49,301 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 09:39:49,302 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 09:39:49,302 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 09:39:49,302 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 09:39:49,302 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 09:39:49,302 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 09:39:49,517 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 09:39:49,517 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 09:39:49,517 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 09:39:49,517 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 09:39:49,517 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-16 09:39:49,517 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 09:40:13,212 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-16 09:40:17,684 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 09:40:17,685 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 09:40:17,685 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 09:40:17,685 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 09:40:17,685 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 09:40:17,686 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 09:40:17,686 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 10:27:11,750 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 10:27:11,772 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 10:27:11,774 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 10:27:11,975 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 10:27:11,975 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:27:16,981 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:27:21,984 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 10:27:21,984 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 10:27:21,984 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 10:27:21,984 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 10:27:21,984 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 10:27:21,984 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 10:27:21,984 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 10:58:50,185 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 10:58:50,281 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 10:58:50,282 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:58:55,288 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:00,293 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:05,299 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:10,305 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:15,311 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:20,317 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:25,324 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:30,330 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:35,336 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:40,342 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:45,348 - FakeValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+2024-09-16 10:59:50,802 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 10:59:50,803 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 10:59:50,803 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 10:59:50,803 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 10:59:50,803 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 10:59:50,803 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 10:59:50,803 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 10:59:50,847 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 10:59:50,847 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 10:59:50,847 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 10:59:50,847 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 10:59:50,848 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-16 10:59:50,848 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 12:02:47,330 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 12:08:03,097 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 12:08:03,100 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 12:08:03,100 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 12:08:03,100 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 12:08:03,101 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 12:08:03,101 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 12:08:03,101 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 12:08:03,101 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 12:38:29,319 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 13:48:30,195 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-16 15:35:10,992 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 15:35:10,993 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 15:35:10,993 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 15:35:10,993 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 15:35:10,993 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 15:35:10,993 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 15:35:10,993 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 15:35:11,076 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-16 15:35:11,076 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-16 15:35:11,076 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-16 15:35:11,076 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-16 15:35:11,076 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-16 15:35:11,077 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-16 19:05:12,860 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 19:08:12,621 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 19:08:12,622 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-16 19:08:12,623 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-16 19:08:12,623 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-16 19:08:12,623 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-16 19:08:12,623 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-16 19:08:12,623 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-16 19:08:12,623 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-16 20:12:23,367 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-16 22:19:07,949 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-17 08:32:47,474 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-17 08:32:47,475 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-17 08:32:47,475 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-17 08:32:47,476 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-17 08:32:47,476 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-17 08:32:47,476 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-17 08:32:47,476 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-17 09:19:04,789 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-17 14:29:59,415 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-17 14:29:59,418 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-17 14:29:59,418 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-17 14:29:59,418 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-17 14:29:59,418 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-17 14:29:59,418 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-17 14:29:59,419 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-17 14:29:59,419 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-17 14:30:09,322 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-17 17:30:05,428 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-17 17:30:05,429 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-17 17:30:05,429 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-17 17:30:05,429 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-17 17:30:05,429 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-17 17:30:05,430 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-17 17:30:05,430 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-18 05:35:06,842 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-19 06:37:47,857 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-19 06:37:47,858 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-19 06:37:47,858 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-19 06:37:47,858 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-19 06:37:47,858 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-19 06:37:47,859 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-19 06:37:47,859 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-19 06:40:28,888 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-19 07:13:23,141 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-19 07:13:23,142 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-19 07:13:23,142 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-19 07:13:23,143 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-19 07:13:23,143 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-19 07:13:23,143 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-19 07:13:23,143 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-19 07:13:23,228 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-19 07:13:23,229 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-19 07:13:23,229 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-19 07:13:23,229 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-19 07:13:23,230 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-19 07:13:23,230 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-19 07:15:56,830 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-19 07:15:56,864 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-19 07:15:56,865 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-19 07:15:56,865 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-19 07:15:57,977 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-19 07:15:58,771 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-19 07:15:58,786 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-19 07:15:58,787 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-19 07:15:58,787 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-19 07:15:58,787 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-19 07:15:58,788 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-19 07:15:58,793 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-19 07:15:58,834 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-19 07:15:58,835 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-19 07:15:58,835 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-19 07:15:58,836 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-19 07:15:58,836 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-19 12:40:46,318 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-19 12:47:58,827 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-19 20:13:40,691 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-19 20:13:40,692 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-19 20:13:40,692 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-19 20:13:40,692 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-19 20:13:40,692 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-19 20:13:40,692 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-19 20:13:40,692 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-20 10:48:59,319 - FakeValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2024-09-20 13:56:22,928 - FakeValveController - INFO - Keyboard interrupt detected. Stopping Service...
+2024-09-20 13:56:23,471 - FakeValveController - INFO - Connected to MQTT broker with result code Success
+2024-09-20 13:56:23,472 - FakeValveController - INFO - Subscribed to topic: device1/valves/1
+2024-09-20 13:56:23,472 - FakeValveController - INFO - Subscribed to topic: device1/valves/2
+2024-09-20 13:56:23,472 - FakeValveController - INFO - Subscribed to topic: device1/valves/3
+2024-09-20 13:56:23,472 - FakeValveController - INFO - Subscribed to topic: device1/valves/4
+2024-09-20 13:56:23,472 - FakeValveController - INFO - Subscribed to topic: device1/valves/5
+2024-09-20 13:56:23,472 - FakeValveController - INFO - Subscribed to topic: device1/valves/6
+2024-09-20 13:56:23,652 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-20 13:56:23,652 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-20 13:56:23,652 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:56:23,652 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-20 13:56:23,652 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-20 13:56:23,652 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-20 13:56:31,009 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-20 13:56:31,051 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-20 13:56:31,052 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:56:31,053 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-20 13:56:32,153 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:56:32,954 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:56:33,756 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:56:34,558 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:56:35,359 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-20 13:56:35,360 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-20 13:56:35,361 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:56:35,361 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-20 13:56:35,362 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-20 13:56:35,362 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-20 13:56:35,364 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-20 13:56:35,364 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-20 13:56:35,365 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:56:35,365 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-20 13:56:35,365 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-20 13:56:35,365 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-20 13:56:35,388 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-20 13:56:35,388 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-20 13:56:35,389 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:56:35,389 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-20 13:56:35,389 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-20 13:56:35,389 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-20 13:58:06,280 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-20 13:58:06,311 - FakeValveController - INFO - Valve '2' state set to 0
+2024-09-20 13:58:06,312 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:06,313 - FakeValveController - INFO - Valve '4' state set to 0
+2024-09-20 13:58:08,521 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:09,323 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:10,125 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:10,927 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:11,730 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:12,531 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:13,334 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:14,134 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:14,936 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:15,738 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:16,552 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:17,342 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:18,145 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:18,977 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:19,749 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:20,550 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:21,353 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:22,153 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:22,956 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:23,756 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:24,559 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:25,361 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:26,163 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:26,965 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:27,768 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:28,570 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:29,372 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:30,174 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:30,977 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:31,776 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:32,578 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:33,380 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:34,182 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:34,982 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:35,785 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:36,586 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:37,388 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:38,190 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:38,993 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:39,799 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:40,596 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:41,397 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:42,198 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:43,000 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:43,802 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:44,604 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:45,405 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:46,207 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:47,019 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:47,811 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:48,613 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:49,450 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:50,217 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:51,019 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:51,820 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:52,621 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:53,424 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:54,225 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:55,027 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:55,828 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:56,631 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:57,433 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:58,235 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:58:59,037 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:58:59,837 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:00,639 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:01,442 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:02,243 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:03,045 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:03,846 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:04,648 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:05,451 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:06,250 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:07,051 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:07,876 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:08,655 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:09,458 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:10,258 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:11,061 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:11,862 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:12,663 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:13,465 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:14,268 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:15,069 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:15,872 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:16,673 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:17,473 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:18,275 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:19,078 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:19,879 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:20,681 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:21,482 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:22,284 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:23,085 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:23,888 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:24,689 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:25,491 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:26,293 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:27,095 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:27,897 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:28,699 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:29,501 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:30,303 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:31,103 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:31,904 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:32,706 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:33,508 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:34,309 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:35,111 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:35,912 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:36,714 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:37,514 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:38,320 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:39,118 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:39,920 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:40,730 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:41,523 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:42,324 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:43,126 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:43,926 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:44,728 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:45,530 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:46,333 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:47,133 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:47,934 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:48,735 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:49,537 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:50,358 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:51,140 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:51,940 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:52,776 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:53,543 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:54,346 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:55,146 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:55,948 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:56,750 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:57,552 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:58,353 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 13:59:59,155 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 13:59:59,956 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:00,758 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:01,559 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:02,361 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:03,162 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:03,964 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:04,765 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:05,567 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:06,368 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:07,170 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:07,971 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:08,774 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:09,574 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:10,377 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:11,180 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:11,980 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:12,782 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:13,585 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:14,385 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:15,186 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:16,008 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:16,790 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:17,591 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:18,392 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:19,192 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:19,995 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:20,835 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:21,598 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:22,400 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:23,202 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:24,003 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:24,805 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:25,606 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:26,408 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:27,209 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:28,011 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:28,812 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:29,614 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:30,415 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:31,217 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:32,019 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:32,821 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:33,622 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:34,424 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:35,225 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:36,026 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:36,833 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:37,630 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:38,431 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:39,251 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:40,035 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:40,837 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:41,666 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:42,440 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:43,242 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:44,043 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:44,844 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:45,647 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:46,448 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:47,249 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:48,051 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:48,853 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:49,654 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:50,458 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:51,259 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:52,062 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:52,863 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:53,666 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:54,468 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:55,270 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:56,071 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:56,873 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:57,674 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:00:58,475 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:00:59,277 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:00,080 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:00,881 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:01,683 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:02,484 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:03,287 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:04,088 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:04,891 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:05,692 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:06,493 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:07,293 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:08,095 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:08,895 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:09,697 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:10,497 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:11,300 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:12,111 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:12,902 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:13,703 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:14,523 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:15,305 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:16,108 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:16,910 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:17,711 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:18,512 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:19,314 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:20,115 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:20,918 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:21,718 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:22,519 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:23,321 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:24,123 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:24,924 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:25,725 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:26,526 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:27,328 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:28,129 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:28,931 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:29,733 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:30,551 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:31,336 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:32,137 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:32,939 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:33,741 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:34,542 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:35,343 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:36,145 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:36,947 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:37,748 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:38,549 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:39,350 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:40,152 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:40,953 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:41,755 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:42,561 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:43,358 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:44,160 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:44,991 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:45,762 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:46,563 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:47,365 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:48,168 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:48,969 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:49,771 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:50,572 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:51,373 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:52,175 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:52,978 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:53,779 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:54,582 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:55,383 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:56,186 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:56,987 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:57,789 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:01:58,590 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:01:59,393 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:00,194 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:00,996 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:01,797 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:02,599 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:03,404 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:04,203 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:05,004 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:05,819 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:06,606 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:07,409 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:08,229 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:09,012 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:09,813 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:10,616 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:11,417 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:12,218 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:13,027 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:13,823 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:14,622 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:15,424 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:16,225 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:17,028 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:17,828 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:18,631 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:19,432 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:20,232 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:21,033 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:21,835 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:22,637 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:23,439 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:24,240 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:25,041 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:25,843 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:26,645 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:27,448 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:28,250 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:29,052 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:29,854 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:30,656 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:31,458 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:32,259 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:33,062 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:33,863 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:34,664 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:35,466 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:36,274 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:37,069 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:37,869 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:38,683 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:39,473 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:40,275 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:41,077 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:41,878 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:42,679 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:43,480 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:44,282 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:45,082 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:45,884 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:46,686 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:47,489 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:48,291 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:49,092 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:49,893 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:50,695 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:51,497 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:52,299 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:53,100 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:53,902 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:54,704 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:55,506 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:56,306 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:57,109 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:57,911 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:02:58,713 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:02:59,514 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:00,317 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:01,118 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:01,919 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:02,721 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:03,523 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:04,324 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:05,126 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:05,927 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:06,729 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:07,531 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:08,334 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:09,159 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:09,938 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:10,738 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:11,540 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:12,342 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:13,144 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:13,984 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:14,748 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:15,549 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:16,350 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:17,152 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:17,955 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:18,756 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:19,559 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:20,360 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:21,162 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:21,963 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:22,766 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:23,565 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:24,368 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:25,170 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:25,970 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:26,772 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:27,574 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:28,375 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:29,177 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:29,978 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:30,779 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:31,580 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:32,385 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:33,183 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:33,985 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:34,799 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:35,587 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:36,388 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:37,214 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:37,991 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:38,795 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:39,629 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:40,397 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:41,198 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:42,000 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:42,802 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:43,604 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:44,406 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:45,207 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:46,009 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:46,812 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:47,613 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:48,415 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:49,216 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:50,018 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:50,820 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:51,622 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:52,423 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:53,225 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:54,027 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:54,830 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:55,631 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:56,434 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:57,235 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:58,037 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:03:58,839 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:03:59,642 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:00,443 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:01,245 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:02,045 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:02,846 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:03,647 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:04,450 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:05,257 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:06,054 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:06,855 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:07,680 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:08,458 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:09,260 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:10,099 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:10,864 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:11,664 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:12,466 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:13,267 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:14,068 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:14,870 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:15,672 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:16,473 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:17,275 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:18,076 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:18,879 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:19,680 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:20,483 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:21,284 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:22,084 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:22,886 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:23,687 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:24,488 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:25,291 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:26,092 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:26,893 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:27,695 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:28,510 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:29,298 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:30,100 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:30,902 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:31,704 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:32,505 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:33,336 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:34,107 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:34,910 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:35,711 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:36,513 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:37,314 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:38,129 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:38,918 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:39,721 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:40,522 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:41,325 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:42,126 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:42,929 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:43,729 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:44,532 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:45,333 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:46,136 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:46,937 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:47,739 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:48,539 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:49,342 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:50,143 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:50,946 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:51,747 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:52,548 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:53,350 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:54,152 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:54,953 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:55,755 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:56,557 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:57,359 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:58,160 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:04:58,962 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:04:59,764 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:00,565 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:01,372 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:02,169 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:02,970 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:03,772 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:04,574 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:05,375 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:06,184 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:06,978 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:07,779 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:08,602 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:09,382 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:10,185 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:11,013 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:11,789 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:12,589 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:13,391 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:14,192 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:14,994 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:15,795 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:16,598 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:17,399 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:18,202 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:19,003 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:19,804 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:20,605 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:21,407 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:22,208 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:23,011 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:23,812 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:24,614 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:25,416 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:26,219 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:27,019 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:27,822 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:28,624 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:29,425 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:30,227 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:31,029 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:31,831 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:32,632 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:33,433 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:34,236 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:35,037 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:35,839 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:36,645 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:37,444 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:38,245 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:39,073 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:39,848 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:40,650 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:41,491 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:42,254 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:43,054 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:43,857 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:44,659 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:45,461 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:46,261 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:47,063 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:47,864 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:48,667 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:49,468 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:50,269 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:51,071 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:51,872 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:52,674 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:53,476 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:54,277 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:55,079 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:55,880 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:56,682 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:57,483 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:58,286 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:05:59,086 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:05:59,888 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:00,689 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:01,490 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:02,306 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:03,094 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:03,894 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:04,729 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:05,497 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:06,299 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:07,101 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:07,901 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:08,703 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:09,505 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:10,305 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:11,107 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:11,909 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:12,711 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:13,513 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:14,314 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:15,115 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:15,916 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:16,718 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:17,520 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:18,322 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:19,123 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:19,925 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:20,728 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:21,529 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:22,329 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:23,130 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:23,932 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:24,733 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:25,537 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:26,339 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:27,140 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:27,961 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:28,743 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:29,544 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:30,373 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:31,147 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:31,949 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:32,750 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:33,553 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:34,354 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:35,157 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:35,957 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:36,759 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:37,561 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:38,363 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:39,165 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:39,967 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:40,768 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:41,571 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:42,372 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:43,174 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:43,975 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:44,777 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:45,578 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:46,380 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:47,181 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:47,983 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:48,784 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:49,585 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:50,387 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:51,202 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:51,989 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:52,791 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:53,624 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:54,394 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:55,196 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:56,032 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:56,800 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:57,601 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:06:58,403 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:06:59,205 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:00,006 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:00,809 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:01,610 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:02,413 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:03,214 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:04,017 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:04,818 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:05,620 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:06,421 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:07,223 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:08,024 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:08,827 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:09,628 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:10,430 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:11,232 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:12,033 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:12,835 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:13,637 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:14,438 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:15,240 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:16,042 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:16,844 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:17,645 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:18,449 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:19,263 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:20,052 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:20,854 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:21,685 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:22,459 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:23,260 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:24,062 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:24,864 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:25,665 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:26,467 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:27,269 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:28,071 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:28,873 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:29,675 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:30,477 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:31,280 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:32,081 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:32,883 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:33,685 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:34,485 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:35,286 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:36,088 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:36,889 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:37,699 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:38,494 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:39,296 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:40,112 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:40,899 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:41,700 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:42,503 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:43,304 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:44,105 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:44,911 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:45,710 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:46,512 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:47,313 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:48,115 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:48,917 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:49,719 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:50,521 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:51,322 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:52,125 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:52,925 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:53,727 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:54,529 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:55,330 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:56,132 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:56,935 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:57,737 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:07:58,539 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:07:59,340 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:00,143 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:00,944 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:01,746 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:02,547 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:03,355 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:04,151 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:04,954 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:05,780 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:06,558 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:07,359 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:08,160 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:08,963 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:09,765 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:10,566 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:11,369 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:12,171 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:12,973 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:13,775 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:14,577 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:15,378 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:16,180 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:16,981 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:17,783 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:18,584 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:19,387 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:20,187 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:20,990 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:21,791 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:22,594 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:23,395 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:24,198 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:24,999 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:25,802 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:26,603 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:27,405 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:28,205 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:29,008 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:29,809 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:30,612 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:31,422 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:32,214 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:33,016 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:33,850 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:34,619 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:35,420 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:36,222 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:37,024 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:37,826 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:38,628 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:39,430 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:40,231 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:41,032 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:41,834 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:42,636 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:43,438 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:44,240 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:45,042 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:45,842 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:46,644 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:47,446 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:48,248 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:49,049 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:49,850 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:50,652 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:51,453 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:52,256 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:53,058 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:53,859 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:54,675 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:55,462 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:56,265 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:57,065 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:57,868 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:08:58,669 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:08:59,470 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:00,273 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:01,074 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:01,876 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:02,678 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:03,480 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:04,281 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:05,083 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:05,885 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:06,687 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:07,488 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:08,289 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:09,092 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:09,893 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:10,698 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:11,497 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:12,299 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:13,100 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:13,901 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:14,703 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:15,505 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:16,307 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:17,109 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:17,910 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:18,712 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:19,513 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:20,315 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:21,117 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:21,919 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:22,739 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:23,523 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:24,324 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:25,167 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:25,928 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:26,730 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:27,531 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:28,333 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:29,135 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:29,936 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:30,737 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:31,541 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:32,342 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:33,145 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:33,947 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:34,749 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:35,551 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:36,353 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:37,154 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:37,956 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:38,757 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:39,558 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:40,360 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:41,166 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:41,964 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:42,766 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:43,580 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:44,370 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:45,172 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:45,989 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:46,775 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:47,577 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:48,378 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:49,180 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:49,981 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:50,786 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:51,586 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:52,388 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:53,189 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:53,991 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:54,792 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:55,595 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:56,396 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:57,198 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:57,999 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:09:58,801 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:09:59,602 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:00,405 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:01,207 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:02,009 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:02,810 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:03,612 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:04,414 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:05,215 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:06,016 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:06,817 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:07,618 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:08,421 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:09,222 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:10,025 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:10,826 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:11,644 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:12,431 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:13,234 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:14,057 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:14,836 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:15,637 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:16,439 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:17,241 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:18,043 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:18,881 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:19,646 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:20,448 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:21,250 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:22,051 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:22,853 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:23,654 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:24,457 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:25,258 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:26,061 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:26,863 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:27,664 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:28,465 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:29,267 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:30,069 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:30,870 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:31,671 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:32,473 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:33,275 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:34,076 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:34,877 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:35,680 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:36,481 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:37,282 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:38,084 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:38,886 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:39,698 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:40,490 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:41,291 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:42,094 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:42,895 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:43,696 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:44,499 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:45,299 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:46,101 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:46,926 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:47,703 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:48,505 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:49,347 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:50,108 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:50,909 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:51,711 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:52,513 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:53,315 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:54,117 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:54,919 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:55,720 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:56,523 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:57,324 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:58,126 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:10:58,927 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:10:59,730 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:00,532 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:01,332 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:02,133 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:02,937 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:03,738 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:04,538 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:05,340 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:06,143 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:06,945 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:07,746 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:08,548 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:09,350 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:10,152 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:10,954 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:11,755 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:12,558 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:13,358 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:14,160 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:14,962 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:15,765 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:16,567 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:17,379 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:18,169 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:18,971 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:19,790 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:20,574 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:21,375 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:22,178 - FakeValveController - INFO - Valve '3' state set to 0
+2024-09-20 14:11:22,979 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:23,780 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-20 14:11:23,781 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-20 14:11:23,781 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:23,782 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-20 14:11:23,782 - FakeValveController - INFO - Valve '5' state set to 1
+2024-09-20 14:11:23,782 - FakeValveController - INFO - Valve '6' state set to 1
+2024-09-20 14:11:23,802 - FakeValveController - INFO - Valve '1' state set to 1
+2024-09-20 14:11:23,803 - FakeValveController - INFO - Valve '2' state set to 1
+2024-09-20 14:11:23,803 - FakeValveController - INFO - Valve '3' state set to 1
+2024-09-20 14:11:23,804 - FakeValveController - INFO - Valve '4' state set to 1
+2024-09-20 14:11:23,804 - FakeValveController - INFO - Valve '5' state set to 0
+2024-09-20 14:11:23,805 - FakeValveController - INFO - Valve '6' state set to 1

@@ -23,7 +23,9 @@ class HoldingTimeState(State):
             self.freq = self.machine.freq_command
             if time.time() - start_time > 90:  # 5 minutes timeout
                 self.machine.logger.error("Tuning timeout")
-                raise TimeoutError("Failed to reach setpoint within 5 minutes")
+                self.machine.logger.error("Failed to reach setpoint within 5 minutes")
+                self.machine.force_Stop = True
+                break
             time.sleep(0.05)
 
     def on_exit(self):
