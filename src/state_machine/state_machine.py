@@ -6,6 +6,7 @@ import json
 import copy
 import threading
 import traceback
+from logging.handlers import RotatingFileHandler
 
 from states.idle import IdleState
 from states.initialize import InitializeState
@@ -22,7 +23,7 @@ class StateMachine:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.ERROR)
         
-        fileHandler = logging.handlers.RotatingFileHandler('logs/state_machine.log', maxBytes=1_000_000, backupCount=5)
+        fileHandler = RotatingFileHandler('logs/state_machine.log', maxBytes=1_000_000, backupCount=5)
         fileHandler.setFormatter(formatter)
         
         stream_handler = logging.StreamHandler()

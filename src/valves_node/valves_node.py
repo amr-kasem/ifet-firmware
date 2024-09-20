@@ -10,6 +10,7 @@ import json
 import logging
 import time
 import paho.mqtt.client as mqtt
+from logging.handlers import RotatingFileHandler
 
 class ValveController:
     def __init__(self, config_file):
@@ -49,7 +50,7 @@ class ValveController:
         logger.setLevel(logging.ERROR)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch = logging.StreamHandler()
-        fh = logging.handlers.RotatingFileHandler('logs/valve_controller.log', maxBytes=1_000_000, backupCount=5)
+        fh = RotatingFileHandler('logs/valve_controller.log', maxBytes=1_000_000, backupCount=5)
         ch.setFormatter(formatter)
         fh.setFormatter(formatter)
         logger.addHandler(ch)

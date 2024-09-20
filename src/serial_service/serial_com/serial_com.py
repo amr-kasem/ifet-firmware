@@ -127,7 +127,7 @@ class SerialCom:
         return self._execute_with_lock(address, self.comport.read_block, register, number_of_registers)
 
     def close(self):
-        self.comport.close()
+        self.comport.serial.close()
         
     def __del__(self):
         self.close()
