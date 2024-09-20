@@ -21,9 +21,9 @@ class HoldingTimeState(State):
                 self.machine.logger.info(f"Setpoint reached: {self.machine.sensors_values[self.machine.sensor_id]}")
                 break
             self.freq = self.machine.freq_command
-            if time.time() - start_time > 90:  # 5 minutes timeout
+            if time.time() - start_time > 120:  # 2 minutes timeout
                 self.machine.logger.error("Tuning timeout")
-                self.machine.logger.error("Failed to reach setpoint within 5 minutes")
+                self.machine.logger.error("Failed to reach setpoint within 2 minutes")
                 self.machine.force_Stop = True
                 break
             time.sleep(0.05)
