@@ -41,7 +41,7 @@ class SerialCom:
             level=logging.ERROR,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[
-                logging.handlersRotatingFileHandler("logs/serial_com.log", maxBytes=1_000_000, backupCount=5),
+                RotatingFileHandler("logs/serial_com.log", maxBytes=1_000_000, backupCount=5),
                 logging.StreamHandler()
             ]
         )
