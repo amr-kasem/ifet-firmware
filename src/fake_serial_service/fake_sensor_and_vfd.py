@@ -7,11 +7,6 @@ from logging.handlers import RotatingFileHandler
 
 class FakeSensorAndVFD:
     def __init__(self):
-        self.vfd_frequency = 0
-        self.sensor_value = 0
-        self.vfd_running = False
-        self.mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-        self.setup_mqtt()
         
         # Set up logging to file with max size of 1 MB and keep the latest 5 files
         log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -21,6 +16,12 @@ class FakeSensorAndVFD:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         self.logger.addHandler(log_handler)
+        
+        self.vfd_frequency = 0
+        self.sensor_value = 0
+        self.vfd_running = False
+        self.mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        self.setup_mqtt()
 
     def setup_mqtt(self):
         self.mqtt_client.on_connect = self.on_connect

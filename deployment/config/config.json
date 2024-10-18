@@ -15,7 +15,7 @@
     "close_port_after_each_call": true
   },
   "mqtt": {
-    "broker_host": "172.17.0.1",
+    "broker_host": "172.20.0.1",
     "broker_port": 1883,
     "username": "",
     "password": ""
