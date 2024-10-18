@@ -32,7 +32,7 @@ class StartVDFState(State):
             self.machine.current_status = 'vfd reset'
         except Exception as e:
             self.machine.logger.error(f"Error starting VDF: {str(e)}")
-            raise
+            self.machine.force_Stop = True
         
     def on_exit(self):
         super().on_exit()

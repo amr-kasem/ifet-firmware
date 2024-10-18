@@ -29,4 +29,4 @@ class IdleState(State):
                 self.machine.current_status = 'idle'
             except Exception as e:
                 self.machine.logger.error(f"Error configuring valves: {str(e)}")
-                raise
+                self.machine.force_Stop = True
