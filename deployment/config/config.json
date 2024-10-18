@@ -28,6 +28,22 @@
       "value":"",
       "active": true,
       "type": "pressure"
+    },
+    {
+      "name": "sensor2",
+      "address": 2,
+      "debug": false,
+      "value":"",
+      "active": true,
+      "type": "pressure"
+    },
+    {
+      "name": "sensor2",
+      "address": 3,
+      "debug": false,
+      "value":"",
+      "active": true,
+      "type": "pressure"
     }
   ],
   "vfd": {
@@ -82,9 +98,9 @@
       "pin": 11,
       "role": [
         "FORCE",
-        "ALWAYSON"
+        "ALWAYSOFF"
       ],
-      "value" :0,
+      "value" :1,
       "address": "5"
     },
     {
@@ -94,7 +110,7 @@
         "FORCE",
         "ALWAYSOFF"
       ],
-      "value" :0,
+      "value" :1,
       "address": "6"
     }
   ],

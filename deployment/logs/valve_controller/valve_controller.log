@@ -1,0 +1,34 @@
+2024-10-04 12:15:21,535 - ValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 62, in connect_mqtt
+    self.client.connect(self.broker_host, self.broker_port)
+  File "/usr/local/lib/python3.9/site-packages/paho/mqtt/client.py", line 1435, in connect
+    return self.reconnect()
+  File "/usr/local/lib/python3.9/site-packages/paho/mqtt/client.py", line 1598, in reconnect
+    self._sock = self._create_socket()
+  File "/usr/local/lib/python3.9/site-packages/paho/mqtt/client.py", line 4609, in _create_socket
+    sock = self._create_socket_connection()
+  File "/usr/local/lib/python3.9/site-packages/paho/mqtt/client.py", line 4640, in _create_socket_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "/usr/local/lib/python3.9/socket.py", line 856, in create_connection
+    raise err
+  File "/usr/local/lib/python3.9/socket.py", line 844, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+2024-10-04 12:15:26,561 - ValveController - ERROR - MQTT connection failed: [Errno 111] Connection refused
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 62, in connect_mqtt
+    self.client.connect(self.broker_host, self.broker_port)
+  File "/usr/local/lib/python3.9/site-packages/paho/mqtt/client.py", line 1435, in connect
+    return self.reconnect()
+  File "/usr/local/lib/python3.9/site-packages/paho/mqtt/client.py", line 1598, in reconnect
+    self._sock = self._create_socket()
+  File "/usr/local/lib/python3.9/site-packages/paho/mqtt/client.py", line 4609, in _create_socket
+    sock = self._create_socket_connection()
+  File "/usr/local/lib/python3.9/site-packages/paho/mqtt/client.py", line 4640, in _create_socket_connection
+    return socket.create_connection(addr, timeout=self._connect_timeout, source_address=source)
+  File "/usr/local/lib/python3.9/socket.py", line 856, in create_connection
+    raise err
+  File "/usr/local/lib/python3.9/socket.py", line 844, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
