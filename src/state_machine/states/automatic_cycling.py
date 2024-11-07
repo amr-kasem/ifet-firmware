@@ -31,12 +31,14 @@ class AutomaticCyclingState(State):
                 
     def on_exit(self):
         super().on_exit()
-        self.machine.api.start_cyclic_test(self.machine.project_id,self.machine.test_index_wanted)
+        if self.machine.test_index_wanted is not None: 
+            self.machine.api.start_cyclic_test(self.machine.project_id,self.machine.test_index_wanted)
 
         for i in range(self.machine.cycle_index,self.machine.cycle_counter):
             
             if self.machine.force_stop : return
-            self.machine.api.update_cyclic_test(self.machine.project_id,self.machine.test_index_wanted, i)
+            if self.machine.test_index_wanted is not None: 
+                self.machine.api.update_cyclic_test(self.machine.project_id,self.machine.test_index_wanted, i)
             
             if self.machine.action == 'positive':
                 while not self.machine.force_stop:
