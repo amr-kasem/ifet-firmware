@@ -20,6 +20,9 @@
     "username": "",
     "password": ""
   },
+  "api": {
+    "base_url": "http://172.20.0.1:8000"
+  },
   "sensors": [
     {
       "name": "1",

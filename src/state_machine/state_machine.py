@@ -10,6 +10,7 @@ import traceback
 import os
 from logging.handlers import RotatingFileHandler
 
+from api.api import Api
 from states.idle import IdleState
 from states.initialize import InitializeState
 from states.start_vfd import StartVDFState
@@ -54,6 +55,8 @@ class StateMachine:
         self.current_event = None
         self.trigger_event_flag = False
         self.freq_command = 0
+        self.api_base_url = config['api']['base_url']
+        self.api = Api(logger=self.logger,api=self.api_base_url)
         self.broker_address = config['mqtt']['broker_host']
         self.broker_port = config['mqtt']['broker_port']
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
@@ -102,60 +105,8 @@ class StateMachine:
         self.current_status = 'initial'
         self.feedback_loop = threading.Thread(target=self.pub_feedback)
         
-        self.retrieve_variables()
         
-    def store_variables(self,resume=None, command=None, current_test_index=None, cycle_index=None, current_inputs=None):
-        # Load existing data
-        try:
-            with open('variables.json', 'r') as file:
-                data = json.load(file)
-        except FileNotFoundError:
-            data = {}
-        except json.JSONDecodeError:
-            self.logger.error("Error decoding JSON from variables file.")
-            data = {}
-
-        # Update with new values
-        if resume is not None:
-            data['resume'] = resume
-        if command is not None:
-            data['command'] = command
-        if current_test_index is not None:
-            data['current_test_index'] = current_test_index
-        if cycle_index is not None:
-            data['cycle_index'] = cycle_index
-        if current_inputs is not None:
-            data['current_inputs'] = current_inputs
-        
-
-        # Write back to file
-        try:
-            with open('variables.json', 'w') as file:
-                json.dump(data, file)
-        except Exception as e:
-            self.logger.error(f"Error writing to variables file: {str(e)}")
-        
-        
-        
-    def retrieve_variables(self):
-        try:
-            with open('variables.json', 'r') as file:
-                data = json.load(file)
-                self.cyclic_resume =  data['resume']
-                self.resume_command =  data['command']
-                self.current_test_index =  int(data['current_test_index'])
-                self.cycle_index =  int(data['cycle_index'])
-                self.current_user_inputs = data['current_inputs']
-                return data
-        except FileNotFoundError:
-            self.logger.warning("variables.json file not found.")
-            return {}
-        except json.JSONDecodeError:
-            self.logger.error("Error decoding JSON from variables file.")
-            return {}
-        
-        
-    
+   
                         
     def on_connect(self, client, userdata, flags, rc,prop):
         
@@ -180,8 +131,8 @@ class StateMachine:
                 self.client.subscribe(vdf_topic)
                 self.feedback_loop.start()
                 self.current_state.on_enter()
-                if self.cyclic_resume:
-                    self.current_status = f'resume cycle {self.cycle_index}'
+                # if self.cyclic_resume:
+                #     self.current_status = f'resume cycle {self.cycle_index}'
                     
                 if self.task is None: 
                     self.task = threading.Thread(target=self.state_loop)
@@ -219,6 +170,9 @@ class StateMachine:
         self.logger.error("Exceeded maximum retry attempts. Exiting...")
         exit(1)
         
+    def notify(self):
+        self.client.publish(f'{self.device_id}/notify','')
+    
     def publish_status(self):
         self.client.publish(f'{self.device_id}/status',self.current_status)
         self.client.publish(f'{self.device_id}/current_test_index',self.current_test_index)
@@ -253,12 +207,11 @@ class StateMachine:
                 self.current_event = event
                 self.trigger_event_flag = True
                 
-            elif topic_name == 'resume_cancel':
-                self.test_index_wanted = None
-                self.cyclic_resume = False
-                self.cycle_index = 0
-                self.current_status = 'idle'
-                self.store_variables(resume=self.cyclic_resume,command={},current_test_index=self.current_test_index,cycle_index=self.cycle_index)
+            # elif topic_name == 'resume_cancel':
+            #     self.test_index_wanted = None
+            #     self.cyclic_resume = False
+            #     self.cycle_index = 0
+            #     self.current_status = 'idle'
                 
             elif topic_name == 'emergency_stop': 
                 self.client.publish(
@@ -282,7 +235,6 @@ class StateMachine:
             elif message.topic == f'{self.device_id}/current_input':
                 data = json.loads(message.payload.decode())
                 self.current_user_inputs = data
-                self.store_variables(current_inputs=data)
         except json.JSONDecodeError:
             self.logger.error(f"Error decoding JSON from message on topic {message.topic}")
         except Exception as e:
@@ -304,42 +256,42 @@ class StateMachine:
         if isinstance(self.current_state, IdleState):
             self.force_stop = False
             if event['command'] == "start":
-                self.logger.info(event)
                 if event.get('custom_preset') == 'preset' :
+                    self.logger.info(event)
                     if event['mode'] == 'manual': 
+                        data = self.api.get_static_test(event['test_id'])
+                        self.current_test = event['test_id']
                         self.cyclic_mode = False
-                        
                         self.mode = event['mode']
                         self.sensor_id = event['sensor_id']
-                        self.setpoint = event['setpoint']
-                        self.holdtime = event['holdtime']
+                        direction = data['type'] == 'inward'
+                        self.setpoint = data['pressure'] * 1 if direction else -1
+                        self.holdtime = data['duration']
                         
+                        self.test_index_wanted = data['index']
                         self.current_state.on_exit()
                         self.current_state = self.states["initializing_valves"]
-                        self.action = 'positive' if self.setpoint > self.sensors_values[self.sensor_id] else 'negative'
+                        self.action = 'positive' if direction else 'negative'
                         self.current_state.on_enter()
-                        
                         n_event = copy.deepcopy(event) 
                         n_event['command'] = 'turn_on'
                         self.current_event = n_event
                         self.trigger_event_flag = True
-                        # self.trigger_event(n_event)
+                        pass
                     elif event['mode'] == 'cyclic':
+                        self.logger.info(f'test event: {event}')
+                        self.project_id = event['project_id']
+                        data = self.api.get_next_cyclic_test(self.project_id)
                         self.cyclic_mode = True
-                        self.logger.info(f'Command Test index: {event["test_index"]}')
-                        self.test_index_wanted = event['test_index'] if 'test_index' in event else 0
-                        self.store_variables(command=event)
-                        
+                        self.logger.info(f'test data: {data}')
+                        self.test_index_wanted = data['index']
+                        self.cycle_index = data['current_cycle']
                         self.mode = event['mode']
                         self.sensor_id =event['sensor_id']
-                        self.cycle_counter = int(event['cycles'])
-                        self.positive_setpoint = float(event['positive'])
-                        self.negative_setpoint = float(event['negative'])
-                        p1 = float(self.positive_setpoint)
-                        p2 = float(self.negative_setpoint)
-                        direction = p1 > p2
-                        self.logger.info(f'{p1} > {p2} = {direction}')
-
+                        self.cycle_counter = data['cycles']
+                        direction = data['type'] == 'inward'
+                        self.positive_setpoint = data['high_pressure'] * -1 if direction else 1
+                        self.negative_setpoint = data['low_pressure'] * -1 if direction else 1
                         self.action = 'positive' if direction else 'negative'
                         self.current_state.on_exit()
                         self.current_state = self.states["initializing_valves"]
@@ -348,20 +300,20 @@ class StateMachine:
                         n_event['command'] = 'turn_on'
                         self.current_event = n_event
                         self.trigger_event_flag = True
-                        # self.trigger_event(n_event)
 
                 else:
+                    self.logger.info(event)
+                    direction = event['inout'] == 'inward'
+
                     if event['mode'] == 'manual': 
                         self.cyclic_mode = False
-                        
                         self.mode = event['mode']
                         self.sensor_id = event['sensor_id']
                         self.setpoint = event['setpoint']
                         self.holdtime = event['holdtime']
-                        
                         self.current_state.on_exit()
                         self.current_state = self.states["initializing_valves"]
-                        self.action = 'positive' if self.setpoint > self.sensors_values[self.sensor_id] else 'negative'
+                        self.action = 'positive' if direction else 'negative'
                         self.current_state.on_enter()
                         
                         n_event = copy.deepcopy(event) 
@@ -372,19 +324,12 @@ class StateMachine:
                     elif event['mode'] == 'cyclic':
                         self.cyclic_mode = True
                         self.logger.info(f'Command Test index: {event["test_index"]}')
-                        self.test_index_wanted = event['test_index'] if 'test_index' in event else 0
-                        self.store_variables(command=event)
-                        
+                        self.test_index_wanted = None
                         self.mode = event['mode']
                         self.sensor_id =event['sensor_id']
                         self.cycle_counter = int(event['cycles'])
                         self.positive_setpoint = float(event['positive'])
                         self.negative_setpoint = float(event['negative'])
-                        p1 = float(self.positive_setpoint)
-                        p2 = float(self.negative_setpoint)
-                        direction = p1 > p2
-                        self.logger.info(f'{p1} > {p2} = {direction}')
-
                         self.action = 'positive' if direction else 'negative'
                         self.current_state.on_exit()
                         self.current_state = self.states["initializing_valves"]

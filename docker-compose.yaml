@@ -3,7 +3,6 @@ services:
     build: ./src/state_machine/
     volumes:
       - ./deployment/config/config.json:/app/config.json
-      - ./deployment/config/variables.json:/app/variables.json
       - ./deployment/log/state_machine:/app/logs
     restart: always
   

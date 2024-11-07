@@ -7,7 +7,6 @@ class AutomaticCyclingState(State):
         super().on_enter()
         self.freq = 0
         self.machine.current_status = 'warming up'
-        self.machine.store_variables(resume=True)
         
         self.setpoint = max(abs(float(self.machine.positive_setpoint)),abs(float(self.machine.negative_setpoint)))
         while not self.machine.force_stop:
@@ -32,11 +31,13 @@ class AutomaticCyclingState(State):
                 
     def on_exit(self):
         super().on_exit()
+        self.machine.api.start_cyclic_test(self.machine.project_id,self.machine.test_index_wanted)
+
         for i in range(self.machine.cycle_index,self.machine.cycle_counter):
             
             if self.machine.force_stop : return
-            self.machine.store_variables(cycle_index=i)    
-                                
+            self.machine.api.update_cyclic_test(self.machine.project_id,self.machine.test_index_wanted, i)
+            
             if self.machine.action == 'positive':
                 while not self.machine.force_stop:
                     self.machine.current_status = f'Cycle {i+1} High Stroke'
@@ -66,6 +67,7 @@ class AutomaticCyclingState(State):
                         time.sleep(0.8) # modif
                         break
                     time.sleep(0.02)
+                
             else:
                 
                 while not self.machine.force_stop:
@@ -99,15 +101,14 @@ class AutomaticCyclingState(State):
             if i == self.machine.cycle_counter - 1 :
                 for valve in self.machine.valves:
                     self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',1) # on // release
-        
+
+
         
                     
         if self.machine.test_index_wanted is not None and  not self.machine.force_stop:
-            self.machine.store_variables(current_test_index=self.machine.test_index_wanted)
-            self.machine.current_test_index = self.machine.test_index_wanted
+            self.machine.api.finish_cyclic_test(self.machine.project_id,self.machine.test_index_wanted)
+            self.machine.notify()
             self.machine.logger.info(f'Test index wanted: {self.machine.test_index_wanted}')
         
         self.machine.cycle_index = 0
-        self.machine.store_variables(cycle_index=0)    
-        self.machine.store_variables(resume=False)
 
