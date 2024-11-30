@@ -68,7 +68,7 @@
       "pin": 15,
       "role": [
         "ACTIVE",
-        "NEGATIVE"
+        "NEGATIVE","RELIEF"
       ],
       "value" :0,
       "address": "2"
@@ -78,7 +78,7 @@
       "pin": 33,
       "role": [
         "ACTIVE",
-        "POSITIVE"
+        "POSITIVE", "NEGATIVE_RELEASE", "RELIEF"
       ],
       "value" :0,
       "address": "3"
@@ -88,7 +88,7 @@
       "pin": 35,
       "role": [
         "ACTIVE",
-        "NEGATIVE"
+        "NEGATIVE", "POSITIVE_RELEASE", "RELIEF"
       ],
       "value" :0,
       "address": "4"

@@ -7,6 +7,11 @@ class StoppingState(State):
             self.machine.logger.info("Stopping VDF...")
             self.machine.current_status = 'colding down'
             if(self.machine.force_stop): self.machine.current_status = 'emergency: waiting for vdf to stop'
+            for valve in self.machine.valves:
+                if "ACTIVE" in valve["role"]:
+                    print(f'will default valve[{valve["name"]} to {"POSITIVE" in valve["role"]}]')
+                    self.machine.logger.info(f'will default valve[{valve["name"]} to {"RELIEF" in valve["role"]}]')
+                    self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0 if "RELIEF" in valve["role"] else 1 )
             while not self.machine.exit:
                 if self.machine.vdf_feedback == 0:
                     break
@@ -32,9 +37,6 @@ class StoppingState(State):
             self.machine.current_status = 'vfd stopped'
         def on_exit(self):
             super().on_exit()
-            for valve in self.machine.valves:
-                if "ACTIVE" in valve["role"]:
-                    self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',1)
             self.machine.logger.info("Valves closed.")
             self.machine.current_status = 'Closed Valves'
         
