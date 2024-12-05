@@ -1,10 +1,6 @@
 {
-<<<<<<< HEAD
   "device_id": "device1",
   "id": "1",
-=======
-  "device_id": "device2",
->>>>>>> origin/release-dev2
   "status": "idle",
   "current_speed": 0,
   "toggleBtn": "static_load",
@@ -33,7 +29,7 @@
       "name": "sensor1",
       "address": 1,
       "debug": false,
-      "value":"",
+      "value": "",
       "active": true,
       "type": "pressure"
     },
@@ -41,7 +37,7 @@
       "name": "sensor2",
       "address": 2,
       "debug": false,
-      "value":"",
+      "value": "",
       "active": true,
       "type": "pressure"
     },
@@ -49,7 +45,7 @@
       "name": "sensor2",
       "address": 3,
       "debug": false,
-      "value":"",
+      "value": "",
       "active": true,
       "type": "pressure"
     }
@@ -64,79 +60,43 @@
     {
       "name": "1",
       "pin": 13,
-      "role": [
-        "ACTIVE",
-        "POSITIVE"
-      ],
-      "value" :0,
+      "role": ["ACTIVE", "POSITIVE"],
+      "value": 0,
       "address": "1"
     },
     {
       "name": "2",
-<<<<<<< HEAD
       "pin": 35,
       "role": ["ACTIVE", "NEGATIVE", "RELIEF"],
       "value": 0,
-=======
-      "pin": 15,
-      "role": [
-        "ACTIVE",
-        "NEGATIVE","RELIEF"
-      ],
-      "value" :0,
->>>>>>> origin/release-dev2
       "address": "2"
     },
     {
       "name": "3",
-<<<<<<< HEAD
       "pin": 31,
       "role": ["ACTIVE", "POSITIVE", "NEGATIVE_RELEASE", "RELIEF"],
       "value": 0,
-=======
-      "pin": 33,
-      "role": [
-        "ACTIVE",
-        "POSITIVE", "NEGATIVE_RELEASE", "RELIEF"
-      ],
-      "value" :0,
->>>>>>> origin/release-dev2
       "address": "3"
     },
     {
       "name": "4",
-<<<<<<< HEAD
       "pin": 15,
       "role": ["ACTIVE", "NEGATIVE", "POSITIVE_RELEASE", "RELIEF"],
       "value": 0,
-=======
-      "pin": 35,
-      "role": [
-        "ACTIVE",
-        "NEGATIVE", "POSITIVE_RELEASE", "RELIEF"
-      ],
-      "value" :0,
->>>>>>> origin/release-dev2
       "address": "4"
     },
     {
       "name": "5",
       "pin": 11,
-      "role": [
-        "FORCE",
-        "ALWAYSOFF"
-      ],
-      "value" :1,
+      "role": ["FORCE", "ALWAYSOFF"],
+      "value": 1,
       "address": "5"
     },
     {
       "name": "6",
       "pin": 37,
-      "role": [
-        "FORCE",
-        "ALWAYSOFF"
-      ],
-      "value" :1,
+      "role": ["FORCE", "ALWAYSOFF"],
+      "value": 1,
       "address": "6"
     }
   ],
@@ -148,5 +108,4 @@
     "valve5": 1,
     "valve6": 1
   }
-
 }
