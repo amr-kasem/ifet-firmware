@@ -81,21 +81,21 @@
     {
       "name": "2",
       "pin": 35,
-      "role": ["ACTIVE", "NEGATIVE"],
+      "role": ["ACTIVE", "NEGATIVE", "RELIEF"],
       "value": 0,
       "address": "2"
     },
     {
       "name": "3",
       "pin": 31,
-      "role": ["ACTIVE", "POSITIVE", "NEGATIVE_RELEASE"],
+      "role": ["ACTIVE", "POSITIVE", "NEGATIVE_RELEASE", "RELIEF"],
       "value": 0,
       "address": "3"
     },
     {
       "name": "4",
       "pin": 15,
-      "role": ["ACTIVE", "NEGATIVE", "POSITIVE_RELEASE"],
+      "role": ["ACTIVE", "NEGATIVE", "POSITIVE_RELEASE", "RELIEF"],
       "value": 0,
       "address": "4"
     },

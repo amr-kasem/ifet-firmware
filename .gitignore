@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 **/log/**
 **/config
+=======
+**/logs/
+**/variables.json
+>>>>>>> origin/release-dev1
