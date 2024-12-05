@@ -1,0 +1,1246 @@
+2024-11-25 18:21:35,579 - VFDController - INFO - Set frequency: 11.41
+2024-11-25 18:21:35,645 - VFDController - INFO - Set frequency: 11.41
+2024-11-25 18:21:35,711 - VFDController - INFO - Set frequency: 11.41
+2024-11-25 18:21:36,756 - VFDController - INFO - Set frequency: 11.41
+2024-11-25 18:21:37,831 - VFDController - INFO - Set frequency: 11.41
+2024-11-25 18:21:38,906 - VFDController - INFO - Set frequency: 11.41
+2024-11-25 18:21:39,003 - VFDController - INFO - Set frequency: 11.41
+2024-11-25 18:21:39,067 - VFDController - INFO - Set frequency: 11.41
+2024-11-25 18:21:39,133 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:40,177 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:41,253 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:42,328 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:42,424 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:42,488 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:42,554 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:43,599 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:44,678 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:45,753 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:45,850 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:45,914 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:45,981 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:47,024 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:48,102 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:49,181 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:49,278 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:49,342 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:49,406 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:50,448 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:51,525 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:52,600 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:52,699 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:52,765 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:52,829 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:53,873 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:54,949 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:56,024 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:56,125 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:56,191 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:56,255 - VFDController - INFO - Set frequency: 14.41
+2024-11-25 18:21:57,330 - VFDController - ERROR - Waiting for VFD to respond, current speed is 14.4
+2024-11-25 18:21:58,405 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:21:58,438 - VFDController - ERROR - Waiting for VFD to respond, current speed is 12.19
+2024-11-25 18:21:58,535 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:21:59,579 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:21:59,612 - VFDController - ERROR - Waiting for VFD to respond, current speed is 10.09
+2024-11-25 18:22:00,687 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:00,720 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.43
+2024-11-25 18:22:01,796 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:01,829 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.91
+2024-11-25 18:22:01,926 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:01,990 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:02,022 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.41
+2024-11-25 18:22:03,067 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:03,100 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.86
+2024-11-25 18:22:03,201 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:03,263 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.52
+2024-11-25 18:22:03,296 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:03,360 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:04,404 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:04,437 - VFDController - ERROR - Waiting for VFD to respond, current speed is 1.03
+2024-11-25 18:22:05,512 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:05,545 - VFDController - INFO - Emergency stop executed.
+2024-11-25 18:22:05,640 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:06,684 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:07,762 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:08,837 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:08,935 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:08,999 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:09,063 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:10,106 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:11,181 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:12,256 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:12,355 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:12,421 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:12,485 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:13,529 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:14,605 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:15,680 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:15,779 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:15,843 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:15,907 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:16,951 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:18,026 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:19,103 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:19,202 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:19,266 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:19,330 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:20,375 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:21,450 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:22:22,527 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:22:22,624 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:23:01,731 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:23:02,776 - VFDController - INFO - Started VFD.
+2024-11-25 18:23:03,851 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:03,680 - VFDController - INFO - Set frequency: 3.0
+2024-11-25 18:24:04,723 - VFDController - INFO - Set frequency: 6.0
+2024-11-25 18:24:12,294 - VFDController - INFO - Set frequency: 9.0
+2024-11-25 18:24:12,471 - VFDController - INFO - Set frequency: 12.0
+2024-11-25 18:24:14,781 - VFDController - INFO - Set frequency: 15.0
+2024-11-25 18:24:33,583 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.02
+2024-11-25 18:24:33,618 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:34,693 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:24:34,726 - VFDController - ERROR - Waiting for VFD to respond, current speed is 10.93
+2024-11-25 18:24:34,823 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:35,868 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:24:35,901 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.05
+2024-11-25 18:24:36,978 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:37,011 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.31
+2024-11-25 18:24:37,108 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:24:38,154 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:38,185 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.29
+2024-11-25 18:24:39,258 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:24:39,291 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.3
+2024-11-25 18:24:39,390 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:40,433 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:24:40,465 - VFDController - ERROR - Waiting for VFD to respond, current speed is 0.67
+2024-11-25 18:24:41,541 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:41,573 - VFDController - INFO - Emergency stop executed.
+2024-11-25 18:24:41,671 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:24:42,715 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:43,790 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:24:44,869 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:44,966 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:24:45,032 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:45,096 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:24:46,138 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:24:47,213 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:25:01,994 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:25:03,037 - VFDController - INFO - Started VFD.
+2024-11-25 18:25:04,112 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:02,305 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:03,347 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:04,422 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:05,498 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:05,595 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:05,660 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:05,724 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:06,769 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:07,844 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:08,919 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:09,016 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:09,080 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:09,147 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:10,190 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:11,265 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:12,341 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:12,438 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:12,503 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:12,568 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:13,612 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:14,689 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:15,768 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:15,865 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:15,929 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:15,993 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:17,037 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:18,113 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:19,188 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:19,286 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:19,353 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:19,418 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:20,463 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:21,538 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:22,611 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:22,708 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:22,774 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:22,840 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:23,884 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:24,960 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:26,037 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:26,134 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:26,201 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:26,265 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:27,310 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:28,387 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:29,464 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:29,561 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:29,627 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:29,691 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:30,735 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:31,810 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:32,886 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:32,984 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:33,048 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:33,115 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:34,159 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:35,236 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:36,311 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:36,408 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:36,474 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:36,538 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:37,582 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:38,657 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:39,733 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:39,829 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:39,895 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:39,959 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:41,004 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:42,079 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:43,154 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:43,251 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:43,317 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:43,381 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:44,425 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:45,500 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:46,576 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:46,672 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:46,738 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:46,805 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:47,849 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:48,924 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:49,999 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:50,096 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:50,162 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:50,226 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:51,268 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:52,345 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:53,421 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:53,517 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:53,581 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:53,645 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:54,690 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:55,767 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:56,844 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:56,941 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:57,007 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:57,071 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:58,115 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:27:59,190 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:28:00,265 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:28:39,790 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:28:40,833 - VFDController - INFO - Started VFD.
+2024-11-25 18:28:41,910 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:29:14,038 - VFDController - INFO - Set frequency: 3.0
+2024-11-25 18:29:15,113 - VFDController - INFO - Set frequency: 6.0
+2024-11-25 18:29:16,158 - VFDController - INFO - Set frequency: 9.0
+2024-11-25 18:29:17,237 - VFDController - INFO - Set frequency: 12.0
+2024-11-25 18:29:37,183 - VFDController - INFO - Set frequency: 15.0
+2024-11-25 18:29:38,227 - VFDController - INFO - Set frequency: 18.0
+2024-11-25 18:29:41,962 - VFDController - INFO - Set frequency: 21.0
+2024-11-25 18:29:44,047 - VFDController - INFO - Set frequency: 24.0
+2024-11-25 18:29:45,792 - VFDController - INFO - Set frequency: 27.0
+2024-11-25 18:29:59,422 - VFDController - INFO - Set frequency: 30.0
+2024-11-25 18:30:00,022 - VFDController - INFO - Set frequency: 33.0
+2024-11-25 18:30:07,938 - VFDController - INFO - Set frequency: 36.0
+2024-11-25 18:30:17,704 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:40,809 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:41,853 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:42,929 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:44,004 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:44,101 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:44,167 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:44,231 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:45,275 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:46,350 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:47,425 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:47,524 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:47,590 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:47,656 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:48,700 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:49,776 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:50,851 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:50,952 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:51,018 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:51,084 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:52,128 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:53,269 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:54,313 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:55,388 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:56,464 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:56,560 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:56,626 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:56,690 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:57,733 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:58,808 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:59,885 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:30:59,982 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:00,046 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:00,112 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:01,156 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:02,231 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:03,309 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:03,407 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:03,471 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:03,535 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:04,578 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:05,655 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:06,730 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:06,827 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:06,893 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:06,957 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:08,000 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:09,109 - VFDController - INFO - Set frequency: 39.0
+2024-11-25 18:31:10,186 - VFDController - ERROR - Waiting for VFD to respond, current speed is 36.26
+2024-11-25 18:31:10,221 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:10,318 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:10,380 - VFDController - ERROR - Waiting for VFD to respond, current speed is 35.68
+2024-11-25 18:31:10,413 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:10,477 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:11,522 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:11,555 - VFDController - ERROR - Waiting for VFD to respond, current speed is 32.16
+2024-11-25 18:31:12,630 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:12,663 - VFDController - ERROR - Waiting for VFD to respond, current speed is 28.84
+2024-11-25 18:31:12,760 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:13,804 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:13,837 - VFDController - ERROR - Waiting for VFD to respond, current speed is 25.32
+2024-11-25 18:31:14,912 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:14,945 - VFDController - ERROR - Waiting for VFD to respond, current speed is 22
+2024-11-25 18:31:15,042 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:16,087 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:16,119 - VFDController - ERROR - Waiting for VFD to respond, current speed is 18.48
+2024-11-25 18:31:17,199 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:17,231 - VFDController - ERROR - Waiting for VFD to respond, current speed is 15.16
+2024-11-25 18:31:17,330 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:18,375 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:18,408 - VFDController - ERROR - Waiting for VFD to respond, current speed is 12.67
+2024-11-25 18:31:19,483 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:19,516 - VFDController - ERROR - Waiting for VFD to respond, current speed is 10.69
+2024-11-25 18:31:19,611 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:20,655 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:20,688 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.79
+2024-11-25 18:31:21,761 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:21,794 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.16
+2024-11-25 18:31:21,891 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:22,933 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:22,966 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.08
+2024-11-25 18:31:24,040 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:24,072 - VFDController - ERROR - Waiting for VFD to respond, current speed is 2.4
+2024-11-25 18:31:24,169 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:25,214 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:25,246 - VFDController - INFO - Emergency stop executed.
+2024-11-25 18:31:26,320 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:27,395 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:27,492 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:27,655 - VFDController - INFO - Emergency stop executed.
+2024-11-25 18:31:28,695 - VFDController - INFO - Emergency stop executed.
+2024-11-25 18:31:28,730 - VFDController - INFO - Emergency stop executed.
+2024-11-25 18:31:28,763 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:28,858 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:28,922 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:28,986 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:30,030 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:31,106 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:32,181 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:32,277 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:32,342 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:32,405 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:33,448 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:34,523 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:35,600 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:35,699 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:35,765 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:35,829 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:36,873 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:37,949 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:39,024 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:39,123 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:39,189 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:39,254 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:40,299 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:41,374 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:42,449 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:42,546 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:42,610 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:42,676 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:43,721 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:44,795 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:45,871 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:45,968 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:46,034 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:46,097 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:47,140 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:48,215 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:49,290 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:49,389 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:49,455 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:49,521 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:31:50,563 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:31:51,640 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:35:02,836 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:35:02,902 - VFDController - INFO - Started VFD.
+2024-11-25 18:35:03,192 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:36:34,956 - VFDController - INFO - Emergency stop executed.
+2024-11-25 18:36:47,015 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:36:47,079 - VFDController - INFO - Started VFD.
+2024-11-25 18:36:48,122 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:36:59,615 - VFDController - INFO - Set frequency: 3.0
+2024-11-25 18:37:00,659 - VFDController - INFO - Set frequency: 6.0
+2024-11-25 18:37:01,737 - VFDController - INFO - Set frequency: 9.0
+2024-11-25 18:37:02,812 - VFDController - INFO - Set frequency: 12.0
+2024-11-25 18:37:04,818 - VFDController - INFO - Set frequency: 15.0
+2024-11-25 18:37:29,080 - VFDController - INFO - Set frequency: 18.0
+2024-11-25 18:37:29,300 - VFDController - INFO - Set frequency: 21.0
+2024-11-25 18:37:38,004 - VFDController - ERROR - Waiting for VFD to respond, current speed is 20.99
+2024-11-25 18:37:39,047 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:39,111 - VFDController - ERROR - Waiting for VFD to respond, current speed is 18.08
+2024-11-25 18:37:39,177 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:39,243 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:39,305 - VFDController - ERROR - Waiting for VFD to respond, current speed is 17.5
+2024-11-25 18:37:39,340 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:40,382 - VFDController - ERROR - Waiting for VFD to respond, current speed is 14.66
+2024-11-25 18:37:40,417 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:41,492 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:41,525 - VFDController - ERROR - Waiting for VFD to respond, current speed is 12.06
+2024-11-25 18:37:41,622 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:42,666 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:42,699 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.94
+2024-11-25 18:37:43,774 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:43,807 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.09
+2024-11-25 18:37:44,885 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:44,918 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.52
+2024-11-25 18:37:45,017 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:45,083 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:45,116 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.02
+2024-11-25 18:37:46,160 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:46,193 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.49
+2024-11-25 18:37:46,290 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:46,354 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:46,387 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.99
+2024-11-25 18:37:47,429 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:47,462 - VFDController - ERROR - Waiting for VFD to respond, current speed is 0.8
+2024-11-25 18:37:47,557 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:47,621 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:47,654 - VFDController - INFO - Emergency stop executed.
+2024-11-25 18:37:48,698 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:48,795 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:37:48,859 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:37:48,925 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:38:20,835 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:38:21,880 - VFDController - INFO - Started VFD.
+2024-11-25 18:38:22,957 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:38:29,456 - VFDController - INFO - Set frequency: 3.0
+2024-11-25 18:38:30,531 - VFDController - INFO - Set frequency: 6.0
+2024-11-25 18:38:31,575 - VFDController - INFO - Set frequency: 9.0
+2024-11-25 18:38:32,652 - VFDController - INFO - Set frequency: 12.0
+2024-11-25 18:38:32,749 - VFDController - INFO - Set frequency: 15.0
+2024-11-25 18:38:32,813 - VFDController - INFO - Set frequency: 18.0
+2024-11-25 18:38:32,877 - VFDController - INFO - Set frequency: 21.0
+2024-11-25 18:38:53,199 - VFDController - INFO - Set frequency: 24.0
+2024-11-25 18:38:54,244 - VFDController - INFO - Set frequency: 27.0
+2024-11-25 18:38:55,319 - VFDController - INFO - Set frequency: 30.0
+2024-11-25 18:39:02,006 - VFDController - INFO - Set frequency: 33.0
+2024-11-25 18:39:06,725 - VFDController - INFO - Set frequency: 36.0
+2024-11-25 18:39:52,065 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:39:52,098 - VFDController - ERROR - Waiting for VFD to respond, current speed is 33.36
+2024-11-25 18:39:53,173 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:39:53,206 - VFDController - ERROR - Waiting for VFD to respond, current speed is 30.04
+2024-11-25 18:39:53,303 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:39:54,347 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:39:54,380 - VFDController - ERROR - Waiting for VFD to respond, current speed is 26.52
+2024-11-25 18:39:55,456 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:39:55,489 - VFDController - ERROR - Waiting for VFD to respond, current speed is 23.2
+2024-11-25 18:39:55,586 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:39:56,630 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:39:56,663 - VFDController - ERROR - Waiting for VFD to respond, current speed is 19.68
+2024-11-25 18:39:57,736 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:39:57,769 - VFDController - ERROR - Waiting for VFD to respond, current speed is 16.36
+2024-11-25 18:39:57,866 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:39:58,910 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:39:58,943 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.35
+2024-11-25 18:40:00,018 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:00,049 - VFDController - ERROR - Waiting for VFD to respond, current speed is 11.17
+2024-11-25 18:40:00,144 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:01,188 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:01,221 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.06
+2024-11-25 18:40:02,297 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:02,329 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.12
+2024-11-25 18:40:02,426 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:03,471 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:03,504 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.17
+2024-11-25 18:40:04,579 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:04,612 - VFDController - ERROR - Waiting for VFD to respond, current speed is 2.77
+2024-11-25 18:40:04,709 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:05,754 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:05,786 - VFDController - INFO - Emergency stop executed.
+2024-11-25 18:40:06,861 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:07,936 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:08,033 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:08,097 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:08,163 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:09,209 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:10,285 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:11,362 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:11,459 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:11,523 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:11,589 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:12,633 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:13,710 - VFDController - INFO - Stopped VFD.
+2024-11-25 18:40:14,785 - VFDController - INFO - Set frequency: 0.0
+2024-11-25 18:40:14,884 - VFDController - INFO - Stopped VFD.
+2024-11-26 15:57:26,648 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 15:57:26,712 - VFDController - INFO - Started VFD.
+2024-11-26 15:57:27,757 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 15:57:51,485 - VFDController - INFO - Set frequency: 3.0
+2024-11-26 15:57:52,529 - VFDController - INFO - Set frequency: 6.0
+2024-11-26 15:57:53,604 - VFDController - INFO - Set frequency: 9.0
+2024-11-26 15:57:54,679 - VFDController - INFO - Set frequency: 12.0
+2024-11-26 15:58:20,915 - VFDController - INFO - Set frequency: 15.0
+2024-11-26 15:58:22,999 - VFDController - INFO - Set frequency: 18.0
+2024-11-26 15:58:26,729 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:27,064 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:28,108 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:29,183 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:30,258 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:30,355 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:30,419 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:30,485 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:31,529 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:32,604 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:33,682 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:33,778 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:33,844 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:33,910 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:34,955 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:36,030 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:37,105 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:37,202 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:37,268 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:37,334 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:38,378 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:39,453 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:40,528 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:40,625 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:40,689 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:40,755 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:41,800 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:42,877 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:43,952 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:44,049 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:44,113 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:44,177 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:45,221 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:46,298 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:47,373 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:47,470 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:47,536 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:47,602 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:48,646 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:49,722 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:50,797 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:50,895 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:50,959 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:51,024 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:52,068 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:53,143 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:54,220 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:54,317 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:54,381 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:54,445 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:55,489 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:56,566 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:57,642 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:57,740 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:57,804 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:57,868 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:58,913 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 15:59:59,988 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:01,063 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:01,160 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:01,224 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:01,290 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:02,334 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:03,409 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:04,484 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:04,581 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:04,645 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:04,709 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:05,754 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:06,829 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:07,902 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:08,001 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:08,067 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:08,133 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:09,177 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:10,252 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:11,327 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:11,426 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:11,490 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:11,554 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:12,599 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:13,676 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:14,751 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:14,850 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:14,916 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:14,982 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:16,026 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:17,101 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:18,176 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:18,273 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:18,339 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:18,405 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:19,449 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:20,526 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:21,602 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:21,700 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:21,764 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:21,829 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:22,873 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:23,948 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:00:25,025 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:25,124 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:25,188 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:25,252 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:26,296 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:27,371 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:28,448 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:28,547 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:28,611 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:28,677 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:29,721 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:30,795 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:31,872 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:31,969 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:32,033 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:32,097 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:33,141 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:34,216 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:35,291 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:35,388 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:35,452 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:35,518 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:36,562 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:37,638 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:38,713 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:38,812 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:38,876 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:38,942 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:39,986 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:41,061 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:42,138 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:42,237 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:42,303 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:42,369 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:43,413 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:44,488 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:45,566 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:45,665 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:45,731 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:45,797 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:46,841 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:47,918 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:48,993 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:49,090 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:49,156 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:49,222 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:50,267 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:51,341 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:52,417 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:52,514 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:52,580 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:52,645 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:53,690 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:54,767 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:55,842 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:55,939 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:56,005 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:56,071 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:57,148 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:00:57,214 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:00:57,247 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:00:58,384 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:00:58,477 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:00:58,510 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:00:59,555 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:01:00,630 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:01:01,709 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:01:01,806 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:01:01,872 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:01:01,936 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:01:02,980 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:01:04,057 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:01:05,133 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:01:05,231 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:01:05,297 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:01:05,363 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:01:06,408 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:01:07,485 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:01:08,560 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:01:08,659 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:01:08,725 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:01:08,789 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:04:14,058 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:04:14,124 - VFDController - INFO - Started VFD.
+2024-11-26 16:04:14,188 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:04:35,893 - VFDController - INFO - Set frequency: 3.0
+2024-11-26 16:04:36,216 - VFDController - INFO - Set frequency: 6.0
+2024-11-26 16:04:37,289 - VFDController - INFO - Set frequency: 9.0
+2024-11-26 16:04:37,355 - VFDController - INFO - Set frequency: 12.0
+2024-11-26 16:04:37,421 - VFDController - INFO - Set frequency: 15.0
+2024-11-26 16:04:38,465 - VFDController - INFO - Set frequency: 18.0
+2024-11-26 16:04:49,367 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:04:50,442 - VFDController - INFO - Set frequency: 24.0
+2024-11-26 16:04:50,508 - VFDController - INFO - Set frequency: 27.0
+2024-11-26 16:04:50,574 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:05:10,828 - VFDController - INFO - Set frequency: 33.0
+2024-11-26 16:05:10,984 - VFDController - INFO - Set frequency: 36.0
+2024-11-26 16:05:12,027 - VFDController - INFO - Set frequency: 39.0
+2024-11-26 16:05:20,698 - VFDController - ERROR - Waiting for VFD to respond, current speed is 38.99
+2024-11-26 16:05:20,762 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:20,826 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:20,890 - VFDController - ERROR - Waiting for VFD to respond, current speed is 38.82
+2024-11-26 16:05:21,996 - VFDController - ERROR - Waiting for VFD to respond, current speed is 35.6
+2024-11-26 16:05:22,029 - VFDController - ERROR - Waiting for VFD to respond, current speed is 35.5
+2024-11-26 16:05:22,062 - VFDController - ERROR - Waiting for VFD to respond, current speed is 35.4
+2024-11-26 16:05:22,097 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:23,168 - VFDController - ERROR - Waiting for VFD to respond, current speed is 32.09
+2024-11-26 16:05:23,203 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:23,236 - VFDController - ERROR - Waiting for VFD to respond, current speed is 31.89
+2024-11-26 16:05:23,267 - VFDController - ERROR - Waiting for VFD to respond, current speed is 31.79
+2024-11-26 16:05:24,342 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:24,375 - VFDController - ERROR - Waiting for VFD to respond, current speed is 28.47
+2024-11-26 16:05:24,408 - VFDController - ERROR - Waiting for VFD to respond, current speed is 28.37
+2024-11-26 16:05:24,439 - VFDController - ERROR - Waiting for VFD to respond, current speed is 28.28
+2024-11-26 16:05:24,534 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:24,567 - VFDController - ERROR - Waiting for VFD to respond, current speed is 27.9
+2024-11-26 16:05:25,607 - VFDController - ERROR - Waiting for VFD to respond, current speed is 24.78
+2024-11-26 16:05:25,643 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:25,675 - VFDController - ERROR - Waiting for VFD to respond, current speed is 24.58
+2024-11-26 16:05:25,708 - VFDController - ERROR - Waiting for VFD to respond, current speed is 24.48
+2024-11-26 16:05:26,784 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:26,815 - VFDController - ERROR - Waiting for VFD to respond, current speed is 21.16
+2024-11-26 16:05:26,846 - VFDController - ERROR - Waiting for VFD to respond, current speed is 21.07
+2024-11-26 16:05:26,877 - VFDController - ERROR - Waiting for VFD to respond, current speed is 20.98
+2024-11-26 16:05:26,974 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:27,007 - VFDController - ERROR - Waiting for VFD to respond, current speed is 20.59
+2024-11-26 16:05:28,082 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:28,115 - VFDController - ERROR - Waiting for VFD to respond, current speed is 17.26
+2024-11-26 16:05:28,146 - VFDController - ERROR - Waiting for VFD to respond, current speed is 17.17
+2024-11-26 16:05:28,208 - VFDController - ERROR - Waiting for VFD to respond, current speed is 16.98
+2024-11-26 16:05:28,272 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:28,305 - VFDController - ERROR - Waiting for VFD to respond, current speed is 16.69
+2024-11-26 16:05:29,345 - VFDController - ERROR - Waiting for VFD to respond, current speed is 14.07
+2024-11-26 16:05:29,380 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:29,414 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.87
+2024-11-26 16:05:29,446 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.77
+2024-11-26 16:05:30,521 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:30,554 - VFDController - ERROR - Waiting for VFD to respond, current speed is 11.62
+2024-11-26 16:05:30,587 - VFDController - ERROR - Waiting for VFD to respond, current speed is 11.54
+2024-11-26 16:05:30,620 - VFDController - ERROR - Waiting for VFD to respond, current speed is 11.45
+2024-11-26 16:05:30,717 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:30,750 - VFDController - ERROR - Waiting for VFD to respond, current speed is 11.08
+2024-11-26 16:05:31,792 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.43
+2024-11-26 16:05:31,827 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:31,860 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.24
+2024-11-26 16:05:31,891 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.16
+2024-11-26 16:05:32,965 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:32,998 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.54
+2024-11-26 16:05:33,031 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.45
+2024-11-26 16:05:33,061 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.36
+2024-11-26 16:05:33,159 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:33,192 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.04
+2024-11-26 16:05:34,232 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.65
+2024-11-26 16:05:34,267 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:34,300 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.48
+2024-11-26 16:05:34,331 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.4
+2024-11-26 16:05:35,406 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:35,439 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.06
+2024-11-26 16:05:35,472 - VFDController - ERROR - Waiting for VFD to respond, current speed is 2.96
+2024-11-26 16:05:35,505 - VFDController - ERROR - Waiting for VFD to respond, current speed is 2.86
+2024-11-26 16:05:35,600 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:35,633 - VFDController - ERROR - Waiting for VFD to respond, current speed is 2.48
+2024-11-26 16:05:36,675 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:05:36,710 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:36,743 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:05:36,774 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:05:37,849 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:37,944 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:38,008 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:38,072 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:39,117 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:40,194 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:41,269 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:41,366 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:41,430 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:41,494 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:42,536 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:43,611 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:44,685 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:05:44,781 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:05:44,847 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:07:28,543 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:07:28,640 - VFDController - INFO - Started VFD.
+2024-11-26 16:07:28,706 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:07:28,821 - VFDController - INFO - Set frequency: 3.0
+2024-11-26 16:07:28,967 - VFDController - INFO - Set frequency: 6.0
+2024-11-26 16:07:30,010 - VFDController - INFO - Set frequency: 9.0
+2024-11-26 16:07:31,085 - VFDController - INFO - Set frequency: 12.0
+2024-11-26 16:07:31,182 - VFDController - INFO - Set frequency: 15.0
+2024-11-26 16:07:31,246 - VFDController - INFO - Set frequency: 18.0
+2024-11-26 16:07:31,310 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:07:49,056 - VFDController - INFO - Set frequency: 24.0
+2024-11-26 16:07:59,866 - VFDController - INFO - Set frequency: 27.0
+2024-11-26 16:08:04,685 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:08:25,777 - VFDController - INFO - Set frequency: 33.0
+2024-11-26 16:08:25,926 - VFDController - INFO - Set frequency: 36.0
+2024-11-26 16:08:26,103 - VFDController - INFO - Set frequency: 39.0
+2024-11-26 16:08:27,177 - VFDController - INFO - Set frequency: 42.0
+2024-11-26 16:08:41,784 - VFDController - INFO - Set frequency: 45.0
+2024-11-26 16:08:42,828 - VFDController - INFO - Set frequency: 48.0
+2024-11-26 16:08:46,995 - VFDController - INFO - Set frequency: 51.0
+2024-11-26 16:08:49,081 - VFDController - INFO - Set frequency: 54.0
+2024-11-26 16:08:57,497 - VFDController - INFO - Set frequency: 57.0
+2024-11-26 16:09:01,087 - VFDController - INFO - Set frequency: 60.0
+2024-11-26 16:09:04,820 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:04,851 - VFDController - ERROR - Waiting for VFD to respond, current speed is 59.98
+2024-11-26 16:09:04,946 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:05,008 - VFDController - ERROR - Waiting for VFD to respond, current speed is 59.75
+2024-11-26 16:09:05,142 - VFDController - ERROR - Waiting for VFD to respond, current speed is 59.41
+2024-11-26 16:09:05,297 - VFDController - ERROR - Waiting for VFD to respond, current speed is 58.96
+2024-11-26 16:09:05,431 - VFDController - ERROR - Waiting for VFD to respond, current speed is 58.56
+2024-11-26 16:09:05,565 - VFDController - ERROR - Waiting for VFD to respond, current speed is 58.16
+2024-11-26 16:09:05,699 - VFDController - ERROR - Waiting for VFD to respond, current speed is 57.76
+2024-11-26 16:09:05,794 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:05,858 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:05,891 - VFDController - ERROR - Waiting for VFD to respond, current speed is 57.18
+2024-11-26 16:09:06,025 - VFDController - ERROR - Waiting for VFD to respond, current speed is 56.78
+2024-11-26 16:09:06,159 - VFDController - ERROR - Waiting for VFD to respond, current speed is 56.38
+2024-11-26 16:09:06,293 - VFDController - ERROR - Waiting for VFD to respond, current speed is 55.98
+2024-11-26 16:09:06,448 - VFDController - ERROR - Waiting for VFD to respond, current speed is 55.52
+2024-11-26 16:09:06,582 - VFDController - ERROR - Waiting for VFD to respond, current speed is 55.12
+2024-11-26 16:09:06,716 - VFDController - ERROR - Waiting for VFD to respond, current speed is 54.71
+2024-11-26 16:09:06,781 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:06,846 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:06,910 - VFDController - ERROR - Waiting for VFD to respond, current speed is 54.13
+2024-11-26 16:09:07,044 - VFDController - ERROR - Waiting for VFD to respond, current speed is 53.73
+2024-11-26 16:09:08,147 - VFDController - ERROR - Waiting for VFD to respond, current speed is 50.43
+2024-11-26 16:09:08,213 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:09,257 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:09,290 - VFDController - ERROR - Waiting for VFD to respond, current speed is 47.01
+2024-11-26 16:09:10,365 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:10,398 - VFDController - ERROR - Waiting for VFD to respond, current speed is 43.69
+2024-11-26 16:09:10,493 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:11,570 - VFDController - ERROR - Waiting for VFD to respond, current speed is 40.18
+2024-11-26 16:09:11,603 - VFDController - ERROR - Waiting for VFD to respond, current speed is 40.08
+2024-11-26 16:09:12,679 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:12,711 - VFDController - ERROR - Waiting for VFD to respond, current speed is 36.76
+2024-11-26 16:09:12,744 - VFDController - ERROR - Waiting for VFD to respond, current speed is 36.66
+2024-11-26 16:09:13,819 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:13,850 - VFDController - ERROR - Waiting for VFD to respond, current speed is 33.34
+2024-11-26 16:09:13,884 - VFDController - ERROR - Waiting for VFD to respond, current speed is 33.24
+2024-11-26 16:09:13,979 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:14,040 - VFDController - ERROR - Waiting for VFD to respond, current speed is 32.77
+2024-11-26 16:09:14,074 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:14,106 - VFDController - ERROR - Waiting for VFD to respond, current speed is 32.58
+2024-11-26 16:09:15,149 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:15,182 - VFDController - ERROR - Waiting for VFD to respond, current speed is 29.35
+2024-11-26 16:09:15,215 - VFDController - ERROR - Waiting for VFD to respond, current speed is 29.25
+2024-11-26 16:09:15,312 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:15,378 - VFDController - ERROR - Waiting for VFD to respond, current speed is 28.76
+2024-11-26 16:09:15,411 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:15,442 - VFDController - ERROR - Waiting for VFD to respond, current speed is 28.57
+2024-11-26 16:09:16,484 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:16,517 - VFDController - ERROR - Waiting for VFD to respond, current speed is 25.35
+2024-11-26 16:09:16,550 - VFDController - ERROR - Waiting for VFD to respond, current speed is 25.25
+2024-11-26 16:09:16,645 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:16,707 - VFDController - ERROR - Waiting for VFD to respond, current speed is 24.78
+2024-11-26 16:09:16,740 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:16,771 - VFDController - ERROR - Waiting for VFD to respond, current speed is 24.59
+2024-11-26 16:09:17,813 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:17,844 - VFDController - ERROR - Waiting for VFD to respond, current speed is 21.37
+2024-11-26 16:09:17,875 - VFDController - ERROR - Waiting for VFD to respond, current speed is 21.28
+2024-11-26 16:09:17,972 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:18,036 - VFDController - ERROR - Waiting for VFD to respond, current speed is 20.8
+2024-11-26 16:09:18,069 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:18,102 - VFDController - ERROR - Waiting for VFD to respond, current speed is 20.6
+2024-11-26 16:09:19,147 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:19,179 - VFDController - ERROR - Waiting for VFD to respond, current speed is 17.37
+2024-11-26 16:09:19,212 - VFDController - ERROR - Waiting for VFD to respond, current speed is 17.27
+2024-11-26 16:09:19,307 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:19,369 - VFDController - ERROR - Waiting for VFD to respond, current speed is 16.8
+2024-11-26 16:09:19,402 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:19,435 - VFDController - ERROR - Waiting for VFD to respond, current speed is 16.6
+2024-11-26 16:09:20,478 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:20,513 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.88
+2024-11-26 16:09:20,546 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.79
+2024-11-26 16:09:20,643 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:20,707 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.32
+2024-11-26 16:09:20,742 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:20,775 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.12
+2024-11-26 16:09:21,817 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:21,850 - VFDController - ERROR - Waiting for VFD to respond, current speed is 11.12
+2024-11-26 16:09:21,883 - VFDController - ERROR - Waiting for VFD to respond, current speed is 11.03
+2024-11-26 16:09:21,980 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:22,042 - VFDController - ERROR - Waiting for VFD to respond, current speed is 10.66
+2024-11-26 16:09:22,075 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:22,108 - VFDController - ERROR - Waiting for VFD to respond, current speed is 10.59
+2024-11-26 16:09:23,152 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:23,185 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.69
+2024-11-26 16:09:23,218 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.63
+2024-11-26 16:09:23,315 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:23,379 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.51
+2024-11-26 16:09:23,412 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:23,443 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.49
+2024-11-26 16:09:24,485 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:24,518 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.55
+2024-11-26 16:09:24,551 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.52
+2024-11-26 16:09:24,646 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:24,708 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.46
+2024-11-26 16:09:24,741 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:24,774 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.42
+2024-11-26 16:09:25,816 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:25,849 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.29
+2024-11-26 16:09:25,880 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.2
+2024-11-26 16:09:25,977 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:26,073 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:26,105 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.64
+2024-11-26 16:09:26,138 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.61
+2024-11-26 16:09:26,204 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:26,270 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:26,301 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.53
+2024-11-26 16:09:27,344 - VFDController - ERROR - Waiting for VFD to respond, current speed is 1
+2024-11-26 16:09:27,379 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:27,409 - VFDController - ERROR - Waiting for VFD to respond, current speed is 0.82
+2024-11-26 16:09:27,507 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:27,538 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:09:28,584 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:28,617 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:09:28,714 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:29,758 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:30,835 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:31,910 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:09:32,009 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:09:32,073 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:10:12,660 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:10:13,704 - VFDController - INFO - Started VFD.
+2024-11-26 16:10:14,781 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:10:15,857 - VFDController - INFO - Set frequency: 3.0
+2024-11-26 16:10:15,953 - VFDController - INFO - Set frequency: 6.0
+2024-11-26 16:10:16,998 - VFDController - INFO - Set frequency: 9.0
+2024-11-26 16:10:18,075 - VFDController - INFO - Set frequency: 12.0
+2024-11-26 16:10:18,172 - VFDController - INFO - Set frequency: 15.0
+2024-11-26 16:10:18,236 - VFDController - INFO - Set frequency: 18.0
+2024-11-26 16:10:36,249 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:10:48,167 - VFDController - INFO - Set frequency: 24.0
+2024-11-26 16:10:50,252 - VFDController - INFO - Set frequency: 27.0
+2024-11-26 16:10:51,329 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:10:51,714 - VFDController - INFO - Set frequency: 33.0
+2024-11-26 16:10:52,791 - VFDController - INFO - Set frequency: 36.0
+2024-11-26 16:10:53,050 - VFDController - INFO - Set frequency: 39.0
+2024-11-26 16:10:54,353 - VFDController - INFO - Set frequency: 42.0
+2024-11-26 16:10:54,450 - VFDController - INFO - Set frequency: 45.0
+2024-11-26 16:11:05,294 - VFDController - ERROR - Waiting for VFD to respond, current speed is 42.47
+2024-11-26 16:11:05,329 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:06,402 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:06,435 - VFDController - ERROR - Waiting for VFD to respond, current speed is 39.05
+2024-11-26 16:11:06,532 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:07,576 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:07,609 - VFDController - ERROR - Waiting for VFD to respond, current speed is 35.53
+2024-11-26 16:11:08,684 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:08,717 - VFDController - ERROR - Waiting for VFD to respond, current speed is 32.21
+2024-11-26 16:11:08,812 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:09,856 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:09,891 - VFDController - ERROR - Waiting for VFD to respond, current speed is 28.69
+2024-11-26 16:11:10,969 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:11,002 - VFDController - ERROR - Waiting for VFD to respond, current speed is 25.36
+2024-11-26 16:11:11,098 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:12,143 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:12,176 - VFDController - ERROR - Waiting for VFD to respond, current speed is 21.84
+2024-11-26 16:11:13,251 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:13,284 - VFDController - ERROR - Waiting for VFD to respond, current speed is 18.52
+2024-11-26 16:11:13,381 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:14,425 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:14,458 - VFDController - ERROR - Waiting for VFD to respond, current speed is 15
+2024-11-26 16:11:15,533 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:15,566 - VFDController - ERROR - Waiting for VFD to respond, current speed is 12.58
+2024-11-26 16:11:15,661 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:16,705 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:16,738 - VFDController - ERROR - Waiting for VFD to respond, current speed is 10.24
+2024-11-26 16:11:17,815 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:17,848 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.26
+2024-11-26 16:11:18,924 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:18,956 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.59
+2024-11-26 16:11:19,053 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:19,119 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:19,152 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.16
+2024-11-26 16:11:20,195 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:20,228 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.59
+2024-11-26 16:11:20,325 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:20,389 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:20,422 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.05
+2024-11-26 16:11:21,466 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:21,499 - VFDController - ERROR - Waiting for VFD to respond, current speed is 0.85
+2024-11-26 16:11:21,596 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:21,662 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:21,695 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:11:22,739 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:22,836 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:22,902 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:22,968 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:24,012 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:25,089 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:26,165 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:26,261 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:26,327 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:26,393 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:11:27,438 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:11:28,513 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:12:29,512 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:12:29,576 - VFDController - INFO - Started VFD.
+2024-11-26 16:12:29,786 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:13:41,511 - VFDController - INFO - Set frequency: 3.0
+2024-11-26 16:13:42,554 - VFDController - INFO - Set frequency: 6.0
+2024-11-26 16:13:43,631 - VFDController - INFO - Set frequency: 9.0
+2024-11-26 16:13:56,721 - VFDController - INFO - Set frequency: 12.0
+2024-11-26 16:13:57,763 - VFDController - INFO - Set frequency: 15.0
+2024-11-26 16:13:58,840 - VFDController - INFO - Set frequency: 18.0
+2024-11-26 16:13:59,918 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:14:07,665 - VFDController - INFO - Set frequency: 24.0
+2024-11-26 16:14:13,402 - VFDController - INFO - Set frequency: 27.0
+2024-11-26 16:14:18,901 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:29,791 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:30,087 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:30,377 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:31,452 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:31,518 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:31,582 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:32,624 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:33,699 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:34,775 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:34,871 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:34,935 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:35,001 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:36,046 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:37,121 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:38,196 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:38,293 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:38,357 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:38,423 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:39,465 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:40,540 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:41,615 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:41,714 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:41,780 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:41,846 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:42,891 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:43,966 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:45,041 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:45,138 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:45,204 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:45,268 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:46,312 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:47,422 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:14:48,495 - VFDController - ERROR - Waiting for VFD to respond, current speed is 27.27
+2024-11-26 16:14:48,530 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:48,629 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:48,693 - VFDController - ERROR - Waiting for VFD to respond, current speed is 26.68
+2024-11-26 16:14:48,726 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:48,790 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:49,835 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:49,867 - VFDController - ERROR - Waiting for VFD to respond, current speed is 23.16
+2024-11-26 16:14:50,941 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:50,976 - VFDController - ERROR - Waiting for VFD to respond, current speed is 19.84
+2024-11-26 16:14:52,053 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:52,086 - VFDController - ERROR - Waiting for VFD to respond, current speed is 16.51
+2024-11-26 16:14:52,183 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:52,249 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:52,280 - VFDController - ERROR - Waiting for VFD to respond, current speed is 15.92
+2024-11-26 16:14:53,322 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:53,355 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.62
+2024-11-26 16:14:53,452 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:53,516 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:53,549 - VFDController - ERROR - Waiting for VFD to respond, current speed is 13.18
+2024-11-26 16:14:54,593 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:54,626 - VFDController - ERROR - Waiting for VFD to respond, current speed is 11.23
+2024-11-26 16:14:54,723 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:54,789 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:54,822 - VFDController - ERROR - Waiting for VFD to respond, current speed is 10.74
+2024-11-26 16:14:55,866 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:55,901 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.08
+2024-11-26 16:14:56,033 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:56,095 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.56
+2024-11-26 16:14:56,126 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.51
+2024-11-26 16:14:56,159 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:56,223 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:56,256 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.39
+2024-11-26 16:14:56,320 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:56,353 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.35
+2024-11-26 16:14:57,396 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:57,429 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.49
+2024-11-26 16:14:57,461 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.45
+2024-11-26 16:14:58,535 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:58,568 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.87
+2024-11-26 16:14:58,601 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.78
+2024-11-26 16:14:58,696 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:58,760 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.32
+2024-11-26 16:14:58,793 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:14:58,826 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.13
+2024-11-26 16:14:59,870 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:14:59,903 - VFDController - ERROR - Waiting for VFD to respond, current speed is 2.15
+2024-11-26 16:14:59,936 - VFDController - ERROR - Waiting for VFD to respond, current speed is 2.05
+2024-11-26 16:15:00,031 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:00,095 - VFDController - ERROR - Waiting for VFD to respond, current speed is 1.58
+2024-11-26 16:15:00,128 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:00,161 - VFDController - ERROR - Waiting for VFD to respond, current speed is 1.38
+2024-11-26 16:15:01,205 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:01,238 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:15:01,271 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:15:01,366 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:01,430 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:01,496 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:02,540 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:03,617 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:04,693 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:04,789 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:04,855 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:04,921 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:05,966 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:07,041 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:08,116 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:08,213 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:08,277 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:08,341 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:09,385 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:10,460 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:11,535 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:15:24,385 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:24,449 - VFDController - INFO - Started VFD.
+2024-11-26 16:15:24,628 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:15:25,733 - VFDController - INFO - Set frequency: 28.73
+2024-11-26 16:16:04,488 - VFDController - INFO - Set frequency: 31.73
+2024-11-26 16:16:09,688 - VFDController - ERROR - Waiting for VFD to respond, current speed is 31.72
+2024-11-26 16:16:09,754 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:09,818 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:09,880 - VFDController - ERROR - Waiting for VFD to respond, current speed is 31.55
+2024-11-26 16:16:09,913 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:10,958 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:10,990 - VFDController - ERROR - Waiting for VFD to respond, current speed is 28.32
+2024-11-26 16:16:12,064 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:12,097 - VFDController - ERROR - Waiting for VFD to respond, current speed is 25
+2024-11-26 16:16:12,196 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:13,240 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:13,273 - VFDController - ERROR - Waiting for VFD to respond, current speed is 21.48
+2024-11-26 16:16:14,348 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:14,381 - VFDController - ERROR - Waiting for VFD to respond, current speed is 18.16
+2024-11-26 16:16:14,480 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:15,524 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:15,557 - VFDController - ERROR - Waiting for VFD to respond, current speed is 14.63
+2024-11-26 16:16:16,635 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:16,667 - VFDController - ERROR - Waiting for VFD to respond, current speed is 12.38
+2024-11-26 16:16:16,766 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:17,811 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:17,844 - VFDController - ERROR - Waiting for VFD to respond, current speed is 10.21
+2024-11-26 16:16:18,919 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:18,952 - VFDController - ERROR - Waiting for VFD to respond, current speed is 8.34
+2024-11-26 16:16:20,027 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:20,060 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.37
+2024-11-26 16:16:20,157 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:20,223 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:20,256 - VFDController - ERROR - Waiting for VFD to respond, current speed is 6.29
+2024-11-26 16:16:21,298 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:21,331 - VFDController - ERROR - Waiting for VFD to respond, current speed is 4.26
+2024-11-26 16:16:21,430 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:21,494 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:21,525 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.68
+2024-11-26 16:16:22,567 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:22,600 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:16:22,699 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:22,763 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:22,827 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:23,872 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:24,947 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:16:26,022 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:16:26,121 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:26:33,153 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:26:33,219 - VFDController - INFO - Started VFD.
+2024-11-26 16:26:34,261 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:26:35,423 - VFDController - INFO - Set frequency: 3.0
+2024-11-26 16:26:36,467 - VFDController - INFO - Set frequency: 6.0
+2024-11-26 16:26:36,566 - VFDController - INFO - Set frequency: 9.0
+2024-11-26 16:26:36,634 - VFDController - INFO - Set frequency: 12.0
+2024-11-26 16:26:36,700 - VFDController - INFO - Set frequency: 15.0
+2024-11-26 16:26:54,914 - VFDController - INFO - Set frequency: 18.0
+2024-11-26 16:27:02,160 - VFDController - INFO - Set frequency: 21.0
+2024-11-26 16:27:09,654 - VFDController - INFO - Set frequency: 24.0
+2024-11-26 16:27:11,728 - VFDController - INFO - Set frequency: 27.0
+2024-11-26 16:27:15,875 - VFDController - INFO - Set frequency: 30.0
+2024-11-26 16:27:26,180 - VFDController - INFO - Set frequency: 33.0
+2024-11-26 16:27:30,033 - VFDController - INFO - Set frequency: 36.0
+2024-11-26 16:28:11,636 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:11,669 - VFDController - ERROR - Waiting for VFD to respond, current speed is 33.37
+2024-11-26 16:28:12,744 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:12,779 - VFDController - ERROR - Waiting for VFD to respond, current speed is 30.04
+2024-11-26 16:28:12,909 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:13,949 - VFDController - ERROR - Waiting for VFD to respond, current speed is 26.53
+2024-11-26 16:28:13,982 - VFDController - ERROR - Waiting for VFD to respond, current speed is 26.43
+2024-11-26 16:28:14,017 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:15,093 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:15,126 - VFDController - ERROR - Waiting for VFD to respond, current speed is 23
+2024-11-26 16:28:15,158 - VFDController - ERROR - Waiting for VFD to respond, current speed is 22.91
+2024-11-26 16:28:16,232 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:16,265 - VFDController - ERROR - Waiting for VFD to respond, current speed is 19.59
+2024-11-26 16:28:16,296 - VFDController - ERROR - Waiting for VFD to respond, current speed is 19.5
+2024-11-26 16:28:16,391 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:16,455 - VFDController - ERROR - Waiting for VFD to respond, current speed is 19.02
+2024-11-26 16:28:16,488 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:16,521 - VFDController - ERROR - Waiting for VFD to respond, current speed is 18.82
+2024-11-26 16:28:17,565 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:17,598 - VFDController - ERROR - Waiting for VFD to respond, current speed is 15.59
+2024-11-26 16:28:17,631 - VFDController - ERROR - Waiting for VFD to respond, current speed is 15.5
+2024-11-26 16:28:17,728 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:17,792 - VFDController - ERROR - Waiting for VFD to respond, current speed is 15.01
+2024-11-26 16:28:17,825 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:17,856 - VFDController - ERROR - Waiting for VFD to respond, current speed is 14.82
+2024-11-26 16:28:18,898 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:18,931 - VFDController - ERROR - Waiting for VFD to respond, current speed is 12.67
+2024-11-26 16:28:18,964 - VFDController - ERROR - Waiting for VFD to respond, current speed is 12.59
+2024-11-26 16:28:19,059 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:19,123 - VFDController - ERROR - Waiting for VFD to respond, current speed is 12.14
+2024-11-26 16:28:19,158 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:19,191 - VFDController - ERROR - Waiting for VFD to respond, current speed is 11.95
+2024-11-26 16:28:20,233 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:20,266 - VFDController - ERROR - Waiting for VFD to respond, current speed is 10.08
+2024-11-26 16:28:20,300 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.98
+2024-11-26 16:28:20,396 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:20,458 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.68
+2024-11-26 16:28:20,491 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:20,525 - VFDController - ERROR - Waiting for VFD to respond, current speed is 9.63
+2024-11-26 16:28:21,569 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:21,601 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.78
+2024-11-26 16:28:21,632 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.74
+2024-11-26 16:28:21,728 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:21,791 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.64
+2024-11-26 16:28:21,827 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:21,859 - VFDController - ERROR - Waiting for VFD to respond, current speed is 7.62
+2024-11-26 16:28:22,904 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:22,937 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.66
+2024-11-26 16:28:22,970 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.62
+2024-11-26 16:28:23,067 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:23,131 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.53
+2024-11-26 16:28:23,164 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:23,195 - VFDController - ERROR - Waiting for VFD to respond, current speed is 5.51
+2024-11-26 16:28:24,237 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:24,270 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.58
+2024-11-26 16:28:24,303 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.49
+2024-11-26 16:28:24,398 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:24,460 - VFDController - ERROR - Waiting for VFD to respond, current speed is 3.04
+2024-11-26 16:28:24,495 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:24,528 - VFDController - ERROR - Waiting for VFD to respond, current speed is 2.84
+2024-11-26 16:28:25,572 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:25,605 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:28:25,638 - VFDController - INFO - Emergency stop executed.
+2024-11-26 16:28:25,733 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:25,799 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:25,865 - VFDController - INFO - Stopped VFD.
+2024-11-26 16:28:26,907 - VFDController - INFO - Set frequency: 0.0
+2024-11-26 16:28:27,985 - VFDController - INFO - Stopped VFD.

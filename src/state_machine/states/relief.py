@@ -6,7 +6,8 @@ class ReliefValvesState(State):
     def on_enter(self):
         super().on_enter()
         for valve in self.machine.valves:
-            self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',1)
+            if "ACTIVE" in valve["role"]:
+                self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0)
         self.machine.logger.info("Valves RELEIFED.")
         self.machine.current_status = 'relief configuration requested'
         
