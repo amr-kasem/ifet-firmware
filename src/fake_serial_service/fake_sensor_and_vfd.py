@@ -26,7 +26,7 @@ class FakeSensorAndVFD:
     def setup_mqtt(self):
         self.mqtt_client.on_connect = self.on_connect
         self.mqtt_client.on_message = self.on_message
-        self.mqtt_client.connect("172.17.0.1", 1883, 60)
+        self.mqtt_client.connect("192.168.1.17", 1883, 60)
         self.mqtt_client.loop_start()
 
     def on_connect(self, client, userdata, flags, rc,_):

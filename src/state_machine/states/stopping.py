@@ -13,23 +13,10 @@ class StoppingState(State):
             while not self.machine.exit:
                 if self.machine.vdf_feedback == 0:
                     break
-                self.machine.client.publish(
-                    f'{self.machine.device_id}/vfd/command',
-                    json.dumps(
-                        {
-                            "command":"set_frequency",
-                            "parameter": 0
-                        }
-                    )
-                )
-                self.machine.client.publish(
-                    f'{self.machine.device_id}/vfd/command',
-                    json.dumps(
-                        {
-                            "command":"stop",
-                            "parameter": ""
-                        }
-                    )
-                )
+                self.machine.set_vfd_speed(0)
+
+                self.machine.set_vfd_state("stop")
+
+               
                 time.sleep(1)
             self.machine.current_status = 'vfd stopped'

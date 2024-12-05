@@ -15,17 +15,17 @@ class HoldingTimeState(State):
         self.machine.publish_status()
         self.machine.current_status = 'tuning'
         
-        start_time = time.time()
+        # start_time = time.time()
         while not self.machine.force_stop:
             if abs(self.machine.sensors_values[self.machine.sensor_id]) > abs(self.machine.setpoint):
                 self.machine.logger.info(f"Setpoint reached: {self.machine.sensors_values[self.machine.sensor_id]}")
                 break
             self.freq = self.machine.freq_command
-            if time.time() - start_time > 120:  # 2 minutes timeout
-                self.machine.logger.error("Tuning timeout")
-                self.machine.logger.error("Failed to reach setpoint within 2 minutes")
-                self.machine.force_Stop = True
-                break
+            # if time.time() - start_time > 120:  # 2 minutes timeout
+                # self.machine.logger.error("Tuning timeout")
+                # self.machine.logger.error("Failed to reach setpoint within 2 minutes")
+                # self.machine.force_Stop = True
+                # break
             time.sleep(0.05)
 
     def on_exit(self):

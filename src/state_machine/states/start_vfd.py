@@ -8,26 +8,13 @@ class StartVDFState(State):
         
         self.machine.logger.info("Starting VDF...")
         try:
-            self.machine.client.publish(
-                f'{self.machine.device_id}/vfd/command',
-                json.dumps(
-                    {
-                        "command":"set_frequency",
-                        "parameter":  0
-                    }
-                )
-            )
+            self.machine.set_vfd_speed(0)
+
             self.machine.logger.info("VDF frequency set to 0.")
             
-            self.machine.client.publish(
-                f'{self.machine.device_id}/vfd/command',
-                json.dumps(
-                    {
-                        "command":"start",
-                        "parameter": ""
-                    }
-                )
-            )
+            self.machine.set_vfd_state("start")
+            
+           
             self.machine.logger.info("VDF start command issued.")
             self.machine.current_status = 'vfd reset'
         except Exception as e:

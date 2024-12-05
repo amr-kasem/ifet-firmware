@@ -15,15 +15,7 @@ class AutomaticCyclingState(State):
             if self.machine.freq_command - self.machine.vdf_feedback < 0.3:
                 self.step =  5 if self.abs_error > 5 else 3 if self.abs_error > 3 else 1
                 self.freq += self.step
-            self.machine.client.publish(
-                    f'{self.machine.device_id}/vfd/command',
-                    json.dumps(
-                        {
-                            "command":"set_frequency",
-                            "parameter": self.freq,
-                        }
-                    )
-            )
+            self.machine.set_vfd_speed(self.freq)
                 
             if self.error >= 0 :
                 break
@@ -105,8 +97,7 @@ class AutomaticCyclingState(State):
                     self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',1) # on // release
 
 
-        
-                    
+        self.machine.logger.info(f'will finish: {self.machine.test_index_wanted} {self.machine.force_stop}')
         if self.machine.test_index_wanted is not None and  not self.machine.force_stop:
             self.machine.api.finish_cyclic_test(self.machine.project_id,self.machine.test_index_wanted)
             self.machine.notify()

@@ -5,6 +5,8 @@ services:
       - ./deployment/config/config.json:/app/config.json
       - ./deployment/log/state_machine:/app/logs
     restart: always
+    network_mode: "host"
+
   
   # valves_service:
   #   build: ./src/valves_node/
@@ -33,6 +35,8 @@ services:
       - ./deployment/log/fake_serial_service:/app/logs
 
     restart: always
+    network_mode: "host"
+
 
   fake_valves_service:
     build: ./src/fake_valves_node/
@@ -40,3 +44,4 @@ services:
       - ./deployment/config/config.json:/app/config.json
       - ./deployment/log/fake_valves:/app/logs
     restart: always
+    network_mode: "host"

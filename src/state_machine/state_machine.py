@@ -36,6 +36,8 @@ class StateMachine:
         self.logger.addHandler(fileHandler)
         self.logger.addHandler(stream_handler)
         
+        self.slave = None
+        
         
         try:
             with open(config_file, 'r') as f:
@@ -80,6 +82,7 @@ class StateMachine:
         self.sensors = config.get('sensors', [])
         self.valves = config.get('valves', [])
         self.device_id = config.get('device_id','device0')
+        self.id = config.get('id','0')
         
         self.retry_interval = 5  # seconds
         self.retry_attempts = 3
@@ -171,7 +174,54 @@ class StateMachine:
         exit(1)
         
     def notify(self):
-        self.client.publish(f'{self.device_id}/notify','')
+        self.client.publish(f'{self.device_id}/notify','notify')
+    
+    def set_vfd_speed(self, freq, slaveOnly:bool = False):
+        if not slaveOnly:
+            self.client.publish(
+                    f'device{self.id}/vfd/command',
+                    json.dumps(
+                        {
+                            "command":"set_frequency",
+                            "parameter": freq,
+                        }
+                    )
+                )
+        if self.slave is not None:
+            self.logger.info('sending frequency')
+            self.client.publish(
+                f'device{self.slave}/vfd/command',
+                json.dumps(
+                    {
+                        "command":"set_frequency",
+                        "parameter": freq,
+                    }
+                )
+            )
+    
+        
+    def set_vfd_state(self, state):
+        self.client.publish(
+                f'device{self.id}/vfd/command',
+                json.dumps(
+                    {
+                        "command":state,
+                        "parameter": "",
+                    }
+                )
+            )
+        self.logger.info(self.slave)
+        if self.slave is not None:
+            self.client.publish(
+                f'device{self.slave}/vfd/command',
+                json.dumps(
+                    {
+                        "command":state,
+                        "parameter": "",
+                    }
+                )
+            )
+
     
     def publish_status(self):
         self.client.publish(f'{self.device_id}/status',self.current_status)
@@ -186,7 +236,7 @@ class StateMachine:
                 )
             )
         if self.current_user_inputs is not None:
-              self.client.publish(
+            self.client.publish(
                 f'{self.device_id}/initial_value',
                 json.dumps(
                     self.current_user_inputs
@@ -202,6 +252,8 @@ class StateMachine:
                 x = json.loads(message.payload.decode())
                 if x['command'] == 'set_frequency':
                     self.freq_command = float(x['parameter'])
+                    if self.slave is not None: 
+                        self.set_vfd_speed(self.freq_command,True)
             elif topic_name == 'command':
                 event = json.loads(message.payload.decode())
                 self.current_event = event
@@ -255,7 +307,12 @@ class StateMachine:
 
         if isinstance(self.current_state, IdleState):
             self.force_stop = False
+            
             if event['command'] == "start":
+                
+                dev_info = self.api.get_device(self.id)
+                self.slave = dev_info.get('turbo_charger',None)
+                    
                 if event.get('custom_preset') == 'preset' :
                     self.logger.info(event)
                     if event['mode'] == 'manual': 
@@ -306,6 +363,7 @@ class StateMachine:
                     direction = event['inout'] == 'inward'
 
                     if event['mode'] == 'manual': 
+                        self.test_index_wanted = None
                         self.cyclic_mode = False
                         self.mode = event['mode']
                         self.sensor_id = event['sensor_id']
