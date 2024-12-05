@@ -25,12 +25,7 @@ class StateMachine:
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
-<<<<<<< HEAD
-        os.makedirs('logs', exist_ok=True)
-
-=======
-        
->>>>>>> origin/release-dev2
+        os.makedirs('logs', exist_ok=True)        
         fileHandler = RotatingFileHandler('logs/state_machine.log', maxBytes=1_000_000, backupCount=5)
         fileHandler.setFormatter(formatter)
         
