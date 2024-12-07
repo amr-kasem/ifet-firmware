@@ -5,9 +5,20 @@ import time
 class ReliefValvesState(State):
     def on_enter(self):
         super().on_enter()
-        for valve in self.machine.valves:
-            if "ACTIVE" in valve["role"]:
-                self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0)
+        if self.machine.turbo_id is not None and self.machine.slave is not None:
+            for valve in self.machine.turbo_valves:
+                self.machine.client.publish(f'{self.machine.turbo_id}/valves/{valve["name"]}',1) # off // release
+
+            for valve in self.machine.valves:
+                self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0) # off // release
+                self.machine.client.publish(f'device{self.machine.slave}/valves/{valve["name"]}',0) # off // release
+
+        else:
+            for valve in self.machine.valves:
+                if "ACTIVE" in valve["role"]:
+                    self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0)
+
+
         self.machine.logger.info("Valves RELEIFED.")
         self.machine.current_status = 'relief configuration requested'
         

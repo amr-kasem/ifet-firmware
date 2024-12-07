@@ -80,7 +80,11 @@ class StateMachine:
         # Initialize sensors and valves from config
         self.sensors = config.get('sensors', [])
         self.valves = config.get('valves', [])
-        self.device_id = config.get('device_id','device0')
+        self.device_id = config.get('device_id', 'device0')
+        turbo = config.get('turbo',None)
+        if turbo is not None: 
+            self.turbo_id = turbo.get('id',None)
+            self.turbo_valves = turbo.get('valves',[])
         self.id = config.get('id','0')
         
         self.retry_interval = 5  # seconds
@@ -320,7 +324,7 @@ class StateMachine:
                         self.cyclic_mode = False
                         self.mode = event['mode']
                         self.sensor_id = event['sensor_id']
-                        direction = data['type'] == 'inward'
+                        direction = data['type'] == 'outward'
                         self.setpoint = data['pressure'] * 1 if direction else -1
                         self.holdtime = data['duration']
                         
@@ -345,7 +349,7 @@ class StateMachine:
                         self.mode = event['mode']
                         self.sensor_id =event['sensor_id']
                         self.cycle_counter = data['cycles']
-                        direction = data['type'] == 'inward'
+                        direction = data['type'] == 'outward'
                         self.positive_setpoint = data['high_pressure'] * -1 if direction else 1
                         self.negative_setpoint = data['low_pressure'] * -1 if direction else 1
                         self.action = 'positive' if direction else 'negative'
@@ -359,7 +363,7 @@ class StateMachine:
 
                 else:
                     self.logger.info(event)
-                    direction = event['inout'] == 'inward'
+                    direction = event['inout'] == 'outward'
 
                     if event['mode'] == 'manual': 
                         self.test_index_wanted = None

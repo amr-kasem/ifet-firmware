@@ -1,5 +1,4 @@
 from states.state import State
-import json
 import time
 class StoppingState(State):
         def on_enter(self):
@@ -7,11 +6,20 @@ class StoppingState(State):
             self.machine.logger.info("Stopping VDF...")
             self.machine.current_status = 'colding down'
             if(self.machine.force_stop): self.machine.current_status = 'emergency: waiting for vdf to stop'
-            for valve in self.machine.valves:
-                if "ACTIVE" in valve["role"]:
-                    print(f'will default valve[{valve["name"]} to {"POSITIVE" in valve["role"]}]')
-                    self.machine.logger.info(f'will default valve[{valve["name"]} to {"RELIEF" in valve["role"]}]')
-                    self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0 if "RELIEF" in valve["role"] else 1 )
+            if self.machine.turbo_id is not None and self.machine.slave is not None:
+                for valve in self.machine.turbo_valves:
+                    self.machine.client.publish(f'{self.machine.turbo_id}/valves/{valve["name"]}',1) # off // release
+
+                for valve in self.machine.valves:
+                    self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0 if "RELIEF" in valve["role"] else 1 ) # off // release
+                    self.machine.client.publish(f'device{self.machine.slave}/valves/{valve["name"]}',1) # off // release
+
+            else:
+                for valve in self.machine.valves:
+                    if "ACTIVE" in valve["role"]:
+                        print(f'will default valve[{valve["name"]} to {"POSITIVE" in valve["role"]}]')
+                        self.machine.logger.info(f'will default valve[{valve["name"]} to {"RELIEF" in valve["role"]}]')
+                        self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0 if "RELIEF" in valve["role"] else 1 )
             while not self.machine.exit:
                 if self.machine.vdf_feedback == 0:
                     break

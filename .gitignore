@@ -1,13 +1,2 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-**/log/**
-**/config
-=======
-**/logs/
-**/variables.json
->>>>>>> origin/release-dev1
-=======
 **/log/**
 **/variables.json
-**/config
->>>>>>> origin/release-dev2
