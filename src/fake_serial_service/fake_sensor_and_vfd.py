@@ -31,7 +31,7 @@ class FakeSensorAndVFD:
 
     def on_connect(self, client, userdata, flags, rc,_):
         self.logger.info(f"Connected to MQTT broker with result code {rc}")
-        self.mqtt_client.subscribe("device1/vfd/command")
+        self.mqtt_client.subscribe("device2/vfd/command")
 
     def on_message(self, client, userdata, msg):
         try:
@@ -71,8 +71,8 @@ class FakeSensorAndVFD:
             self.sensor_value = max(0, self.sensor_value - 1)
 
     def publish_data(self):
-        self.mqtt_client.publish("device1/vfd/feedback", self.vfd_frequency)
-        self.mqtt_client.publish("device1/sensors/1", self.sensor_value)
+        self.mqtt_client.publish("device2/vfd/feedback", self.vfd_frequency)
+        self.mqtt_client.publish("device2/sensors/1", self.sensor_value)
         self.logger.info(f"Published VFD frequency: {self.vfd_frequency}, Sensor value: {self.sensor_value}")
 
     def run(self):

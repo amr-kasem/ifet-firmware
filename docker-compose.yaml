@@ -2,7 +2,7 @@ services:
   state_machine_service:
     build: ./src/state_machine/
     volumes:
-      - ./deployment/config/config.json:/app/config.json
+      - ./deployment/config/config2.json:/app/config.json
       - ./deployment/log/state_machine:/app/logs
     restart: always
     network_mode: "host"
@@ -12,7 +12,7 @@ services:
   #   build: ./src/valves_node/
   #   privileged: true
   #   volumes:
-  #     - ./deployment/config/config.json:/app/config.json
+  #     - ./deployment/config/config2.json:/app/config.json
   #     - ./deployment/logs/valve_controller:/app/logs
 
   #   restart: always
@@ -20,7 +20,7 @@ services:
   # serial_service:
   #   build: ./src/serial_service/
   #   volumes:
-  #     - ./deployment/config/config.json:/app/config.json
+  #     - ./deployment/config/config2.json:/app/config.json
   #     - ./deployment/logs/serial_com:/app/logs
 
   #   devices:
@@ -31,7 +31,7 @@ services:
   fake_serial_service:
     build: ./src/fake_serial_service/
     volumes:
-      - ./deployment/config/config.json:/app/config.json
+      - ./deployment/config/config2.json:/app/config.json
       - ./deployment/log/fake_serial_service:/app/logs
 
     restart: always
@@ -41,7 +41,7 @@ services:
   fake_valves_service:
     build: ./src/fake_valves_node/
     volumes:
-      - ./deployment/config/config.json:/app/config.json
+      - ./deployment/config/config2.json:/app/config.json
       - ./deployment/log/fake_valves:/app/logs
     restart: always
     network_mode: "host"

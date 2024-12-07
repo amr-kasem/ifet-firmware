@@ -1,6 +1,6 @@
 {
-  "device_id": "device1",
-  "id": "1",
+  "device_id": "device2",
+  "id": "2",
   "status": "idle",
   "current_speed": 0,
   "toggleBtn": "static_load",
@@ -60,52 +60,61 @@
     {
       "name": "1",
       "pin": 13,
-      "role": ["ACTIVE", "POSITIVE"],
+      "role": ["ACTIVE", "POSITIVE", "POSITIVE_TURBO"],
       "value": 0,
       "address": "1"
     },
     {
       "name": "2",
       "pin": 35,
-      "role": ["ACTIVE", "NEGATIVE", "RELIEF"],
+      "role": ["ACTIVE", "NEGATIVE", "RELIEF", "NEGATIVE_TURBO_SLAVE"],
       "value": 0,
       "address": "2"
     },
     {
       "name": "3",
       "pin": 31,
-      "role": ["ACTIVE", "POSITIVE", "NEGATIVE_RELEASE", "RELIEF"],
+      "role": [
+        "ACTIVE",
+        "POSITIVE",
+        "POSITIVE_TURBO_SLAVE",
+        "NEGATIVE_RELEASE",
+        "RELIEF"
+      ],
       "value": 0,
       "address": "3"
     },
     {
       "name": "4",
       "pin": 15,
-      "role": ["ACTIVE", "NEGATIVE", "POSITIVE_RELEASE", "RELIEF"],
+      "role": [
+        "ACTIVE",
+        "NEGATIVE",
+        "NEGATIVE_TURBO",
+        "POSITIVE_RELEASE",
+        "RELIEF"
+      ],
       "value": 0,
       "address": "4"
-    },
-    {
-      "name": "5",
-      "pin": 11,
-      "role": ["FORCE", "ALWAYSOFF"],
-      "value": 1,
-      "address": "5"
-    },
-    {
-      "name": "6",
-      "pin": 37,
-      "role": ["FORCE", "ALWAYSOFF"],
-      "value": 1,
-      "address": "6"
     }
   ],
+  "turbo": {
+    "id": "turbo",
+    "valves": [
+      {
+        "role": ["POSITIVE"],
+        "address": "5"
+      },
+      {
+        "role": ["NEGATIVE"],
+        "address": "6"
+      }
+    ]
+  },
   "valves_status": {
     "valve1": 1,
     "valve2": 1,
     "valve3": 1,
-    "valve4": 1,
-    "valve5": 1,
-    "valve6": 1
+    "valve4": 1
   }
 }
