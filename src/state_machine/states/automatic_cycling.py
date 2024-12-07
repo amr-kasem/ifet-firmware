@@ -40,8 +40,10 @@ class AutomaticCyclingState(State):
                         for valve in self.machine.valves:
                             if "POSITIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0) # off // release
+
                         time.sleep(0.8) # modif
                         break
+                    
                     time.sleep(0.02)
                     
                     
@@ -58,6 +60,7 @@ class AutomaticCyclingState(State):
                         for valve in self.machine.valves:
                             if "POSITIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',1) # on // pump
+                        
                         time.sleep(0.8) # modif
                         break
                     time.sleep(0.02)
@@ -71,6 +74,7 @@ class AutomaticCyclingState(State):
                         for valve in self.machine.valves:
                             if "NEGATIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0) # on // release
+                        
                         time.sleep(0.8) # modif
                         break
                     time.sleep(0.02)
