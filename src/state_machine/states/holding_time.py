@@ -43,7 +43,7 @@ class HoldingTimeState(State):
         if self.machine.force_stop:
             self.machine.logger.warning("Holding time interrupted")
         else:
-            if self.machine.test_index_wanted is not None:
+            if self.machine.test_index_wanted is not None and self.machine.project_id is not None:
                 self.machine.api.finish_static_test(self.machine.project_id,self.machine.test_index_wanted)
                 self.machine.notify()
             self.machine.logger.info("Holding time completed.")

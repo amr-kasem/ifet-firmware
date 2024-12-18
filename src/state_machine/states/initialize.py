@@ -38,7 +38,10 @@ class InitializeState(State):
                 while not self.machine.force_stop:
                     # if "ACTIVE" in valve['role']:
                     if self.machine.turbo_id is not None and self.machine.slave is not None:
-                        # all_matched = all(((not "POSITIVE" in valve['role']) == self.machine.valve_status[valve['name']]) or not "ACTIVE" in valve['role'] for valve in self.machine.valves)
+                        # for valve in self.machine.turbo_valves:
+                        #     self.machine.client.publish(f'{self.machine.turbo_id}/valves/{valve["name"]}',1) # off // release
+
+                        all_matched = all(((not "POSITIVE" in valve['role']) == self.machine.valve_status[valve['name']]) or not "ACTIVE" in valve['role'] for valve in self.machine.valves)
                         pass
                         break
                     else:

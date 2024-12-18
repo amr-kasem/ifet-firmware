@@ -7,7 +7,7 @@ class ReliefValvesState(State):
         super().on_enter()
         if self.machine.turbo_id is not None and self.machine.slave is not None:
             for valve in self.machine.turbo_valves:
-                self.machine.client.publish(f'{self.machine.turbo_id}/valves/{valve["name"]}',1) # off // release
+                self.machine.client.publish(f'{self.machine.turbo_id}/valves/{valve["name"]}',0) # off // release
 
             for valve in self.machine.valves:
                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0) # off // release

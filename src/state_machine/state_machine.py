@@ -28,7 +28,8 @@ class StateMachine:
         os.makedirs('logs', exist_ok=True)        
         fileHandler = RotatingFileHandler('logs/state_machine.log', maxBytes=1_000_000, backupCount=5)
         fileHandler.setFormatter(formatter)
-        
+        self.test_index_wanted = None
+
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(formatter)
         
@@ -269,15 +270,8 @@ class StateMachine:
             #     self.current_status = 'idle'
                 
             elif topic_name == 'emergency_stop': 
-                self.client.publish(
-                    f'{self.device_id}/vfd/command',
-                    json.dumps(
-                        {
-                            "command":"emergency_stop",
-                            "parameter": ""
-                        }
-                    )
-                )
+                self.set_vfd_state('emergency_stop')
+
                 self.force_stop = True
                 
             elif topic_base == f'{self.device_id}/sensors':
@@ -319,7 +313,9 @@ class StateMachine:
                 if event.get('custom_preset') == 'preset' :
                     self.logger.info(event)
                     if event['mode'] == 'manual': 
-                        data = self.api.get_static_test(event['test_id'])
+                        self.project_id = None
+                        data = self.api.get_static_test(event['e'])
+                        self.project_id = event['project_id']
                         self.current_test = event['test_id']
                         self.cyclic_mode = False
                         self.mode = event['mode']
@@ -327,7 +323,6 @@ class StateMachine:
                         direction = data['type'] == 'outward'
                         self.setpoint = data['pressure'] * 1 if direction else -1
                         self.holdtime = data['duration']
-                        
                         self.test_index_wanted = data['index']
                         self.current_state.on_exit()
                         self.current_state = self.states["initializing_valves"]
