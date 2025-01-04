@@ -72,7 +72,7 @@ class SensorHandler:
             if self.mqtt_connected:
                 sensor_reading = sensor.read()
                 self.mqtt_client.publish(topic, int(sensor_reading*100)/100)
-                # self.logger.info(f"Published reading for {sensor.name}: {sensor_reading} on {topic}")
+                self.logger.info(f"Published reading for {sensor.name}: {sensor_reading} on {topic}")
             else:
                 self.logger.warning("MQTT broker not connected. Cannot publish reading.")
         except Exception as e:

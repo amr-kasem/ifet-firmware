@@ -3490,3 +3490,22 @@ json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
 2025-01-04 17:26:45,783 - ValveController - INFO - Valve '2' state set to 1
 2025-01-04 17:26:45,784 - ValveController - INFO - Valve '3' state set to 1
 2025-01-04 17:26:45,785 - ValveController - INFO - Valve '4' state set to 1
+2025-01-04 17:37:11,877 - ValveController - INFO - Connected to MQTT broker with result code Success
+2025-01-04 17:37:11,879 - ValveController - INFO - Subscribed to topic: device1/valves/1
+2025-01-04 17:37:11,880 - ValveController - INFO - Subscribed to topic: device1/valves/2
+2025-01-04 17:37:11,882 - ValveController - INFO - Subscribed to topic: device1/valves/3
+2025-01-04 17:37:11,884 - ValveController - INFO - Subscribed to topic: device1/valves/4
+2025-01-04 17:37:12,012 - ValveController - INFO - Valve '1' state set to 1
+2025-01-04 17:37:12,015 - ValveController - INFO - Valve '2' state set to 1
+2025-01-04 17:37:12,016 - ValveController - INFO - Valve '3' state set to 1
+2025-01-04 17:37:12,017 - ValveController - INFO - Valve '4' state set to 1
+2025-01-04 17:37:47,803 - ValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
+2025-01-04 17:38:02,511 - ValveController - INFO - Connected to MQTT broker with result code Success
+2025-01-04 17:38:02,512 - ValveController - INFO - Subscribed to topic: device1/valves/1
+2025-01-04 17:38:02,513 - ValveController - INFO - Subscribed to topic: device1/valves/2
+2025-01-04 17:38:02,514 - ValveController - INFO - Subscribed to topic: device1/valves/3
+2025-01-04 17:38:02,515 - ValveController - INFO - Subscribed to topic: device1/valves/4
+2025-01-04 17:38:02,652 - ValveController - INFO - Valve '1' state set to 1
+2025-01-04 17:38:02,654 - ValveController - INFO - Valve '2' state set to 1
+2025-01-04 17:38:02,655 - ValveController - INFO - Valve '3' state set to 1
+2025-01-04 17:38:02,656 - ValveController - INFO - Valve '4' state set to 1
