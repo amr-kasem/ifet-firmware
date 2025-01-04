@@ -313,17 +313,16 @@ class StateMachine:
                 if event.get('custom_preset') == 'preset' :
                     self.logger.info(event)
                     if event['mode'] == 'manual': 
-                        self.project_id = None
-                        data = self.api.get_static_test(event['e'])
                         self.project_id = event['project_id']
                         self.current_test = event['test_id']
+                        data = self.api.get_static_test(self.current_test)
                         self.cyclic_mode = False
                         self.mode = event['mode']
                         self.sensor_id = event['sensor_id']
                         direction = data['type'] == 'outward'
                         self.setpoint = data['pressure'] * 1 if direction else -1
-                        self.holdtime = data['duration']
                         self.test_index_wanted = data['index']
+                        self.holdtime = data['duration']
                         self.current_state.on_exit()
                         self.current_state = self.states["initializing_valves"]
                         self.action = 'positive' if direction else 'negative'

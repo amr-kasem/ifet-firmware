@@ -1,6 +1,6 @@
 {
-  "device_id": "device2",
-  "id": "2",
+  "device_id": "device1",
+  "id": "1",
   "status": "idle",
   "current_speed": 0,
   "toggleBtn": "static_load",
@@ -10,7 +10,7 @@
     "bytesize": 8,
     "parity": "PARITY_NONE",
     "stopbits": 1,
-    "timeout": 1,
+    "timeout": 0.05,
     "mode": "MODE_RTU",
     "clear_buffers_before_each_transaction": true,
     "close_port_after_each_call": true
@@ -26,36 +26,50 @@
   },
   "sensors": [
     {
-      "name": "sensor1",
-      "address": 1,
+      "name": "1",
+      "address": "1",
       "debug": false,
       "value": "",
       "active": true,
       "type": "pressure"
     },
     {
-      "name": "sensor2",
-      "address": 2,
+      "name": "2",
+      "address": "2",
       "debug": false,
       "value": "",
       "active": true,
       "type": "pressure"
     },
     {
-      "name": "sensor2",
-      "address": 3,
+      "name": "3",
+      "address": "3",
       "debug": false,
+      "frequency": 20,
       "value": "",
       "active": true,
       "type": "pressure"
+    },
+    {
+      "name": "Flow",
+      "address": "11",
+      "debug": false,
+      "frequency": 20,
+      "value": "",
+      "active": false,
+      "type": "flow",
+      "pressure_sensor_device_id": "device1",
+      "pressure_sensor_address": 2
     }
   ],
+
   "vfd": {
-    "name": "vfd2",
+    "name": "vfd1",
     "address": "5",
     "debug": false,
     "frequency": 20
   },
+
   "valves": [
     {
       "name": "1",
@@ -74,13 +88,7 @@
     {
       "name": "3",
       "pin": 31,
-      "role": [
-        "ACTIVE",
-        "POSITIVE",
-        "POSITIVE_TURBO_SLAVE",
-        "NEGATIVE_RELEASE",
-        "RELIEF"
-      ],
+      "role": ["ACTIVE", "POSITIVE", "NEGATIVE_RELEASE", "RELIEF"],
       "value": 0,
       "address": "3"
     },
@@ -91,10 +99,7 @@
         "ACTIVE",
         "NEGATIVE",
         "NEGATIVE_TURBO",
-<<<<<<<< HEAD:deployment/config/config2.json
-========
         "POSITIVE_TURBO_SLAVE",
->>>>>>>> a74ffdf89b6eacc1455bab1dad1d8accc036db66:deployment/config/config1.json
         "POSITIVE_RELEASE",
         "RELIEF"
       ],
@@ -106,21 +111,12 @@
     "id": "turbo",
     "valves": [
       {
-<<<<<<<< HEAD:deployment/config/config2.json
-        "role": ["POSITIVE"],
-        "address": "5"
-      },
-      {
-        "role": ["NEGATIVE"],
-        "address": "6"
-========
         "role": ["NEGATIVE"],
         "name": "5"
       },
       {
         "role": ["POSITIVE"],
         "name": "6"
->>>>>>>> a74ffdf89b6eacc1455bab1dad1d8accc036db66:deployment/config/config1.json
       }
     ]
   },
@@ -128,6 +124,8 @@
     "valve1": 1,
     "valve2": 1,
     "valve3": 1,
-    "valve4": 1
+    "valve4": 1,
+    "valve5": 1,
+    "valve6": 1
   }
 }
