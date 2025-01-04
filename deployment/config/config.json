@@ -91,7 +91,7 @@
     {
       "name": "4",
       "pin": 15,
-      "role": ["ACTIVE", "NEGATIVE", "POSITIVE_RELEASE", "RELIEF"],
+      "role": ["ACTIVE", "NEGATIVE", "POSITIVE_RELEASE"],
       "value": 0,
       "address": "4"
     },
