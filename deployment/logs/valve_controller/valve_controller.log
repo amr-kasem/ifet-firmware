@@ -3342,3 +3342,151 @@ Traceback (most recent call last):
   File "/usr/local/lib/python3.9/socket.py", line 844, in create_connection
     sock.connect(sa)
 OSError: [Errno 101] Network is unreachable
+2025-01-04 17:21:36,574 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:21:37,973 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:21:39,457 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:21:40,886 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:21:42,760 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:21:45,498 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:21:49,822 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:21:57,371 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:22:11,335 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:22:38,068 - ValveController - ERROR - Error loading configuration file: Expecting value: line 94 column 1 (char 1777)
+Traceback (most recent call last):
+  File "/app/valves_node.py", line 23, in __init__
+    config = json.load(f)
+  File "/usr/local/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/usr/local/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 94 column 1 (char 1777)
+2025-01-04 17:23:07,913 - ValveController - INFO - Connected to MQTT broker with result code Success
+2025-01-04 17:23:07,915 - ValveController - INFO - Subscribed to topic: device1/valves/1
+2025-01-04 17:23:07,917 - ValveController - INFO - Subscribed to topic: device1/valves/2
+2025-01-04 17:23:07,921 - ValveController - INFO - Subscribed to topic: device1/valves/3
+2025-01-04 17:23:07,925 - ValveController - INFO - Subscribed to topic: device1/valves/4
+2025-01-04 17:23:08,058 - ValveController - INFO - Valve '1' state set to 1
+2025-01-04 17:23:08,064 - ValveController - INFO - Valve '2' state set to 1
+2025-01-04 17:23:08,065 - ValveController - INFO - Valve '3' state set to 1
+2025-01-04 17:23:08,066 - ValveController - INFO - Valve '4' state set to 1
+2025-01-04 17:26:45,710 - ValveController - INFO - Connected to MQTT broker with result code Success
+2025-01-04 17:26:45,712 - ValveController - INFO - Subscribed to topic: device1/valves/1
+2025-01-04 17:26:45,713 - ValveController - INFO - Subscribed to topic: device1/valves/2
+2025-01-04 17:26:45,713 - ValveController - INFO - Subscribed to topic: device1/valves/3
+2025-01-04 17:26:45,714 - ValveController - INFO - Subscribed to topic: device1/valves/4
+2025-01-04 17:26:45,781 - ValveController - INFO - Valve '1' state set to 1
+2025-01-04 17:26:45,783 - ValveController - INFO - Valve '2' state set to 1
+2025-01-04 17:26:45,784 - ValveController - INFO - Valve '3' state set to 1
+2025-01-04 17:26:45,785 - ValveController - INFO - Valve '4' state set to 1
