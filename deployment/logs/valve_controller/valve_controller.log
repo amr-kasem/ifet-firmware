@@ -12489,3 +12489,4 @@ ConnectionRefusedError: [Errno 111] Connection refused
 2025-01-05 18:48:27,637 - ValveController - INFO - Valve '2' state set to 1
 2025-01-05 18:48:27,638 - ValveController - INFO - Valve '3' state set to 1
 2025-01-05 18:48:27,639 - ValveController - INFO - Valve '4' state set to 1
+2025-01-05 19:03:37,235 - ValveController - WARNING - Disconnected from MQTT broker. Reconnecting...
