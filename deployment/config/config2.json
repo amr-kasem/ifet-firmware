@@ -16,13 +16,13 @@
     "close_port_after_each_call": true
   },
   "mqtt": {
-    "broker_host": "192.168.1.17",
+    "broker_host": "10.1.10.185",
     "broker_port": 1883,
     "username": "",
     "password": ""
   },
   "api": {
-    "base_url": "http://192.168.1.17:8000"
+    "base_url": "http://10.1.10.185:8000"
   },
   "sensors": [
     {
@@ -77,9 +77,9 @@
       "role": [
         "ACTIVE",
         "POSITIVE",
-        "POSITIVE_TURBO_SLAVE",
         "NEGATIVE_RELEASE",
-        "RELIEF"
+        "RELIEF",
+        "POSITIVE_TURBO_SLAVE"
       ],
       "value": 0,
       "address": "3"
@@ -90,13 +90,9 @@
       "role": [
         "ACTIVE",
         "NEGATIVE",
-        "NEGATIVE_TURBO",
-<<<<<<<< HEAD:deployment/config/config2.json
-========
-        "POSITIVE_TURBO_SLAVE",
->>>>>>>> a74ffdf89b6eacc1455bab1dad1d8accc036db66:deployment/config/config1.json
         "POSITIVE_RELEASE",
-        "RELIEF"
+        "NEGATIVE_TURBO",
+        "POSITIVE_TURBO_SLAVE"
       ],
       "value": 0,
       "address": "4"
@@ -106,21 +102,12 @@
     "id": "turbo",
     "valves": [
       {
-<<<<<<<< HEAD:deployment/config/config2.json
         "role": ["POSITIVE"],
         "address": "5"
       },
       {
         "role": ["NEGATIVE"],
         "address": "6"
-========
-        "role": ["NEGATIVE"],
-        "name": "5"
-      },
-      {
-        "role": ["POSITIVE"],
-        "name": "6"
->>>>>>>> a74ffdf89b6eacc1455bab1dad1d8accc036db66:deployment/config/config1.json
       }
     ]
   },
