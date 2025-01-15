@@ -57,6 +57,7 @@ class StateMachine:
         self.current_event = None
         self.trigger_event_flag = False
         self.freq_command = 0
+        self.turbo_vdf_topic = ''
         self.api_base_url = config['api']['base_url']
         self.api = Api(logger=self.logger,api=self.api_base_url)
         self.broker_address = config['mqtt']['broker_host']
@@ -94,6 +95,7 @@ class StateMachine:
         self.sensors_values = {}
         self.valve_status = {}
         self.vdf_feedback = 0
+        self.turbo_vdf_feedback = 0
         self.action = ''
         self.force_stop = False
         self.task = None
@@ -250,7 +252,7 @@ class StateMachine:
     def on_message(self, client, userdata, message):
         try:
             topic_base, topic_name = self.get_topic_parts(message.topic)
-            self.logger.debug(f"Received message on topic: {message.topic}")
+            self.logger.info(f"Received message on topic: {message.topic}")
             
             if message.topic == f'{self.device_id}/vfd/command':
                 x = json.loads(message.payload.decode())
@@ -278,6 +280,8 @@ class StateMachine:
                 self.sensors_values[topic_name] = float(message.payload.decode())
             elif message.topic == f'{self.device_id}/vfd/feedback':
                 self.vdf_feedback = float(message.payload.decode())
+            elif message.topic == self.turbo_vdf_topic:
+                self.turbo_vdf_feedback = float(message.payload.decode())
             elif message.topic == f'{self.device_id}/valves/status':
                 data = json.loads(message.payload.decode())
                 self.valve_status = {i:int(data[i]) for i in data}
@@ -309,6 +313,15 @@ class StateMachine:
                 
                 dev_info = self.api.get_device(self.id)
                 self.slave = dev_info.get('turbo_charger',None)
+                
+                if self.slave is not None:
+                    try:
+                        self.client.unsubscribe(self.turbo_vdf_topic)
+                    except:
+                        pass
+                    self.turbo_vdf_topic = f"device{self.slave}/vfd/feedback"
+                    self.logger.info(self.turbo_vdf_topic)
+                    self.client.subscribe(self.turbo_vdf_topic)
                     
                 if event.get('custom_preset') == 'preset' :
                     self.logger.info(event)

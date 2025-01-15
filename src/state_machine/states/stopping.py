@@ -8,7 +8,7 @@ class StoppingState(State):
             if(self.machine.force_stop): self.machine.current_status = 'emergency: waiting for vdf to stop'
             if self.machine.turbo_id is not None and self.machine.slave is not None:
                 for valve in self.machine.turbo_valves:
-                    self.machine.client.publish(f'{self.machine.turbo_id}/valves/{valve["name"]}',1) # off // release
+                    self.machine.client.publish(f'{self.machine.turbo_id}/valves/{valve["name"]}',0) # off // release
 
                 for valve in self.machine.valves:
                     self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0 if "RELIEF" in valve["role"] else 1 ) # off // release
@@ -21,7 +21,7 @@ class StoppingState(State):
                         self.machine.logger.info(f'will default valve[{valve["name"]} to {"RELIEF" in valve["role"]}]')
                         self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0 if "RELIEF" in valve["role"] else 1 )
             while not self.machine.exit:
-                if self.machine.vdf_feedback == 0:
+                if self.machine.vdf_feedback == 0 and (self.machine.turbo_vdf_feedback == 0 or self.slave is None):
                     break
                 self.machine.set_vfd_speed(0)
 

@@ -12,7 +12,8 @@ class AutomaticCyclingState(State):
         while not self.machine.force_stop:
             self.error =  abs(self.machine.sensors_values[self.machine.sensor_id]) - abs(self.setpoint) 
             self.abs_error = abs(self.error)
-            if self.machine.freq_command - self.machine.vdf_feedback < 0.3:
+            self.machine.logger.info(f'{self.machine.freq_command} = {self.machine.vdf_feedback},{self.machine.turbo_vdf_feedback}')
+            if self.machine.freq_command - self.machine.vdf_feedback < 0.3 and (self.machine.freq_command - self.machine.turbo_vdf_feedback < 0.3 or self.machine.slave is None):
                 self.step =  5 if self.abs_error > 5 else 3 if self.abs_error > 3 else 1
                 self.freq += self.step
             self.machine.set_vfd_speed(self.freq)
