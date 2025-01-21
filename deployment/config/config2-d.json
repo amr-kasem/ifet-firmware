@@ -103,11 +103,11 @@
     "valves": [
       {
         "role": ["POSITIVE"],
-        "address": "5"
+        "name": "5"
       },
       {
         "role": ["NEGATIVE"],
-        "address": "6"
+        "name": "6"
       }
     ]
   },

@@ -252,7 +252,6 @@ class StateMachine:
     def on_message(self, client, userdata, message):
         try:
             topic_base, topic_name = self.get_topic_parts(message.topic)
-            self.logger.info(f"Received message on topic: {message.topic}")
             
             if message.topic == f'{self.device_id}/vfd/command':
                 x = json.loads(message.payload.decode())
@@ -262,6 +261,8 @@ class StateMachine:
                         self.set_vfd_speed(self.freq_command,True)
             elif topic_name == 'command':
                 event = json.loads(message.payload.decode())
+                if(event['command'] == 'slave_turn_off'):
+                    self.current_state = self.states["relief"]
                 self.current_event = event
                 self.trigger_event_flag = True
                 
@@ -465,6 +466,16 @@ class StateMachine:
         elif isinstance(self.current_state, ReliefValvesState):
             if event['command'] == "turn_off":
                 self.current_state.on_exit()
+                self.current_state = self.states["stopping"]
+                self.current_state.on_enter()
+                n_event = copy.deepcopy(event) 
+                n_event['command'] = 'idle'
+                self.current_event = n_event
+                self.trigger_event_flag = True
+            elif event['command'] == 'slave_turn_off':
+                self.slave = None
+                try: self.client.unsubscribe(self.turbo_vdf_topic)
+                except: pass
                 self.current_state = self.states["stopping"]
                 self.current_state.on_enter()
                 n_event = copy.deepcopy(event) 

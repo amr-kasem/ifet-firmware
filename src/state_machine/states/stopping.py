@@ -12,7 +12,7 @@ class StoppingState(State):
 
                 for valve in self.machine.valves:
                     self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0 if "RELIEF" in valve["role"] else 1 ) # off // release
-                    self.machine.client.publish(f'device{self.machine.slave}/valves/{valve["name"]}',1) # off // release
+                self.machine.client.publish(f'device{self.machine.slave}/command','{"command":"slave_turn_off"}') # off // release
 
             else:
                 for valve in self.machine.valves:
