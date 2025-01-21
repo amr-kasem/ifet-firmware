@@ -252,7 +252,6 @@ class StateMachine:
     def on_message(self, client, userdata, message):
         try:
             topic_base, topic_name = self.get_topic_parts(message.topic)
-            self.logger.info(f"Received message on topic: {message.topic}")
             
             if message.topic == f'{self.device_id}/vfd/command':
                 x = json.loads(message.payload.decode())
