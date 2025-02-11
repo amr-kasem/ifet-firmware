@@ -67,7 +67,7 @@
     {
       "name": "2",
       "pin": 35,
-      "role": ["ACTIVE", "NEGATIVE", "RELIEF", "NEGATIVE_TURBO_SLAVE"],
+      "role": ["ACTIVE", "NEGATIVE","POSITIVE_RELEASE", "RELIEF", "NEGATIVE_TURBO_SLAVE"],
       "value": 0,
       "address": "2"
     },
@@ -90,7 +90,6 @@
       "role": [
         "ACTIVE",
         "NEGATIVE",
-        "POSITIVE_RELEASE",
         "NEGATIVE_TURBO",
         "POSITIVE_TURBO_SLAVE"
       ],
