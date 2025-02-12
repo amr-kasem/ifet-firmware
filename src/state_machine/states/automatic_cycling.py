@@ -17,7 +17,7 @@ class AutomaticCyclingState(State):
                 self.step =  5 if self.abs_error > 5 else 3 if self.abs_error > 3 else 1
                 self.freq += self.step
             self.machine.set_vfd_speed(self.freq)
-                
+            self.machine.logger.info(f'{self.machine.positive_setpoint},{self.machine.negative_setpoint}, {self.machine.sensors_values}, {self.machine.sensors_values[self.machine.sensor_id]}')
             if self.error >= 0 :
                 break
             time.sleep(1)
