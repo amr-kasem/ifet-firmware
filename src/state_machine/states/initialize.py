@@ -1,10 +1,18 @@
 import time
 from states.state import State
+import json
 class InitializeState(State):
         def on_enter(self):
             super().on_enter()
 
             self.machine.logger.info("Initializing valves...")
+            for sensor in self.machine.selected_deflection_sensors: 
+                self.machine.client.publish(
+                    f'sick/assign/{sensor}', 
+                    json.dumps({
+                        "testing_system_id": self.machine.device_id
+                    })
+                )
             if self.machine.action == 'positive' :
                 if self.machine.turbo_id is not None and self.machine.slave is not None:
                     for valve in self.machine.turbo_valves:

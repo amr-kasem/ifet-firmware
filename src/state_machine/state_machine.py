@@ -18,6 +18,7 @@ from states.holding_time import HoldingTimeState
 from states.automatic_cycling import AutomaticCyclingState
 from states.stopping import StoppingState
 from states.relief import ReliefValvesState
+from states.recovery import RecoveryState
 
 
 class StateMachine:
@@ -75,7 +76,8 @@ class StateMachine:
             "holding_time": HoldingTimeState(self),
             "automatic_cycling": AutomaticCyclingState(self),
             "stopping": StoppingState(self),
-            "relief": ReliefValvesState(self)
+            "relief": ReliefValvesState(self),
+            "recovery": RecoveryState(self)
         }
         self.current_state = self.states["idle"]
 
@@ -261,6 +263,7 @@ class StateMachine:
                         self.set_vfd_speed(self.freq_command,True)
             elif topic_name == 'command':
                 event = json.loads(message.payload.decode())
+                self.logger.info(f'command: {event}')
                 if(event['command'] == 'slave_turn_off'):
                     self.current_state = self.states["relief"]
                 self.current_event = event
@@ -306,7 +309,7 @@ class StateMachine:
         return topic_base , topic_parts[-1]
     
     def trigger_event(self, event:dict): 
-
+        self.logger.info(f"Triggering event: {event['command']}")
         if isinstance(self.current_state, IdleState):
             self.force_stop = False
             
@@ -314,7 +317,7 @@ class StateMachine:
                 
                 dev_info = self.api.get_device(self.id)
                 self.slave = dev_info.get('turbo_charger',None)
-                
+                self.selected_deflection_sensors = event.get('selectedSensors',[])
                 if self.slave is not None:
                     try:
                         self.client.unsubscribe(self.turbo_vdf_topic)
@@ -469,7 +472,7 @@ class StateMachine:
                 self.current_state = self.states["stopping"]
                 self.current_state.on_enter()
                 n_event = copy.deepcopy(event) 
-                n_event['command'] = 'idle'
+                n_event['command'] = 'recovery'
                 self.current_event = n_event
                 self.trigger_event_flag = True
             elif event['command'] == 'slave_turn_off':
@@ -485,11 +488,31 @@ class StateMachine:
                 # self.trigger_event(n_event)
                 
         elif isinstance(self.current_state, StoppingState):
-            if event['command'] == "idle":
-                self.cyclic_mode = False
+            if event['command'] == "recovery":
+                self.current_state.on_exit()
+                self.current_state = self.states["recovery"]
+                self.logger.info("Entering recovery state...")
+                self.current_state.on_enter()
+                n_event = copy.deepcopy(event) 
+                n_event['command'] = 'idle'
+                self.logger.info("Entered already recovery state...")
+                self.current_event = n_event
+                self.trigger_event_flag = True
+            elif event['command'] == 'idle':
                 self.current_state.on_exit()
                 self.current_state = self.states["idle"]
                 self.current_state.on_enter()
+                n_event = copy.deepcopy(event) 
+                n_event['command'] = 'idle'
+        elif isinstance(self.current_state, RecoveryState):
+            self.logger.info(f"Current state: {self.current_state} and event: {event}")
+            if event['command'] == "idle":
+                self.logger.info("Leaving recovery state...")
+                self.current_state.on_exit()
+                self.current_state = self.states["idle"]
+                self.current_state.on_enter()
+                n_event = copy.deepcopy(event) 
+                n_event['command'] = 'idle'
 
     def pub_feedback(self):
         while not self.exit:
