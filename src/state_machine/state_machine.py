@@ -361,8 +361,8 @@ class StateMachine:
                         self.sensor_id =event['sensor_id']
                         self.cycle_counter = data['cycles']
                         direction = data['type'] == 'outward'
-                        self.positive_setpoint = data['high_pressure'] * -1 if direction else 1
-                        self.negative_setpoint = data['low_pressure'] * -1 if direction else 1
+                        self.positive_setpoint = data['high_pressure'] * ( -1 if direction else 1 )
+                        self.negative_setpoint = data['low_pressure'] * ( -1 if direction else 1 )
                         self.action = 'positive' if direction else 'negative'
                         self.current_state.on_exit()
                         self.current_state = self.states["initializing_valves"]

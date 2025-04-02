@@ -88,7 +88,7 @@
     {
       "name": "3",
       "pin": 31,
-      "role": ["ACTIVE", "POSITIVE", "NEGATIVE_RELEASE", "RELIEF"],
+      "role": ["ACTIVE", "POSITIVE", "NEGATIVE_RELEASE", "RELIEF", "POSITIVE_TURBO_SLAVE"],
       "value": 0,
       "address": "3"
     },
@@ -99,8 +99,7 @@
         "ACTIVE",
         "NEGATIVE",
         "POSITIVE_RELEASE",
-        "NEGATIVE_TURBO",
-        "POSITIVE_TURBO_SLAVE"
+        "NEGATIVE_TURBO"
       ],
       "value": 0,
       "address": "4"
