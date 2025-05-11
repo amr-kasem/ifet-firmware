@@ -7,8 +7,8 @@ class Api:
         self.logger = logger
         pass
     
-    def get_static_test(self, id: str):
-        res = requests.get(f'{self.api}/static-tests/{id}')
+    def get_static_test(self, project_id: str, test_index: str):
+        res = requests.get(f'{self.api}/projects/{project_id}/static-tests/{test_index}')
         if self.logger:
             self.logger.info(res.json())
         return res.json()

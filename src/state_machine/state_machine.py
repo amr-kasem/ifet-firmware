@@ -292,6 +292,9 @@ class StateMachine:
             elif message.topic == f'{self.device_id}/current_input':
                 data = json.loads(message.payload.decode())
                 self.current_user_inputs = data
+            elif topic_base == f'sick/sensors':
+                data = json.loads(message.payload.decode())
+                self.deflection_sensors_values[topic_name] = data['value']
         except json.JSONDecodeError:
             self.logger.error(f"Error decoding JSON from message on topic {message.topic}")
         except Exception as e:
@@ -318,6 +321,10 @@ class StateMachine:
                 dev_info = self.api.get_device(self.id)
                 self.slave = dev_info.get('turbo_charger',None)
                 self.selected_deflection_sensors = event.get('selectedSensors',[])
+                self.selected_deflection_sensors_subscriptions = [
+                    self.client.subscribe(f'sick/sensors/{sensor}')
+                    for sensor in self.selected_deflection_sensors
+                ]
                 if self.slave is not None:
                     try:
                         self.client.unsubscribe(self.turbo_vdf_topic)
@@ -327,90 +334,90 @@ class StateMachine:
                     self.logger.info(self.turbo_vdf_topic)
                     self.client.subscribe(self.turbo_vdf_topic)
                     
-                if event.get('custom_preset') == 'preset' :
-                    self.logger.info(event)
-                    if event['mode'] == 'manual': 
-                        self.project_id = event['project_id']
-                        self.current_test = event['test_id']
-                        data = self.api.get_static_test(self.current_test)
-                        self.cyclic_mode = False
-                        self.mode = event['mode']
-                        self.sensor_id = event['sensor_id']
-                        direction = data['type'] == 'outward'
-                        self.setpoint = data['pressure'] * 1 if direction else -1
-                        self.test_index_wanted = data['index']
-                        self.holdtime = data['duration']
-                        self.current_state.on_exit()
-                        self.current_state = self.states["initializing_valves"]
-                        self.action = 'positive' if direction else 'negative'
-                        self.current_state.on_enter()
-                        n_event = copy.deepcopy(event) 
-                        n_event['command'] = 'turn_on'
-                        self.current_event = n_event
-                        self.trigger_event_flag = True
-                        pass
-                    elif event['mode'] == 'cyclic':
-                        self.logger.info(f'test event: {event}')
-                        self.project_id = event['project_id']
-                        data = self.api.get_next_cyclic_test(self.project_id)
-                        self.cyclic_mode = True
-                        self.logger.info(f'test data: {data}')
-                        self.test_index_wanted = data['index']
-                        self.cycle_index = data['current_cycle']
-                        self.mode = event['mode']
-                        self.sensor_id =event['sensor_id']
-                        self.cycle_counter = data['cycles']
-                        direction = data['type'] == 'outward'
-                        self.positive_setpoint = data['high_pressure'] * ( -1 if direction else 1 )
-                        self.negative_setpoint = data['low_pressure'] * ( -1 if direction else 1 )
-                        self.action = 'positive' if direction else 'negative'
-                        self.current_state.on_exit()
-                        self.current_state = self.states["initializing_valves"]
-                        self.current_state.on_enter()
-                        n_event = copy.deepcopy(event) 
-                        n_event['command'] = 'turn_on'
-                        self.current_event = n_event
-                        self.trigger_event_flag = True
+                # if event.get('custom_preset') == 'preset' :
+                self.logger.info(event)
+                if event['mode'] == 'manual': 
+                    self.project_id = event['project_id']
+                    self.current_test = event['test_index']
+                    data = self.api.get_static_test(self.project_id,self.current_test)
+                    self.cyclic_mode = False
+                    self.mode = event['mode']
+                    self.sensor_id = event['sensor_id']
+                    direction = data['type'] == 'outward'
+                    self.setpoint = data['pressure'] * 1 if direction else -1
+                    self.test_index_wanted = data['index']
+                    self.holdtime = data['duration']
+                    self.current_state.on_exit()
+                    self.current_state = self.states["initializing_valves"]
+                    self.action = 'positive' if direction else 'negative'
+                    self.current_state.on_enter()
+                    n_event = copy.deepcopy(event) 
+                    n_event['command'] = 'turn_on'
+                    self.current_event = n_event
+                    self.trigger_event_flag = True
+                    pass
+                elif event['mode'] == 'cyclic':
+                    self.logger.info(f'test event: {event}')
+                    self.project_id = event['project_id']
+                    data = self.api.get_next_cyclic_test(self.project_id)
+                    self.cyclic_mode = True
+                    self.logger.info(f'test data: {data}')
+                    self.test_index_wanted = data['index']
+                    self.cycle_index = data['current_cycle']
+                    self.mode = event['mode']
+                    self.sensor_id =event['sensor_id']
+                    self.cycle_counter = data['cycles']
+                    direction = data['type'] == 'outward'
+                    self.positive_setpoint = data['high_pressure'] * ( -1 if direction else 1 )
+                    self.negative_setpoint = data['low_pressure'] * ( -1 if direction else 1 )
+                    self.action = 'positive' if direction else 'negative'
+                    self.current_state.on_exit()
+                    self.current_state = self.states["initializing_valves"]
+                    self.current_state.on_enter()
+                    n_event = copy.deepcopy(event) 
+                    n_event['command'] = 'turn_on'
+                    self.current_event = n_event
+                    self.trigger_event_flag = True
 
-                else:
-                    self.logger.info(event)
-                    direction = event['inout'] == 'outward'
+                # else:
+                #     self.logger.info(event)
+                #     direction = event['inout'] == 'outward'
 
-                    if event['mode'] == 'manual': 
-                        self.test_index_wanted = None
-                        self.cyclic_mode = False
-                        self.mode = event['mode']
-                        self.sensor_id = event['sensor_id']
-                        self.setpoint = event['setpoint']
-                        self.holdtime = event['holdtime']
-                        self.current_state.on_exit()
-                        self.current_state = self.states["initializing_valves"]
-                        self.action = 'positive' if direction else 'negative'
-                        self.current_state.on_enter()
+                #     if event['mode'] == 'manual': 
+                #         self.test_index_wanted = None
+                #         self.cyclic_mode = False
+                #         self.mode = event['mode']
+                #         self.sensor_id = event['sensor_id']
+                #         self.setpoint = event['setpoint']
+                #         self.holdtime = event['holdtime']
+                #         self.current_state.on_exit()
+                #         self.current_state = self.states["initializing_valves"]
+                #         self.action = 'positive' if direction else 'negative'
+                #         self.current_state.on_enter()
                         
-                        n_event = copy.deepcopy(event) 
-                        n_event['command'] = 'turn_on'
-                        self.current_event = n_event
-                        self.trigger_event_flag = True
-                        # self.trigger_event(n_event)
-                    elif event['mode'] == 'cyclic':
-                        self.cyclic_mode = True
-                        self.logger.info(f'Command Test index: {event["test_index"]}')
-                        self.test_index_wanted = None
-                        self.mode = event['mode']
-                        self.sensor_id =event['sensor_id']
-                        self.cycle_counter = int(event['cycles'])
-                        self.positive_setpoint = float(event['positive'])
-                        self.negative_setpoint = float(event['negative'])
-                        self.action = 'positive' if direction else 'negative'
-                        self.current_state.on_exit()
-                        self.current_state = self.states["initializing_valves"]
-                        self.current_state.on_enter()
-                        n_event = copy.deepcopy(event) 
-                        n_event['command'] = 'turn_on'
-                        self.current_event = n_event
-                        self.trigger_event_flag = True
-                        # self.trigger_event(n_event)
+                #         n_event = copy.deepcopy(event) 
+                #         n_event['command'] = 'turn_on'
+                #         self.current_event = n_event
+                #         self.trigger_event_flag = True
+                #         # self.trigger_event(n_event)
+                #     elif event['mode'] == 'cyclic':
+                #         self.cyclic_mode = True
+                #         self.logger.info(f'Command Test index: {event["test_index"]}')
+                #         self.test_index_wanted = None
+                #         self.mode = event['mode']
+                #         self.sensor_id =event['sensor_id']
+                #         self.cycle_counter = int(event['cycles'])
+                #         self.positive_setpoint = float(event['positive'])
+                #         self.negative_setpoint = float(event['negative'])
+                #         self.action = 'positive' if direction else 'negative'
+                #         self.current_state.on_exit()
+                #         self.current_state = self.states["initializing_valves"]
+                #         self.current_state.on_enter()
+                #         n_event = copy.deepcopy(event) 
+                #         n_event['command'] = 'turn_on'
+                #         self.current_event = n_event
+                #         self.trigger_event_flag = True
+                #         # self.trigger_event(n_event)
 
         elif isinstance(self.current_state, InitializeState):
             if event['command'] == "turn_on":
