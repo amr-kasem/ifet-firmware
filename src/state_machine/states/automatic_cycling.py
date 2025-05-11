@@ -103,10 +103,10 @@ class AutomaticCyclingState(State):
 
 
         self.machine.logger.info(f'will finish: {self.machine.test_index_wanted} {self.machine.force_stop}')
-        if self.machine.test_index_wanted is not None and  not self.machine.force_stop:
-            self.machine.api.finish_cyclic_test(self.machine.project_id,self.machine.test_index_wanted)
-            self.machine.notify()
-            self.machine.logger.info(f'Test index wanted: {self.machine.test_index_wanted}')
+        # if self.machine.test_index_wanted is not None and  not self.machine.force_stop:
+        #     self.machine.api.finish_cyclic_test(self.machine.project_id,self.machine.test_index_wanted)
+        #     self.machine.notify()
+        #     self.machine.logger.info(f'Test index wanted: {self.machine.test_index_wanted}')
         
         self.machine.cycle_index = 0
 

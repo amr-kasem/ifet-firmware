@@ -30,6 +30,8 @@ class StateMachine:
         fileHandler = RotatingFileHandler('logs/state_machine.log', maxBytes=1_000_000, backupCount=5)
         fileHandler.setFormatter(formatter)
         self.test_index_wanted = None
+        
+        self.deflection_sensors_values  = {}
 
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(formatter)
@@ -277,9 +279,7 @@ class StateMachine:
                 
             elif topic_name == 'emergency_stop': 
                 self.set_vfd_state('emergency_stop')
-
                 self.force_stop = True
-                
             elif topic_base == f'{self.device_id}/sensors':
                 self.sensors_values[topic_name] = float(message.payload.decode())
             elif message.topic == f'{self.device_id}/vfd/feedback':
@@ -294,7 +294,7 @@ class StateMachine:
                 self.current_user_inputs = data
             elif topic_base == f'sick/sensors':
                 data = json.loads(message.payload.decode())
-                self.deflection_sensors_values[topic_name] = data['value']
+                self.deflection_sensors_values[topic_name] = data
         except json.JSONDecodeError:
             self.logger.error(f"Error decoding JSON from message on topic {message.topic}")
         except Exception as e:
@@ -321,10 +321,13 @@ class StateMachine:
                 dev_info = self.api.get_device(self.id)
                 self.slave = dev_info.get('turbo_charger',None)
                 self.selected_deflection_sensors = event.get('selectedSensors',[])
-                self.selected_deflection_sensors_subscriptions = [
-                    self.client.subscribe(f'sick/sensors/{sensor}')
+                self.deflection_sensors_values  = {}
+                self.selected_deflection_sensors_topics = [
+                    f'sick/sensors/{sensor}'
                     for sensor in self.selected_deflection_sensors
                 ]
+                for subscription in self.selected_deflection_sensors_topics:
+                    self.client.subscribe(subscription)
                 if self.slave is not None:
                     try:
                         self.client.unsubscribe(self.turbo_vdf_topic)
@@ -520,6 +523,8 @@ class StateMachine:
                 self.current_state.on_enter()
                 n_event = copy.deepcopy(event) 
                 n_event['command'] = 'idle'
+                for subscription in self.selected_deflection_sensors_topics:
+                    self.client.unsubscribe(subscription)
 
     def pub_feedback(self):
         while not self.exit:
