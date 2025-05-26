@@ -347,7 +347,7 @@ class StateMachine:
                     self.mode = event['mode']
                     self.sensor_id = event['sensor_id']
                     direction = data['type'] == 'outward'
-                    self.setpoint = data['pressure'] * 1 if direction else -1
+                    self.setpoint = data['pressure'] * (1 if direction else -1)
                     self.test_index_wanted = data['index']
                     self.holdtime = data['duration']
                     self.current_state.on_exit()
