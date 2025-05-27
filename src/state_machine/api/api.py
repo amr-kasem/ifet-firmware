@@ -7,8 +7,8 @@ class Api:
         self.logger = logger
         pass
     
-    def get_static_test(self, id: str):
-        res = requests.get(f'{self.api}/static-tests/{id}')
+    def get_static_test(self, project_id: str, test_index: str):
+        res = requests.get(f'{self.api}/projects/{project_id}/static-tests/{test_index}')
         if self.logger:
             self.logger.info(res.json())
         return res.json()
@@ -25,8 +25,21 @@ class Api:
             self.logger.info(res.json())
         return res.json()
 
-    def finish_static_test(self, project_id: str, test_id:str):
-        res = requests.put(f'{self.api}/projects/{project_id}/static_tests/{test_id}/finish')
+    def finish_static_test(self, project_id: str, static_test_index:str, deflection_sensors_values: dict, recovery: float):
+        
+        res = requests.post(
+            f'{self.api}/projects/{project_id}/static_tests/{static_test_index}/trials',
+            json={
+                'deflections': [
+                    {
+                        "deflection_gauge": i,
+                        "max_deflection": deflection_sensors_values[i]['max_value'],
+                        "permanent_deflection": deflection_sensors_values[i]['permanent_value'],
+                        "recovery": recovery
+                    } for i in  deflection_sensors_values
+                ]
+            }
+        )
         if self.logger:
             self.logger.info(res.json())
         return res.json()
@@ -40,8 +53,19 @@ class Api:
 
 
 
-    def finish_cyclic_test(self, project_id: str, test_id:str):
-        res = requests.put(f'{self.api}/projects/{project_id}/cyclic_tests/{test_id}/finish')
+    def finish_cyclic_test(self, project_id: str, test_index:str, deflection_sensors_values: dict, recovery: float):
+        res = requests.post(f'{self.api}/projects/{project_id}/cyclic-tests/{test_index}/trials',
+            json={
+                'deflections': [
+                    {
+                        "deflection_gauge": i,
+                        "max_deflection": deflection_sensors_values[i]['max_value'],
+                        "permanent_deflection": deflection_sensors_values[i]['permanent_value'],
+                        "recovery": recovery
+                    } for i in  deflection_sensors_values
+                ]
+            }
+        )
         if self.logger:
             self.logger.info(res.json())
         return res.json()

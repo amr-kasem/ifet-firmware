@@ -18,7 +18,7 @@ class HoldingTimeState(State):
         # start_time = time.time()
         while not self.machine.force_stop:
             if abs(self.machine.sensors_values[self.machine.sensor_id]) > abs(self.machine.setpoint):
-                self.machine.logger.info(f"Setpoint reached: {self.machine.sensors_values[self.machine.sensor_id]}")
+                self.machine.logger.info(f"Setpoint reached: {self.machine.sensors_values[self.machine.sensor_id]} {abs(self.machine.setpoint)}")
                 break
             self.freq = self.machine.freq_command
             # if time.time() - start_time > 120:  # 2 minutes timeout
@@ -40,11 +40,4 @@ class HoldingTimeState(State):
             time.sleep(0.1)
             self.machine.current_status = f'Holding {i/10.0}s'
         
-        if self.machine.force_stop:
-            self.machine.logger.warning("Holding time interrupted")
-        else:
-            if self.machine.test_index_wanted is not None and self.machine.project_id is not None:
-                self.machine.api.finish_static_test(self.machine.project_id,self.machine.test_index_wanted)
-                self.machine.notify()
-            self.machine.logger.info("Holding time completed.")
-
+        
