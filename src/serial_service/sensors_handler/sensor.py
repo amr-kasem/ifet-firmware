@@ -2,11 +2,11 @@ import os
 import time
 import logging
 
-from serial_com.serial_com import SerialCom
+from serial_service.serial_com import ModbusCom
 
 class Sensor:
-    def __init__(self, config, serial_com:SerialCom):
-        self.serial_com = serial_com
+    def __init__(self, config, com_port:ModbusCom):
+        self.com_port = com_port
         self.name = config["name"]
         self.address = int(config["address"])
         self.debug = config["debug"]
@@ -25,7 +25,7 @@ class Sensor:
 
     def read(self):
         try:
-            self.last_t = self.serial_com.read_float(self.address, 1028, 3) * 144
+            self.last_t = self.com_port.read_float(self.address, 1028, 3) * 144
         except:
             # self.logger.error('ignored writing [read] command')
             pass

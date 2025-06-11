@@ -5,14 +5,14 @@ import struct
 import math
 import paho.mqtt.client as mqtt
 
-from serial_com.serial_com import SerialCom
+from serial_com.serial_com import ModbusCom
 
 class Sensor:
-    def __init__(self, config, serial_com:SerialCom):
+    def __init__(self, config, com_port:ModbusCom):
         self.name = config["name"]
         self.address = int(config["address"])
         self.debug = config["debug"]
-        self.serial_com = serial_com
+        self.com_port = com_port
         self.pressure_topic =  f"{config['pressure_sensor_device_id']}/sensors/{config['pressure_sensor_address']}"
         self.temprature_topic =  f"{config['pressure_sensor_device_id']}/sensors/temperature"
         self.humidity_topic =  f"{config['pressure_sensor_device_id']}/sensors/humidity"
@@ -49,7 +49,7 @@ class Sensor:
     def read_32bit_register_as_float(self,address):
         try:
             # Read two 16-bit registers (4 bytes) from the given address
-            registers = self.serial_com.read_register(self.address, address, 2, functioncode=3)
+            registers = self.com_port.read_register(self.address, address, 2, functioncode=3)
             print(f"Raw register values: {registers}")
             # Convert the two 16-bit registers to a 32-bit float using IEEE 754 format
             packed_data = struct.pack('>HH', registers[0], registers[1])

@@ -4,11 +4,11 @@ import json
 import threading
 import logging
 from logging.handlers import RotatingFileHandler
-
 from typing import Union
+from .modbus_com import ModbusCom
 
-class SerialCom:
-    def __init__(self, config_file):
+class SerialCom(ModbusCom):
+    def __init__(self, config_file: str):
         self.lock = threading.Lock()
         try:
             with open(config_file) as f:
@@ -63,24 +63,31 @@ class SerialCom:
                 self.logger.info(f"Releasing lock for address {address}")
 
     def read_float(self, address: int, register: int, number_of_registers: int):
+        """Read float value from registers."""
         return self._execute_with_lock(address, self.comport.read_float, register, number_of_registers)
 
     def read_int(self, address: int, register: int, number_of_registers: int):
+        """Read integer value from registers."""
         return self._execute_with_lock(address, self.comport.read_int, register, number_of_registers)
 
     def read_string(self, address: int, register: int, number_of_registers: int):
+        """Read string value from registers."""
         return self._execute_with_lock(address, self.comport.read_string, register, number_of_registers)
 
     def write_float(self, address: int, register: int, value: float, number_of_decimals: int = 0):
+        """Write float value to registers."""
         return self._execute_with_lock(address, self.comport.write_float, register, value, number_of_decimals)
 
     def write_int(self, address: int, register: int, value: int):
+        """Write integer value to register."""
         return self._execute_with_lock(address, self.comport.write_int, register, value)
 
     def write_string(self, address: int, register: int, value: str):
+        """Write string value to registers."""
         return self._execute_with_lock(address, self.comport.write_string, register, value)
 
     def read_register(self, address: int, register: int, number_of_registers: int, functioncode: int = 1):
+        """Read registers using specified function code."""
         return self._execute_with_lock(address, self.comport.read_register, register, number_of_registers, functioncode)
 
     def write_register(
@@ -124,10 +131,13 @@ class SerialCom:
         self._execute_with_lock(address, write_func)
 
     def read_block(self, address: int, register: int, number_of_registers: int):
+        """Read a block of registers."""
         return self._execute_with_lock(address, self.comport.read_block, register, number_of_registers)
 
     def close(self):
+        """Close the communication connection."""
         self.comport.serial.close()
         
     def __del__(self):
+        """Destructor to ensure connection is closed."""
         self.close()
