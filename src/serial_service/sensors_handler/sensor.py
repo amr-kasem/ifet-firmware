@@ -2,16 +2,19 @@ import os
 import time
 import logging
 
-from serial_service.serial_com import ModbusCom
+from serial_com import ModbusCom, ModbusTcpCom
 
 class Sensor:
-    def __init__(self, config, com_port:ModbusCom):
-        self.com_port = com_port
+    def __init__(self, config, com_port:ModbusCom = None, tcp = False):
         self.name = config["name"]
         self.address = int(config["address"])
         self.debug = config["debug"]
         self.logger = self.setup_logger()
         self.last_t = 0
+        if tcp:
+            self.com_port = ModbusTcpCom(config)
+        else: 
+            self.com_port = com_port
         
     def setup_logger(self):
         logger = logging.getLogger(self.__class__.__name__)

@@ -1,0 +1,4 @@
+device,test_device,1,,
+poll,holding_register,1028,2,BE_BE
+ref,register_1028,1028,uint16,r
+ref,register_1029,1029,uint16,r
