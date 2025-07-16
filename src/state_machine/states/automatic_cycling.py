@@ -62,7 +62,7 @@ class AutomaticCyclingState(State):
                             if "POSITIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',1) # on // pump
                         
-                        time.sleep(1.3) # modif
+                        time.sleep(1.0) # modif
                         break
                     time.sleep(0.02)
                 
