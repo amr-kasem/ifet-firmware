@@ -42,14 +42,14 @@ class AutomaticCyclingState(State):
                             if "POSITIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0) # off // release
 
-                        time.sleep(1.3) # modif
+                        time.sleep(1.0) # modif
                         break
                     
                     time.sleep(0.02)
                     
                     
                 #####################
-                # if self.machine.sensors_values[self.machine.sensor_id] <= float(self.machine.positive_setpoint) * 0.8 :
+                # if self.machine.sensors_values[self.machine.sensor_id] <= float(self.machine.positive_setpoint) * 1.0 :
                 #     break
                 #####################
                 
@@ -76,7 +76,7 @@ class AutomaticCyclingState(State):
                             if "NEGATIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0) # on // release
                         
-                        time.sleep(0.8) # modif
+                        time.sleep(1.0) # modif
                         break
                     time.sleep(0.02)
                 
@@ -92,7 +92,7 @@ class AutomaticCyclingState(State):
                         for valve in self.machine.valves:
                             if "NEGATIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',1) # off // suck
-                        time.sleep(0.8) # modif
+                        time.sleep(1.0) # modif
                         break
                     time.sleep(0.02)
                 
