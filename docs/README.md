@@ -1,37 +1,40 @@
-# Pin Configuration
+# Configuration Documentation
 
-## Device 1 (config1.json)
+## Modbus RTU Configuration
+
+| Parameter | Device 1 | Device 2 | Notes |
+|-----------|----------|----------|-------|
+| Port | `/dev/ttyACM0` | `/dev/ttyACM0` | Same |
+| Baudrate | 9600 | 9600 | Same |
+| Byte Size | 8 | 8 | Same |
+| Parity | PARITY_NONE | PARITY_NONE | Same |
+| Stop Bits | 1 | 1 | Same |
+| Mode | MODE_RTU | MODE_RTU | Same |
+| Clear Buffers Before Each Transaction | true | true | Same |
+| Close Port After Each Call | true | true | Same |
+
+<div style="page-break-after: always;"></div>
+
+## Pin Configuration
+
+### Device 1 (config1.json)
 
 ```mermaid
 flowchart LR
-    subgraph Device1["Device 1 - Pin Configuration"]
-        V1_1["Valve 1<br/>Pin: 13<br/>Address: 1"]
-        V2_1["Valve 2<br/>Pin: 35<br/>Address: 2"]
-        V3_1["Valve 3<br/>Pin: 31<br/>Address: 3"]
-        V4_1["Valve 4<br/>Pin: 15<br/>Address: 4"]
-        
-        V1_1 --> R1_1["ACTIVE<br/>POSITIVE<br/>POSITIVE_TURBO"]
-        V2_1 --> R2_1["ACTIVE<br/>NEGATIVE<br/>RELIEF<br/>POSITIVE_RELEASE<br/>NEGATIVE_TURBO_SLAVE"]
-        V3_1 --> R3_1["ACTIVE<br/>POSITIVE<br/>NEGATIVE_RELEASE<br/>RELIEF<br/>POSITIVE_TURBO_SLAVE"]
-        V4_1 --> R4_1["ACTIVE<br/>NEGATIVE<br/>NEGATIVE_TURBO"]
-    end
+    V1["Valve 1 - Pin 13"] --> R1["ACTIVE, POSITIVE, POSITIVE_TURBO"]
+    V2["Valve 2 - Pin 35"] --> R2["ACTIVE, NEGATIVE, RELIEF, POSITIVE_RELEASE, NEGATIVE_TURBO_SLAVE"]
+    V3["Valve 3 - Pin 31"] --> R3["ACTIVE, POSITIVE, NEGATIVE_RELEASE, RELIEF, POSITIVE_TURBO_SLAVE"]
+    V4["Valve 4 - Pin 15"] --> R4["ACTIVE, NEGATIVE, NEGATIVE_TURBO"]
 ```
 
-## Device 2 (config2.json)
+### Device 2 (config2.json)
 
 ```mermaid
 flowchart LR
-    subgraph Device2["Device 2 - Pin Configuration"]
-        V1_2["Valve 1<br/>Pin: 13<br/>Address: 1"]
-        V2_2["Valve 2<br/>Pin: 35<br/>Address: 2"]
-        V3_2["Valve 3<br/>Pin: 31<br/>Address: 3"]
-        V4_2["Valve 4<br/>Pin: 15<br/>Address: 4"]
-        
-        V1_2 --> R1_2["ACTIVE<br/>POSITIVE<br/>POSITIVE_TURBO"]
-        V2_2 --> R2_2["ACTIVE<br/>NEGATIVE<br/>POSITIVE_RELEASE<br/>RELIEF<br/>NEGATIVE_TURBO_SLAVE"]
-        V3_2 --> R3_2["ACTIVE<br/>POSITIVE<br/>NEGATIVE_RELEASE<br/>RELIEF<br/>POSITIVE_TURBO_SLAVE"]
-        V4_2 --> R4_2["ACTIVE<br/>NEGATIVE<br/>NEGATIVE_TURBO<br/>POSITIVE_TURBO_SLAVE"]
-    end
+    V1_2["Valve 1 - Pin 13"] --> R1_2["ACTIVE, POSITIVE, POSITIVE_TURBO"]
+    V2_2["Valve 2 - Pin 35"] --> R2_2["ACTIVE, NEGATIVE, POSITIVE_RELEASE, RELIEF, NEGATIVE_TURBO_SLAVE"]
+    V3_2["Valve 3 - Pin 31"] --> R3_2["ACTIVE, POSITIVE, NEGATIVE_RELEASE, RELIEF, POSITIVE_TURBO_SLAVE"]
+    V4_2["Valve 4 - Pin 15"] --> R4_2["ACTIVE, NEGATIVE, NEGATIVE_TURBO, POSITIVE_TURBO_SLAVE"]
 ```
 
 ## Pin Mapping Summary
