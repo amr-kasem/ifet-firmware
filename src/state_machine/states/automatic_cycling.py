@@ -12,12 +12,13 @@ class AutomaticCyclingState(State):
         while not self.machine.force_stop:
             self.error =  abs(self.machine.sensors_values[self.machine.sensor_id]) - abs(self.setpoint) 
             self.abs_error = abs(self.error)
-            if self.machine.freq_command - self.machine.vdf_feedback < 0.3:
+            self.machine.logger.info(f'{self.machine.freq_command} = {self.machine.vdf_feedback},{self.machine.turbo_vdf_feedback}')
+            if self.machine.freq_command - self.machine.vdf_feedback < 0.3 and (self.machine.freq_command - self.machine.turbo_vdf_feedback < 0.3 or self.machine.slave is None):
                 self.step =  5 if self.abs_error > 5 else 3 if self.abs_error > 3 else 1
                 self.freq += self.step
             self.machine.set_vfd_speed(self.freq)
-                
-            if self.error >= 0 :
+            self.machine.logger.info(f'{self.machine.positive_setpoint},{self.machine.negative_setpoint}, {self.machine.sensors_values}, {self.machine.sensors_values[self.machine.sensor_id]}')
+            if self.error >= - 0.15 * self.setpoint:
                 break
             time.sleep(1)
                 
@@ -40,13 +41,15 @@ class AutomaticCyclingState(State):
                         for valve in self.machine.valves:
                             if "POSITIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0) # off // release
-                        time.sleep(0.8) # modif
+
+                        time.sleep(1.0) # modif
                         break
+                    
                     time.sleep(0.02)
                     
                     
                 #####################
-                # if self.machine.sensors_values[self.machine.sensor_id] <= float(self.machine.positive_setpoint) * 0.8 :
+                # if self.machine.sensors_values[self.machine.sensor_id] <= float(self.machine.positive_setpoint) * 1.0 :
                 #     break
                 #####################
                 
@@ -58,7 +61,8 @@ class AutomaticCyclingState(State):
                         for valve in self.machine.valves:
                             if "POSITIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',1) # on // pump
-                        time.sleep(0.8) # modif
+                        
+                        time.sleep(1.0) # modif
                         break
                     time.sleep(0.02)
                 
@@ -71,7 +75,8 @@ class AutomaticCyclingState(State):
                         for valve in self.machine.valves:
                             if "NEGATIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',0) # on // release
-                        time.sleep(0.8) # modif
+                        
+                        time.sleep(1.0) # modif
                         break
                     time.sleep(0.02)
                 
@@ -87,7 +92,7 @@ class AutomaticCyclingState(State):
                         for valve in self.machine.valves:
                             if "NEGATIVE_RELEASE" in valve['role']:
                                 self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}',1) # off // suck
-                        time.sleep(0.8) # modif
+                        time.sleep(1.0) # modif
                         break
                     time.sleep(0.02)
                 
@@ -98,10 +103,10 @@ class AutomaticCyclingState(State):
 
 
         self.machine.logger.info(f'will finish: {self.machine.test_index_wanted} {self.machine.force_stop}')
-        if self.machine.test_index_wanted is not None and  not self.machine.force_stop:
-            self.machine.api.finish_cyclic_test(self.machine.project_id,self.machine.test_index_wanted)
-            self.machine.notify()
-            self.machine.logger.info(f'Test index wanted: {self.machine.test_index_wanted}')
+        # if self.machine.test_index_wanted is not None and  not self.machine.force_stop:
+        #     self.machine.api.finish_cyclic_test(self.machine.project_id,self.machine.test_index_wanted)
+        #     self.machine.notify()
+        #     self.machine.logger.info(f'Test index wanted: {self.machine.test_index_wanted}')
         
         self.machine.cycle_index = 0
 

@@ -2,19 +2,24 @@ import os
 import time
 import logging
 
-from serial_com.serial_com import SerialCom
+from serial_com import ModbusCom, ModbusTcpCom
 
 class Sensor:
-    def __init__(self, config, serial_com:SerialCom):
-        self.serial_com = serial_com
+    def __init__(self, config, com_port:ModbusCom = None, tcp = False):
         self.name = config["name"]
         self.address = int(config["address"])
         self.debug = config["debug"]
         self.logger = self.setup_logger()
         self.last_t = 0
+        if tcp:
+            self.com_port = ModbusTcpCom(config)
+        else: 
+            self.com_port = com_port
         
     def setup_logger(self):
         logger = logging.getLogger(self.__class__.__name__)
+        if self.debug:
+            logger.setLevel(logging.DEBUG)
         logger.setLevel(logging.INFO)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch = logging.StreamHandler()
@@ -25,9 +30,11 @@ class Sensor:
 
     def read(self):
         try:
-            self.last_t = self.serial_com.read_float(self.address, 1028, 3) * 144
-        except:
-            # self.logger.error('ignored writing [read] command')
+            self.last_t = self.com_port.read_float(self.address, 1028, 3) * 144
+            self.logger.error(f'sensor [{self.address}] value {self.last_t}')
+            print(f'sensor [{self.address}] value is {self.last_t} ')
+        except Exception as e:
+            self.logger.error(f'failed to read sensor [{self.address}] command due to {e}')
             pass
         return self.last_t
     

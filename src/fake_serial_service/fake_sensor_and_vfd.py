@@ -6,7 +6,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 class FakeSensorAndVFD:
-    def __init__(self):
+    def __init__(self,config_file:str):
         
         # Set up logging to file with max size of 1 MB and keep the latest 5 files
         log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -20,18 +20,26 @@ class FakeSensorAndVFD:
         self.vfd_frequency = 0
         self.sensor_value = 0
         self.vfd_running = False
+        with open(config_file) as f:
+            config = json.load(f)
+        self.device_id = config.get('device_id')
+        mqtt_config = config.get('mqtt', {})
+        self.broker_host = mqtt_config.get('broker_host')
+        self.broker_port = mqtt_config.get('broker_port')
+        self.username = mqtt_config.get('username')
+        self.password = mqtt_config.get('password')
         self.mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.setup_mqtt()
 
     def setup_mqtt(self):
         self.mqtt_client.on_connect = self.on_connect
         self.mqtt_client.on_message = self.on_message
-        self.mqtt_client.connect("192.168.1.17", 1883, 60)
+        self.mqtt_client.connect(self.broker_host, self.broker_port, 60)
         self.mqtt_client.loop_start()
 
     def on_connect(self, client, userdata, flags, rc,_):
         self.logger.info(f"Connected to MQTT broker with result code {rc}")
-        self.mqtt_client.subscribe("device1/vfd/command")
+        self.mqtt_client.subscribe(f"{self.device_id}/vfd/command")
 
     def on_message(self, client, userdata, msg):
         try:
@@ -65,14 +73,14 @@ class FakeSensorAndVFD:
     def update_sensor_value(self):
         if self.vfd_running:
             # Sensor value increases with frequency, plus some random noise
-            self.sensor_value = self.vfd_frequency * 10 + random.uniform(-5, 5)
+            self.sensor_value = self.vfd_frequency * 0.1 + random.uniform(-0.05, 0.05)
         else:
             # When VFD is not running, sensor value slowly decreases to zero
             self.sensor_value = max(0, self.sensor_value - 1)
 
     def publish_data(self):
-        self.mqtt_client.publish("device1/vfd/feedback", self.vfd_frequency)
-        self.mqtt_client.publish("device1/sensors/1", self.sensor_value)
+        self.mqtt_client.publish(f"{self.device_id}/vfd/feedback", self.vfd_frequency)
+        self.mqtt_client.publish(f"{self.device_id}/sensors/1", self.sensor_value)
         self.logger.info(f"Published VFD frequency: {self.vfd_frequency}, Sensor value: {self.sensor_value}")
 
     def run(self):
@@ -85,5 +93,6 @@ class FakeSensorAndVFD:
             self.logger.warning("Process interrupted by user")
 
 if __name__ == "__main__":
-    fake_system = FakeSensorAndVFD()
+    config_file = "config.json"
+    fake_system = FakeSensorAndVFD(config_file)
     fake_system.run()

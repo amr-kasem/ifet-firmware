@@ -5,11 +5,11 @@ import time
 
 from sensors_handler.sensor import Sensor as PressureSensor
 from sensors_handler.flow_sensor import Sensor as FlowSensor
-from serial_com.serial_com import SerialCom
+from serial_com.serial_com import ModbusCom 
 
 class SensorHandler:
-    def __init__(self, config_file, serial_com : SerialCom):
-        self.serial_com = serial_com
+    def __init__(self, config_file, com_port : ModbusCom):
+        self.com_port = com_port
         self.sensors: list = []
         self.load_config(config_file)
         self.mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
@@ -37,10 +37,10 @@ class SensorHandler:
 
     def add_sensor(self, sensor_config):
         if sensor_config['type'] == 'pressure':
-            sensor = PressureSensor(sensor_config,serial_com=self.serial_com)
+            sensor = PressureSensor(sensor_config,com_port=self.com_port)
             self.sensors.append(sensor)
         elif sensor_config['type'] == 'flow':
-            sensor = FlowSensor(sensor_config,serial_com=self.serial_com)
+            sensor = FlowSensor(sensor_config,com_port=self.com_port)
             self.sensors.append(sensor)
 
     def connect_mqtt_broker(self):

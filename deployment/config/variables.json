@@ -1,0 +1,38 @@
+{
+  "command": {
+    "command": "start",
+    "mode": "cyclic",
+    "positive": "18.00",
+    "negative": "7.20",
+    "cycles": 3350,
+    "sensor_id": "2",
+    "test_index": "8"
+  },
+  "resume": false,
+  "cycle_index": 0,
+  "current_test_index": "8",
+  "current_inputs": {
+    "current_values": {
+      "project_values": {
+        "project_name": "9500 storefront ES",
+        "design_load": { "positive": 36, "negative": 36 }
+      },
+      "static_values": { "setpoint": 27, "sensor": 2, "hold_time": 30 },
+      "cyclic_values": {
+        "1": { "positive": 18, "negative": 7.2, "cycles": 3500 },
+        "2": { "positive": 21.599999999999998, "negative": 0, "cycles": 300 },
+        "3": { "positive": 28.8, "negative": 18, "cycles": 600 },
+        "4": { "positive": 36, "negative": 10.799999999999999, "cycles": 100 },
+        "5": { "positive": 18, "negative": 7.2, "cycles": 50 },
+        "6": { "positive": 36, "negative": 10.799999999999999, "cycles": 1050 },
+        "7": { "positive": 28.8, "negative": 18, "cycles": 50 },
+        "8": { "positive": 21.599999999999998, "negative": 0, "cycles": 3050 },
+        "high_Pressure": 0,
+        "low_Pressure": 0,
+        "number_of_cycles": 0,
+        "current_index": "1"
+      },
+      "others": { "Temperature": 555, "Humidity": 111, "toggle": "static_load" }
+    }
+  }
+}
