@@ -2,7 +2,7 @@ import minimalmodbus
 import serial
 import sys
 
-def scan_modbus_addresses(port, baudrate=9600, timeout=1, start_address=1, end_address=247):
+def scan_modbus_addresses(port, baudrate=9600, timeout=10, start_address=1, end_address=247):
     # Configure the serial connection
     instrument = minimalmodbus.Instrument(port, 1)  # Temporary address, will be changed in the loop
     instrument.serial.baudrate = baudrate

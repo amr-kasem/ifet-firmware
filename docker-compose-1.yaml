@@ -2,29 +2,43 @@ services:
   state_machine_service:
     build: ./src/state_machine/
     volumes:
-      - ./deployment/config/config1.json:/app/config.json
+      - ./deployment/config/config1-site-b.json:/app/config.json
       - ./deployment/log/state_machine:/app/logs
     restart: always
     network_mode: "host"
 
-  
   valves_service:
     build: ./src/valves_node/
     privileged: true
+    devices:
+      - /dev/gpiochip0:/dev/gpiochip0
     volumes:
-      - ./deployment/config/config1.json:/app/config.json
+      - ./deployment/config/config1-site-b.json:/app/config.json
       - ./deployment/logs/valve_controller:/app/logs
-
     restart: always
+  # valves_service:
+  #   build: ./src/valves_node/
+  #   privileged: true
+  #   network_mode: host
+
+  #   devices:
+  #     - /dev/gpiomem
+  #     - /dev/mem
+  #   volumes:
+  #     - /sys:/sys
+  #     - ./deployment/config/config1.json:/app/config.json
+  #     - ./deployment/logs/valve_controller:/app/logs
+
+  #   restart: always
 
   serial_service:
     build: ./src/serial_service/
     volumes:
-      - ./deployment/config/config1.json:/app/config.json
+      - ./deployment/config/config1-site-b.json:/app/config.json
       - ./deployment/logs/serial_com:/app/logs
 
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/ttyUSB0:/dev/ttyACM0
     restart: always
 
 

@@ -1,22 +1,16 @@
-# import RPi.GPIO as GPIO
-# try:
-#     import RPi.GPIO
-# except (RuntimeError, ModuleNotFoundError):
-#     import fake_rpigpio.utils
-#     fake_rpigpio.utils.install()
-# from fake_rpigpio import RPi
-import RPi.GPIO as GPIO
+import gpiod
+from gpiod.line import Direction, Value
 import json
 import logging
 from logging.handlers import RotatingFileHandler
 import time
 import os
 import paho.mqtt.client as mqtt
-from logging.handlers import RotatingFileHandler
 
 class ValveController:
     def __init__(self, config_file):
         self.logger = self.setup_logger()
+        self.valve_lines = {}
 
         try:
             with open(config_file) as f:
@@ -33,12 +27,48 @@ class ValveController:
         self.username = mqtt_config.get('username')
         self.password = mqtt_config.get('password')
         
-        GPIO.setmode(GPIO.BOARD)  # Use Broadcom SOC channel numbering
+        # Pin conversion: BOARD -> BCM
+        BOARD_TO_BCM = {
+            13: 27,  # Valve 1
+            35: 19,  # Valve 2
+            31: 6,   # Valve 3
+            15: 22   # Valve 4
+        }
 
-        for valve in self.valves:
-            pin = valve.get('pin')
-            GPIO.setup(pin, GPIO.OUT)
-            GPIO.output(pin, GPIO.LOW)
+        # Initialize GPIO using gpiod v2 API
+        try:
+            # Setup valve pins
+            for valve in self.valves:
+                board_pin = valve.get('pin')
+                valve_name = valve.get('name')
+                
+                # Convert BOARD pin to BCM
+                bcm_pin = BOARD_TO_BCM.get(board_pin)
+                if bcm_pin is None:
+                    self.logger.error(f"Invalid BOARD pin {board_pin} for valve '{valve_name}'")
+                    raise ValueError(f"Pin {board_pin} is not a valid BOARD pin")
+                
+                try:
+                    # gpiod v2 API: request line directly
+                    line_request = gpiod.request_lines(
+                        "/dev/gpiochip0",
+                        consumer=f"valve_{valve_name}",
+                        config={
+                            bcm_pin: gpiod.LineSettings(
+                                direction=Direction.OUTPUT,
+                                output_value=Value.INACTIVE
+                            )
+                        }
+                    )
+                    self.valve_lines[valve_name] = (line_request, bcm_pin)
+                    self.logger.info(f"Valve '{valve_name}' initialized on BOARD pin {board_pin} (BCM {bcm_pin})")
+                except Exception as e:
+                    self.logger.error(f"Failed to setup valve '{valve_name}': {e}", exc_info=True)
+                    raise
+                    
+        except Exception as e:
+            self.logger.error(f"Failed to initialize GPIO: {e}", exc_info=True)
+            raise
 
         # Initialize MQTT client
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
@@ -90,34 +120,65 @@ class ValveController:
         retry_count = 3
         for i in range(retry_count):
             try:
-                for valve in self.valves:
-                    if valve['name'] == valve_name:
-                        pin = valve['pin']
-                        GPIO.output(pin, GPIO.HIGH if state == 1 else GPIO.LOW)
-                        self.logger.info(f"Valve '{valve_name}' state set to {state}")
-                        break
+                if valve_name in self.valve_lines:
+                    line_request, pin = self.valve_lines[valve_name]
+                    # gpiod v2 API: set_value
+                    line_request.set_value(pin, Value.ACTIVE if state == 1 else Value.INACTIVE)
+                    self.logger.info(f"Valve '{valve_name}' state set to {state}")
+                    return
+                else:
+                    self.logger.error(f"Valve '{valve_name}' not found")
+                    return
             except Exception as e:
                 self.logger.error(f"Failed to set state for valve '{valve_name}': {e}", exc_info=True)
                 time.sleep(1)  # Wait for 1 second before retrying
-            else:
-                return
+        
         self.logger.error(f"Failed to set state for valve '{valve_name}' after {retry_count} retries")
+
+    def get_valve_state(self, valve_name):
+        """Get current state of a valve"""
+        try:
+            if valve_name in self.valve_lines:
+                line_request, pin = self.valve_lines[valve_name]
+                # gpiod v2 API: get_value
+                value = line_request.get_value(pin)
+                return 1 if value == Value.ACTIVE else 0
+            else:
+                self.logger.error(f"Valve '{valve_name}' not found")
+                return 0
+        except Exception as e:
+            self.logger.error(f"Failed to get state for valve '{valve_name}': {e}", exc_info=True)
+            return 0
 
     def run(self):
         self.connect_mqtt()
         while True:
             try:
-                self.client.publish(f'{self.device_id}/valves/status', json.dumps({v['name']: GPIO.input(v['pin']) for v in self.valves}))
+                # Publish valve status
+                status = {valve['name']: self.get_valve_state(valve['name']) for valve in self.valves}
+                self.client.publish(f'{self.device_id}/valves/status', json.dumps(status))
                 time.sleep(0.2)  # Keep the script running to handle MQTT messages
             except Exception as e:
                 self.logger.error(f"Error during run loop: {e}", exc_info=True)
             
     def cleanup(self):
-        GPIO.cleanup()
+        """Clean up GPIO resources"""
+        self.logger.info("Cleaning up GPIO resources...")
+        
+        # Release all GPIO lines
+        for valve_name, (line_request, pin) in self.valve_lines.items():
+            try:
+                line_request.release()
+                self.logger.info(f"Released GPIO line for valve '{valve_name}'")
+            except Exception as e:
+                self.logger.error(f"Error releasing line for valve '{valve_name}': {e}", exc_info=True)
+        
+        # MQTT cleanup
         self.client.loop_stop()
         self.client.disconnect()
+        self.logger.info("MQTT connection closed")
         
-    def on_disconnect(self, client, userdata, rc,_,__):
+    def on_disconnect(self, client, userdata, rc, _, __):
         if rc != 0:
             self.logger.warning("Disconnected from MQTT broker. Reconnecting...")
             self.client.loop_stop()
@@ -129,9 +190,12 @@ if __name__ == "__main__":
 
     try:
         controller.run()
-        pass
         
     except KeyboardInterrupt:
         print("\nKeyboard interrupt detected. Cleaning up GPIO and MQTT...")
         controller.cleanup()
-    controller.cleanup()
+    except Exception as e:
+        controller.logger.error(f"Unexpected error: {e}", exc_info=True)
+        controller.cleanup()
+    finally:
+        controller.cleanup()

@@ -21,7 +21,7 @@ class ModbusCom(ABC):
         pass
        
     @abstractmethod
-    def read_float(self, address: int, register: int, number_of_registers: int):
+    def read_float(self, address: int, register: int, number_of_registers: int, functioncode: int = 3):
         """Read float value from registers."""
         pass
 

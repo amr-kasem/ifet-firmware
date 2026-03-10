@@ -62,9 +62,9 @@ class SerialCom(ModbusCom):
             finally:
                 self.logger.info(f"Releasing lock for address {address}")
 
-    def read_float(self, address: int, register: int, number_of_registers: int):
+    def read_float(self, address: int, register: int, number_of_registers: int, functioncode: int = 3):
         """Read float value from registers."""
-        return self._execute_with_lock(address, self.comport.read_float, register, number_of_registers)
+        return self._execute_with_lock(address, self.comport.read_float, register, number_of_registers, functioncode)
 
     def read_int(self, address: int, register: int, number_of_registers: int):
         """Read integer value from registers."""

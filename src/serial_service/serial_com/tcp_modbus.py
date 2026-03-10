@@ -24,16 +24,24 @@ class ModbusTcpCom(ModbusCom):
             if not self.client.connect():
                 raise ConnectionError(f"Failed to connect to {self.host}:{self.port}")
 
-    def read_float(self, address: int, register: int, number_of_registers: int = 2):
-        """Read float value from holding registers (32-bit float requires 2 registers)."""
+    def read_float(self, address: int, register: int, number_of_registers: int = 2, functioncode: int = 3):
+        """Read float value from registers (holding or input based on functioncode)."""
         self._connect()
-        print('wil read')
-        result = self.client.read_holding_registers(register, count=number_of_registers, slave=address)
+        if functioncode == 3:
+            result = self.client.read_holding_registers(register, count=number_of_registers, slave=address)
+        elif functioncode == 4:
+            result = self.client.read_input_registers(register, count=number_of_registers, slave=address)
+        else:
+            raise ValueError(f"Unsupported functioncode {functioncode}")
         if result.isError():
             raise ModbusException(f"Failed to read float from register {register}")
-        # Convert two 16-bit registers to 32-bit float
-        combined = (result.registers[0] << 16) | result.registers[1]
-        return struct.unpack('>f', struct.pack('>I', combined))[0]
+        # Convert registers to 32-bit float
+        if number_of_registers == 2:
+            combined = (result.registers[0] << 16) | result.registers[1]
+            return struct.unpack('>f', struct.pack('>I', combined))[0]
+        else:
+            # For more registers, adjust as needed
+            raise NotImplementedError("Only 2 registers supported for float")
 
     def read_int(self, address: int, register: int, number_of_registers: int = 1):
         """Read integer value from holding registers."""
