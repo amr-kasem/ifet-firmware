@@ -2,6 +2,7 @@
   "device_id": "device1",
   "id": "1",
   "status": "idle",
+  "version": "5",
   "current_speed": 0,
   "toggleBtn": "static_load",
   "serial": {
