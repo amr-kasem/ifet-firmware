@@ -36,7 +36,7 @@ class Sensor:
 
     def read(self):
         try:
-            raw_value = self.com_port.read_float(self.address, 7, 2, 4)
+            raw_value = self.com_port.read_float(self.address, 7, 3, 4)
             self.logger.info(f'sensor [{self.address}] raw value {raw_value}')
             self.last_t = raw_value * 204.816
             self.logger.info(f'sensor [{self.address}] value {self.last_t}')
