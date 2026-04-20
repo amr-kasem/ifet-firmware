@@ -4,7 +4,7 @@ import time
 class RecoveryState(State):
     def __init__(self, machine):
         super().__init__(machine)
-        self.recovery_time = 60  # 60 seconds recovery time
+        self.recovery_time = 0  # 60 seconds recovery time
         
     def on_enter(self):
         super().on_enter()

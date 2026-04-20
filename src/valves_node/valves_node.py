@@ -5,14 +5,7 @@
 #     import fake_rpigpio.utils
 #     fake_rpigpio.utils.install()
 # from fake_rpigpio import RPi
-import RPi.GPIO as GPIO
 import json
-import logging
-from logging.handlers import RotatingFileHandler
-import time
-import os
-import paho.mqtt.client as mqtt
-from logging.handlers import RotatingFileHandler
 
 
 if __name__ == "__main__":
@@ -22,7 +15,7 @@ if __name__ == "__main__":
         with open(config_file) as f:
             config = json.load(f)
         if config != "":
-            if config["version"] == 5:
+            if config["version"] == "5":
                 from valve_controller_pi5 import ValveController 
             else:
                 from valve_controller_pi4 import ValveController 
