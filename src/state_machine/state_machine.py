@@ -499,15 +499,54 @@ class StateMachine:
                 
         elif isinstance(self.current_state, StoppingState):
             if event['command'] == "recovery":
-                self.current_state.on_exit()
-                self.current_state = self.states["recovery"]
-                self.logger.info("Entering recovery state...")
-                self.current_state.on_enter()
-                n_event = copy.deepcopy(event) 
-                n_event['command'] = 'idle'
-                self.logger.info("Entered already recovery state...")
-                self.current_event = n_event
-                self.trigger_event_flag = True
+                if self.mode == 'cyclic':
+                    # [CHANGE] cyclic mode bypasses RecoveryState — finish_cyclic_test called here, then go directly to idle
+                    self.current_state.on_exit()
+                    if self.test_index_wanted is not None and not self.force_stop:
+                        try:
+                            self.api.finish_cyclic_test(
+                                self.project_id,
+                                self.test_index_wanted,
+                                self.deflection_sensors_values,
+                                0
+                            )
+                        except Exception as e:
+                            self.logger.error(f"Error finishing cyclic test: {e}")
+                        else:
+                            # notify only on successful API call — avoid false UI refresh on failure
+                            self.notify()
+                    for sensor in self.selected_deflection_sensors:
+                        self.client.publish(f'sick/release/{sensor}', 'free')
+                    for subscription in self.selected_deflection_sensors_topics:
+                        self.client.unsubscribe(subscription)
+                    self.current_state = self.states["idle"]
+                    self.current_state.on_enter()
+                    n_event = copy.deepcopy(event)
+                    n_event['command'] = 'idle'
+                    self.current_event = n_event
+                    self.trigger_event_flag = True
+                else:
+                    # Static/manual mode goes through RecoveryState as normal
+                    # (previously both modes entered RecoveryState here)
+                    self.current_state.on_exit()
+                    self.current_state = self.states["recovery"]
+                    self.logger.info("Entering recovery state...")
+                    self.current_state.on_enter()
+                    n_event = copy.deepcopy(event)
+                    n_event['command'] = 'idle'
+                    self.logger.info("Entered already recovery state...")
+                    self.current_event = n_event
+                    self.trigger_event_flag = True
+                # --- original (both modes entered RecoveryState) ---
+                # self.current_state.on_exit()
+                # self.current_state = self.states["recovery"]
+                # self.logger.info("Entering recovery state...")
+                # self.current_state.on_enter()
+                # n_event = copy.deepcopy(event)
+                # n_event['command'] = 'idle'
+                # self.logger.info("Entered already recovery state...")
+                # self.current_event = n_event
+                # self.trigger_event_flag = True
             elif event['command'] == 'idle':
                 self.current_state.on_exit()
                 self.current_state = self.states["idle"]
