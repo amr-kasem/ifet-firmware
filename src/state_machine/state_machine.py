@@ -114,15 +114,20 @@ class StateMachine:
         self.cycle_index = 0
         self.positive_setpoint = 0
         self.negative_setpoint = 0
-        
+
+        self.selected_deflection_sensors = []
+        self.selected_deflection_sensors_topics = []
+
         self.current_status = 'initial'
         self.feedback_loop = threading.Thread(target=self.pub_feedback)
+        self.connected_event = threading.Event()
+        self.boot_recovery_done = False
         
         
    
                         
-    def on_connect(self, client, userdata, flags, rc,prop):
-        
+    def on_connect(self, client, userdata, flags, rc, prop):
+
         try:
             if rc == 0:
                 self.logger.info("Connected to MQTT broker")
@@ -132,24 +137,27 @@ class StateMachine:
                 self.client.subscribe(f'{self.device_id}/emergency_stop')
                 self.client.subscribe(f'{self.device_id}/current_input')
                 self.logger.info(f'subscribed to command topics')
-                
+
                 for sensor in self.sensors:
                     topic = f"{self.device_id}/sensors/{sensor['address']}"
                     self.logger.info(f'subscribed to {topic}')
                     self.client.subscribe(topic)
-                    
+
                 self.client.subscribe(f"{self.device_id}/valves/status")
-                
+
                 vdf_topic = f"{self.device_id}/vfd/feedback"
                 self.client.subscribe(vdf_topic)
-                self.feedback_loop.start()
-                self.current_state.on_enter()
+
+                # [CHANGE] boot orchestration moved to run() so reconnects don't
+                # re-start threads or re-run boot recovery. Signal run() instead.
+                self.connected_event.set()
+                # self.feedback_loop.start()
+                # self.current_state.on_enter()
                 # if self.cyclic_resume:
                 #     self.current_status = f'resume cycle {self.cycle_index}'
-                    
-                if self.task is None: 
-                    self.task = threading.Thread(target=self.state_loop)
-                    self.task.start()
+                # if self.task is None:
+                #     self.task = threading.Thread(target=self.state_loop)
+                #     self.task.start()
             else:
                 self.logger.error(f"Failed to connect to MQTT broker with return code: {rc}")
                 self.retry_connect()
@@ -158,15 +166,16 @@ class StateMachine:
             self.retry_connect()
         
 
-    def on_disconnect(self, client, userdata, rc,prop,d):
+    def on_disconnect(self, client, userdata, rc, prop, d):
         self.logger.warning("Disconnected from MQTT broker")
         self.force_stop = True
         self.exit = True
-        try:
-            if self.task is not None: self.task.join()
-            if self.feedback_loop is not None: self.feedback_loop.join()
-        except Exception as e:
-            self.logger.error(f"No threads to join: {str(e)}")
+        # [CHANGE] thread joins moved out — loop_stop() in run() handles cleanup
+        # try:
+        #     if self.task is not None: self.task.join()
+        #     if self.feedback_loop is not None: self.feedback_loop.join()
+        # except Exception as e:
+        #     self.logger.error(f"No threads to join: {str(e)}")
         # self.retry_connect()
 
     def retry_connect(self):
@@ -581,6 +590,8 @@ class StateMachine:
                 
                 
     def run(self):
+        import sensor_ownership
+
         while not self.exit:
             try:
                 self.logger.info(f"Connecting to MQTT broker at {self.broker_address}:{self.broker_port}")
@@ -589,13 +600,50 @@ class StateMachine:
                 self.logger.info("Successfully connected to MQTT broker")
                 break
             except Exception as e:
-                self.logger.warning(f"Waiting for MQTT server: {str(e)}") 
+                self.logger.warning(f"Waiting for MQTT server: {str(e)}")
                 time.sleep(3)
+
+        # [CHANGE] loop_start() replaces loop_forever() so the main thread is
+        # free to call fetch_on_boot() without deadlocking the paho callback thread.
+        # loop_forever() would have blocked here; loop_start() runs paho in background.
+        # try:
+        #     self.client.loop_forever()
+        # except Exception as e:
+        #     self.logger.error(f"Error in MQTT loop: {str(e)}")
+        #     self.logger.error(traceback.format_exc())
+        self.client.loop_start()
+
         try:
-            self.client.loop_forever()
+            if not self.connected_event.wait(timeout=10.0):
+                self.logger.error("MQTT connect timeout — exiting")
+                return
+
+            # Boot-time orphan recovery — runs on the main thread while the
+            # paho loop thread can freely deliver the retained payload back.
+            if not self.boot_recovery_done:
+                orphans = sensor_ownership.fetch_on_boot(self.client, self.device_id)
+                if orphans:
+                    self.logger.info(f"Recovered ownership from broker: {orphans}")
+                    self.selected_deflection_sensors = orphans
+                    # topics list left empty: we never subscribed to sick/sensors
+                    # in this process, so nothing to unsubscribe.
+                self.boot_recovery_done = True
+
+            # Start state machine — IdleState.on_enter releases any orphans.
+            self.current_state.on_enter()
+            self.feedback_loop.start()
+            if self.task is None:
+                self.task = threading.Thread(target=self.state_loop)
+                self.task.start()
+
+            while not self.exit:
+                time.sleep(0.5)
+
         except Exception as e:
-            self.logger.error(f"Error in MQTT loop: {str(e)}")
+            self.logger.error(f"Error in run loop: {str(e)}")
             self.logger.error(traceback.format_exc())
+        finally:
+            self.client.loop_stop()
 
 
     def disconnect(self):
