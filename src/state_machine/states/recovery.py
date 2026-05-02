@@ -4,7 +4,7 @@ import time
 class RecoveryState(State):
     def __init__(self, machine):
         super().__init__(machine)
-        self.recovery_time = 60  # 60 seconds recovery time
+        self.recovery_time = 0  # 60 seconds recovery time
         
     def on_enter(self):
         super().on_enter()
@@ -37,16 +37,17 @@ class RecoveryState(State):
                         self.machine.deflection_sensors_values,
                         self.recovery_time
                     )
-                else:
-                    try:
-                        self.machine.api.finish_cyclic_test(
-                            self.machine.project_id,
-                            self.machine.test_index_wanted,
-                            self.machine.deflection_sensors_values,
-                            self.recovery_time
-                        )
-                    except Exception as e:
-                        self.machine.logger.error(f"Error finishing cyclic test: {e}")
+                # [CHANGE] cyclic mode no longer reaches RecoveryState — finish_cyclic_test moved to state_machine.py StoppingState handler
+                # else:
+                #     try:
+                #         self.machine.api.finish_cyclic_test(
+                #             self.machine.project_id,
+                #             self.machine.test_index_wanted,
+                #             self.machine.deflection_sensors_values,
+                #             self.recovery_time
+                #         )
+                #     except Exception as e:
+                #         self.machine.logger.error(f"Error finishing cyclic test: {e}")
                 self.machine.notify()
             self.machine.logger.info("Recovery time completed.")
 

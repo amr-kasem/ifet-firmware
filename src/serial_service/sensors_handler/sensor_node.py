@@ -4,6 +4,7 @@ import logging
 import time
 
 from sensors_handler.sensor import Sensor as PressureSensor
+from sensors_handler.new_sensor import NewSensor as PressureSensor2
 from sensors_handler.flow_sensor import Sensor as FlowSensor
 from serial_com.serial_com import ModbusCom 
 
@@ -38,6 +39,9 @@ class SensorHandler:
     def add_sensor(self, sensor_config):
         if sensor_config['type'] == 'pressure':
             sensor = PressureSensor(sensor_config,com_port=self.com_port)
+            self.sensors.append(sensor)
+        elif sensor_config['type'] == 'pressure2':
+            sensor = PressureSensor2(sensor_config,com_port=self.com_port)
             self.sensors.append(sensor)
         elif sensor_config['type'] == 'flow':
             sensor = FlowSensor(sensor_config,com_port=self.com_port)
