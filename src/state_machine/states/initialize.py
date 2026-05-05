@@ -1,14 +1,27 @@
 import time
 from states.state import State
 import json
+import sensor_ownership
+
+
 class InitializeState(State):
         def on_enter(self):
             super().on_enter()
 
             self.machine.logger.info("Initializing valves...")
-            for sensor in self.machine.selected_deflection_sensors: 
+
+            # Write-ahead: record ownership before SICK assigns so a crash
+            # between here and the assign loop is still recoverable on reboot.
+            if self.machine.selected_deflection_sensors:
+                sensor_ownership.publish(
+                    self.machine.client,
+                    self.machine.device_id,
+                    self.machine.selected_deflection_sensors,
+                )
+
+            for sensor in self.machine.selected_deflection_sensors:
                 self.machine.client.publish(
-                    f'sick/assign/{sensor}', 
+                    f'sick/assign/{sensor}',
                     json.dumps({
                         "testing_system_id": self.machine.device_id
                     })
