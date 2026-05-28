@@ -5,10 +5,12 @@
     "bytesize": 8,
     "parity": "PARITY_NONE",
     "stopbits": 1,
-    "timeout": 0.05,
+    "timeout": 0.1,
     "mode": "MODE_RTU",
     "clear_buffers_before_each_transaction": true,
-    "close_port_after_each_call": true
+    "close_port_after_each_call": false,
+    "retries": 3,
+    "retry_backoff": 0.01
   }
 }
   
