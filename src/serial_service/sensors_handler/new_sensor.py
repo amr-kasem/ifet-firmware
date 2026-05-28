@@ -17,24 +17,21 @@ class NewSensor:
             self.com_port = com_port
         if self.com_port is None:
             raise ValueError(f"NewSensor '{self.name}': com_port must be provided when tcp=False")
-        self.com_port.write_register(self.address, 3, 8, 0, 6)
     def setup_logger(self):
-        logger = logging.getLogger(self.__class__.__name__)
-        if self.debug:
-            logger.setLevel(logging.DEBUG)
-        logger.setLevel(logging.INFO)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        ch = logging.StreamHandler()
-        ch.setFormatter(formatter)
-        logger.addHandler(ch)
+        logger = logging.getLogger(f"{self.__class__.__name__}.{self.name}")
+        if not logger.handlers:
+            logger.setLevel(logging.DEBUG if self.debug else logging.INFO)
+            ch = logging.StreamHandler()
+            ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+            logger.addHandler(ch)
         return logger
     
 
     def read(self):
         try:
             self.last_t = self.com_port.read_float(self.address, 22, 3)
-            self.logger.error(f'sensor [{self.address}] value {self.last_t}')
-            print(f'sensor [{self.address}] value is {self.last_t} ')
+            self.logger.info(f'sensor [{self.address}] value {self.last_t} PSI')
+            print(f'sensor [{self.address}] value is {self.last_t} PSI')
         except Exception as e:
             self.logger.error(f'failed to read sensor [{self.address}] command due to {e}')
             pass
