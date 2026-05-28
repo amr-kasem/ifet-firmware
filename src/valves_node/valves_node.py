@@ -15,7 +15,7 @@ if __name__ == "__main__":
         with open(config_file) as f:
             config = json.load(f)
         if config != "":
-            if config["version"] == "5":
+            if str(config.get("version", "")) == "5":
                 from valve_controller_pi5 import ValveController 
             else:
                 from valve_controller_pi4 import ValveController 
