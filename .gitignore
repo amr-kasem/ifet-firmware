@@ -1,3 +1,5 @@
 **/log/**
 **/logs/**
 **/variables.json
+**/__pycache__/
+*.pyc
