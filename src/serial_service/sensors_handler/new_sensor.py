@@ -15,6 +15,8 @@ class NewSensor:
             self.com_port = ModbusTcpCom(config)
         else: 
             self.com_port = com_port
+        if self.com_port is None:
+            raise ValueError(f"NewSensor '{self.name}': com_port must be provided when tcp=False")
         self.com_port.write_register(self.address, 3, 3, 8)
     def setup_logger(self):
         logger = logging.getLogger(self.__class__.__name__)
