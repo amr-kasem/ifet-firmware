@@ -22,7 +22,7 @@ def main():
     try:
         while True:
             print(sensor.read())
-            time.sleep(1/15)
+            time.sleep(0.5)
     except KeyboardInterrupt:
         print("Stopped by user.")
 

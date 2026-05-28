@@ -18,14 +18,12 @@ class NewSensor:
         if self.com_port is None:
             raise ValueError(f"NewSensor '{self.name}': com_port must be provided when tcp=False")
     def setup_logger(self):
-        logger = logging.getLogger(self.__class__.__name__)
-        if self.debug:
-            logger.setLevel(logging.DEBUG)
-        logger.setLevel(logging.INFO)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        ch = logging.StreamHandler()
-        ch.setFormatter(formatter)
-        logger.addHandler(ch)
+        logger = logging.getLogger(f"{self.__class__.__name__}.{self.name}")
+        if not logger.handlers:
+            logger.setLevel(logging.DEBUG if self.debug else logging.INFO)
+            ch = logging.StreamHandler()
+            ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+            logger.addHandler(ch)
         return logger
     
 
