@@ -18,12 +18,6 @@ def main():
 
     com_port = SerialCom(CONFIG_FILE)
     sensor = NewSensor(config, com_port=com_port)
-      "host": "10.1.10.185",
-      "port": 1883,
-    }
-
-    # Step 3: Create Sensor instance
-    sensor = Sensor(config)
 
     try:
         while True:
