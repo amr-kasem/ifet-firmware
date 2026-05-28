@@ -10,7 +10,8 @@
     "clear_buffers_before_each_transaction": true,
     "close_port_after_each_call": false,
     "retries": 3,
-    "retry_backoff": 0.01
+    "retry_backoff": 0.01,
+    "low_latency": true
   }
 }
   

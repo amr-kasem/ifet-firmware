@@ -44,6 +44,10 @@ class SerialCom(ModbusCom):
                 # instead of wasting it on a single corrupted/truncated frame.
                 self.retries = int(config.get("retries", 3))
                 self.retry_backoff = float(config.get("retry_backoff", 0.01))
+                # USB-serial (e.g. /dev/ttyACM*) defaults to a high latency timer
+                # that dominates per-transaction time. Enabling low-latency mode
+                # cuts the round-trip overhead without touching the baud rate.
+                self.low_latency = bool(config.get("low_latency", True))
         except (FileNotFoundError, KeyError, json.JSONDecodeError) as e:
             logging.error(f"Error loading configuration: {e}", exc_info=True)
             raise
@@ -57,7 +61,6 @@ class SerialCom(ModbusCom):
         self.comport.mode = self.mode
         self.comport.clear_buffers_before_each_transaction = self.clear_buffers_before_each_transaction
         self.comport.close_port_after_each_call = self.close_port_after_each_call
-        
 
         os.makedirs("logs", exist_ok=True)
         logging.basicConfig(
@@ -69,6 +72,22 @@ class SerialCom(ModbusCom):
             ]
         )
         self.logger = logging.getLogger(self.__class__.__name__)
+
+        if self.low_latency:
+            self._enable_low_latency()
+
+    def _enable_low_latency(self):
+        """Enable the serial port's low-latency mode (cuts USB-serial round-trip).
+
+        Best-effort: not all platforms/drivers support it, so any failure is
+        logged and ignored rather than blocking startup. Has no effect on the
+        baud rate or framing.
+        """
+        try:
+            self.comport.serial.set_low_latency_mode(True)
+            self.logger.info(f"Enabled low-latency mode on {self.port}")
+        except (ValueError, NotImplementedError, OSError, AttributeError) as e:
+            self.logger.warning(f"Could not enable low-latency mode on {self.port}: {e}")
 
     def _execute_with_lock(self, address: int, func, *args, **kwargs):
         """Execute a Modbus operation under the bus lock, retrying transient faults.
