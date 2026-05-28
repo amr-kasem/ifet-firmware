@@ -11,13 +11,13 @@ def main():
       "debug": True,
       "value": "",
       "active": True,
-      "type": "pressure",
-      "host": "10.1.10.120",
-      "port": 3001,
+      "type": "pressure2",
+      "host": "10.1.10.185",
+      "port": 1883,
     }
 
     # Step 3: Create Sensor instance
-    sensor = Sensor(config, tcp=True)
+    sensor = Sensor(config)
 
     # Step 4: Read from sensor in a loop (or just once for quick test)
     try:
