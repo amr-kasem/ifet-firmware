@@ -30,7 +30,7 @@
         "debug": false,
         "value": "",
         "active": true,
-        "type": "pressure"
+        "type": "pressure2"
       },
       {
         "name": "2",
@@ -38,7 +38,7 @@
         "debug": false,
         "value": "",
         "active": true,
-        "type": "pressure"
+        "type": "pressure2"
       },
       {
         "name": "3",
@@ -47,7 +47,7 @@
         "frequency": 20,
         "value": "",
         "active": true,
-        "type": "pressure"
+        "type": "pressure2"
       },
       {
         "name": "Flow",
