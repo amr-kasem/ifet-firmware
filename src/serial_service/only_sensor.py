@@ -1,10 +1,12 @@
 import time
-from serial_com import ModbusTcpCom
-from sensors_handler.sensor import Sensor  # assuming the class is saved in sensor.py
+from serial_com import ModbusTcpCom, SerialCom
+from sensors_handler.sensor import Sensor
+from sensors_handler.new_sensor import NewSensor
+
+CONFIG_FILE = "debug-sensor.json"
 
 def main():
 
-    # Step 2: Define sensor configuration
     config = {
       "name": "1",
       "address": "1",
@@ -12,6 +14,10 @@ def main():
       "value": "",
       "active": True,
       "type": "pressure2",
+    }
+
+    com_port = SerialCom(CONFIG_FILE)
+    sensor = NewSensor(config, com_port=com_port)
       "host": "10.1.10.185",
       "port": 1883,
     }
@@ -19,11 +25,10 @@ def main():
     # Step 3: Create Sensor instance
     sensor = Sensor(config)
 
-    # Step 4: Read from sensor in a loop (or just once for quick test)
     try:
         while True:
             print(sensor.read())
-            time.sleep(1/15)  # adjust interval as needed
+            time.sleep(1/15)
     except KeyboardInterrupt:
         print("Stopped by user.")
 
