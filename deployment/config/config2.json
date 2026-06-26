@@ -44,12 +44,12 @@
       "type": "pressure"
     },
     {
-      "name": "sensor2",
+      "name": "sensor3",
       "address": 3,
       "debug": false,
       "value": "",
       "active": true,
-      "type": "pressure"
+      "type": "pressure2"
     }
   ],
   "vfd": {
@@ -62,14 +62,24 @@
     {
       "name": "1",
       "pin": 13,
-      "role": ["ACTIVE", "POSITIVE", "POSITIVE_TURBO"],
+      "role": [
+        "ACTIVE",
+        "POSITIVE",
+        "POSITIVE_TURBO"
+      ],
       "value": 0,
       "address": "1"
     },
     {
       "name": "2",
       "pin": 35,
-      "role": ["ACTIVE", "NEGATIVE","POSITIVE_RELEASE", "RELIEF", "NEGATIVE_TURBO_SLAVE"],
+      "role": [
+        "ACTIVE",
+        "NEGATIVE",
+        "POSITIVE_RELEASE",
+        "RELIEF",
+        "NEGATIVE_TURBO_SLAVE"
+      ],
       "value": 0,
       "address": "2"
     },
@@ -103,11 +113,15 @@
     "id": "turbo",
     "valves": [
       {
-        "role": ["POSITIVE"],
+        "role": [
+          "POSITIVE"
+        ],
         "name": "5"
       },
       {
-        "role": ["NEGATIVE"],
+        "role": [
+          "NEGATIVE"
+        ],
         "name": "6"
       }
     ]
