@@ -104,6 +104,12 @@ class StateMachine:
         self.force_stop = False
         self.task = None
 
+        # When True, cyclic tests skip RecoveryState on completion: the result is
+        # reported immediately and the machine goes straight to idle. Defaults to
+        # False (cyclic goes through RecoveryState like static/manual), so this is
+        # an opt-in behavior change activated only via config.
+        self.cyclic_skip_recovery = bool(config.get('cyclic_skip_recovery', False))
+
         self.cyclic_mode = False
         self.cyclic_resume = False
         self.resume_command = {}
@@ -508,8 +514,11 @@ class StateMachine:
                 
         elif isinstance(self.current_state, StoppingState):
             if event['command'] == "recovery":
-                if self.mode == 'cyclic':
-                    # [CHANGE] cyclic mode bypasses RecoveryState — finish_cyclic_test called here, then go directly to idle
+                if self.mode == 'cyclic' and self.cyclic_skip_recovery:
+                    # Opt-in (config: cyclic_skip_recovery=true): cyclic mode bypasses
+                    # RecoveryState — finish_cyclic_test is called here, then go directly
+                    # to idle. When the flag is off (default), cyclic falls through to the
+                    # normal RecoveryState path below and recovery.py finishes the test.
                     self.current_state.on_exit()
                     if self.test_index_wanted is not None and not self.force_stop:
                         try:
@@ -535,8 +544,8 @@ class StateMachine:
                     self.current_event = n_event
                     self.trigger_event_flag = True
                 else:
-                    # Static/manual mode goes through RecoveryState as normal
-                    # (previously both modes entered RecoveryState here)
+                    # Default path: static/manual mode, and cyclic mode when
+                    # cyclic_skip_recovery is off — all go through RecoveryState.
                     self.current_state.on_exit()
                     self.current_state = self.states["recovery"]
                     self.logger.info("Entering recovery state...")
@@ -546,16 +555,6 @@ class StateMachine:
                     self.logger.info("Entered already recovery state...")
                     self.current_event = n_event
                     self.trigger_event_flag = True
-                # --- original (both modes entered RecoveryState) ---
-                # self.current_state.on_exit()
-                # self.current_state = self.states["recovery"]
-                # self.logger.info("Entering recovery state...")
-                # self.current_state.on_enter()
-                # n_event = copy.deepcopy(event)
-                # n_event['command'] = 'idle'
-                # self.logger.info("Entered already recovery state...")
-                # self.current_event = n_event
-                # self.trigger_event_flag = True
             elif event['command'] == 'idle':
                 self.current_state.on_exit()
                 self.current_state = self.states["idle"]
