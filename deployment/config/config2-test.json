@@ -35,8 +35,23 @@
       "value": "",
       "active": true,
       "type": "pressure2"
+    },
+    {
+      "name": "sensor2",
+      "address": 2,
+      "debug": false,
+      "value": "",
+      "active": true,
+      "type": "pressure2"
+    },
+    {
+      "name": "sensor3",
+      "address": 3,
+      "debug": false,
+      "value": "",
+      "active": true,
+      "type": "pressure2"
     }
-
   ],
   "vfd": {
     "name": "vfd2",
