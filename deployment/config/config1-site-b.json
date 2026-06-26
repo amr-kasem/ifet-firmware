@@ -1,4 +1,6 @@
 {
+  "cyclic_skip_recovery": true,
+  "recovery_time": 60,
   "device_id": "device1",
   "id": "1",
   "status": "idle",

@@ -4,10 +4,12 @@ import time
 class RecoveryState(State):
     def __init__(self, machine):
         super().__init__(machine)
-        self.recovery_time = 0  # 60 seconds recovery time
-        
+        self.recovery_time = 0  # read from config (machine.recovery_time) on each entry
+
     def on_enter(self):
         super().on_enter()
+        # Pull the configured hold time at entry (set in StateMachine from config).
+        self.recovery_time = getattr(self.machine, 'recovery_time', 0)
         self.machine.logger.info("Entering recovery state...")
         self.machine.current_status = f'Recovery {self.recovery_time}s'
         

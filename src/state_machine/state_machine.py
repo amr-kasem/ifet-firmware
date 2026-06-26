@@ -110,6 +110,10 @@ class StateMachine:
         # an opt-in behavior change activated only via config.
         self.cyclic_skip_recovery = bool(config.get('cyclic_skip_recovery', False))
 
+        # Recovery hold time (seconds) applied in RecoveryState. Config-driven so
+        # per-device tuning lives in the config file, not a source edit. Default 0.
+        self.recovery_time = int(config.get('recovery_time', 0))
+
         self.cyclic_mode = False
         self.cyclic_resume = False
         self.resume_command = {}
