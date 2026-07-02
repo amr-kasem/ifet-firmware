@@ -5,23 +5,20 @@ import threading
 import paho.mqtt.client as mqtt
 
 from serial_com.serial_com import SerialCom
+from vfd_handler.vfd_driver import build_vfd_driver
 
 
 class VFDController:
-    def __init__(self, config_file, serial_com: SerialCom):
-        self.load_config(config_file)
+    def __init__(self, config_file, serial_com: SerialCom, vfd_driver=None):
+        self.config = self.load_config(config_file)
         self.serial_com = serial_com
-        self.startstopAddr = 8192
-        self.setFreqAddr = 8193
-        self.readFreqAddr = 8451
-        self.startCmd = 18
-        self.stopCmd = 1
-        self.startDec = 0
-        self.setFreqDec = 2
-        self.writeFC = 6
-        self.readFC = 3
 
         self.logger = self.setup_logger()
+        self.vfd_driver = vfd_driver or build_vfd_driver(
+            self.config,
+            serial_com=serial_com,
+            logger=self.logger,
+        )
 
         self.setup_mqtt()
 
@@ -47,6 +44,7 @@ class VFDController:
         self.broker_port = mqtt_config['broker_port']
         self.username = mqtt_config['username']
         self.password = mqtt_config['password']
+        return config
 
     def setup_mqtt(self):
         self.client = mqtt.Client()
@@ -93,36 +91,37 @@ class VFDController:
 
     def start_vfd(self):
         try:
-            self.serial_com.write_register(self.address,self.startstopAddr, self.startCmd, self.startDec, self.writeFC)
+            self.vfd_driver.run_forward()
         except Exception as e:
             self.logger.error(f"Ignored writing command: {e}")
 
-        self.logger.info("Started VFD.")
+        self.logger.info("VFD run_forward command sent.")
 
     def stop_vfd(self):
         try:
-            self.serial_com.write_register(self.address,self.startstopAddr, self.stopCmd, self.startDec, self.writeFC)
+            self.vfd_driver.stop()
         except Exception as e:
             self.logger.error(f"Ignored writing command: {e}")
 
-        self.logger.info("Stopped VFD.")
+        self.logger.info("VFD stop command sent.")
 
     def set_frequency(self, frequency):
         try:
-            self.serial_com.write_register(self.address,self.setFreqAddr, frequency, self.setFreqDec, self.writeFC)
+            self.vfd_driver.set_frequency_hz(frequency)
         except Exception as e:
             self.logger.error(f"Ignored writing command: {e}")
 
-        self.logger.info(f"Set frequency: {frequency}")
+        self.logger.info(f"Set VFD frequency command: {frequency} Hz")
 
     def emergency_stop(self):
         try:
-            self.serial_com.write_register(self.address,self.startstopAddr, self.stopCmd, self.startDec, self.writeFC)
+            self.vfd_driver.stop()
         except Exception as e:
             self.logger.error(f"Ignored writing command: {e}")
         while True:
+            speed = None
             try:
-                speed = self.serial_com.read_register(self.address,self.readFreqAddr, 2, self.readFC)
+                speed = self.vfd_driver.read_output_frequency_hz()
             except Exception as e:
                 self.logger.error(f"Ignored reading command: {e}")
             if speed == 0:
@@ -134,7 +133,7 @@ class VFDController:
     def publish_feedback(self):
         while True:
             try:
-                speed = self.serial_com.read_register(self.address,self.readFreqAddr, 2, self.readFC)
+                speed = self.vfd_driver.read_output_frequency_hz()
                 self.client.publish(f"{self.device_id}/vfd/feedback", speed)
             except Exception as e:
                 self.logger.error(f"Failed to read VFD feedback: {e}")
@@ -146,5 +145,3 @@ class VFDController:
         feedback_thread.start()
         while True:
             time.sleep(0.2)  # Keep the script running to handle MQTT messages
-
-
