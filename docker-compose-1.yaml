@@ -24,7 +24,7 @@ services:
       - ./deployment/logs/serial_com:/app/logs
 
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/ttyUSB0:/dev/ttyUSB0
     restart: always
 
 
