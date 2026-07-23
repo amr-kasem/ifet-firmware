@@ -136,6 +136,7 @@ class VFDController:
             try:
                 speed = self.serial_com.read_register(self.address,self.readFreqAddr, 2, self.readFC)
                 self.client.publish(f"{self.device_id}/vfd/feedback", speed)
+                self.logger.info(f"Published VFD feedback: {speed}")
             except Exception as e:
                 self.logger.error(f"Failed to read VFD feedback: {e}")
             time.sleep(1)

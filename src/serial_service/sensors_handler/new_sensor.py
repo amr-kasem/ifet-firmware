@@ -11,6 +11,9 @@ class NewSensor:
         self.debug = config["debug"]
         self.logger = self.setup_logger()
         self.last_t = 0
+        # Optional per-sensor unit conversion (default preserves raw PSI reading).
+        self.scale = float(config.get("scale", 1))
+        self.unit = config.get("unit", "PSI")
         if tcp:
             self.com_port = ModbusTcpCom(config)
         else: 
@@ -29,9 +32,9 @@ class NewSensor:
 
     def read(self):
         try:
-            self.last_t = self.com_port.read_float(self.address, 22, 3)
-            self.logger.info(f'sensor [{self.address}] value {self.last_t} PSI')
-            print(f'sensor [{self.address}] value is {self.last_t} PSI')
+            self.last_t = self.com_port.read_float(self.address, 22, 3) * self.scale
+            self.logger.info(f'sensor [{self.address}] value {self.last_t} {self.unit}')
+            print(f'sensor [{self.address}] value is {self.last_t} {self.unit}')
         except Exception as e:
             self.logger.error(f'failed to read sensor [{self.address}] command due to {e}')
             pass
