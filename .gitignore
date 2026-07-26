@@ -3,3 +3,16 @@
 **/variables.json
 **/__pycache__/
 *.pyc
+
+# ad-hoc pre-edit config backups -- git is the source of truth for tracked configs
+*.bak
+*.bak.*
+deployment/config/backups/
+
+# scratch/experiment dirs that appeared on device worktrees
+deployment/split-serial-temp/
+
+# local virtualenvs (seen on system-1: src/serial_service/venve, tools/.venv)
+.venv/
+venv/
+venve/
