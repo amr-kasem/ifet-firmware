@@ -5,15 +5,16 @@
   "current_speed": 0,
   "toggleBtn": "static_load",
   "serial": {
-    "port": "/dev/ttyACM0",
+    "port": "/dev/ttyUSB0",
     "baudrate": 9600,
     "bytesize": 8,
     "parity": "PARITY_NONE",
     "stopbits": 1,
-    "timeout": 0.05,
+    "timeout": 0.1,
     "mode": "MODE_RTU",
     "clear_buffers_before_each_transaction": true,
-    "close_port_after_each_call": true
+    "close_port_after_each_call": true,
+    "retries": 0
   },
   "mqtt": {
     "broker_host": "10.1.10.185",
@@ -31,7 +32,9 @@
       "debug": false,
       "value": "",
       "active": true,
-      "type": "pressure"
+      "type": "pressure2",
+      "scale": 144,
+      "unit": "PSF"
     },
     {
       "name": "2",
@@ -39,7 +42,9 @@
       "debug": false,
       "value": "",
       "active": true,
-      "type": "pressure"
+      "type": "pressure2",
+      "scale": 144,
+      "unit": "PSF"
     },
     {
       "name": "3",
@@ -48,7 +53,29 @@
       "frequency": 20,
       "value": "",
       "active": true,
-      "type": "pressure"
+      "type": "pressure2",
+      "scale": 144,
+      "unit": "PSF"
+    },
+    {
+      "name": "4",
+      "address": "4",
+      "debug": false,
+      "value": "",
+      "active": true,
+      "type": "pressure2",
+      "scale": 144,
+      "unit": "PSF"
+    },
+    {
+      "name": "5",
+      "address": "5",
+      "debug": false,
+      "value": "",
+      "active": true,
+      "type": "pressure2",
+      "scale": 144,
+      "unit": "PSF"
     },
     {
       "name": "Flow",
@@ -62,10 +89,9 @@
       "pressure_sensor_address": 2
     }
   ],
-
   "vfd": {
     "name": "vfd1",
-    "address": "5",
+    "address": "12",
     "debug": false,
     "frequency": 20,
     "transport": "serial",
@@ -76,26 +102,41 @@
       "port": 502
     }
   },
-
   "valves": [
     {
       "name": "1",
       "pin": 13,
-      "role": ["ACTIVE", "POSITIVE", "POSITIVE_TURBO"],
+      "role": [
+        "ACTIVE",
+        "POSITIVE",
+        "POSITIVE_TURBO"
+      ],
       "value": 0,
       "address": "1"
     },
     {
       "name": "2",
       "pin": 35,
-      "role": ["ACTIVE", "NEGATIVE", "RELIEF",  "POSITIVE_RELEASE","NEGATIVE_TURBO_SLAVE"],
+      "role": [
+        "ACTIVE",
+        "NEGATIVE",
+        "RELIEF",
+        "POSITIVE_RELEASE",
+        "NEGATIVE_TURBO_SLAVE"
+      ],
       "value": 0,
       "address": "2"
     },
     {
       "name": "3",
       "pin": 31,
-      "role": ["ACTIVE", "POSITIVE", "NEGATIVE_RELEASE", "RELIEF", "POSITIVE_TURBO_SLAVE"],
+      "role": [
+        "ACTIVE",
+        "POSITIVE",
+        "NEGATIVE_RELEASE",
+        "RELIEF",
+        "POSITIVE_TURBO_SLAVE"
+      ],
       "value": 0,
       "address": "3"
     },
@@ -105,7 +146,6 @@
       "role": [
         "ACTIVE",
         "NEGATIVE",
-       
         "NEGATIVE_TURBO"
       ],
       "value": 0,
@@ -116,11 +156,15 @@
     "id": "turbo",
     "valves": [
       {
-        "role": ["NEGATIVE"],
+        "role": [
+          "NEGATIVE"
+        ],
         "name": "5"
       },
       {
-        "role": ["POSITIVE"],
+        "role": [
+          "POSITIVE"
+        ],
         "name": "6"
       }
     ]

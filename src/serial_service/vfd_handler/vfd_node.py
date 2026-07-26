@@ -135,6 +135,7 @@ class VFDController:
             try:
                 speed = self.vfd_driver.read_output_frequency_hz()
                 self.client.publish(f"{self.device_id}/vfd/feedback", speed)
+                self.logger.info(f"Published VFD feedback: {speed}")
             except Exception as e:
                 self.logger.error(f"Failed to read VFD feedback: {e}")
             time.sleep(1)
