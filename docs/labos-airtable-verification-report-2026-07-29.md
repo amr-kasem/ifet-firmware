@@ -191,6 +191,8 @@ please either purge the tagged rows afterwards, or grant delete on that one sand
 
 ## 5. What we need from the Airtable side
 
+*(The six items below are the ones that block progress now. The full list, including our own outstanding work, is tracked internally in the write contract.)*
+
 | # | Item | What it holds up |
 |---|---|---|
 | 1 | **Revoke the token in your document** and send the replacement out-of-band — a secrets manager rather than a file. It also persists in the document's version history, so revocation is the only complete fix. | every request above |

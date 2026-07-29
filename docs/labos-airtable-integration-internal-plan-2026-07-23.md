@@ -22,7 +22,7 @@
 > real W3 gate. *(~S once decided; blocked on them.)*
 >
 > **Secret hygiene, immediate:** their PDF contained a live PAT. Revocation requested; LabOS never stored or
-> used it. P0/Ref 42 (`.env` externalization) must land **before** the replacement token arrives.
+> used it. P0/Ref 42 (`.env` externalization) **landed 2026-07-29** (`bf4db01`) — ahead of the replacement token, as intended.
 
 > This is my private, complete plan to finish **all** LabOS work for the Airtable integration —
 > the superset of the dashboard. The dashboard shows the Airtable team only the clean deliverable
@@ -65,8 +65,10 @@ production actually runs `latest`, which is further along.** This reconcile live
 
 ## 2. Contract & mapping readiness
 
-- **Contract** (`v0.1 DRAFT`): envelopes, identifiers, sync state machine, retry policy, auth — all
-  stable and sufficient to build Track A against. Ratifies to **v1.0** when the mapping is Agreed.
+- **Contract** (`v0.2 DRAFT` as of 2026-07-29, was `v0.1`): envelopes, identifiers, sync state machine,
+  retry policy, auth — all stable and sufficient to build Track A against. v0.2 adds the real Airtable
+  field names, the omit-vs-null rule, the upsert/immutability model, and the retest-vs-correction
+  distinction. Ratifies to **v1.0** when contract §10 (the canonical open-items list) closes.
 - **Mapping doc:** complete LabOS proposal but **0% Agreed** — every row 🟡 Proposed, Airtable-field
   column empty. **All ratification work is the Airtable team's / Luis's**, none is mine.
 - **My ask into the Airtable team (send W1, day 1):** (a) fill real table + field names/types,
@@ -143,7 +145,7 @@ Points re-sized to the `latest` reality. **[D]** = on dashboard (has a tracker R
 | Wk | Board milestone (external) | + Off-board / gap work (internal) | Gate |
 |---|---|---|---|
 | **Pre** | — | Branch reconcile to `latest`; branch `feature/labos-airtable`. | — |
-| **W1** | P0 foundations + contract lock | ✅ *done 2026-07-29:* mapping + sandbox ask sent **and answered**. Now: reply with contract v0.2 asks; **P0/Ref 42 `.env` before the rotated token arrives**; gap J field-ID binding + schema snapshot; gap B reachable origin; **start firmware P3 pressure capture (off-board)**. | Airtable team ratifying; sandbox base in hand |
+| **W1** | P0 foundations + contract lock | ✅ *done 2026-07-29:* mapping + sandbox ask sent **and answered**. Now: reply with contract v0.2 asks; ✅ **P0/Ref 42 done (`bf4db01`, built + rehearsed, not deployed)**; gap J field-ID binding + schema snapshot; gap B reachable origin; **start firmware P3 pressure capture (off-board)**. | Airtable team ratifying; sandbox base in hand |
 | **W2** | P1 schema & identity migrated | gap D JSON cols; **finish firmware P3 + `/trials` seam (H)**; pass/fail compute stub (C). | canonical build, no field names needed |
 | **W3** | P2 requirements-IN live | Build against **sandbox base**; requirements cache. | **needs mapping 🟢 Agreed** (else swap W3⇄W4) |
 | **W4** | ★ Bidirectional sync, dark-launched | in-process worker (5); confirm roll-up mechanism (E) live. | needs mapping Agreed |

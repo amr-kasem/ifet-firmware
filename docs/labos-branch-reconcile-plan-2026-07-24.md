@@ -332,7 +332,7 @@ browser-readable management configs.
 The reconcile is done; the integration branches exist and are based on real production state:
 - **`feature/labos-airtable`** (management, off `latest`) — where the integration itself lives.
 - **`feature/labos-firmware-p3`** (firmware, off `dev`) — off-dashboard P3 work.
-- **P0 (Ref 42)** is the first real task and is now the only thing standing between here and W1: externalize the management `compose.yaml` secrets to a gitignored `.env`/secret store *before* an `AIRTABLE_TOKEN` exists to leak.
+- ✅ **P0 (Ref 42) — DONE 2026-07-29** (`bf4db01` on management `feature/labos-airtable`): `compose.yaml` secrets externalized to a gitignored `.env`, `app/config.py` as the single server-side entry point, `check-secrets.sh` guard, gated runbook in `deployment/SECRETS.md`. Rehearsed off-node; **not deployed** — the management node is production, so it waits on a maintenance window and a non-production node.
 - Optional close-out from §0: the one-line read-only root-crontab check on system-1 + management, whenever the sudo password is at hand.
 
 ---

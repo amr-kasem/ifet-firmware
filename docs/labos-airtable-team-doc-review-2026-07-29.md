@@ -226,6 +226,9 @@ Free text is the one outcome that doesn't work — we'd be shipping a copy-typin
 
 ## 6. Open questions for them (short list, ordered)
 
+> **View, not source.** The canonical open-items list is `labos-airtable-write-contract-v0.2.md` §10.
+> This section is the subset worth raising conversationally, ordered by how much it unblocks.
+
 1. `Photos` field type — URL/long-text (multiple links newline-separated), or Attachment? We need the former
    (HM point 6). Related: do `Report Link` / `Excel File Link` need to be **publicly** reachable, or will
    Airtable users be authenticated to LabOS? That decides whether our links carry a signed token.

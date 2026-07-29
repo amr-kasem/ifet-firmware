@@ -85,6 +85,60 @@ attempt ID exists in the LabOS database before any network call — always.
 - **Corrections are new rows.** A corrected result is a *new* `LabOS Attempt ID` with a new `Attempt Number`,
   carrying `Corrects Attempt ID` = the superseded attempt and `Correction Reason` = why. Airtable's automation
   may then mark the old row `Superseded` and exclude it from roll-ups; LabOS never writes `Superseded`.
+
+### 3.1 Retest vs. correction — two different things that look identical without the reference field
+
+This is the distinction the `Corrects Attempt ID` field exists to carry, and getting it wrong corrupts every
+roll-up downstream.
+
+| | **Retest** | **Correction** |
+|---|---|---|
+| What happened physically | The specimen **was tested again**. Two real test events. | **One** test event, recorded wrongly. |
+| Typical cause | First attempt failed, or was aborted on an equipment fault, and the specimen was re-run. | Wrong mock-up selected, wrong operator, a unit mix-up, pass/fail computed against the wrong design pressure, or a gauge later found out of calibration. |
+| Rows in Airtable | 2 rows, **both valid data** | 2 rows, **only the second is true** |
+| `Attempt Number` | increments (1 → 2) | increments (1 → 2) |
+| `Corrects Attempt ID` | **absent** | **set to the superseded attempt** |
+| `Retest Required` on the earlier row | `true` | irrelevant — the earlier row is not a real result |
+| How roll-ups must treat it | count both attempts; the specimen was tested twice | count only the correction; the specimen was tested **once** |
+
+`Attempt Number` alone cannot distinguish them — attempt 2 is ambiguous. Without `Corrects Attempt ID`, a
+mis-recorded test and a genuine second test are indistinguishable in the data, so any roll-up that counts
+attempts, computes a pass rate, or reports "tests performed" is wrong in one of the two cases.
+
+**Worked example (a real class of failure from this project).** On 2026-07-09 a rig's pressure sensors were
+converting PSI→PSF with a scale factor; before that fix, a reading logged as `40` was in the wrong unit. Say an
+attempt had already been written:
+
+```
+attempt a1 · Attempt Number 1 · Completed · Pass · Measured Value 40 · Unit PSF   ← wrong unit
+```
+
+- **Editing the row** destroys the evidence. A report has already gone out citing 40 PSF, and afterwards
+  nothing in the base shows that the number changed, when, or why. For a testing lab whose output is
+  certification evidence, that is the failure mode to design against.
+- **A bare new row** leaves two contradictory Completed results for the same test with no explanation, and the
+  roll-up counts both.
+- **A new row with the reference** is the only complete answer:
+
+```
+attempt a2 · Attempt Number 2 · Completed · Pass · Measured Value 5760 · Unit PSF
+           · Corrects Attempt ID  = a1
+           · Correction Reason    = "sensor unit misconfiguration (PSI logged as PSF);
+                                     value re-derived from the raw log, sensor re-scaled 2026-07-09"
+```
+
+Airtable's automation sees `Corrects Attempt ID`, marks `a1` `Superseded`, and excludes it from roll-ups.
+Both rows survive, the reason is on the record, and an auditor can reconstruct exactly what happened.
+
+**Corrections chain.** If a correction is itself wrong, the next one references *it* (`a3` → `a2` → `a1`), and
+the authoritative result is the head of the chain — the row no other row supersedes. That's why this is a
+reference field rather than a boolean "corrected" flag: a flag cannot express a chain, and cannot say which
+row is current.
+
+**Why LabOS cannot just do this itself.** The old row is locked, so LabOS is not permitted to touch it — which
+means LabOS cannot mark it superseded. It can only write the new row *stating* what it supersedes. Marking the
+old row is Airtable's automation, on Airtable's side of the boundary. That split is deliberate: the writer of
+a record never gets to retroactively alter one.
 - **Honest limitation:** a write-scoped PAT can technically PATCH a terminal row. The lock is a LabOS
   invariant plus Airtable revision history for audit — not an API permission. If Airtable wants defence in
   depth, an automation can revert edits to rows whose `Test Status` is terminal.
@@ -319,10 +373,16 @@ time.
 
 ---
 
-## 10. Open items before `v1.0`
+## 10. Open items before `v1.0` — **canonical list**
+
+> **This table is the single source of truth for open integration items.** The review doc §6, the verification
+> report §5, the Notion mapping §5, and the Notion response §9 are *views* of it, written for different
+> audiences. When an item closes, close it **here first**, then update the views. If they ever disagree, this
+> table wins.
 
 | # | Item | Owner |
 |---|---|---|
+| 0 | **`Testing End Date` is in their §4 always-required set, but an `In Progress` attempt has no end date.** Either drop it from that set (enables the two-write lifecycle, §10.8) or confirm a single terminal write only. Their doc as written forbids the former. | Airtable |
 | 1 | `Photos` field type = URL/long-text (not Attachment); do artifact links need to be publicly reachable? | Airtable |
 | 2 | `Airtable … ID` fields: plain text or link-to-record? (LabOS proposes text) | Airtable |
 | 3 | Read-side parameter structure: discrete fields or versioned JSON? (§9.1) | Airtable / Luis |
