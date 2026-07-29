@@ -244,80 +244,109 @@ Free text is the one outcome that doesn't work — we'd be shipping a copy-typin
 
 ---
 
-## 7. Reply to send (draft — trim to taste)
+## 7. Reply to send — final wording
 
-> Thanks Huzaifa, and thanks @HM / @Luis for the review comments — we agree with all of them, and they line
-> up with how LabOS was already designed. Two notes before we build, then our asks.
->
-> **First, security:** please revoke the token in §1 and send the replacement through a secrets manager rather
-> than a document — note the token also lives in the Google Doc's version history, so revocation is the only
-> complete fix. LabOS has not stored or used it. On the new token we'd like `data.records:read`,
-> `data.records:write`, and `schema.bases:read` — the last one lets us bind to **field IDs** instead of names,
-> so renaming a field on your side never breaks the integration.
->
-> **Second, one correction to §5:** we can't send `""`. Airtable's API rejects empty strings on number and
-> date fields and on single-selects. HM's rule is the correct one — **if a field doesn't apply, we omit the
-> key entirely.** We'll reserve `null` to mean "clear this cell" and never send it. One caveat: `0` is a real
-> measurement, not a blank, so a genuine zero reading will be sent as `0`.
->
-> **Confirming your model, which we're adopting as-is:** one writable table; Airtable owns projects,
-> scheduling, walls, and all roll-ups; LabOS writes one row per test attempt and nothing else. We're also
-> **withdrawing** our earlier ask for separate Impact / Forced-Entry / ANSI columns — your generic
-> `Test Result` + `Measured Value` plus one new `Result Detail (JSON)` field covers all five test types with
-> fewer columns and no schema change when a sixth arrives.
->
-> **Agreed on all four of HM's structural points**, with one gap: immutability needs a field. To file a
-> correction as a new record *referencing* the old attempt, the schema needs `Corrects Attempt ID` +
-> `Correction Reason`. Without them there's nowhere to put the reference. LabOS enforces the lock at source —
-> once we write `Completed`/`Aborted` for an attempt ID, we never write that attempt again.
->
-> **On upsert:** yes, `LabOS Attempt ID` is the unique key and every write is an upsert on it
-> (`performUpsert` / `fieldsToMergeOn`). Two requirements: it must be a plain text field (computed fields
-> can't be merge keys), and uniqueness is guaranteed by LabOS — it's a UUID minted once when the attempt is
-> created locally and reused across every retry, reboot, and offline replay.
->
-> **On `Sync Status`:** we'd suggest dropping it. A field whose values include "Sync Failed" can never be
-> written when the sync actually fails. LabOS keeps that state locally and surfaces it to the operator, where
-> it's actionable; `LabOS Updated At` plus your `Created time` gives you arrival tracking for free.
->
-> **Fields we need added** — the schema currently can't hold what the rig produces. Blocking:
-> `Max Pressure Achieved` (peak is distinct from held pressure, and for a failure test it *is* the result),
-> `Result Detail (JSON)`, `Deflection Unit`, `Corrects Attempt ID` + `Correction Reason`, and
-> `Schema Version`. High value: `Cycles Required` / `Cycles Completed`, `Required Unit`, `Abort Reason`.
-> Nice to have for traceability: `Test Rig`, `LabOS Version`, `Result Rationale`. Proposed option sets for
-> every select field are in the attached mapping.
->
-> **Schema version, per Luis:** agreed — `Schema Version` on every record, starting `1.0`; additive changes
-> bump the minor, breaking changes the major. It'd help to version the read side too, e.g. one
-> `Integration Meta` row we poll.
->
-> **The one thing that worries us more than any write field is the read side.** If
-> `Required Testing Parameters` is free text, the operator still reads it and re-types the numbers, which is
-> the problem we're removing. A static-load test needs discrete values: inward and outward design pressure,
-> hold time, loading sequence, and deflection-point count; a cyclic test needs cycle count and pressure range.
-> Either give us discrete fields on Protocol Sections, or one `Required Testing Parameters (JSON)` field with
-> an agreed, versioned shape — either works, free text doesn't. Related: please expose named views for us to
-> read (`LabOS – Scheduled Tests`) so your filter logic stays yours, and confirm we should send ISO-8601 UTC
-> timestamps.
->
-> **A call would be useful** — 45 minutes to close: read-parameter structure, the added fields, text vs.
-> linked-record IDs, and whether the writable table sits in its own base. One note on that last point: an
-> Airtable PAT scopes per *base*, not per table, so "read-only on the existing tables" can't be enforced by
-> the token as long as the writable table lives in the same base. Splitting it into its own base makes your
-> guarantee real; otherwise we'll enforce it in code with a single-table write allowlist and you'll have
-> revision history as the audit trail. Either is fine — worth a deliberate choice.
->
-> We can start immediately either way: the sandbox base unblocks our Week 1–2 work (token store, API client,
-> data model), and Weeks 3–4 need only the read-parameter decision and the field additions above.
+Written in the same register the Airtable team used in their own review notes: short numbered points,
+colleague-to-colleague, no document formality. **This is the text that goes out**, verbatim.
+
+Ordering is deliberate — the three confirmations of HM's points come first (cheap agreement, builds the
+premise), then the field gaps, then the two items that need an actual decision from them (§4 contradiction,
+read-side structure), then the token and the access note. Point 6 appears in nobody's review, including HM's:
+their always-required `Testing End Date` silently forbids creating the row when a test starts.
+
+```text
+Thanks Huzaifa. Went through the doc — structure works for us as-is, and we're
+adopting it. One writable table, you own scheduling and rollups, we write one row
+per test attempt and nothing else.
+
+Also agree with all of HM's points and Luis's.... that's already how LabOS is
+built. A few things before we build against it....
+
+1. On the "" rule — agreed with HM, we can't send "".... Airtable rejects it on
+number/date/select. We'll omit the key entirely when a field doesn't apply. One
+exception worth flagging: 0 is a real reading, not a blank.... a genuine zero
+pressure result gets sent as 0.
+
+2. Upserts on LabOS Attempt ID — yes, that's our design.... two things needed on
+your side though: it has to be a plain text field (computed fields can't be used
+as a merge key), and Airtable can't enforce uniqueness, so we guarantee it. UUID
+minted before the first send, reused on every retry and offline replay.
+
+3. Locking after Completed/Aborted — agreed, and we enforce it at our end....
+but "a new record referencing the old attempt" needs somewhere to put the
+reference. Can you add Corrects Attempt ID + Correction Reason? Right now there's
+no field for it.
+
+4. The schema can't hold what the rig actually produces yet.... we need
+Max Pressure Achieved (peak is different from the held pressure, and on a failure
+test the peak IS the result), Deflection Unit (Unit describes the pressure, so
+the deflection number has no unit of its own), and one Result Detail (JSON) long
+text for per-gauge deflection, load steps, impact sequences. That last one means
+neither side has to touch the schema again when a 6th test type shows up. Plus
+Cycles Required / Cycles Completed for cyclic.
+
+5. Schema version per Luis — agreed.... every row carries it, starting 1.0.
+Additive changes bump the minor, breaking changes the major. Would help to
+version the read side too, even just one row we can poll.
+
+6. Small contradiction in section 4.... Testing End Date is in the always-required
+list, but a test that's still In Progress doesn't have one. Either drop it from
+that list — then we can create the row when a test starts, so you'd see what's on
+the walls live — or tell us you want a single write at the end only. As written
+the doc rules out the first.
+
+7. Biggest one, and it's on the read side.... if Required Testing Parameters is
+free text, the operator still has to read it and type the numbers into LabOS,
+which is the thing we're removing. A static test needs discrete values — inward
+and outward design pressure, hold time, loading sequence, gauge/deflection count.
+Cyclic needs cycle count and pressure range. Either discrete fields on Protocol
+Sections or one agreed JSON shape, both work for us. Free text doesn't.
+
+8. Sync Status — we'd suggest dropping it.... a field whose values include
+"Sync Failed" can never be written at the moment the sync actually fails. We keep
+that state in LabOS where the operator can act on it, and LabOS Updated At plus
+your Created time gives you arrival tracking anyway.
+
+9. Token — please revoke the one in the PDF.... it's also in the doc's version
+history, so revoking is the only complete fix. We haven't stored or used it. On
+the new one, could you include schema read access alongside record read/write?
+That lets us bind to field IDs instead of names, so renaming a field on your side
+never breaks the integration.
+
+10. One note on access.... an Airtable token scopes per base, not per table, so
+"read-only on the existing tables" isn't something the token can enforce while
+the writable table lives in the same base. Own base would make it real.
+Otherwise we enforce it in code with a one-table allowlist — fine either way,
+just flagging it so it's a deliberate choice.
+
+Also, we're dropping our earlier ask for separate Impact / Forced Entry / ANSI
+result columns.... your Test Result + Measured Value plus that JSON field covers
+all five test types with fewer columns.
+
+Once the new token's in, we'd like to run read-only checks first — whoami, the
+base schema, a few sample records — and send you back a full schema report within
+a day. Then a handful of write probes against the results table only, tagged
+LABOS-PROBE so you can filter and purge them. Just let us know if that's OK.
+
+Happy to get on a call — 45 minutes would close most of this faster than docs.
+```
+
+**Send alongside it:** the two Notion links — *LabOS Response — Airtable Schema Review & Write Contract v0.2*
+(the field-by-field detail behind points 1–10) and *LabOS ↔ Airtable — Integration Status & Verification
+Report* (the ownership boundary, what we've verified, and the exact requests we're asking approval for).
+The message carries the asks; the pages carry the evidence.
 
 ---
 
 ## 8. What LabOS does next — no longer blocked
 
 **This week (W1), none of it gated on their reply:**
-1. **P0 / Ref 42 — secret store.** Externalize the ifet-management `compose.yaml` secrets to a gitignored
-   `.env` *before* an `AIRTABLE_TOKEN` exists to leak. Server-side only; never in the two browser-readable
-   configs.
+1. ✅ **P0 / Ref 42 — secret store. DONE 2026-07-29** (`bf4db01`, `feature/labos-airtable`). Every credential
+   out of `compose.yaml` into a gitignored `.env`; `app/config.py` as the single server-side entry point (token
+   never printed, one-table write allowlist, refuses to emit a localhost link); `check-secrets.sh` guard;
+   gated migration runbook in `deployment/SECRETS.md`. Rehearsed off-node under an isolated compose project —
+   evidence in SECRETS.md §2.1a. **Not deployed:** the management node is production, so deployment is gated on
+   a maintenance window and, ideally, a test node.
 2. **P0 / Ref 43 — Airtable HTTP client** on `feature/labos-airtable`: single-table write allowlist,
    5 req/s limiter, 429/5xx retry with backoff, `performUpsert` helper, field-**ID** binding table.
 3. **Schema introspection tool** — `GET /v0/meta/bases/{baseId}/tables`, snapshot the base schema to the
