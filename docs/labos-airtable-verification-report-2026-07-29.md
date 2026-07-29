@@ -1,263 +1,219 @@
-# LabOS Verification Report & API Pre-Flight — Airtable Integration
+# LabOS ↔ Airtable — Integration Status & Verification Report
 
-**From:** LabOS (Abdelrahman) · **Date:** 2026-07-29 · **Base:** `appYBTqIL43pmS0xN` (`IFET Test Base For LabOS`)
+**From:** LabOS (Abdelrahman) · **Date:** 2026-07-29
+**Sandbox base:** `appYBTqIL43pmS0xN` — *IFET Test Base For LabOS*
 **Companion:** *LabOS Response — Airtable Schema Review & Write Contract v0.2*
 
 ---
 
-## 0. Status in one paragraph
+## Purpose
 
-**No request has yet been made against your base.** The access token printed in §1 of your document is treated
-as compromised and was never used or stored by LabOS — we are waiting for the rotated one. So this report has
-two halves: **Part A** is what LabOS has already built and verified *on our own side*, with commands and
-outputs; **Part B and C** are the **exact HTTP requests we intend to run**, listed in full so you can approve
-them before anything touches your base. Part B is entirely read-only. Part C writes only to
-`LabOS Raw Test Results` and needs your explicit go-ahead.
+This report does three things: it states clearly **which system owns what**, it shows **what LabOS has built
+and verified so far**, and it lists **what we need from the Airtable side** to connect the two.
+
+**One note first: we have not yet made a single request to your base.** The access token printed in your
+document is treated as compromised and was never used or stored by LabOS. Everything described as *verified*
+below happened inside our own system; everything described as *planned* is written out in full so you can
+review it before it runs.
 
 ---
 
-## Part A — What LabOS has verified (completed 2026-07-29)
+## 1. Who owns what
 
-### A.1 Secret handling — the token now has exactly one way into the system
+The boundary is deliberately narrow. Neither system reaches into the other's responsibilities.
 
-Ahead of receiving the replacement token, every credential was moved out of source control into a
-server-side-only environment file. The relevant guarantee for you: **the Airtable token can no longer reach a
-file that a browser can read.**
-
-| Check | Command | Result |
+| | **Airtable — your side** | **LabOS — our side** |
 |---|---|---|
-| Configuration resolves with the environment file present | `docker compose config --quiet` | **exit 0** |
-| Stack refuses to start when a credential is missing | `docker compose config --quiet` (file removed) | **exit 1** — `required variable POSTGRES_USER is missing a value: set POSTGRES_USER in .env` |
-| No credential remains in version control | `./deployment/scripts/check-secrets.sh` | **PASS** — 4/4 checks |
-| No Airtable token pattern in any tracked file | `git grep -E 'pat[A-Za-z0-9]{14}\.'` | **0 matches** |
-| Browser-served configs carry no secrets | guard checks `deployment/config/config.json`, `src/ifet_ui_react/config.json` | **clean** — credential fields absent or empty; no mention of Airtable |
+| **Owns** | Projects, job numbers, mock-ups and specimens, test protocols, protocol sections, walls, wall positions, reservations, scheduling | Test execution on the rigs, measurement, pass/fail determination, reports and photos |
+| **Decides** | What is to be tested, when, and on which wall | What the test measured and whether it passed |
+| **Roll-ups and status** | All Project / Mock-Up / Protocol roll-ups, via your automations | Nothing — LabOS writes one row per test attempt and stops there |
+| **Access held by the other side** | LabOS reads; LabOS never edits or deletes | Airtable does not reach into LabOS at all |
+| **Never does** | Control equipment or influence a running test | Create or modify a project, protocol, wall, or reservation |
 
-The guard is a pre-commit check that fails the build on a token pattern in tracked content, a non-empty
-credential in either browser-served config, or a literal credential in the compose file. It is the direct
-answer to how the leak that happened to your document cannot happen to ours.
+Two consequences worth stating plainly, because they are what make the integration safe:
 
-### A.2 The integration service comes up and reads its settings correctly
+- **Airtable is never on the testing critical path.** Every test is saved in LabOS *before* any Airtable call.
+  If your base is unreachable, testing continues normally and the results sync later.
+- **No field is written in both directions.** Requirements only flow in; results only flow out. There is no
+  case where the two systems disagree about who is right.
 
-Rehearsed end-to-end in an isolated environment — no production system involved:
+---
 
-| Check | Result |
+## 2. What crosses the boundary
+
+**Direction 1 — requirements in (Airtable → LabOS, read-only).** The operator selects Project → Mock-Up →
+Protocol → Section, and the test parameters load automatically. Nothing is re-typed. LabOS reads only; it
+writes nothing back to these tables.
+
+**Direction 2 — results out (LabOS → Airtable, one table).** When a test attempt finishes, LabOS writes a
+single row to `LabOS Raw Test Results`: the four Airtable record IDs, our test and attempt identifiers, what
+was measured, whether it passed, timestamps, the operator, and links to the report and photos. Your
+automations read that row and update your own records.
+
+That is the entire interface. One read path, one write path, one table.
+
+---
+
+## 3. What LabOS has built and verified — our side
+
+All of the following was completed and checked in our own system. No production system and no Airtable base
+was involved.
+
+### 3.1 The token now has one single, safe way into our system
+
+We did this work *before* asking for the replacement token, so there is nothing to leak when it arrives.
+
+| What we checked | Result |
 |---|---|
-| Database + API services start | both **Up** |
-| Environment inside the API container | `AIRTABLE_BASE_ID=appYBTqIL43pmS0xN`, `AIRTABLE_RESULTS_TABLE=LabOS Raw Test Results`, `AIRTABLE_WRITE_ALLOWLIST=LabOS Raw Test Results`, `AIRTABLE_SYNC_ENABLED=false`, `AIRTABLE_TOKEN=` *(empty)* — all correctly injected |
-| Database authentication from the secret store | **succeeded** — `Application startup complete`, no auth errors |
-| Real HTTP request against the LabOS API | `curl -o /dev/null -w "%{http_code}" http://localhost:18000/docs` → **HTTP 200** |
-| Settings module output | `{'base_id': 'appYBTqIL43pmS0xN', 'results_table': 'LabOS Raw Test Results', 'write_allowlist': ['LabOS Raw Test Results'], 'sync_enabled': False, 'token_present': False, 'public_origin': None}` → `state: not configured (missing: AIRTABLE_TOKEN)` |
+| Every credential moved out of source control into a server-side-only file | done |
+| The system refuses to start if a credential is missing, rather than falling back to a default | confirmed — startup fails with a clear message |
+| No credential of any kind remains in version control | confirmed — automated check passes |
+| No Airtable token pattern anywhere in our repository | confirmed — zero matches |
+| The two configuration files our web UI serves to browsers contain no secrets | confirmed — and an automated check now fails the build if that ever changes |
 
-Three properties worth calling out, because they are the ones that matter to you:
+The last point is the important one for you: **the Airtable token cannot reach a file a browser can read.**
+That is enforced by a check that runs before every commit, not by anyone remembering.
 
-1. **The token is never printed.** The settings object reports `token_present: true/false` and nothing more —
-   in logs, in error traces, in debug output. There is no code path that emits its value.
-2. **A missing token is a valid, non-fatal state.** LabOS runs normally with Airtable unconfigured; it simply
-   does not sync. So issuing the token is not on anyone's critical path, and revoking it breaks nothing.
-3. **Sync is behind two independent switches** — an explicit `AIRTABLE_SYNC_ENABLED` flag *and* a
-   fully-configured check. A half-filled configuration cannot accidentally start writing to your base.
+### 3.2 The integration service starts correctly and handles the token safely
 
-### A.3 The write boundary is enforced in our code
+| What we checked | Result |
+|---|---|
+| The service starts and connects to its database using only the secret store | confirmed |
+| It receives the Airtable settings correctly | confirmed — base ID, table name, write allowlist, and sync flag all present |
+| The token value is never printed — in logs, errors, or debug output | confirmed — the system reports only whether a token *is present* |
+| The service runs normally with **no** Airtable token configured | confirmed — it simply does not sync |
+| Sync cannot start by accident | confirmed — it requires an explicit switch *and* a complete configuration |
 
-Because an Airtable personal access token is scoped **per base, not per table**, the "read-only on all
-existing tables" guarantee in your §1 cannot be enforced by the token itself. LabOS therefore enforces it
-locally: the API client checks every write against a single-table allowlist and raises before the request is
-built.
+The fourth point matters practically: **issuing or revoking the token breaks nothing on our side.** There is no
+pressure to hurry the rotation.
+
+### 3.3 The write boundary is enforced in our code, not just promised
+
+Your document says LabOS has read-only access to your existing tables. We should flag that an Airtable access
+token is scoped **per base, not per table** — so the token itself cannot enforce that. LabOS therefore
+enforces it: our client checks every write against a one-table allowlist and refuses before the request is
+even built.
 
 ```
-PermissionError: refusing to write Airtable table 'Projects': not in
-AIRTABLE_WRITE_ALLOWLIST ['LabOS Raw Test Results']
+refusing to write Airtable table 'Projects':
+not in allowlist ['LabOS Raw Test Results']
 ```
 
-This holds regardless of what the token technically permits. We'd still suggest the structural fix — putting
-the writable table in its own base — so the guarantee is enforced by Airtable rather than by our good
-behaviour.
+This holds regardless of what the token technically permits. We would still suggest the structural fix —
+putting the writable table in its own base — so that the guarantee is enforced by Airtable rather than by our
+good behaviour. Either way is workable; it is worth a deliberate choice.
 
 ---
 
-## Part B — Read-only requests we will run first (for your approval)
+## 4. How we will verify the connection
 
-All `GET`. No writes, no deletes, no schema changes. Rate-limited to **5 requests/second** per your API's
-limit. The token is read from the environment and never appears on a command line or in a log.
+Three stages, in increasing order of what they touch. **Only stage 1 has run so far.**
 
-```bash
-# Authorization header comes from the environment, never inline
-AUTH="Authorization: Bearer $AIRTABLE_TOKEN"
-BASE=appYBTqIL43pmS0xN
-```
+### Stage 1 — inside our own system (no access to your base needed) · *in progress*
 
-### B.1 Confirm what the token can actually do
+We test our result payloads offline against the agreed contract: that every required field is present for
+each test type, that no empty strings are ever sent, that only agreed option values are used, that all
+timestamps are ISO 8601 UTC, and that a genuine zero reading is sent as `0` rather than dropped. This proves
+our half without touching anything of yours.
 
-```bash
-curl -s -H "$AUTH" https://api.airtable.com/v0/meta/whoami
-```
-**Answers:** the token's identity and its granted scopes. This settles the per-base vs. per-table question
-without writing anything, and confirms whether `schema.bases:read` was included.
+### Stage 2 — reading your sandbox base (read-only) · *needs the new token*
 
-### B.2 Read the base schema — the single most useful call
+Four read requests, no writes of any kind:
 
 ```bash
-curl -s -H "$AUTH" https://api.airtable.com/v0/meta/bases/$BASE/tables
+# 1. What can this token actually do?
+GET https://api.airtable.com/v0/meta/whoami
+
+# 2. The base schema — every table, field, field ID, type and option list
+GET https://api.airtable.com/v0/meta/bases/appYBTqIL43pmS0xN/tables
+
+# 3. A three-record sample from each table, to confirm we can follow
+#    Project → Mock-Up → Protocol → Section → Wall through your ID fields
+GET https://api.airtable.com/v0/appYBTqIL43pmS0xN/{table}?pageSize=3
+
+# 4. The Protocol Sections read that decides our Week 3 design
+GET https://api.airtable.com/v0/appYBTqIL43pmS0xN/Protocol%20Sections?pageSize=10
 ```
-**Answers, mechanically, six of the open questions in our response document:**
-- whether the `Airtable … ID` fields are **plain text or link-to-record**
-- whether `Photos` is a **URL/long-text or an Attachment** field
-- whether `LabOS Attempt ID` is **plain text** (required — computed fields cannot be an upsert merge key)
-- the **real option sets** for `Test Status`, `Test Result`, `Unit`, `Testing Continued`, and the status fields
-- whether `Required Testing Parameters` is long text
-- every field's **field ID** (`fld…`), which is what LabOS binds to so a later rename cannot break the
-  integration
 
-We snapshot this response into our repository as the binding baseline and compare it on every deployment, so
-an Airtable-side schema change surfaces as a deployment failure rather than a silent mid-test failure.
+Request 2 is the valuable one: **it answers six of our open questions mechanically, without another document
+round-trip** — whether the record-ID fields are plain text or linked records, whether `Photos` is a URL field
+or an attachment field, whether `LabOS Attempt ID` is a plain text field, what your real option lists are,
+what type `Required Testing Parameters` is, and every field's stable ID.
 
-### B.3 Read a small sample from each table
+Request 4 settles our biggest open risk from your own sample data. **If `Required Testing Parameters` holds
+prose, the operator still has to read it and re-type the numbers, which is the exact problem this integration
+exists to remove.** We would much rather discover that from your samples than argue it in a document.
+
+**What you get back:** a written schema report within a day of receiving the token — every field, its type, its
+ID, and its option list, with each of our open questions marked answered or still open.
+
+### Stage 3 — writing to `LabOS Raw Test Results` only · *needs your explicit approval*
+
+Fourteen small, deliberate checks against the sandbox results table, grouped by what they confirm:
+
+| Group | What it confirms |
+|---|---|
+| **No duplicates** — send the same attempt twice, then repeat it exactly as a timed-out retry would | **The core guarantee.** One record, not two. A retry updates the existing row instead of creating a second one. |
+| **Blank handling** — send an empty string to a number, a date, and a select field; then omit the key instead | Which approach your API actually accepts. We expect the empty strings to be rejected, which would confirm the correction we proposed to your §5. |
+| **Value discipline** — an unknown option value; a genuine `0` | That unrecognised values fail loudly rather than creating stray options, and that a zero reading is stored as zero rather than treated as blank. |
+| **Limits and formats** — batch size, request rate, field IDs as keys, a JSON round-trip, a UTC timestamp round-trip | That our client respects your limits and that timestamps and structured detail survive intact. |
+
+The single most important request, in full:
 
 ```bash
-for T in Projects "Mock-Ups" "Test Protocols" "Protocol Sections" Walls; do
-  curl -s -H "$AUTH" -G "https://api.airtable.com/v0/$BASE/$(printf %s "$T" | jq -sRr @uri)" \
-       -d pageSize=3 -d returnFieldsByFieldId=true
-done
+PATCH https://api.airtable.com/v0/appYBTqIL43pmS0xN/LabOS%20Raw%20Test%20Results
+
+{ "performUpsert": { "fieldsToMergeOn": ["LabOS Attempt ID"] },
+  "records": [ { "fields": {
+      "Airtable Project ID": "rec…", "Airtable Mock-Up ID": "rec…",
+      "Airtable Protocol ID": "rec…", "Airtable Section ID": "rec…",
+      "LabOS Test ID": "probe-test-0001",
+      "LabOS Attempt ID": "probe-attempt-0001",
+      "Attempt Number": 1,
+      "Test Name": "Static Load", "Test Type": "Static Load",
+      "Test Status": "Completed", "Test Result": "Pass",
+      "Measured Value": 40.0, "Unit": "PSF", "Deflection Value": 0.42,
+      "Testing Start Date": "2026-07-29T14:03:00Z",
+      "Testing End Date":   "2026-07-29T14:31:00Z",
+      "Operator Name": "LABOS-PROBE",
+      "Retest Required": false, "Testing Continued": "Continued"
+  } } ] }
 ```
-**Answers:** that we can walk **Project → Mock-Up → Protocol → Section → Wall** using your ID fields, and that
-`returnFieldsByFieldId` behaves as expected. Three records per table is enough; we are not bulk-reading your
-data.
 
-*(Exact table names/IDs will be taken from B.2 rather than guessed — names containing spaces are URL-encoded.)*
+Sent **twice, unchanged.** Expected: the first call creates one record, the second updates that same record
+and creates nothing. This is what proves a network timeout can never duplicate a test result.
 
-### B.4 The one read that decides the Week 3 design
-
-```bash
-curl -s -H "$AUTH" -G "https://api.airtable.com/v0/$BASE/Protocol%20Sections" \
-     -d pageSize=10 \
-     -d "fields%5B%5D=Test Name" \
-     -d "fields%5B%5D=Required Test Value" \
-     -d "fields%5B%5D=Required Unit" \
-     -d "fields%5B%5D=Required Testing Parameters"
-```
-**Answers the biggest open risk empirically.** If `Required Testing Parameters` contains prose, the operator
-still has to read it and re-type the numbers, and Week 3 delivers nothing — we would need the discrete fields
-(inward/outward design pressure, hold time, loading sequence, deflection points, cycles) or one versioned JSON
-field. If the samples already contain structured values, the design may be fine as-is. **We would rather find
-this out from your sample data than debate it.**
-
-### B.5 Read through a named view, if you create one
-
-```bash
-curl -s -H "$AUTH" -G "https://api.airtable.com/v0/$BASE/Protocol%20Sections" \
-     -d "view=LabOS – Scheduled Tests"
-```
-**Answers:** whether we can take our work queue from a view you control. You own the filter logic; your
-scheduling changes then never become a LabOS bug.
-
-**Deliverable from Part B:** a written schema report back to you within a day of receiving the token —
-every field, its type, its ID, and its option set, with our open questions marked answered or still open.
+**Housekeeping:** every test row is tagged `Operator Name = LABOS-PROBE` with a `LabOS Test ID` starting
+`probe-`, so they are easy to filter. Your document says LabOS only creates and updates, never deletes — so
+please either purge the tagged rows afterwards, or grant delete on that one sandbox table.
 
 ---
 
-## Part C — Write probes (explicit approval needed)
+## 5. What we need from the Airtable side
 
-Only against `LabOS Raw Test Results`, only in the sandbox base. Each probe proves one contract rule, so the
-contract rests on your API's actual behaviour instead of on either side's assumption.
-
-**Tagging and cleanup.** Every probe row carries `Operator Name = LABOS-PROBE` and a `LabOS Test ID` prefixed
-`probe-`, so they are trivially filterable. Your document says LabOS only creates and updates, never deletes —
-so please either **purge the tagged rows** when we're done, or grant delete on that one sandbox table.
-
-| # | Probe | Expected | What it settles |
-|---|---|---|---|
-| 1 | Create with required fields only | 200 | the minimum viable payload |
-| 2 | `""` into a number field | **422** | confirms §5 must become "omit the key" — with your API's own error text as evidence |
-| 3 | `""` into a date field | **422** | same, for dates |
-| 4 | `""` into a single select | **422** | same, for selects |
-| 5 | Omit a non-applicable key | 200, cell empty | our replacement rule works |
-| 6 | Send `0` into a number | 200, stores `0` | a zero reading is data, not a blank |
-| 7 | **Upsert twice with the same `LabOS Attempt ID`** | **one record**; second call reports *updated* | the no-duplicates guarantee |
-| 8 | Repeat the identical payload, as a timed-out retry would | still **one record** | retries after a network timeout are safe |
-| 9 | Unknown select option | 422 | LabOS must never invent an option at runtime |
-| 10 | Batch of 10, then 11 | 200, then 422 | documents the batch limit |
-| 11 | Burst above 5 req/s | 429 | confirms our rate limiter |
-| 12 | Field **ID** as the payload key | 200 | we can bind by ID, so renames are free |
-| 13 | JSON round-trip through a long text field | byte-identical | `Result Detail (JSON)` is safe to use |
-| 14 | ISO 8601 UTC datetime round-trip | no timezone shift | overnight cyclic runs are not off by hours |
-
-### The two requests that matter most, in full
-
-**Minimal upsert — the shape every result write will take:**
-```bash
-curl -s -X PATCH "https://api.airtable.com/v0/$BASE/LabOS%20Raw%20Test%20Results" \
-  -H "$AUTH" -H "Content-Type: application/json" \
-  -d '{
-    "performUpsert": { "fieldsToMergeOn": ["LabOS Attempt ID"] },
-    "records": [{ "fields": {
-      "Airtable Project ID":  "recXXXXXXXXXXXXXX",
-      "Airtable Mock-Up ID":  "recYYYYYYYYYYYYYY",
-      "Airtable Protocol ID": "recZZZZZZZZZZZZZZ",
-      "Airtable Section ID":  "recWWWWWWWWWWWWWW",
-      "LabOS Test ID":        "probe-test-0001",
-      "LabOS Attempt ID":     "probe-attempt-0001",
-      "Attempt Number":       1,
-      "Test Name":            "Static Load",
-      "Test Type":            "Static Load",
-      "Test Status":          "Completed",
-      "Test Result":          "Pass",
-      "Measured Value":       40.0,
-      "Unit":                 "PSF",
-      "Deflection Value":     0.42,
-      "Testing Start Date":   "2026-07-29T14:03:00Z",
-      "Testing End Date":     "2026-07-29T14:31:00Z",
-      "Operator Name":        "LABOS-PROBE",
-      "Retest Required":      false,
-      "Testing Continued":    "Continued"
-    }}]
-  }'
-```
-Run **twice, unchanged**. Expected: the first call creates one record, the second **updates that same record**
-and creates nothing. That is probes 7 and 8, and it is the single most important test in this document —
-it's the proof that a retry after a timeout cannot duplicate a test result.
-
-**The blank-handling probe, which produces the evidence for your §5:**
-```bash
-# identical body, except one number field carries an empty string
-... "Deflection Value": "" ...
-```
-Expected: **422**, with an `INVALID_VALUE_FOR_COLUMN`-class error naming the field. We will send you the exact
-response so the rule change rests on your API's behaviour rather than on our claim.
-
----
-
-## Part D — What we need from you
-
-| # | Item | Blocks | Note |
-|---|---|---|---|
-| 1 | **Revoke the token in your §1** and send the replacement out-of-band (secrets manager, not a document) | every request in this report | It also persists in the source document's version history, so revocation is the only complete fix |
-| 2 | Scopes on the new token: `data.records:read`, `data.records:write`, **`schema.bases:read`** | B.2, and field-ID binding | Without the third, we must bind to field *names* and a rename silently breaks the integration |
-| 3 | **Approval to run Part B** (read-only) and **Part C** (writes to the results table only) | testing | Part B is harmless; we won't run Part C without a yes |
-| 4 | Read-side parameter structure — discrete fields or one versioned JSON field | **Week 3** | B.4 may answer this from your samples; if it shows prose, this becomes urgent |
-| 5 | The 11 requested result fields and the proposed option sets | **Week 4** | Five are blocking: `Max Pressure Achieved`, `Result Detail (JSON)`, `Deflection Unit`, `Corrects Attempt ID` + `Correction Reason`, `Schema Version` |
-| 6 | **`Testing End Date` is in your §4 always-required list** — but a test that is still `In Progress` has no end date | the record lifecycle | Either drop it from the always-required set so we can create the row when a test *starts* (giving you live visibility of what is on the walls), or tell us you want a single write at completion only. **Your document as written forbids the first.** |
-| 7 | Who purges the `LABOS-PROBE` rows, or delete permission on that sandbox table | cleanup | |
-| 8 | Whether report/photo links must be publicly reachable, or Airtable users authenticate to LabOS | Week 5 | Decides whether our URLs carry a signed, expiring token |
-
----
-
-## Part E — What LabOS does next, in order
-
-| Step | Waits on | Status |
+| # | Item | What it holds up |
 |---|---|---|
-| Secret store, write allowlist, settings module | — | ✅ **done and verified** (Part A) |
-| Airtable API client — rate limiter, retry classes, upsert helper, schema snapshot | — | in progress; no token needed to build it |
-| Payload builder + offline contract tests (no empty strings, required-per-test-type, enum validation, ISO 8601 UTC) | — | in progress; testable with no API access at all |
-| **Run Part B and send you the schema report** | items 1–3 | ready to run |
-| **Run Part C and send you the evidence table** | item 3 | ready to run |
-| Append-only attempt data model | — | next |
-| Rig-side capture of peak pressure + per-gauge deflection | — | in parallel; needs rig time |
-| Requirements-IN operator flow | item 4 | Week 3 |
-| Results-OUT sync queue, dark-launched | items 4, 5 | Week 4 |
-
-**A 45-minute call would close items 3–6 faster than document round-trips** — happy to schedule whenever
-suits.
+| 1 | **Revoke the token in your document** and send the replacement out-of-band — a secrets manager rather than a file. It also persists in the document's version history, so revocation is the only complete fix. | every request above |
+| 2 | On the new token, include **schema read** access alongside record read and write. It lets us bind to field *IDs* instead of names, so renaming a field on your side can never break the integration. | stage 2, and long-term stability |
+| 3 | **Approval for stage 2** (read-only) and **stage 3** (writes to the one results table). | all connection testing |
+| 4 | **Test parameters in a machine-readable form** — either discrete fields on Protocol Sections (inward and outward design pressure, hold time, loading sequence, deflection points, cycles) or one agreed JSON field. Free text means the operator still re-types the numbers. | **Week 3** |
+| 5 | The **11 additional result fields** and the proposed option lists from our response document. Five are essential, including peak pressure achieved and a way to reference a corrected attempt. | **Week 4** |
+| 6 | **One contradiction in your §4:** `Testing End Date` is listed as always required, but a test that is still in progress has no end date. Either drop it from the always-required set — which lets us create the row when a test *starts*, giving you live visibility of what is on the walls — or confirm you want a single write at completion only. As written, your document rules out the first. | the record lifecycle |
 
 ---
-*LabOS · 2026-07-29. No request has been made against base `appYBTqIL43pmS0xN`. Every command in Parts B and C
-is listed here in full precisely so that it can be reviewed before it is run.*
+
+## 6. What happens next
+
+| **On the LabOS side — now, unblocked** | **On the Airtable side** |
+|---|---|
+| Airtable client: rate limiting, retry handling, the upsert call, and a stored copy of your schema that we compare on every deployment | Revoke and reissue the token, with schema read access |
+| Offline contract tests for our result payloads (stage 1) | Approve stages 2 and 3 |
+| Append-only test-attempt data model — every attempt kept separately, never overwritten | Decide the test-parameter structure (item 4) |
+| Rig-side capture of peak pressure and per-gauge deflection, which the new fields need | Confirm the additional fields and option lists (item 5) |
+| Then: run stage 2, send you the schema report; run stage 3, send you the results | Resolve the `Testing End Date` question (item 6) |
+
+**A 45-minute call would settle items 3 to 6 faster than documents will** — happy to schedule whenever suits.
+
+---
+*LabOS · 2026-07-29. No request has been made against base `appYBTqIL43pmS0xN`. Every request in stages 2 and
+3 is written out above so that it can be reviewed before it is run.*
