@@ -17,7 +17,7 @@ class IdleState(State):
 
             try:
                 for valve in self.machine.valves:
-                    if not "FORCE" in valve['role']:
+                    if not "FORCE" in valve['role'] and not "RELIEF" in valve['role']:
                         self.machine.client.publish(f'{self.machine.device_id}/valves/{valve["name"]}', 1)
 
                 for valve in self.machine.valves:
