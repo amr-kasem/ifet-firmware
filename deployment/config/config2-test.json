@@ -57,7 +57,14 @@
     "name": "vfd2",
     "address": "5",
     "debug": false,
-    "frequency": 20
+    "frequency": 20,
+    "transport": "serial",
+    "dry_run": false,
+    "timeout": 2.0,
+    "tcp": {
+      "host": "",
+      "port": 502
+    }
   },
   "valves": [
     {
