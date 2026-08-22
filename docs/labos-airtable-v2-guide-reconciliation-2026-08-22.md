@@ -175,7 +175,21 @@ on **us sending §5.1.**
 v2 §5 rule 5 says schema changes go through them first. It has the longest lead time of anything outstanding,
 and it is independent of the token — holding it until after access arrives spends that window for nothing.
 
-### 5.1 NOT YET SENT — the write-back field requirements (ready to send)
+### 5.1 HELD — the write-back field requirements (drafted, deliberately not sent)
+
+**Status as of 2026-08-22: drafted and ready, held pending the Airtable team's reply to §5.0.**
+
+This is a decision, not an oversight. §5.0 asks for the PAT and the read-side structure — the two hard
+blockers. Sending a second, longer message with four more asks before Luis has answered the first risks
+burying the items that actually gate the work. The field requirements go out either when he replies, or if
+the reply does not come in a reasonable window.
+
+**What being held costs us:** §10.13, §10.14, §10.15 and §10.16 stay un-raised. §10.14 is the one to watch —
+it needs a schema change *plus* automation work on their side, so it has the longest lead time of anything
+outstanding and it does not depend on the token. If §5.0 goes unanswered for long, send §5.1 anyway rather
+than let that lead time run down.
+
+A WhatsApp-formatted version is in the session scratchpad as `luis-field-requirements.txt`.
 
 > One more from our side, separate from the access request — these are the specific write-back fields we
 > need settled before end-to-end testing. Raising them now because a couple involve schema changes on your
@@ -289,7 +303,7 @@ Kept for reference; §5.0 is what actually went out.
 | 4 | Schema probe — closes contract §10.1/.2/.5/.16 and verifies all nine table IDs in one call | ✅ done 2026-08-22 — `python3 -m app.airtable.probe`, read-only |
 | 5 | Offline payload contract tests asserting the exact wire names (`Airtable Mockup ID`, `LabOS Report Link`, `Complete LabOS JSON Response`) | ✅ done 2026-08-22 — `app/airtable/envelope.py`, 95 tests |
 | 6 | Send the reply; escalate the read-side parameter structure | ✅ **sent 2026-08-22 to Luis** (§5.0) |
-| 7 | **Send the write-back field requirements (§5.1)** — §10.13/.14/.15/.16 are currently un-raised with the Airtable team. §10.14 has the longest lead time and does not depend on the token | **NOT SENT — highest-value next action** |
+| 7 | **Write-back field requirements (§5.1)** — drafted; §10.13/.14/.15/.16 remain un-raised | 🟡 **HELD by decision** — awaiting the Airtable team's reply to §5.0, so a second ask does not bury the first. Send anyway if that reply does not arrive; §10.14 has the longest lead time and is token-independent |
 
 ### 6.1 What exists now, and what it does the day the PAT arrives
 
