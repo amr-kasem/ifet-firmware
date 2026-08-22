@@ -249,3 +249,130 @@ Ordered by what blocks the most:
 
 Once 1 and 2 are settled, LabOS runs verification stages 2–3 (a live upsert round-trip into the testing base),
 which is the last thing standing between here and W2.
+
+---
+
+## 8. The message that goes out
+
+> **Status:** ready to send to Luis for the Monday session. This section is the **authoritative wording** —
+> contract §10 owns the item *statuses*, this owns what we actually say. Sent record to be stamped below.
+
+**To:** Luis Macias (IFET) · **Cc:** Airtable team
+**Subject:** LabOS ↔ Airtable — we've connected and read both bases; one issue we need to flag before Monday
+
+---
+
+Hi Luis,
+
+Thanks for the tokens and for pointing us at the populated proposal data — that was exactly what we needed.
+Both tokens work, and we've now connected to both bases for the first time.
+
+To be clear about what we did: **we only read.** Every request was a `GET`. We wrote nothing to either base,
+including the LabOS Raw Data Table, so nothing has changed on your side. We'll keep it that way until you give
+us the go-ahead for the write test described at the end.
+
+Almost everything checked out, and several open questions closed on the spot. But we found one thing that we
+think you'll want to look at before anything goes live, so I'll lead with that.
+
+### 1. The requirement values in Airtable don't match the proposal PDF
+
+We cross-checked the IFET-26-0066 records against the proposal PDF you sent. The values are **shifted by one
+column**:
+
+| Requirement | Your proposal PDF | Airtable currently holds |
+|---|---|---|
+| SMI (impacts) | *(blank)* | 10 |
+| # Dials | 10 | Full |
+| Static / Type | Full | +60/60 |
+| **DP (+) (PSF)** | **+60/60** | **9** |
+| Water (PSF) | 9 | *(blank)* |
+
+The pattern is consistent: where the proposal has a **blank** cell, the extractor appears to skip it rather
+than hold its position, so every value after it moves one column to the left. The blank SMI cell is what
+starts it here; the run of blanks at Water/Forced Entry is where it re-aligns.
+
+**Why we're flagging it rather than just working around it.** These are the numbers LabOS reads to drive the
+test rig. Taken at face value, this record tells LabOS to run the TAS-202 structural test at **9 PSF instead
+of +60/60** — roughly a seventh of the specified design pressure — and, if the door holds, to record it as
+Passed. The water requirement disappears entirely.
+
+We can't defend against this from our side, because every shifted value is individually plausible: 9 is a
+perfectly legal design pressure. Nothing short of comparing against the original proposal reveals it.
+
+What we'd ask:
+
+1. Make the extraction **column-positional**, so a blank cell keeps its slot.
+2. **Re-extract IFET-26-0066**, and let us know how many other jobs were loaded the same way.
+3. Add a **sanity check** before a job is released for testing — even simple range limits on the pressure
+   fields would have caught `DP = 9`.
+
+Until that's done, we won't read requirements from Airtable to drive a live test. We'll keep building against
+the structure — that part is fine, see item 3 — but we won't put it in front of a rig.
+
+### 2. Test Type only has one option
+
+The `Test Type` field in the LabOS Raw Data Table currently offers only **Static Load**. Airtable rejects any
+value that isn't in the list, so at the moment we can only write back static-load results.
+
+The IFET-26-0066 job itself needs four more: TAS-201 impact, TAS-202 forced entry, TAS-203 cyclic, and
+ANSI Z97.1. Could you add these options to the field, in both bases?
+
+- `Cycles`
+- `Impact`
+- `Forced Entry`
+- `ANSI Z97.1`
+
+### 3. The read side — good news, plus one request
+
+We now understand how requirements are structured: one Protocol Section record per requirement, with the name
+in `Section Name` and the value in `Value`. **That works for us** and unblocks the requirements-reading work.
+
+One request that would make it considerably safer: `Value` is free text, so it holds `9`, `Full` and `+60/60`
+in the same column, and the unit is carried in the section's *name* rather than in a field. That means we have
+to parse the numbers back out of text, and a small wording change on your side could silently change how a
+test runs.
+
+If you could add two fields to Protocol Sections — **`Required Value`** (number) and **`Required Unit`**
+(text or single-select) — we'd read those and treat `Value` purely as the human-readable display string.
+Nothing you do today would need to change.
+
+### 4. Smaller items
+
+- **`Test Status` is spelled `Abborted`** in both bases. We're sending your spelling so nothing breaks, but if
+  you rename the option to `Aborted` we'll follow — renaming in Airtable keeps existing values intact.
+- **`Test Result`** — your guide was right and our spec was wrong. We've changed our side to send
+  `Passed` / `Failed`.
+- **`Corrects Attempt ID` and `Correction Reason`** (from our earlier list) are still the two fields we most
+  need. Without them, a corrected result and a genuine retest look identical in the data, so any roll-up that
+  counts attempts or works out a pass rate will be wrong in one of the two cases — and it will look right.
+- **`Test Date` is a date-only field**, so a test's start and end time can't both be recorded and duration
+  can't be derived. We're keeping both in the JSON field for now; flagging it in case you want it reportable.
+- **Attempt IDs** — your sample row uses `001`. Ours are UUIDs, because two rigs running at once would collide
+  on a simple counter. The sequence number lives in `Latest LabOS Attempt Number` instead.
+- **Please rotate both tokens** once we're through acceptance testing. They came through email, so it's worth
+  replacing them as a matter of routine.
+
+### For Monday
+
+We're ready for the last verification step: **a single test write** into the LabOS Raw Data Table in the
+**testing** base (`app4oXS3Kd5IKWgJ7`) — one record, written and then updated, to confirm the round-trip and
+the duplicate-prevention behave as expected. We won't touch the production base. **We just need your OK to run
+it.**
+
+Suggested order for the call:
+
+1. The extraction issue (item 1) — the only one that affects test results
+2. Test Type options (item 2) — blocks writing back anything but static load
+3. Approval for the test write
+4. The field requests in items 3 and 4
+
+Happy to walk through any of it live, or send the detailed findings if your Airtable developers would like
+them.
+
+Best,
+Abdelrahman
+LabOS
+
+---
+
+> **Sent:** *(pending — hold for Monday's session)*
