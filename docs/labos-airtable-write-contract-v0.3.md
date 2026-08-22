@@ -78,9 +78,16 @@ before any production cutover. The probe harness (§10.11) does exactly that and
 this document — so the first thing that happens when the PAT arrives is that these tables get checked, not
 assumed.
 
-**One ID is already confirmed from a second source.** The production base in the dashboard URL above,
-`app0OCunbmuXl7Hc9`, matches the value transcribed from their PDF exactly. The other eight remain
-single-sourced until the probe runs.
+**Confirmed live on 2026-08-23.** The probe ran against both bases and every table ID above is present with
+the expected name, so nothing in this section is transcription-only any more. `tbly6A3GB1GHdGocq`
+(*Wall Positions Calendar*) is absent from **both** bases and is presumably interface-only; LabOS needs no
+access to it either way.
+
+**The testing base is a structural clone of production** — table IDs *and* field IDs are identical across the
+two, so it was duplicated rather than rebuilt. That is useful: the §9 field-ID snapshot is portable across
+environments, and a cutover cannot silently re-point at different fields. The testing base holds **no
+records**, so all data-level findings come from production. Evidence:
+`labos-airtable-live-probe-findings-2026-08-23.md`.
 
 ---
 
@@ -265,9 +272,9 @@ is a deliberate decision rather than an omission, because after the fact the res
 | Field | Type | Req | v2 | Options |
 |---|---|---|---|---|
 | `Test Name` | text | R | ❌ | **§10.15.** Echoes the Protocol Section's `Test Name` verbatim. Without it every row is human-readable only by `rec…` ID. |
-| `Test Type` | single select | R | ✅ | `Static Load` · `Cycles` · `Impact` · `Forced Entry` · `ANSI Z97.1` |
-| `Test Status` | single select | R | ✅ | `In Progress` · `Completed` · `Aborted` (LabOS writes only these) |
-| `Test Result` | single select | C | ✅ ⚠️ | `Pass` · `Fail` · `Inconclusive`. **Their v2 example sends `"Passed"` — §10.16.** Omitted while `In Progress`; required when `Completed`. |
+| `Test Type` | single select | R | ✅ ⚠️ | LabOS: `Static Load` · `Cycles` · `Impact` · `Forced Entry` · `ANSI Z97.1`. **The live base offers only `Static Load` — §10.17, blocking.** The other four have no option to land in and are refused locally by the envelope rather than sent as a 422. |
+| `Test Status` | single select | R | ✅ | LabOS: `In Progress` · `Completed` · `Aborted` (only these). **On the wire `Aborted` is sent as `Abborted`**, which is how the live base spells it — §10.18. The base also holds `Not Started`, which LabOS never writes. |
+| `Test Result` | single select | C | ✅ | LabOS: `Pass` · `Fail` · `Inconclusive`. **On the wire these are `Passed` / `Failed` / `Inconclusive`** — the live base confirmed their v2 example was right and this contract was wrong (§10.16, closed 2026-08-23). The base also holds `Pending` and `Not Applicable`, which LabOS never writes. Omitted while `In Progress`; required when `Completed`. |
 | `Abort Reason` | single select | C | ❌ | **§10.15.** `Specimen Failure` · `Equipment Fault` · `Operator Stop` · `Power/Comms Loss` · `Other`. Required when `Aborted`; without it an aborted row carries no cause. |
 
 ### 4.4 Measurements
@@ -506,22 +513,28 @@ views stay traceable; 13–16 are new in `v0.3`.
 | # | Item | Owner | Status after v2 |
 |---|---|---|---|
 | 0 | `Testing End Date` in their always-required set vs. an `In Progress` attempt having no end date | Airtable | ⬛ **Moot** — v2 removed both date fields. Reopened in different form as **13**. |
-| 1 | `Photos` field type = URL/long-text (not Attachment); must artifact links be publicly reachable? | Airtable | 🔎 Open — **type answered by the schema probe**; reachability still needs a human answer. |
-| 2 | `Airtable … ID` fields: plain text or link-to-record? (LabOS proposes text) | Airtable | 🔎 Open — **answered by the schema probe**. |
-| 3 | **Read-side parameter structure: discrete fields or versioned JSON? (§9.1)** | Airtable / Luis | 🔴 **Open — the critical path. Gates W3.** v2 §6 step 5 still says only "use the requirement values read from Airtable". No field spec for Protocol Sections. |
+| 1 | `Photos` field type = URL/long-text (not Attachment); must artifact links be publicly reachable? | Airtable | ✅ **CLOSED 2026-08-23** — live probe: `Photos` is `url`, matches §7. Link *reachability* remains open as gap B / item 12. See `labos-airtable-live-probe-findings-2026-08-23.md` §3. |
+| 2 | `Airtable … ID` fields: plain text or link-to-record? (LabOS proposes text) | Airtable | ✅ **CLOSED 2026-08-23** — live probe: all four are `singleLineText`, exactly as LabOS proposed. See `labos-airtable-live-probe-findings-2026-08-23.md` §3. |
+| 3 | **Read-side parameter structure: discrete fields or versioned JSON? (§9.1)** | Airtable / Luis | 🟡 **ANSWERED 2026-08-23, with a defect.** Neither option: it is **row-per-parameter** on `Protocol Sections` (`Section Name` + free-text `Value`). Addressable, so **W3 is unblocked on structure** — but untyped, and the sample data is **wrong** (new item **19**). LabOS still asks for `Required Value` + `Required Unit`. See `labos-airtable-live-probe-findings-2026-08-23.md` §5. |
 | 4 | Writable table in its own base vs. one base + write allowlist | Airtable | ✅ **CLOSED by v2 §2.** Testing `app4oXS3Kd5IKWgJ7`, production `app0OCunbmuXl7Hc9`. **Caveat in §0.1:** PAT scopes are per-base, so LabOS enforces the table allowlist client-side. |
-| 5 | `Impact Result` option set — fixed list or free text? | Airtable / Luis | 🔎 Open — **answered by the schema probe**. |
+| 5 | `Impact Result` option set — fixed list or free text? | Airtable / Luis | ✅ **CLOSED 2026-08-23** — live probe: `Impact Result` is `singleLineText`, free text. See `labos-airtable-live-probe-findings-2026-08-23.md` §3. |
 | 6 | Approve the 11 requested fields and the option sets (§4.3–4.5) | Airtable | 🟡 **4 of 11 granted:** `Schema Version`, `Max Pressure Achieved`, `Deflection Unit`, `Complete LabOS JSON Response`. The remaining 7 split into **14** (blocking) and **15** (not blocking). |
 | 7 | Is `Test Name` canonically the Protocol Section's `Test Name`? | Airtable | ⬛ **Moot** — no `Test Name` field exists in their raw table. Folded into **15**. |
 | 8 | Confirm the two-write lifecycle (`In Progress` then terminal) is acceptable | Airtable | 🟠 Open — now **coupled to 13**. A single `Test Date` only works cleanly if it means *start*. |
 | 9 | Wall snapshot fields: required on every hardware test? | Airtable | ⬛ **Answered implicitly: no** — absent from v2. Confirmation folded into **15**. |
-| 10 | Rotated PAT with `data.records:read` + `:write` + `schema.bases:read`, delivered out-of-band | Airtable | 🟠 **Open — gates everything LabOS can verify.** v2 states the scopes and correctly omits the token. **The leak is remediated:** no token appears in v2. Delivery still pending. |
-| 11 | Verify the §5 null/blank table against the live base and add the evidence column | **LabOS** | 🟠 Open — **client, schema probe and payload builder are all built ahead of the token** (§10.3 below), so this closes the day it arrives. |
+| 10 | Rotated PAT with `data.records:read` + `:write` + `schema.bases:read`, delivered out-of-band | Airtable | ✅ **CLOSED 2026-08-23** — both PATs delivered (testing + production), stored in the gitignored `.env`. **Rotate after acceptance testing:** they arrived as plaintext email. See `labos-airtable-live-probe-findings-2026-08-23.md` §1. |
+| 11 | Verify the §5 null/blank table against the live base and add the evidence column | **LabOS** | ✅ **CLOSED 2026-08-23** — probe run against both bases, field-ID snapshots committed to `docs/airtable-schema/`. See `labos-airtable-live-probe-findings-2026-08-23.md` §2. |
 | 12 | Reachable report/photo origin (gap B) before first production write | **LabOS** | 🟠 Open. |
 | **13** | **The `Test Date` collapse.** v2 replaces `Testing Start Date` + `Testing End Date` with one `Test Date`. This removes test duration from the record entirely, and leaves the two-write lifecycle with no field that distinguishes "started at" from "finished at". **LabOS asks for both fields back.** Fallback if refused: `Test Date` means *start*, duration moves into `Complete LabOS JSON Response`, and item **8** must then be confirmed explicitly. | Airtable | 🔴 **NEW — blocking** |
 | **14** | **`Corrects Attempt ID` + `Correction Reason` are absent.** These are the only two fields in §4 that the JSON valve cannot rescue, because Airtable automations must *branch* on them — a value buried in long text cannot be filtered, linked, or rolled up. Without them a correction and a genuine retest are indistinguishable in the data (§3.1), so any roll-up counting attempts or computing a pass rate is wrong in one of the two cases. | Airtable | 🔴 **NEW — blocking** |
 | **15** | **Seven further fields absent**, all non-blocking because §6's JSON field can carry them: `Test Name`, `Abort Reason`, `Required Value`, `Required Unit`, `Cycles Required`, `Cycles Completed`, plus `Test Rig` / `LabOS Version` / `Result Rationale` and the six wall-snapshot fields (§4.2). LabOS asks for `Test Name` and `Abort Reason` as first-class fields — both are things a human reads off the row — and will carry the rest in JSON. Also: confirm the wall-snapshot omission is deliberate. | Airtable | 🟠 **NEW** |
-| **16** | **`Test Result` option spelling.** Their v2 worked example sends `"Passed"`; this contract specifies `Pass`. A single-select mismatch either 422s or silently creates a junk option, and the same risk applies to every select field. | Airtable | 🔎 **NEW — answered by the schema probe**, then confirmed in writing. |
+| **16** | **`Test Result` option spelling.** Their v2 worked example sends `"Passed"`; this contract specifies `Pass`. A single-select mismatch either 422s or silently creates a junk option, and the same risk applies to every select field. | Airtable | ✅ **CLOSED 2026-08-23 — against this contract.** The live base holds `Passed` / `Failed`; **their v2 example was right and this document was wrong.** §4.3 now records their spelling, and the envelope translates LabOS `Pass`→`Passed` at the wire boundary. See `labos-airtable-live-probe-findings-2026-08-23.md` §6. |
+| **17** | **`Test Type` offers only `Static Load`.** The live single-select holds one option, but contract §4.3 defines five. **Four of the five test types LabOS runs have no option to land in**, and a single-select rejects an unknown value — so today only the static-load part of a job can be written back at all. Their own worked example (IFET-26-0066) contains TAS-201 impact, TAS-202 forced entry, TAS-203 cyclic and ANSI Z97.1. Add `Cycles`, `Impact`, `Forced Entry`, `ANSI Z97.1` to both bases. | Airtable | 🔴 **NEW 2026-08-23 — blocking** |
+| **18** | **`Test Status` is misspelt `Abborted`** in both bases. A single select will not accept `Aborted`, so LabOS sends their spelling verbatim (implemented) or every aborted test 422s. Preferred fix is an option **rename**, which preserves existing cell values. | Airtable | 🟠 **NEW 2026-08-23** |
+| **19** | **The proposal data in Airtable does not match the source PDF.** Verified by glyph coordinate against `IFET-26-0066.pdf`: the blank `SMI` cell was dropped rather than held as a positional blank, so every value from `# Dials` onward slid one column left. **Airtable says `DP (+) (PSF) = 9`; the proposal says `+60/60`**, and the water requirement is lost entirely. These are the values that *drive the rig* — taken at face value this record runs a structural test at a seventh of design pressure and writes back `Passed`. LabOS cannot detect this: every shifted value is individually plausible. Fix the extractor to be column-positional, re-extract affected jobs, add plausibility bounds. | Airtable | 🔴 **NEW 2026-08-23 — blocking, highest severity** |
+| **20** | **`Test Date` is a `date`, not a `dateTime`** — so duration is not merely un-modelled, it is unrepresentable in any column. LabOS already mirrors start/end/`duration_s` into the JSON valve, so the payload loses nothing, but Airtable cannot filter, sort or roll up on it. Strengthens **13** rather than replacing it. | Airtable | 🟠 **NEW 2026-08-23** |
+| **21** | **Confirm the write model.** `Protocol Sections` already carries populated LabOS fields (`LabOS Attempt ID`, `Latest LabOS Attempt Number`, `LabOS Report Link`, …). LabOS reads this as *their automation rolling raw rows up*, consistent with v2 §5/§7 and with "only the raw table changes". If LabOS is instead expected to write `Protocol Sections` directly, the client allowlist must be widened deliberately. | Airtable | 🟠 **NEW 2026-08-23** |
+| **22** | **`LabOS Attempt ID` format.** Their populated sample uses `"001"`; §3 specifies a **UUID**, because a zero-padded counter collides as soon as two rigs run concurrently — the normal case. LabOS keeps sending UUIDs; their automation must not assume a short numeric form. `Latest LabOS Attempt Number` is the field that carries `1`, `2`, `3`. | Airtable | 🟠 **NEW 2026-08-23** |
 
 **Legend:** ✅ closed · 🟡 partially closed · 🔴 blocking · 🟠 open · 🔎 mechanically answerable from
 `GET /v0/meta/bases/{baseId}/tables` · ⬛ moot/superseded.

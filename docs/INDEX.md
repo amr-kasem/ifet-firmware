@@ -1,6 +1,6 @@
 # IFET Project — Documentation Index
 
-**Maintained by:** Abdelrahman · **Reconciled:** 2026-08-22 (previously 2026-07-29)
+**Maintained by:** Abdelrahman · **Reconciled:** 2026-08-23 (previously 2026-08-22)
 **Scope:** every LabOS ↔ Airtable integration and status document, across both repos and Notion.
 
 > **Why this file exists.** The same fact was living in five places and starting to drift — three different
@@ -44,6 +44,7 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 | `INDEX.md` | this file | current |
 | `labos-airtable-write-contract-v0.3.md` | **The spec both teams build against.** Identity, idempotency, the attempt lifecycle, retest vs. correction, the field envelope, blank rules, JSON shapes, retry classes, the live base/table IDs (§0.1), and the canonical open-items list. | **`v0.3 DRAFT`** — ratifies to `v1.0` when §10 closes |
 | `labos-airtable-v2-guide-reconciliation-2026-08-22.md` | **Current outbound artifact.** Delta against their *API Integration Guide v2*, the four things we need settled, and **§5 — the message that goes out.** | current |
+| `labos-airtable-live-probe-findings-2026-08-23.md` | **Evidence record for the first live probe of both bases.** What the schema actually holds, the six items it closes, the six it opens, §10.3 answered, and the proposal-extraction defect (§5.2). | current |
 | `labos-airtable-team-doc-review-2026-07-29.md` | Review of their **v1** schema doc: the verdict, ten required changes, eleven requested fields, §7 the message sent on 2026-07-29. | ⚠️ **superseded in part** by their v2 — bannered, kept verbatim as the sent record |
 | `labos-airtable-verification-report-2026-07-29.md` | Sendable report: the ownership boundary, what LabOS has verified, and the exact HTTP requests awaiting their approval. | ⚠️ **superseded in part** — bannered. Its base ID and table name are stale; the stage 1–3 request *shapes* still stand. Reissue against `app4oXS3Kd5IKWgJ7` when the PAT lands |
 | `labos-airtable-integration-internal-plan-2026-07-23.md` | Internal superset: gaps A–J, nine pre-closed decisions, the five-week sequencing with off-dashboard firmware work. | current (updated 2026-08-22) |
@@ -82,26 +83,33 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 
 ---
 
-## 3. Status snapshot — 2026-08-22
+## 3. Status snapshot — 2026-08-23
 
 | | |
 |---|---|
-| **Week** | 1 of 5 — still. W2+ has not started because the external gate never opened. |
-| **Contract** | `v0.3 DRAFT` (was `v0.2`). Ratifies to `v1.0` when contract §10 closes. |
+| **Week** | 1 of 5 — closing. **The external gate opened on 2026-08-23** (PATs delivered, §10.3 answered). W2 starts once verification stages 2–3 pass. |
+| **Contract** | `v0.3 DRAFT`. §10 now runs to **22 items: 6 closed on 2026-08-23**, 6 opened by the live probe. Ratifies to `v1.0` when §10 closes. |
 | **Their latest** | *API Integration Guide* **v2**, 2026-08-17. Delta: `labos-airtable-v2-guide-reconciliation-2026-08-22.md` |
-| **Testing base** | `app4oXS3Kd5IKWgJ7` — *LabOS Testing Base*. Production `app0OCunbmuXl7Hc9`. All nine table IDs published (contract §0.1). **No request made against either base yet.** |
+| **Testing base** | `app4oXS3Kd5IKWgJ7` — *LabOS Testing Base*. Production `app0OCunbmuXl7Hc9`. All nine table IDs published (contract §0.1). **First requests made 2026-08-23 — read-only, both bases; nothing was written to either.** Every table ID confirmed live; the testing base is a schema-only clone holding no records. |
 | **Write target** | `LabOS Raw Data Table` — `tblnc9SsbXU0C0FWh`. **The only writable surface**; LabOS enforces the allowlist client-side, since PAT scopes are per-base not per-table. |
-| **Token** | v2 correctly contains no token; the v1 leak is remediated and was never used or stored by LabOS. **The testing PAT is still not delivered** — this gates every LabOS-side verification. |
-| **Requested fields** | **4 of 11 granted** in v2: `Schema Version`, `Max Pressure Achieved`, `Deflection Unit`, `Complete LabOS JSON Response`. |
-| **Done** | branch reconcile (closed) · schema review + reply · write contract v0.3 · v2 reconciliation + reply drafted · Airtable client, schema probe and envelope builder (`feature/labos-airtable`) · P0/Ref 42 secret store (`bf4db01`, built + rehearsed off-node, **not deployed**) |
-| **Awaiting their reply** | §5.0 sent 2026-08-22 to Luis — the PAT and the read-side parameter structure. The write-back field asks (§5.1) are drafted and **held by decision** until he replies, so the two blockers are not buried. |
-| **Blocked on the Airtable team** | **read-side parameter structure (gates W3 — the critical path, open since 2026-07-23 and untouched by v2)** · testing PAT delivery · the `Test Date` collapse (§10.13) · `Corrects Attempt ID` + `Correction Reason` (§10.14) · approval to run verification stages 2–3 |
+| **Token** | ✅ **Both PATs delivered 2026-08-23** (testing + production), stored in the gitignored `.env`, in no commit or document. **Rotate after acceptance testing** — they arrived as plaintext email. |
+| **Requested fields** | **4 of 11 granted** in v2: `Schema Version`, `Max Pressure Achieved`, `Deflection Unit`, `Complete LabOS JSON Response`. All 28 promised fields confirmed live. |
+| **Done** | branch reconcile (closed) · schema review + reply · write contract v0.3 · v2 reconciliation + reply · Airtable client, schema probe and envelope builder (`feature/labos-airtable`) · P0/Ref 42 secret store (`bf4db01`, built + rehearsed off-node, **not deployed**) · **live probe of both bases + wire-level option translation, 98 tests (2026-08-23)** |
+| **Awaiting their reply** | Luis replied 2026-08-23 with both PATs and pointed us at the populated proposal data; he is away until Monday, when a joint testing session is booked. The §5.1 write-back asks are no longer held — they go **with** the probe findings, since the probe turned two of them into blockers with evidence. Agenda: `labos-airtable-live-probe-findings-2026-08-23.md` §7. |
+| **Blocked on the Airtable team** | **the proposal-extraction shift (§10.19) — highest severity: their sample job carries `DP = 9 PSF` where the PDF says `+60/60`, and LabOS cannot detect it** · `Test Type` has only one option, so 4 of 5 test types cannot be written (§10.17) · `Corrects Attempt ID` + `Correction Reason` (§10.14) · typed `Required Value`/`Required Unit` (§10.3) · the `Test Date` collapse (§10.13/§10.20) · confirm the write model (§10.21) |
 | **Blocked on the manager** | test node up and reachable — offline since ~2026-07-24, so there is **no non-production rig** for firmware P3 |
-| **Built, awaiting the token** | Airtable API client + write allowlist · schema probe · payload envelope builder · **95 offline tests** — all in `ifet-management` @ `feature/labos-airtable`, stdlib-only so none of it needs a production image rebuild |
-| **Not blocked** | P1 append-only attempt model · sync worker + durable queue · firmware P3 pressure and per-gauge deflection capture (write + unit-test only, no rig) |
+| **Verified against the live base** | Airtable API client + write allowlist · schema probe (run against both bases, snapshots in `docs/airtable-schema/`) · payload envelope builder with wire-level option translation · **98 offline tests** — all in `ifet-management` @ `feature/labos-airtable`, stdlib-only so none of it needs a production image rebuild |
+| **Not blocked** | **verification stages 2–3 — a live upsert round-trip into the testing base, the last thing before W2** · P1 append-only attempt model · sync worker + durable queue · firmware P3 pressure and per-gauge deflection capture (write + unit-test only, no rig) |
 
-> **The honest read.** Everything LabOS can do without the Airtable team is either done or unblocked and
-> queued. What is missing is one field specification (§10.3) and one token. Neither is ours to produce.
+> **The honest read, 2026-08-23.** The token arrived and the gate opened: six open items closed in one probe
+> run, and §10.3 — the critical path since July — is answered. W3 is unblocked *on structure*.
+>
+> But the probe also found something worse than a missing spec. **The requirement values in their sample job do
+> not match the proposal PDF they were extracted from** (§10.19): the extractor drops blank cells instead of
+> holding the column position, so `DP (+) (PSF)` reads `9` where the proposal says `+60/60`. Those are the
+> numbers that drive the rig. LabOS cannot defend against it — every shifted value is individually plausible —
+> so **nothing may read requirements from Airtable for a live test until the extraction is corrected.** W3 can
+> be built against this structure; it must not be trusted with a rig yet.
 
 ## 4. Keeping these consistent
 
