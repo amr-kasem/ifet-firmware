@@ -325,7 +325,7 @@ A force-push to `origin` **cannot reach the devices**: there is no auto-deploy a
 
 **Live as of 2026-07-29:** the Airtable team's schema doc arrived and is reviewed —
 `docs/labos-airtable-team-doc-review-2026-07-29.md` (review + reply) and
-`docs/labos-airtable-write-contract-v0.2.md` (the write spec). P0/Ref 42 is now **urgent**, not just first:
+`docs/labos-airtable-write-contract-v0.3.md` (the write spec). P0/Ref 42 is now **urgent**, not just first:
 a rotated `AIRTABLE_TOKEN` is about to exist and must land in a gitignored `.env`, never in the two
 browser-readable management configs.
 

@@ -3,13 +3,28 @@
 **Author:** Abdelrahman · **Date:** 2026-07-23 · **Updated:** 2026-07-29 · **Status:** Working (internal) · **Mode:** Solo
 **Companion (external) view:** the *Delivery & Progress Tracker* dashboard on Notion (Epic **IFET-32**).
 
+> ### Update 2026-08-22 — their guide **v2** landed; gap G re-based, gap I still open
+> *IFET Phase 2 · LabOS × Airtable API Integration Guide* **v2** (2026-08-17) supersedes the v1 schema doc
+> reviewed below. Delta and the outbound reply: **`docs/labos-airtable-v2-guide-reconciliation-2026-08-22.md`**.
+> Canonical open items: **`docs/labos-airtable-write-contract-v0.3.md` §10**.
+>
+> **Changed:** the sandbox base ID below is **stale** — the testing base is now `app4oXS3Kd5IKWgJ7` and
+> production is `app0OCunbmuXl7Hc9`; all nine table IDs are published (contract §0.1). **4 of the 11
+> requested fields granted**, including the JSON valve (`Complete LabOS JSON Response`).
+> **New blockers:** the `Test Date` collapse (§10.13) and the absent correction fields (§10.14).
+> **Unchanged and now the critical path:** gap **I** / contract §10.3 — v2 still does not specify how test
+> requirements come out of Protocol Sections. **W3 stays blocked.**
+>
+> **PAT status:** v2 correctly contains no token. The v1 leak is remediated; LabOS never used or stored it.
+> The testing PAT is still not delivered, which is what gates every LabOS-side verification.
+
 > ### Update 2026-07-29 — the Airtable team answered; three gaps close, one new one opens
 > Their *IFET Phase 2 · LABOS Sample Schema* doc landed (sandbox base + read-only field list + a single
 > writable `LabOS Raw Test Results` table). Full review, the ten required changes, the eleven fields we need
 > added, and the reply draft: **`docs/labos-airtable-team-doc-review-2026-07-29.md`**. The write spec both
-> teams build against: **`docs/labos-airtable-write-contract-v0.2.md`**.
+> teams build against: **`docs/labos-airtable-write-contract-v0.3.md`**.
 >
-> **Closed by their doc:** gap **G** (sandbox base — provisioned, `appYBTqIL43pmS0xN`) · gap **E**
+> **Closed by their doc:** gap **G** (sandbox base — provisioned, ~~`appYBTqIL43pmS0xN`~~ **superseded 2026-08-22 → `app4oXS3Kd5IKWgJ7`**) · gap **E**
 > (roll-ups = Airtable automations, confirming decision **#8**) · decision **#6** (photos = links) and
 > decision **#4** (LabOS computes pass/fail → writes `Test Result`) both confirmed by the counterparty.
 > **Also simpler than planned:** LabOS writes *one table*, never Projects/Mock-Ups/Protocols — so the P4
@@ -65,7 +80,7 @@ production actually runs `latest`, which is further along.** This reconcile live
 
 ## 2. Contract & mapping readiness
 
-- **Contract** (`v0.2 DRAFT` as of 2026-07-29, was `v0.1`): envelopes, identifiers, sync state machine,
+- **Contract** (`v0.3 DRAFT` as of 2026-08-22; was `v0.2`, was `v0.1`): envelopes, identifiers, sync state machine,
   retry policy, auth — all stable and sufficient to build Track A against. v0.2 adds the real Airtable
   field names, the omit-vs-null rule, the upsert/immutability model, and the retest-vs-correction
   distinction. Ratifies to **v1.0** when contract §10 (the canonical open-items list) closes.
@@ -104,11 +119,13 @@ My recommended call for each, so nothing stalls once bindings land:
 - **D · Structured-format modeling** — decision #7; affects P1 columns. *(folded into P1)*
 - **E · Roll-up** — decision #8; confirm at ratification so P4 write count is fixed. *(decision)*
 - **F · Backfill** — one-off script to stamp Airtable IDs onto existing active projects. *(~S, in W5 cutover)*
-- ~~**G · Sandbox base**~~ — ✅ **CLOSED 2026-07-29.** Airtable team provisioned `IFET Test Base For LabOS`
-  (`appYBTqIL43pmS0xN`). W3/W4 can be built safely. *(Token must be rotated first — it leaked in their PDF.)*
+- ~~**G · Sandbox base**~~ — ✅ **CLOSED**, re-based 2026-08-22. Their v2 guide replaces the original sandbox
+  with **`LabOS Testing Base` (`app4oXS3Kd5IKWgJ7`)**; production is `app0OCunbmuXl7Hc9`. The earlier ID
+  `appYBTqIL43pmS0xN` is **retired — do not use it.** W3/W4 can be built safely. *(Still gated on the testing
+  PAT being delivered out-of-band; the v1 token leaked in their PDF and was never used by LabOS.)*
 - ~~**E · Roll-up**~~ — ✅ **CLOSED 2026-07-29.** Their §6 puts all Project/Mock-Up/Protocol roll-ups on
   Airtable automations, exactly as decision #8 proposed. LabOS writes one attempt row, nothing else.
-- **I · Read-side parameters not machine-readable** — NEW, **blocking W3.** `Required Testing Parameters` is
+- **I · Read-side parameters not machine-readable** — **still blocking W3 as of 2026-08-22** (v2 did not address it; contract §10.3). `Required Testing Parameters` is
   likely free text; the rig needs discrete values (inward/outward design pressure, hold time, loading
   sequence, deflection points; cycles + pressure range for cyclic). Asked for discrete fields **or** one
   versioned `Required Testing Parameters (JSON)`. *(~S for us once decided; external decision.)*
@@ -145,7 +162,7 @@ Points re-sized to the `latest` reality. **[D]** = on dashboard (has a tracker R
 | Wk | Board milestone (external) | + Off-board / gap work (internal) | Gate |
 |---|---|---|---|
 | **Pre** | — | Branch reconcile to `latest`; branch `feature/labos-airtable`. | — |
-| **W1** | P0 foundations + contract lock | ✅ *done 2026-07-29:* mapping + sandbox ask sent **and answered**. Now: reply with contract v0.2 asks; ✅ **P0/Ref 42 done (`bf4db01`, built + rehearsed, not deployed)**; gap J field-ID binding + schema snapshot; gap B reachable origin; **start firmware P3 pressure capture (off-board)**. | Airtable team ratifying; sandbox base in hand |
+| **W1** | P0 foundations + contract lock | ✅ *done 2026-07-29:* mapping + sandbox ask sent **and answered**. Now: reply with contract v0.3 asks (v2 reconciliation); ✅ **P0/Ref 42 done (`bf4db01`, built + rehearsed, not deployed)**; gap J field-ID binding + schema snapshot; gap B reachable origin; **start firmware P3 pressure capture (off-board)**. | Airtable team ratifying; sandbox base in hand |
 | **W2** | P1 schema & identity migrated | gap D JSON cols; **finish firmware P3 + `/trials` seam (H)**; pass/fail compute stub (C). | canonical build, no field names needed |
 | **W3** | P2 requirements-IN live | Build against **sandbox base**; requirements cache. | **needs mapping 🟢 Agreed** (else swap W3⇄W4) |
 | **W4** | ★ Bidirectional sync, dark-launched | in-process worker (5); confirm roll-up mechanism (E) live. | needs mapping Agreed |
@@ -178,11 +195,13 @@ P0→P1→P4 spine and mostly my own decisions.
 `rec…` IDs ✅ · (4) roll-ups = Airtable automations ✅ · (5) photos = links ✅ (field *type* still to confirm) ·
 (6) option sets — we proposed them, awaiting acceptance · (7) sandbox base ✅ provisioned.
 
-Still open — full list with owners in `docs/labos-airtable-write-contract-v0.2.md` §10. The four that matter:
+Still open — full list with owners in `docs/labos-airtable-write-contract-v0.3.md` §10. The four that matter:
 1. **Read-side parameter structure** (gap I) — discrete fields or versioned JSON. *Gates W3.*
-2. **The 11 requested result fields** (`Max Pressure Achieved`, `Result Detail (JSON)`, `Deflection Unit`,
-   `Corrects Attempt ID` + `Correction Reason`, `Schema Version`, `Cycles Required/Completed`,
-   `Required Unit`, `Abort Reason`, + traceability extras). *Gates W4.*
+2. **The requested result fields — 4 of 11 granted in v2** (`Schema Version`, `Max Pressure Achieved`,
+   `Deflection Unit`, `Complete LabOS JSON Response`). Still outstanding: `Corrects Attempt ID` +
+   `Correction Reason` (**blocking** — contract §10.14), `Test Name`, `Abort Reason`, `Cycles
+   Required/Completed`, `Required Value/Unit`, traceability extras (all carryable in JSON — §10.15).
+   *Gates W4.*
 3. **Rotated PAT** with `data.records:read` + `data.records:write` + **`schema.bases:read`**, delivered
    out-of-band. *Gates any live call.*
 4. **Writable table in its own base, or one base + LabOS write allowlist** — their "read-only on existing

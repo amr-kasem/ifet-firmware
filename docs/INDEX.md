@@ -1,6 +1,6 @@
 # IFET Project — Documentation Index
 
-**Maintained by:** Abdelrahman · **Reconciled:** 2026-07-29
+**Maintained by:** Abdelrahman · **Reconciled:** 2026-08-22 (previously 2026-07-29)
 **Scope:** every LabOS ↔ Airtable integration and status document, across both repos and Notion.
 
 > **Why this file exists.** The same fact was living in five places and starting to drift — three different
@@ -15,17 +15,18 @@
 
 | Subject | **Authoritative document** | Views that must follow it |
 |---|---|---|
-| **Open integration items / what blocks what** | `labos-airtable-write-contract-v0.2.md` **§10** | review doc §6 · verification report §5 · Notion mapping §5 · Notion response §9 |
-| **The write envelope** — fields, types, required-per-test-type, blank rules, upsert, immutability | `labos-airtable-write-contract-v0.2.md` | Notion *Field Mapping* §2 · Notion *Response* §4 |
+| **Open integration items / what blocks what** | `labos-airtable-write-contract-v0.3.md` **§10** | review doc §6 · verification report §5 · Notion mapping §5 · Notion response §9 |
+| **The write envelope** — fields, types, required-per-test-type, blank rules, upsert, immutability | `labos-airtable-write-contract-v0.3.md` | Notion *Field Mapping* §2 · Notion *Response* §4 |
 | **Field-name mapping** LabOS ↔ Airtable, and ratification status per row | Notion *[Field Mapping (Working)](https://app.notion.com/p/3a357bad43d581c68ea1c85411429cac)* | the contract's field tables |
-| **What we asked the Airtable team for, and why** | `labos-airtable-team-doc-review-2026-07-29.md` | Notion *[Response page](https://app.notion.com/p/3ac57bad43d581c49ff9cf1e125c40c3)* |
-| **The exact message that goes out** | review doc **§7** | — |
+| **What we asked the Airtable team for, and why** | `labos-airtable-v2-guide-reconciliation-2026-08-22.md` | Notion *[Response page](https://app.notion.com/p/3ac57bad43d581c49ff9cf1e125c40c3)* · review doc `…-2026-07-29.md` (superseded, kept as the sent record) |
+| **The exact message that goes out** | reconciliation doc **§5** | review doc §7 (the 2026-07-29 message, already sent) |
 | **What we've verified, and the requests awaiting their approval** | `labos-airtable-verification-report-2026-07-29.md` | Notion *[Verification Report](https://app.notion.com/p/3ac57bad43d5811b84a2da22288d0edb)* |
 | **Internal plan, gaps A–J, pre-closed decisions, week sequencing** | `labos-airtable-integration-internal-plan-2026-07-23.md` | Notion internal copy (private) |
 | **Cross-team schedule and per-week deliverables** | Notion *[5-Week Integration Plan](https://app.notion.com/p/3a657bad43d581e59490f53a8eeedbf6)* | — |
 | **Live task status** | Notion *Delivery & Progress Tracker* (Epic IFET-32) | — |
 | **Repo/branch/production ground truth** | `labos-branch-reconcile-plan-2026-07-24.md` | Notion *[Execution Record](https://app.notion.com/p/3a957bad43d581b4a091d1c1459de641)* |
 | **Secret handling and the gated deploy runbook** | `ifet-management/deployment/SECRETS.md` | this index |
+| **Airtable environments, base IDs, table IDs, PAT scopes** | `labos-airtable-write-contract-v0.3.md` **§0.1** | reconciliation doc §1 · everything else |
 | **Hardware config — Modbus, VFD, valve pins** | `README.md` (this directory) | — |
 
 **Rule:** when an item closes, close it in the authoritative document **first**, then update the views the same
@@ -40,10 +41,11 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 | Document | Purpose | Status |
 |---|---|---|
 | `INDEX.md` | this file | current |
-| `labos-airtable-write-contract-v0.2.md` | **The spec both teams build against.** Identity, idempotency, the attempt lifecycle, retest vs. correction, the field envelope, blank rules, JSON shapes, retry classes, and the canonical open-items list. | **`v0.2 DRAFT`** — ratifies to `v1.0` when §10 closes |
-| `labos-airtable-team-doc-review-2026-07-29.md` | Our review of their schema doc: the verdict, ten required changes, eleven requested fields, and **§7 — the message that goes out.** | current |
-| `labos-airtable-verification-report-2026-07-29.md` | Sendable report: the ownership boundary, what LabOS has verified, and the exact HTTP requests awaiting their approval. | current — **stage 1 done, stages 2–3 pending their token and approval** |
-| `labos-airtable-integration-internal-plan-2026-07-23.md` | Internal superset: gaps A–J, nine pre-closed decisions, the five-week sequencing with off-dashboard firmware work. | current (updated 2026-07-29) |
+| `labos-airtable-write-contract-v0.3.md` | **The spec both teams build against.** Identity, idempotency, the attempt lifecycle, retest vs. correction, the field envelope, blank rules, JSON shapes, retry classes, the live base/table IDs (§0.1), and the canonical open-items list. | **`v0.3 DRAFT`** — ratifies to `v1.0` when §10 closes |
+| `labos-airtable-v2-guide-reconciliation-2026-08-22.md` | **Current outbound artifact.** Delta against their *API Integration Guide v2*, the four things we need settled, and **§5 — the message that goes out.** | current |
+| `labos-airtable-team-doc-review-2026-07-29.md` | Review of their **v1** schema doc: the verdict, ten required changes, eleven requested fields, §7 the message sent on 2026-07-29. | ⚠️ **superseded in part** by their v2 — bannered, kept verbatim as the sent record |
+| `labos-airtable-verification-report-2026-07-29.md` | Sendable report: the ownership boundary, what LabOS has verified, and the exact HTTP requests awaiting their approval. | ⚠️ **superseded in part** — bannered. Its base ID and table name are stale; the stage 1–3 request *shapes* still stand. Reissue against `app4oXS3Kd5IKWgJ7` when the PAT lands |
+| `labos-airtable-integration-internal-plan-2026-07-23.md` | Internal superset: gaps A–J, nine pre-closed decisions, the five-week sequencing with off-dashboard firmware work. | current (updated 2026-08-22) |
 | `labos-branch-reconcile-plan-2026-07-24.md` | Repo ↔ production reconcile. Node baselines, container audit, the safety guardrails for git on a live node, and the Step E deploy runbook. | 🔒 **CLOSED** — only Step E/F remain, folded into the next deliberate deploy |
 | `system1-sensor-vfd-debug-report-2026-07-07.md` | system-1 bring-up: sensors, the VFD-at-address-12 finding, PSF scaling. | historical record |
 | `system1-sensor4-5-addition-2026-07-08.md` | system-1 sensor 4/5 addition. | historical record |
@@ -71,21 +73,24 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 
 ---
 
-## 3. Status snapshot — 2026-07-29
+## 3. Status snapshot — 2026-08-22
 
 | | |
 |---|---|
-| **Week** | 1 of 5 |
-| **Contract** | `v0.2 DRAFT`. Ratifies to `v1.0` when contract §10 closes. |
-| **Mapping ratification** | 0 rows 🟢 Agreed. ~45 🔵 In review (their field names supplied), 11 🟠 Requested, 4 ⛔ withdrawn by us. |
-| **Sandbox base** | provisioned — `appYBTqIL43pmS0xN`. No request made against it yet. |
-| **Token** | the one in their PDF is compromised; revocation requested; **never used or stored by LabOS**. |
-| **Done** | branch reconcile (closed) · schema review + reply · write contract v0.2 · P0/Ref 42 secret store (`bf4db01`, built + rehearsed off-node, **not deployed**) |
-| **Blocked on the Airtable team** | rotated token with schema-read scope · read-side parameter structure (gates W3) · the 11 field additions (gates W4) · approval to run stages 2–3 · the `Testing End Date` contradiction |
-| **Blocked on the manager** | test node up and reachable — the `test` node has been offline since ~2026-07-24 |
-| **Not blocked** | Airtable API client + probe harness · offline payload contract tests · P1 append-only attempt model · firmware P3 pressure and per-gauge deflection capture |
+| **Week** | 1 of 5 — still. W2+ has not started because the external gate never opened. |
+| **Contract** | `v0.3 DRAFT` (was `v0.2`). Ratifies to `v1.0` when contract §10 closes. |
+| **Their latest** | *API Integration Guide* **v2**, 2026-08-17. Delta: `labos-airtable-v2-guide-reconciliation-2026-08-22.md` |
+| **Testing base** | `app4oXS3Kd5IKWgJ7` — *LabOS Testing Base*. Production `app0OCunbmuXl7Hc9`. All nine table IDs published (contract §0.1). **No request made against either base yet.** |
+| **Write target** | `LabOS Raw Data Table` — `tblnc9SsbXU0C0FWh`. **The only writable surface**; LabOS enforces the allowlist client-side, since PAT scopes are per-base not per-table. |
+| **Token** | v2 correctly contains no token; the v1 leak is remediated and was never used or stored by LabOS. **The testing PAT is still not delivered** — this gates every LabOS-side verification. |
+| **Requested fields** | **4 of 11 granted** in v2: `Schema Version`, `Max Pressure Achieved`, `Deflection Unit`, `Complete LabOS JSON Response`. |
+| **Done** | branch reconcile (closed) · schema review + reply · write contract v0.3 · v2 reconciliation + reply drafted · P0/Ref 42 secret store (`bf4db01`, built + rehearsed off-node, **not deployed**) |
+| **Blocked on the Airtable team** | **read-side parameter structure (gates W3 — the critical path, open since 2026-07-23 and untouched by v2)** · testing PAT delivery · the `Test Date` collapse (§10.13) · `Corrects Attempt ID` + `Correction Reason` (§10.14) · approval to run verification stages 2–3 |
+| **Blocked on the manager** | test node up and reachable — offline since ~2026-07-24, so there is **no non-production rig** for firmware P3 |
+| **Not blocked** | Airtable API client + write allowlist · schema probe harness · offline payload contract tests · P1 append-only attempt model · firmware P3 pressure and per-gauge deflection capture (write + unit-test only, no rig) |
 
----
+> **The honest read.** Everything LabOS can do without the Airtable team is either done or unblocked and
+> queued. What is missing is one field specification (§10.3) and one token. Neither is ours to produce.
 
 ## 4. Keeping these consistent
 
@@ -112,3 +117,19 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 - Retest vs. correction was undefined in the contract, though the whole immutability model depends on it →
   now contract §3.1.
 - Readiness evaluation flagged as partly superseded rather than left to mislead.
+
+### Fixed in the 2026-08-22 reconcile
+
+- Base `appYBTqIL43pmS0xN` was cited as live in **5 files, 12 places**; their v2 guide re-based the sandbox to
+  `app4oXS3Kd5IKWgJ7`. Every live reference now points at the new base; the two already-sent 2026-07-29 docs
+  keep theirs, under a banner that says the ID is retired.
+- Contract renamed `v0.2` → `v0.3` **with the filename**, so the version cannot drift from the document again;
+  all nine inbound references updated.
+- Their real wire names folded into contract §4 — `Airtable Mockup ID` (no hyphen), `LabOS Report Link`,
+  `Complete LabOS JSON Response`. These are the strings the client sends; the LabOS names are internal only.
+- `Test Result` option spelling flagged: v2's example sends `"Passed"`, the contract says `Pass`
+  (§10.16).
+- Open items 0, 7 and 9 went **moot** — v2 deleted the fields they were about. Recorded as moot rather than
+  closed, and the substance reopened as §10.13 / §10.15 where it still matters.
+- The two 2026-07-29 documents were **bannered, not rewritten.** They are the record of what was sent; editing
+  them to match today's facts would falsify the correspondence.

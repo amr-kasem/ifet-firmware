@@ -4,6 +4,26 @@
 **Sandbox base:** `appYBTqIL43pmS0xN` — *IFET Test Base For LabOS*
 **Companion:** *LabOS Response — Airtable Schema Review & Write Contract v0.2*
 
+
+> ### ⚠️ Superseded in part — read this first
+>
+> This document is the **record of what LabOS sent on 2026-07-29**, kept verbatim so the correspondence stays
+> auditable. It reviews the Airtable team's **v1** schema doc.
+>
+> They replied with **v2 of the integration guide on 2026-08-17**, which changed the base IDs, published real
+> table IDs, granted four of the eleven requested fields, and removed several fields this document assumes.
+> **Nothing below has been rewritten to match.**
+>
+> For the current position, read:
+> - **`labos-airtable-write-contract-v0.3.md` §0** — what v2 changed, and the live base/table IDs
+> - **`labos-airtable-write-contract-v0.3.md` §10** — the canonical open-items list (this doc's §5 is a
+>   stale view of it)
+> - **`labos-airtable-v2-guide-reconciliation-2026-08-22.md`** — the v2 delta and the outbound reply
+>
+> In particular: base `appYBTqIL43pmS0xN` and the table name `LabOS Raw Test Results` **no longer apply.**
+> The testing base is `app4oXS3Kd5IKWgJ7` and the writable table is `LabOS Raw Data Table`
+> (`tblnc9SsbXU0C0FWh`).
+
 ---
 
 ## Purpose
