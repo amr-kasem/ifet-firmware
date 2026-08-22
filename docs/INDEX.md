@@ -26,7 +26,8 @@
 | **Live task status** | Notion *Delivery & Progress Tracker* (Epic IFET-32) | — |
 | **Repo/branch/production ground truth** | `labos-branch-reconcile-plan-2026-07-24.md` | Notion *[Execution Record](https://app.notion.com/p/3a957bad43d581b4a091d1c1459de641)* |
 | **Secret handling and the gated deploy runbook** | `ifet-management/deployment/SECRETS.md` | this index |
-| **Airtable environments, base IDs, table IDs, PAT scopes** | `labos-airtable-write-contract-v0.3.md` **§0.1** | reconciliation doc §1 · everything else |
+| **Airtable environments, base IDs, table IDs, PAT scopes** | `labos-airtable-write-contract-v0.3.md` **§0.1** | reconciliation doc §1 · `ifet-management` `app/config.py` · everything else |
+| **The write envelope as executable rules** | `labos-airtable-write-contract-v0.3.md` §4/§5/§5.1 | `ifet-management` `app/airtable/contract.py` — **a view; the prose wins on disagreement** |
 | **Hardware config — Modbus, VFD, valve pins** | `README.md` (this directory) | — |
 
 **Rule:** when an item closes, close it in the authoritative document **first**, then update the views the same
@@ -84,10 +85,11 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 | **Write target** | `LabOS Raw Data Table` — `tblnc9SsbXU0C0FWh`. **The only writable surface**; LabOS enforces the allowlist client-side, since PAT scopes are per-base not per-table. |
 | **Token** | v2 correctly contains no token; the v1 leak is remediated and was never used or stored by LabOS. **The testing PAT is still not delivered** — this gates every LabOS-side verification. |
 | **Requested fields** | **4 of 11 granted** in v2: `Schema Version`, `Max Pressure Achieved`, `Deflection Unit`, `Complete LabOS JSON Response`. |
-| **Done** | branch reconcile (closed) · schema review + reply · write contract v0.3 · v2 reconciliation + reply drafted · P0/Ref 42 secret store (`bf4db01`, built + rehearsed off-node, **not deployed**) |
+| **Done** | branch reconcile (closed) · schema review + reply · write contract v0.3 · v2 reconciliation + reply drafted · Airtable client, schema probe and envelope builder (`feature/labos-airtable`) · P0/Ref 42 secret store (`bf4db01`, built + rehearsed off-node, **not deployed**) |
 | **Blocked on the Airtable team** | **read-side parameter structure (gates W3 — the critical path, open since 2026-07-23 and untouched by v2)** · testing PAT delivery · the `Test Date` collapse (§10.13) · `Corrects Attempt ID` + `Correction Reason` (§10.14) · approval to run verification stages 2–3 |
 | **Blocked on the manager** | test node up and reachable — offline since ~2026-07-24, so there is **no non-production rig** for firmware P3 |
-| **Not blocked** | Airtable API client + write allowlist · schema probe harness · offline payload contract tests · P1 append-only attempt model · firmware P3 pressure and per-gauge deflection capture (write + unit-test only, no rig) |
+| **Built, awaiting the token** | Airtable API client + write allowlist · schema probe · payload envelope builder · **95 offline tests** — all in `ifet-management` @ `feature/labos-airtable`, stdlib-only so none of it needs a production image rebuild |
+| **Not blocked** | P1 append-only attempt model · sync worker + durable queue · firmware P3 pressure and per-gauge deflection capture (write + unit-test only, no rig) |
 
 > **The honest read.** Everything LabOS can do without the Airtable team is either done or unblocked and
 > queued. What is missing is one field specification (§10.3) and one token. Neither is ours to produce.

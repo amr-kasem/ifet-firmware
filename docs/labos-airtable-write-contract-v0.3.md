@@ -325,6 +325,13 @@ implementable as a general rule.
 - Booleans are always explicit on terminal writes (`Retest Required`).
 - LabOS never invents a select option at runtime. An unmapped value is a **contract error**, logged and
   surfaced in the LabOS UI as `Retry Required`, not coerced into free text.
+- **These rules are executable, not advisory.** `ifet-management` `app/airtable/envelope.py` enforces every
+  row of this table, and `app/airtable/contract.py` holds §4/§5.1 as data. The prose here stays authoritative;
+  the code is a view of it, with a test asserting that every field marked **R** is actually validated
+  somewhere — an unenforced requirement looks fine in review and lets an incomplete attempt through.
+- Select values are validated against the **live** option set when a probe snapshot is available, not against
+  the list in §4. That is what turns the `Pass` / `Passed` mismatch (§10.16) into a caught error instead of a
+  422 — or, worse, a junk duplicate option created by `typecast`.
 - **To be verified on the sandbox base and appended here:** exact 422 behaviour per field type, and whether
   `typecast: true` is needed for select fields. Evidence, not assumption — this table gets a verification
   column before `v1.0`.
@@ -346,12 +353,17 @@ implementable as a general rule.
 
 ✅ required when `Completed` · ○ optional · — omitted (key absent)
 
-> **Reading this matrix against v2.** Five rows name fields that do not yet exist in their raw table:
-> `Cycles Required` / `Cycles Completed`, `Required Value` / `Required Unit`, and the wall snapshot. Until
-> §10.15 is answered, LabOS satisfies those rows by carrying the same values inside
-> `Complete LabOS JSON Response` (§6) — the requirement holds, only its destination changes. `Result Detail
-> (JSON)` in this matrix means that field. No row is dropped, because dropping one would silently reduce what
-> a `Completed` attempt has to prove.
+> **Reading this matrix against v2.** Several rows here — and several always-required fields in §4 — name
+> fields that do not exist in their raw table: `Cycles Required` / `Cycles Completed`, `Required Value` /
+> `Required Unit`, the wall snapshot, and also `Test Name`, `Abort Reason` and `Testing End Date`. Until
+> §10.15 and §10.13 are answered, LabOS satisfies them by carrying the same values inside
+> `Complete LabOS JSON Response` (§6), namespaced under `labos_extra` — the requirement holds, only its
+> destination changes. `Result Detail (JSON)` in this matrix means that field.
+>
+> **No row is dropped, and this is deliberate.** Requirements are about the data, not about which column
+> happens to exist this week; letting an Airtable schema decision quietly reduce what a `Completed` attempt
+> has to prove is how a testing record stops being evidence. The builder therefore still refuses a terminal
+> write with no `Testing End Date`, even though there is currently nowhere on the row to put it.
 
 ---
 
@@ -494,7 +506,7 @@ views stay traceable; 13–16 are new in `v0.3`.
 | 8 | Confirm the two-write lifecycle (`In Progress` then terminal) is acceptable | Airtable | 🟠 Open — now **coupled to 13**. A single `Test Date` only works cleanly if it means *start*. |
 | 9 | Wall snapshot fields: required on every hardware test? | Airtable | ⬛ **Answered implicitly: no** — absent from v2. Confirmation folded into **15**. |
 | 10 | Rotated PAT with `data.records:read` + `:write` + `schema.bases:read`, delivered out-of-band | Airtable | 🟠 **Open — gates everything LabOS can verify.** v2 states the scopes and correctly omits the token. **The leak is remediated:** no token appears in v2. Delivery still pending. |
-| 11 | Verify the §5 null/blank table against the live base and add the evidence column | **LabOS** | 🟠 Open — **harness built ahead of the token** so this closes the day it arrives. |
+| 11 | Verify the §5 null/blank table against the live base and add the evidence column | **LabOS** | 🟠 Open — **client, schema probe and payload builder are all built ahead of the token** (§10.3 below), so this closes the day it arrives. |
 | 12 | Reachable report/photo origin (gap B) before first production write | **LabOS** | 🟠 Open. |
 | **13** | **The `Test Date` collapse.** v2 replaces `Testing Start Date` + `Testing End Date` with one `Test Date`. This removes test duration from the record entirely, and leaves the two-write lifecycle with no field that distinguishes "started at" from "finished at". **LabOS asks for both fields back.** Fallback if refused: `Test Date` means *start*, duration moves into `Complete LabOS JSON Response`, and item **8** must then be confirmed explicitly. | Airtable | 🔴 **NEW — blocking** |
 | **14** | **`Corrects Attempt ID` + `Correction Reason` are absent.** These are the only two fields in §4 that the JSON valve cannot rescue, because Airtable automations must *branch* on them — a value buried in long text cannot be filtered, linked, or rolled up. Without them a correction and a genuine retest are indistinguishable in the data (§3.1), so any roll-up counting attempts or computing a pass rate is wrong in one of the two cases. | Airtable | 🔴 **NEW — blocking** |
@@ -509,6 +521,21 @@ views stay traceable; 13–16 are new in `v0.3`.
 Items **1** (partly), **2**, **5**, **16** — and it verifies every ID in §0.1 — from a single authenticated
 call. That is four open items and nine table IDs converted from correspondence into evidence, in one request.
 The harness is built now, ahead of the token (item 10), so the answers land the same day the PAT does.
+
+### 10.1.1 What is already built on the LabOS side
+
+`ifet-management` @ `feature/labos-airtable`, all offline and all committed:
+
+| Module | Role |
+|---|---|
+| `app/airtable/client.py` | REST client. Write allowlist enforced **before the socket opens** (§0.1); separate opt-in gate on the production base; §8 retry classes encoded in the exception type. |
+| `app/airtable/probe.py` | The read-only schema probe described above. |
+| `app/airtable/envelope.py` | Builds the wire payload from LabOS values — §4 names, §5 blank rules, §5.1 matrix, the §10.13 `Test Date` workaround, and the §10.15 JSON-valve overflow. |
+| `app/airtable/contract.py` | §4 / §5 / §5.1 as data. **This prose document stays authoritative; that file is a view of it.** |
+| `tests/` | 95 offline tests — no network, no token. |
+
+Stdlib only, deliberately: `report-api`'s `app/` is bind-mounted, so none of this needs an image rebuild of a
+production container to run.
 
 ### 10.2 What genuinely blocks, once the token arrives
 
