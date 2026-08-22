@@ -140,7 +140,89 @@ about their design — it is the correct design — but the guarantee has to liv
 
 ---
 
-## 5. Ready-to-send reply
+## 5. Correspondence
+
+### 5.0 SENT — 2026-08-22, to Luis (WhatsApp)
+
+Recorded as sent. Do not edit it to match later facts.
+
+> Hi Luis — quick update from the LabOS side.
+> We've reviewed the Airtable Phase 2 integration guide and have already prepared the LabOS integration
+> components required for the next validation step, including the API client, schema validation/probe,
+> payload mapping, and offline test coverage.
+>
+> At this point, the main items we need from the Airtable side to continue the end-to-end integration are:
+>
+> 1. Testing PAT for the LabOS Testing Base. Once received, we can immediately validate the live schema,
+> hierarchy retrieval, and test write-back.
+>
+> 2. Clarification on how test requirements are represented in Protocol Sections. The guide says LabOS should
+> perform testing using the requirement values read from Airtable, but we need to confirm which fields contain
+> those requirements and their structure so LabOS can consume them programmatically.
+>
+> Once the PAT is available, we expect the initial API/schema validation to be a short step, then we can
+> proceed with the controlled read/write test together with the Airtable team.
+
+**What this covers:** contract §10.10 (the PAT) and §10.3 (read-side structure) — the two hard blockers, both
+stated clearly. A draft third point about write-back field changes was **removed before sending.**
+
+**Consequence — the write-back schema items are now un-raised.** §10.13 (`Test Date`), §10.14 (the correction
+fields), §10.15 (`Test Name`, `Abort Reason`) and §10.16 (option spelling) have not been communicated to the
+Airtable team in any form. They are not blocked on them, because they have not been asked. They are blocked
+on **us sending §5.1.**
+
+**This should not wait for the PAT.** §10.14 needs a schema change *plus* automation work on their side, and
+v2 §5 rule 5 says schema changes go through them first. It has the longest lead time of anything outstanding,
+and it is independent of the token — holding it until after access arrives spends that window for nothing.
+
+### 5.1 NOT YET SENT — the write-back field requirements (ready to send)
+
+> One more from our side, separate from the access request — these are the specific write-back fields we
+> need settled before end-to-end testing. Raising them now because a couple involve schema changes on your
+> side, so they're worth starting in parallel rather than after we have access. Four items, in priority
+> order.
+>
+> **1. Test dates — we'd like the start and end back as two fields.**
+> v2 merged them into a single `Test Date`. Two problems for us: test duration is part of the result for
+> cyclic tests and anything with timed holds, and we write twice per attempt — once when the test starts, so
+> you get live visibility, and once when it finishes. With one date field the second write either overwrites
+> the first or loses the end time.
+> *Request:* `Testing Start Date` and `Testing End Date`, both datetime.
+> *If not possible:* we'll treat `Test Date` as the start time and carry duration in the JSON field — but
+> we'd need you to confirm the two-write pattern is fine on your side.
+>
+> **2. `Corrects Attempt ID` and `Correction Reason` — the two we can't work around.**
+> We're happy to carry the other missing fields inside `Complete LabOS JSON Response`, but not these, because
+> your automations need to filter and link on them, and a value inside a long-text blob can't be filtered on.
+> The problem they solve: if a specimen is genuinely re-tested, that's two valid results. If a result was
+> recorded wrongly and re-entered, only the second is true. In both cases `Attempt Number` goes 1 → 2, so
+> without a reference field the two are indistinguishable — and any roll-up counting attempts or computing a
+> pass rate is wrong in one of the two cases, with no way to tell which.
+> We never edit or delete a submitted row, since that's the audit trail for certification evidence, so a
+> correction has to arrive as a new row stating what it supersedes. With the field present, your automation
+> can mark the old row superseded and exclude it from roll-ups.
+> *Request:* `Corrects Attempt ID` (text) and `Correction Reason` (long text).
+>
+> **3. Two smaller fields, if possible.**
+> `Test Name` (text) — right now a raw row is only identifiable by record IDs, so the table is hard to read
+> for anyone opening it. `Abort Reason` (single select: Specimen Failure, Equipment Fault, Operator Stop,
+> Power/Comms Loss, Other) — an aborted row currently records no cause.
+> Everything else on our list (`Required Value`/`Unit`, `Cycles Required`/`Completed`, rig and version
+> traceability) we'll carry in the JSON field — no schema change needed.
+>
+> **4. One flag on option spelling.**
+> The example in v2 sends `"Test Result": "Passed"`; we had `Pass` in our spec. We'll read the live option
+> sets off the schema endpoint once we have the token and match whatever is actually configured — just
+> flagging it, since a mismatch on a single-select either errors or quietly creates a duplicate option.
+>
+> Also confirming we understand the wall/reservation fields are intentionally not in the raw table, and that
+> production automation stays off until you enable it.
+
+### 5.2 Superseded draft — the long-form reply
+
+Kept for reference; §5.0 is what actually went out.
+
+
 
 > **Subject:** LabOS response — API Integration Guide v2
 >
@@ -206,7 +288,8 @@ about their design — it is the correct design — but the guarantee has to liv
 | 3 | Airtable API client with a **hard write allowlist** of `tblnc9SsbXU0C0FWh` (§4) | ✅ done 2026-08-22 — `ifet-management` `app/airtable/client.py` |
 | 4 | Schema probe — closes contract §10.1/.2/.5/.16 and verifies all nine table IDs in one call | ✅ done 2026-08-22 — `python3 -m app.airtable.probe`, read-only |
 | 5 | Offline payload contract tests asserting the exact wire names (`Airtable Mockup ID`, `LabOS Report Link`, `Complete LabOS JSON Response`) | ✅ done 2026-08-22 — `app/airtable/envelope.py`, 95 tests |
-| 6 | Send §5 reply; escalate the read-side parameter structure | pending review |
+| 6 | Send the reply; escalate the read-side parameter structure | ✅ **sent 2026-08-22 to Luis** (§5.0) |
+| 7 | **Send the write-back field requirements (§5.1)** — §10.13/.14/.15/.16 are currently un-raised with the Airtable team. §10.14 has the longest lead time and does not depend on the token | **NOT SENT — highest-value next action** |
 
 ### 6.1 What exists now, and what it does the day the PAT arrives
 
