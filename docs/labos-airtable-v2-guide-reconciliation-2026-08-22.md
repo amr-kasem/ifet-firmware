@@ -203,7 +203,29 @@ about their design — it is the correct design — but the guarantee has to liv
 |---|---|---|
 | 1 | Contract → `v0.3`; §0 records v2's environment, §10 reconciled | ✅ done 2026-08-22 |
 | 2 | Retire base `appYBTqIL43pmS0xN` from all live docs; banner the two 2026-07-29 sent docs | ✅ done 2026-08-22 |
-| 3 | Airtable API client with a **hard write allowlist** of `tblnc9SsbXU0C0FWh` (§4) | next |
-| 4 | Schema probe — closes contract §10.1/.2/.5/.16 and verifies all nine table IDs in one call | next |
-| 5 | Offline payload contract tests asserting the exact wire names (`Airtable Mockup ID`, `LabOS Report Link`, `Complete LabOS JSON Response`) | next |
+| 3 | Airtable API client with a **hard write allowlist** of `tblnc9SsbXU0C0FWh` (§4) | ✅ done 2026-08-22 — `ifet-management` `app/airtable/client.py` |
+| 4 | Schema probe — closes contract §10.1/.2/.5/.16 and verifies all nine table IDs in one call | ✅ done 2026-08-22 — `python3 -m app.airtable.probe`, read-only |
+| 5 | Offline payload contract tests asserting the exact wire names (`Airtable Mockup ID`, `LabOS Report Link`, `Complete LabOS JSON Response`) | next — envelope builder still to write; §4 is already encoded as data in `app/airtable/contract.py` |
 | 6 | Send §5 reply; escalate the read-side parameter structure | pending review |
+
+### 6.1 What exists now, and what it does the day the PAT arrives
+
+`ifet-management` @ `feature/labos-airtable`:
+
+| Module | Role |
+|---|---|
+| `app/airtable/client.py` | stdlib-only REST client. Write allowlist enforced **before the socket opens**; separate opt-in gate on the production base; retry classes from contract §8 encoded in the exception type. |
+| `app/airtable/errors.py` | the retry taxonomy — 422 never retried, 401/403 halts, 429/5xx/transport retried with jittered backoff. |
+| `app/airtable/contract.py` | contract §4 as data, so the schema diff is mechanical rather than by eye. **The prose contract stays authoritative; this is a view of it.** |
+| `app/airtable/probe.py` | read-only probe. `python3 -m app.airtable.probe --snapshot schema-snapshot.json`. |
+| `tests/` | 44 offline tests, stdlib `unittest`, no network and no token. |
+
+**Two deliberate constraints.** The client uses **only the standard library**, because `report-api`'s `app/`
+is bind-mounted into the running container — adding `requests` would have made the probe undeployable without
+an image rebuild, and a rebuild on this node is a scheduled event. And the probe issues **GETs only**, so it
+is safe to run against production, though there is no reason to before cutover.
+
+**On the day the PAT lands:** put it in `.env`, run the probe, and contract items §10.1, §10.2, §10.5 and
+§10.16 close with evidence, all nine table IDs are verified against the live base, and the field-ID snapshot
+that contract §9 requires for deploy-time diffs is written and committable. §10.3 does **not** close — the
+probe prints the Protocol Sections field list and says outright that it cannot judge it.
