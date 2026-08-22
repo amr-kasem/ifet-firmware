@@ -24,7 +24,13 @@ services:
       - ./deployment/logs/serial_com:/app/logs
 
     devices:
-      - /dev/ttyUSB0:/dev/ttyACM0
+      # /dev/ttyUSB0 is unstable — it's assigned by USB enumeration order and
+      # shifts (e.g. to ttyUSB1) on any adapter disconnect/reconnect, which
+      # caused a serial_service outage on the test node. Use the stable by-id
+      # path instead once the new hardware's adapter is connected: run
+      # `ls -la /dev/serial/by-id/` on the device and replace the line below
+      # with e.g. /dev/serial/by-id/usb-<VENDOR>_<PRODUCT>_<SERIAL>-if00-port0:/dev/ttyACM0
+      - /dev/serial/by-id/REPLACE_WITH_DEVICE_ID:/dev/ttyACM0
     restart: always
 
 
