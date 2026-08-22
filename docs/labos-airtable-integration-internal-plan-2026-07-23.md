@@ -3,6 +3,32 @@
 **Author:** Abdelrahman · **Date:** 2026-07-23 · **Updated:** 2026-07-29 · **Status:** Working (internal) · **Mode:** Solo
 **Companion (external) view:** the *Delivery & Progress Tracker* dashboard on Notion (Epic **IFET-32**).
 
+> ### Update 2026-08-23 — **the gate opened.** Gap I answered (with a defect), gap J closed
+> Both PATs delivered. The schema probe and a record dump ran against **both** bases — read-only, nothing
+> written to either. Evidence: **`docs/labos-airtable-live-probe-findings-2026-08-23.md`**. Canonical open items:
+> **`docs/labos-airtable-write-contract-v0.3.md` §10**, now 22 items.
+>
+> **Closed:** §10.1 `Photos` is `url` · §10.2 the four ID fields are plain text as proposed · §10.5
+> `Impact Result` is free text · §10.10 **PAT delivered** · §10.11 null/blank table verified · §10.16
+> `Test Result` is `Passed`/`Failed` — **their example was right and our contract was wrong.**
+>
+> **Gap I / §10.3 is answered** — the read side is **row-per-parameter** on `Protocol Sections`
+> (`Section Name` + free-text `Value`), which is neither option either side proposed. Addressable, so
+> **W3 is unblocked on structure.** Untyped, so the `Required Value` / `Required Unit` ask stands.
+>
+> **⚠️ New, and worse than a missing spec — §10.19.** Their PDF extractor drops blank cells instead of holding
+> the column position, so requirement values are shifted one column. Their sample job reads
+> `DP (+) (PSF) = 9` where the proposal says `+60/60`. Those values drive the rig. **Standing rule: nothing
+> reads requirements from Airtable for a live test until they fix the extractor.** W3 may be *built* against
+> the structure; it must not be *trusted* with a rig.
+>
+> **Also new:** `Test Type` has only `Static Load`, so 4 of 5 test types cannot be written (§10.17, blocking) ·
+> `Abborted` is misspelt in their base (§10.18) · `Test Date` is a `date`, so duration is unrepresentable
+> (§10.20) · confirm their automation owns the `Protocol Sections` roll-up (§10.21) · their sample uses `001`
+> where §3 specifies a UUID (§10.22).
+>
+> **Next:** verification stage 3 — a live upsert round-trip into the testing base. Last thing before W2.
+
 > ### Update 2026-08-22 — their guide **v2** landed; gap G re-based, gap I still open
 > *IFET Phase 2 · LabOS × Airtable API Integration Guide* **v2** (2026-08-17) supersedes the v1 schema doc
 > reviewed below. Delta and the outbound reply: **`docs/labos-airtable-v2-guide-reconciliation-2026-08-22.md`**.
@@ -16,7 +42,7 @@
 > requirements come out of Protocol Sections. **W3 stays blocked.**
 >
 > **PAT status:** v2 correctly contains no token. The v1 leak is remediated; LabOS never used or stored it.
-> The testing PAT is still not delivered, which is what gates every LabOS-side verification.
+> ~~The testing PAT is still not delivered~~ — **delivered 2026-08-23; see the 2026-08-23 update above.**
 
 > ### Update 2026-07-29 — the Airtable team answered; three gaps close, one new one opens
 > Their *IFET Phase 2 · LABOS Sample Schema* doc landed (sandbox base + read-only field list + a single
@@ -125,13 +151,20 @@ My recommended call for each, so nothing stalls once bindings land:
   PAT being delivered out-of-band; the v1 token leaked in their PDF and was never used by LabOS.)*
 - ~~**E · Roll-up**~~ — ✅ **CLOSED 2026-07-29.** Their §6 puts all Project/Mock-Up/Protocol roll-ups on
   Airtable automations, exactly as decision #8 proposed. LabOS writes one attempt row, nothing else.
-- **I · Read-side parameters not machine-readable** — **still blocking W3 as of 2026-08-22** (v2 did not address it; contract §10.3). `Required Testing Parameters` is
-  likely free text; the rig needs discrete values (inward/outward design pressure, hold time, loading
-  sequence, deflection points; cycles + pressure range for cyclic). Asked for discrete fields **or** one
-  versioned `Required Testing Parameters (JSON)`. *(~S for us once decided; external decision.)*
-- **J · Field-ID binding + schema-drift detection** — bind to `fld…` IDs via `schema.bases:read`, snapshot the
-  base schema into the repo, diff at deploy so an Airtable rename fails loudly at deploy rather than silently
-  mid-test. *(new work, ~S; needs the scope on the rotated token.)*
+- **I · Read-side parameters** — 🟡 **ANSWERED 2026-08-23, and it split in two.**
+  *Structure:* neither discrete fields nor versioned JSON — it is **row-per-parameter** on `Protocol
+  Sections`: one record per requirement line, `Section Name` (e.g. `DP (+) (PSF)`) + free-text `Value`.
+  Addressable, so **W3 is unblocked on structure** and the parser is ~S as estimated. Still untyped —
+  `9`, `Full` and `+60/60` share one text column and the unit lives in the *name* — so the ask for
+  `Required Value` + `Required Unit` stands (contract §10.3).
+  *Data:* ❌ **and this is the new blocker.** The values do not match the source proposal — their extractor
+  drops blank cells instead of holding column position, so everything shifts one column left (§10.19).
+  LabOS cannot detect it; every shifted value is individually plausible. **W3 may be built, not trusted.**
+  See `docs/labos-airtable-live-probe-findings-2026-08-23.md` §5.
+- ~~**J · Field-ID binding + schema-drift detection**~~ — ✅ **CLOSED 2026-08-23.** `schema.bases:read` arrived
+  on both PATs; the probe writes the `fld…`-ID snapshot and both bases are committed under
+  `docs/airtable-schema/`. Bonus: the testing base is a structural *clone* of production (identical table and
+  field IDs), so one snapshot binds both environments and a cutover cannot silently re-point.
 - **H · Firmware→mgmt `/trials` contract** — extend payload for IDs + pressure; Ref 53 (fw, off-board)
   ↔ Ref 54 (mgmt, on-board) must land together. *(coordinate across the seam)*
 
@@ -195,15 +228,24 @@ P0→P1→P4 spine and mostly my own decisions.
 `rec…` IDs ✅ · (4) roll-ups = Airtable automations ✅ · (5) photos = links ✅ (field *type* still to confirm) ·
 (6) option sets — we proposed them, awaiting acceptance · (7) sandbox base ✅ provisioned.
 
-Still open — full list with owners in `docs/labos-airtable-write-contract-v0.3.md` §10. The four that matter:
-1. **Read-side parameter structure** (gap I) — discrete fields or versioned JSON. *Gates W3.*
+**Re-baselined again 2026-08-23** against the live probe. Newly answered: (3) `Photos` field type ✅ `url` ·
+the four `Airtable … ID` fields ✅ plain text · `Impact Result` ✅ free text · **the PAT** ✅ delivered ·
+option sets ✅ read from the base rather than proposed.
+
+Still open — full list with owners in `docs/labos-airtable-write-contract-v0.3.md` §10. The ones that matter:
+0. **The proposal-extraction shift** (§10.19) — *highest severity.* Their requirement values do not match the
+   proposal PDF they came from. *Gates any live test driven from Airtable, which is the point of W3.*
+0b. **`Test Type` has one option** (§10.17) — 4 of 5 test types cannot be written back at all. *Gates W4.*
+1. **Read-side parameter structure** (gap I) — ✅ structure answered; the *typing* ask (`Required Value` /
+   `Required Unit`) remains. *W3 unblocked to build, blocked to trust.*
 2. **The requested result fields — 4 of 11 granted in v2** (`Schema Version`, `Max Pressure Achieved`,
    `Deflection Unit`, `Complete LabOS JSON Response`). Still outstanding: `Corrects Attempt ID` +
    `Correction Reason` (**blocking** — contract §10.14), `Test Name`, `Abort Reason`, `Cycles
    Required/Completed`, `Required Value/Unit`, traceability extras (all carryable in JSON — §10.15).
    *Gates W4.*
-3. **Rotated PAT** with `data.records:read` + `data.records:write` + **`schema.bases:read`**, delivered
-   out-of-band. *Gates any live call.*
+3. ~~**Rotated PAT**~~ — ✅ **CLOSED 2026-08-23.** Both PATs delivered with `schema.bases:read`, stored in the
+   gitignored `.env`, in no commit or document. **Rotate after acceptance testing:** they arrived as plaintext
+   email, the second credential-delivery leak on this project.
 4. **Writable table in its own base, or one base + LabOS write allowlist** — their "read-only on existing
    tables" guarantee isn't enforceable by a PAT (scopes are per-base, not per-table). Their choice; we
    implement the allowlist either way.

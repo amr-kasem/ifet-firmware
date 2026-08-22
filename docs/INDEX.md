@@ -20,7 +20,7 @@
 | **Field-name mapping** LabOS ↔ Airtable, and ratification status per row | Notion *[Field Mapping (Working)](https://app.notion.com/p/3a357bad43d581c68ea1c85411429cac)* | the contract's field tables |
 | **What we asked the Airtable team for, and why** | `labos-airtable-v2-guide-reconciliation-2026-08-22.md` | Notion *[Response page](https://app.notion.com/p/3ac57bad43d581c49ff9cf1e125c40c3)* · review doc `…-2026-07-29.md` (superseded, kept as the sent record) |
 | **The exact message that goes out** | reconciliation doc **§5** | review doc §7 (the 2026-07-29 message, already sent) |
-| **What we've verified, and the requests awaiting their approval** | `labos-airtable-verification-report-2026-07-29.md` | Notion *[Verification Report](https://app.notion.com/p/3ac57bad43d5811b84a2da22288d0edb)* |
+| **What we've verified against the live base** | `labos-airtable-live-probe-findings-2026-08-23.md` | `labos-airtable-verification-report-2026-07-29.md` (**historical** — the 2026-07-29 sent record) · Notion *[Verification Report](https://app.notion.com/p/3ac57bad43d5811b84a2da22288d0edb)* |
 | **Internal plan, gaps A–J, pre-closed decisions, week sequencing** | `labos-airtable-integration-internal-plan-2026-07-23.md` | Notion internal copy (private) |
 | **Cross-team schedule and per-week deliverables** | Notion *[5-Week Integration Plan](https://app.notion.com/p/3a657bad43d581e59490f53a8eeedbf6)* | — |
 | **Live task status** | Notion *Delivery & Progress Tracker* (Epic IFET-32) | — |
@@ -43,10 +43,10 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 |---|---|---|
 | `INDEX.md` | this file | current |
 | `labos-airtable-write-contract-v0.3.md` | **The spec both teams build against.** Identity, idempotency, the attempt lifecycle, retest vs. correction, the field envelope, blank rules, JSON shapes, retry classes, the live base/table IDs (§0.1), and the canonical open-items list. | **`v0.3 DRAFT`** — ratifies to `v1.0` when §10 closes |
-| `labos-airtable-v2-guide-reconciliation-2026-08-22.md` | **Current outbound artifact.** Delta against their *API Integration Guide v2*, the four things we need settled, and **§5 — the message that goes out.** | current |
+| `labos-airtable-v2-guide-reconciliation-2026-08-22.md` | Delta against their *API Integration Guide v2*, and **§5 — the correspondence record.** Its §5.0 ask was **answered on 2026-08-23** (both PATs delivered). | current — but the **outbound artifact is now `labos-airtable-live-probe-findings-2026-08-23.md` §7**, the Monday agenda |
 | `labos-airtable-live-probe-findings-2026-08-23.md` | **Evidence record for the first live probe of both bases.** What the schema actually holds, the six items it closes, the six it opens, §10.3 answered, and the proposal-extraction defect (§5.2). | current |
 | `labos-airtable-team-doc-review-2026-07-29.md` | Review of their **v1** schema doc: the verdict, ten required changes, eleven requested fields, §7 the message sent on 2026-07-29. | ⚠️ **superseded in part** by their v2 — bannered, kept verbatim as the sent record |
-| `labos-airtable-verification-report-2026-07-29.md` | Sendable report: the ownership boundary, what LabOS has verified, and the exact HTTP requests awaiting their approval. | ⚠️ **superseded in part** — bannered. Its base ID and table name are stale; the stage 1–3 request *shapes* still stand. Reissue against `app4oXS3Kd5IKWgJ7` when the PAT lands |
+| `labos-airtable-verification-report-2026-07-29.md` | The ownership boundary, and the exact HTTP requests LabOS proposed to run. | 📕 **Historical — the 2026-07-29 sent record.** Its stage 1 and 2 were **executed on 2026-08-23** against `app4oXS3Kd5IKWgJ7` and `app0OCunbmuXl7Hc9`; results live in `labos-airtable-live-probe-findings-2026-08-23.md`, which now owns this subject. Base ID and table name in the header are stale by design |
 | `labos-airtable-integration-internal-plan-2026-07-23.md` | Internal superset: gaps A–J, nine pre-closed decisions, the five-week sequencing with off-dashboard firmware work. | current (updated 2026-08-22) |
 | `labos-branch-reconcile-plan-2026-07-24.md` | Repo ↔ production reconcile. Node baselines, container audit, the safety guardrails for git on a live node, and the Step E deploy runbook. | 🔒 **CLOSED** — only Step E/F remain, folded into the next deliberate deploy |
 | `system1-sensor-vfd-debug-report-2026-07-07.md` | system-1 bring-up: sensors, the VFD-at-address-12 finding, PSF scaling. | historical record |
@@ -152,3 +152,25 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
   closed, and the substance reopened as §10.13 / §10.15 where it still matters.
 - The two 2026-07-29 documents were **bannered, not rewritten.** They are the record of what was sent; editing
   them to match today's facts would falsify the correspondence.
+
+### Fixed in the 2026-08-23 reconcile
+
+- **Subject ownership moved.** "What we've verified" now belongs to `labos-airtable-live-probe-findings-2026-08-23.md`; the 2026-07-29 verification report
+  is re-labelled **historical** rather than "superseded in part", because its stage 1 and 2 were actually
+  *executed* on 2026-08-23. Its banner now scores the plan against the outcome instead of just warning.
+- **Six §10 items closed with evidence** rather than argument, and six opened. §10 went from 16 items to 22.
+- **§10.16 closed against us** — the live base holds `Passed`/`Failed`. Their v2 example was right and the
+  contract was wrong. Recorded that way in contract §4.3, in the reconciliation doc's §6.1 post-mortem, and
+  here, because a reconcile that only ever finds the *other* side wrong is not being honest.
+- **Gap J closed, gap I answered.** The internal plan's gap list had both open; J's `fld…`-ID snapshot now
+  exists for both bases under `docs/airtable-schema/`, and I turned out to have a third answer neither side
+  had proposed (row-per-parameter).
+- **The held §5.1 message was released.** It was held so a second ask would not bury the first; Luis replied,
+  so the reason expired. It now travels with the probe findings, which is strictly better — two of its asks
+  became blockers backed by evidence.
+- **Test count 95 → 98** in the four places that cited it.
+- Stale future-tense headings ("the day the PAT arrives", "when the PAT lands") corrected — the PAT arrived.
+- Retired base `appYBTqIL43pmS0xN` now survives **only** inside the two bannered sent-records and in
+  statements that it is retired. Verified by sweep.
+- **New standing safety rule recorded in three places** (INDEX §3, contract §10.19, internal plan gap I):
+  nothing reads requirements from Airtable for a live test until their extractor is fixed.

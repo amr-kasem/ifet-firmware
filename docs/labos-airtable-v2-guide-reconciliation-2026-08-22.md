@@ -301,11 +301,13 @@ Kept for reference; §5.0 is what actually went out.
 | 2 | Retire base `appYBTqIL43pmS0xN` from all live docs; banner the two 2026-07-29 sent docs | ✅ done 2026-08-22 |
 | 3 | Airtable API client with a **hard write allowlist** of `tblnc9SsbXU0C0FWh` (§4) | ✅ done 2026-08-22 — `ifet-management` `app/airtable/client.py` |
 | 4 | Schema probe — closes contract §10.1/.2/.5/.16 and verifies all nine table IDs in one call | ✅ done 2026-08-22 — `python3 -m app.airtable.probe`, read-only |
-| 5 | Offline payload contract tests asserting the exact wire names (`Airtable Mockup ID`, `LabOS Report Link`, `Complete LabOS JSON Response`) | ✅ done 2026-08-22 — `app/airtable/envelope.py`, 95 tests |
+| 5 | Offline payload contract tests asserting the exact wire names (`Airtable Mockup ID`, `LabOS Report Link`, `Complete LabOS JSON Response`) | ✅ done 2026-08-22 — `app/airtable/envelope.py`; **98 tests** after the 2026-08-23 option-translation work |
 | 6 | Send the reply; escalate the read-side parameter structure | ✅ **sent 2026-08-22 to Luis** (§5.0) |
-| 7 | **Write-back field requirements (§5.1)** — drafted; §10.13/.14/.15/.16 remain un-raised | 🟡 **HELD by decision** — awaiting the Airtable team's reply to §5.0, so a second ask does not bury the first. Send anyway if that reply does not arrive; §10.14 has the longest lead time and is token-independent |
+| 7 | **Write-back field requirements (§5.1)** — drafted; §10.13/.14/.15/.16 remain un-raised | ✅ **RELEASED 2026-08-23.** The hold existed so a second ask would not bury the first; Luis replied, so the reason is gone. They now travel **with** the probe findings, which is strictly better — §10.16 is closed by evidence rather than argued, and §10.13 is sharpened by §10.20. Agenda: `labos-airtable-live-probe-findings-2026-08-23.md` §7 |
+| 8 | **Live probe of both bases** — the whole point of items 3–5 | ✅ **done 2026-08-23.** Read-only, both bases, nothing written. Six §10 items closed, six opened, §10.3 answered. `labos-airtable-live-probe-findings-2026-08-23.md` |
+| 9 | **Wire-level option translation** — send the base's spelling, not ours | ✅ done 2026-08-23 — `Pass`→`Passed`, `Fail`→`Failed`, `Aborted`→`Abborted` (§10.16, §10.18) |
 
-### 6.1 What exists now, and what it does the day the PAT arrives
+### 6.1 What exists now — and what it did when the PAT arrived
 
 `ifet-management` @ `feature/labos-airtable`:
 
@@ -316,19 +318,31 @@ Kept for reference; §5.0 is what actually went out.
 | `app/airtable/contract.py` | contract §4 / §5 / §5.1 as data, so the schema diff and the payload validation are mechanical rather than by eye. **The prose contract stays authoritative; this is a view of it.** |
 | `app/airtable/envelope.py` | Builds the wire payload. LabOS names in, their names out; §5 blank rules; §5.1 matrix; the `Test Date` workaround; the JSON-valve overflow for fields they have not created. |
 | `app/airtable/probe.py` | read-only probe. `python3 -m app.airtable.probe --snapshot schema-snapshot.json`. |
-| `tests/` | 95 offline tests, stdlib `unittest`, no network and no token. |
+| `tests/` | **98** offline tests, stdlib `unittest`, no network and no token. |
 
 **Two deliberate constraints.** The client uses **only the standard library**, because `report-api`'s `app/`
 is bind-mounted into the running container — adding `requests` would have made the probe undeployable without
 an image rebuild, and a rebuild on this node is a scheduled event. And the probe issues **GETs only**, so it
 is safe to run against production, though there is no reason to before cutover.
 
-**On the day the PAT lands:** put it in `.env`, run the probe, and contract items §10.1, §10.2, §10.5 and
-§10.16 close with evidence, all nine table IDs are verified against the live base, and the field-ID snapshot
-that contract §9 requires for deploy-time diffs is written and committable. Feed that snapshot's option sets
-into the envelope builder and the payload is validated against what the base **actually accepts** rather than
-what the contract wishes it accepted. §10.3 does **not** close — the probe prints the Protocol Sections field
-list and says outright that it cannot judge it.
+**The PAT landed on 2026-08-23, and this is what it did.** Recorded here because the prediction is worth
+scoring against the outcome:
+
+Everything above happened as written — §10.1, §10.2, §10.5 and §10.16 closed with evidence, the table IDs
+verified against both live bases, and the field-ID snapshots are committed under `docs/airtable-schema/`.
+Feeding the snapshot's option sets into the envelope builder did exactly what it was built for: it caught
+that the base spells the options `Passed` / `Failed` / `Abborted`, and that `Test Type` has only one option.
+
+Two things the prediction got wrong, both in the same direction — **it assumed the base would be right and
+only our contract could be wrong**:
+
+- §10.16 did not close in our favour. **Their v2 example was correct and this contract was wrong.**
+- §10.3 *is* answered after all — not by the probe's schema view, but by reading their populated records. The
+  structure is row-per-parameter on `Protocol Sections`. And the data in it **does not match the source
+  proposal PDF** (§10.19) — a class of defect no schema probe could ever have surfaced, because the schema is
+  fine and the values are wrong.
+
+Full evidence: `labos-airtable-live-probe-findings-2026-08-23.md`.
 
 ### 6.2 One design decision worth ratifying with the team
 

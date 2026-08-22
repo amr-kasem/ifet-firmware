@@ -1,28 +1,42 @@
 # LabOS ↔ Airtable — Integration Status & Verification Report
 
-**From:** LabOS (Abdelrahman) · **Date:** 2026-07-29
-**Sandbox base:** `appYBTqIL43pmS0xN` — *IFET Test Base For LabOS*
+**From:** LabOS (Abdelrahman) · **Date:** 2026-07-29 · **Status:** historical sent record (see banner)
+**Sandbox base:** ~~`appYBTqIL43pmS0xN`~~ — *retired 2026-08-22; see banner*
 **Companion:** *LabOS Response — Airtable Schema Review & Write Contract v0.2*
 
 
-> ### ⚠️ Superseded in part — read this first
+> ### 📕 Historical — this is the 2026-07-29 sent record. Read this first
 >
-> This document is the **record of what LabOS sent on 2026-07-29**, kept verbatim so the correspondence stays
-> auditable. It reviews the Airtable team's **v1** schema doc.
+> Kept **verbatim** so the correspondence stays auditable. It reviews the Airtable team's **v1** schema doc and
+> proposes a three-stage verification. Nothing below has been rewritten, and it should not be.
 >
-> They replied with **v2 of the integration guide on 2026-08-17**, which changed the base IDs, published real
-> table IDs, granted four of the eleven requested fields, and removed several fields this document assumes.
-> **Nothing below has been rewritten to match.**
+> **What actually happened since.** Their **v2 guide (2026-08-17)** changed the base IDs, published real table
+> IDs, granted four of eleven requested fields, and removed several fields this document assumes. Then on
+> **2026-08-23 they delivered both PATs**, and LabOS ran the plan in §4:
+>
+> | This document proposed | Outcome |
+> |---|---|
+> | **Stage 1** — offline contract tests, no access needed | ✅ **run** — 98 offline tests, no network, no token |
+> | **Stage 2** — read-only requests against the base | ✅ **run 2026-08-23** against *both* `app4oXS3Kd5IKWgJ7` and `app0OCunbmuXl7Hc9`. GETs only; nothing was written to either |
+> | **Stage 3** — a write round-trip into the results table | ⏳ **not yet run** — the last thing standing before W2 |
+>
+> The stage shapes held up; §5's asks are largely answered or overtaken. **This document no longer owns the
+> "what we've verified" subject** — `labos-airtable-live-probe-findings-2026-08-23.md` does.
 >
 > For the current position, read:
-> - **`labos-airtable-write-contract-v0.3.md` §0** — what v2 changed, and the live base/table IDs
+> - **`labos-airtable-live-probe-findings-2026-08-23.md`** — what the live bases actually hold, six items closed, six opened, and the Monday agenda (§7)
 > - **`labos-airtable-write-contract-v0.3.md` §10** — the canonical open-items list (this doc's §5 is a
 >   stale view of it)
-> - **`labos-airtable-v2-guide-reconciliation-2026-08-22.md`** — the v2 delta and the outbound reply
+> - **`labos-airtable-write-contract-v0.3.md` §0** — the live base/table IDs, now confirmed against the API
 >
 > In particular: base `appYBTqIL43pmS0xN` and the table name `LabOS Raw Test Results` **no longer apply.**
 > The testing base is `app4oXS3Kd5IKWgJ7` and the writable table is `LabOS Raw Data Table`
 > (`tblnc9SsbXU0C0FWh`).
+>
+> **Of §5's six asks:** 1 and 2 (token + schema scope) ✅ closed · 3 (approval for stages 2–3) — stage 2 was
+> invited and run, stage 3 still needs their go-ahead · 4 (machine-readable parameters) 🟡 answered with a
+> defect, contract §10.3 + §10.19 · 5 (the 11 fields) 🟡 4 granted · 6 (`Testing End Date`) ⬛ moot, v2 removed
+> both date fields and replaced them with a single `Test Date` — reopened as §10.13/§10.20.
 
 ---
 
