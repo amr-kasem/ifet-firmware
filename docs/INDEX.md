@@ -59,6 +59,14 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 | `deployment/SECRETS.md` | Where every credential lives, the secret-hygiene guard, and the **gated** migration runbook for the production management node. | current — P0 built and rehearsed, **deployment gated** |
 | `src/management_service/DATABASE_MIGRATIONS.md` | Alembic usage. | pre-existing |
 
+### Airtable (theirs — read-only to us)
+
+| Resource | Link / ID | Notes |
+|---|---|---|
+| Production dashboard | [interface page](https://airtable.com/app0OCunbmuXl7Hc9/pagGRZZBAH691m3x5) | Human-facing only; interface pages are not exposed by the Meta API. Confirms production base `app0OCunbmuXl7Hc9`. |
+| Testing base | `app4oXS3Kd5IKWgJ7` | Where LabOS builds. Contract §0.1. |
+| Write target | `tblnc9SsbXU0C0FWh` | The only writable surface. |
+
 ### Notion — [LabOS hub](https://app.notion.com/p/3a357bad43d5818cb726d24c5e803c69)
 
 | Page | Audience | Status |

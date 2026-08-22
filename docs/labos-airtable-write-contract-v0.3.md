@@ -65,12 +65,22 @@ specification for Protocol Sections. **This gates W3.**
 > stays disabled until the Airtable team formally enables it after acceptance testing. LabOS must not treat a
 > successful production write as an integrated result until that switch is thrown.
 
+**Airtable-side dashboard (production):**
+`https://airtable.com/app0OCunbmuXl7Hc9/pagGRZZBAH691m3x5` — the "Dashboards" link referenced in v2 §1.
+`pag…` is an **interface page**, not a table: the Meta API does not expose interface pages, so nothing here
+can read or verify it. It is a human-facing view of the production base, useful for understanding the
+hierarchy the demo video walks through. LabOS points at neither this page nor its base.
+
 ### 0.2 Verify before trusting this section
 
 Every ID above is transcribed from a PDF. v2 §2 itself says to confirm live IDs against the schema endpoint
 before any production cutover. The probe harness (§10.11) does exactly that and diffs the live schema against
 this document — so the first thing that happens when the PAT arrives is that these tables get checked, not
 assumed.
+
+**One ID is already confirmed from a second source.** The production base in the dashboard URL above,
+`app0OCunbmuXl7Hc9`, matches the value transcribed from their PDF exactly. The other eight remain
+single-sourced until the probe runs.
 
 ---
 
