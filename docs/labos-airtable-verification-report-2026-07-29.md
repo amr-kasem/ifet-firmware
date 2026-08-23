@@ -16,7 +16,7 @@
 >
 > | This document proposed | Outcome |
 > |---|---|
-> | **Stage 1** — offline contract tests, no access needed | ✅ **run** — 98 offline tests, no network, no token |
+> | **Stage 1** — offline contract tests, no access needed | ✅ **run** — 132 offline tests, no network, no token |
 > | **Stage 2** — read-only requests against the base | ✅ **run 2026-08-23** against *both* `app4oXS3Kd5IKWgJ7` and `app0OCunbmuXl7Hc9`. GETs only; nothing was written to either |
 > | **Stage 3** — a write round-trip into the results table | ⏳ **not yet run** — the last thing standing before W2 |
 >

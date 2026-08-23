@@ -1,7 +1,7 @@
 # LabOS ↔ Airtable Integration — Readiness Report
 
 **As of:** 2026-08-23 · **Epic:** IFET-32 · **Author:** Abdelrahman
-**Contract:** `v0.3 DRAFT` · **Week:** 1 of 5, closing
+**Contract:** `v0.3 DRAFT` · **Week:** 2 of 5 · **Last updated:** 2026-08-23 (end of W2/P1)
 
 > **What this document is.** One readable place to see where the integration stands, what has been built, what
 > has been proven against the live system, and what is genuinely left. It is a **view** — the authoritative
@@ -36,12 +36,15 @@ session is booked for **Monday 2026-08-25**, where both items above are the agen
 | **Airtable API client** | 🟢 Built · verified live | Write allowlist, retry classes, rate limiting. Talked to both bases today. |
 | **Schema probe** | 🟢 Built · run against both bases | Read-only. Closed six contract items in one run. |
 | **Payload envelope builder** | 🟢 Built · corrected against live schema | Now sends the base's own option spellings. |
-| **Offline test suite** | 🟢 98 tests passing | stdlib only, no network, no token needed. |
+| **Offline test suite** | 🟢 **132** tests passing | stdlib only, no network, no token needed. |
 | **Field-ID snapshots** | 🟢 Captured, both bases | Committed. Makes an Airtable rename a non-event. |
 | **Secret handling** | 🟢 Done | Tokens in a gitignored `.env`; never in git, docs, or browser-served config. |
 | **Reading requirements (W3)** | 🟡 Unblocked to build · **not safe to trust** | Structure understood. The *data* is wrong — see below. |
 | **Writing results back (W4)** | 🟡 Partially blocked | Only static-load results can be written today. |
 | **Live write round-trip** | ⚪ Not yet run | Ready to go. Needs the Airtable team's go-ahead. |
+| **Attempt schema (W2 / P1)** | 🟢 Built · migration rehearsed | Append-only attempts, Airtable linkage, JSON columns. **Not deployed.** |
+| **ORM → payload mapping** | 🟢 Built | A stored attempt now produces a contract-valid Airtable payload. |
+| **Migration delivery** | 🟢 Fixed | Migrations were gitignored and lived only on the node; the real chain is now in git. |
 | **Corrections vs. retests** | 🔴 Blocked | Two fields still absent; the builder refuses to fake it. |
 | **Firmware P3 (rig capture)** | 🟡 Write + unit-test only | **No test rig** — the non-production node has been offline since ~2026-07-24. |
 | **Production deployment** | ⚪ Deliberately gated | Nothing deployed. Nothing should be yet — see [Deployment posture](#deployment-posture). |
@@ -62,7 +65,7 @@ All of it lives on integration branches — `feature/labos-airtable` in `ifet-ma
 | `app/airtable/contract.py` | The written contract, as data | Lets the schema diff and payload validation be mechanical instead of by eye. The prose contract stays authoritative. |
 | `app/airtable/envelope.py` | Builds the outgoing record | Translates LabOS's vocabulary to Airtable's at the wire boundary — field names *and*, since today, option values. |
 | `app/airtable/probe.py` | Read-only schema probe | Issues `GET`s and nothing else, so it is safe to point at production. One call answers questions that would otherwise cost an email round-trip each. |
-| `tests/` | 98 offline tests | No network, no token. The fixtures now mirror the real base, including its quirks. |
+| `tests/` | **132** offline tests | No network, no token. The fixtures mirror the real base, including its quirks. |
 
 **Two constraints were chosen deliberately, and both paid off today:**
 

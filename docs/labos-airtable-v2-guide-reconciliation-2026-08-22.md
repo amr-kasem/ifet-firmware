@@ -301,7 +301,7 @@ Kept for reference; §5.0 is what actually went out.
 | 2 | Retire base `appYBTqIL43pmS0xN` from all live docs; banner the two 2026-07-29 sent docs | ✅ done 2026-08-22 |
 | 3 | Airtable API client with a **hard write allowlist** of `tblnc9SsbXU0C0FWh` (§4) | ✅ done 2026-08-22 — `ifet-management` `app/airtable/client.py` |
 | 4 | Schema probe — closes contract §10.1/.2/.5/.16 and verifies all nine table IDs in one call | ✅ done 2026-08-22 — `python3 -m app.airtable.probe`, read-only |
-| 5 | Offline payload contract tests asserting the exact wire names (`Airtable Mockup ID`, `LabOS Report Link`, `Complete LabOS JSON Response`) | ✅ done 2026-08-22 — `app/airtable/envelope.py`; **98 tests** after the 2026-08-23 option-translation work |
+| 5 | Offline payload contract tests asserting the exact wire names (`Airtable Mockup ID`, `LabOS Report Link`, `Complete LabOS JSON Response`) | ✅ done 2026-08-22 — `app/airtable/envelope.py`; **132 tests** after the 2026-08-23 option-translation and P1 work |
 | 6 | Send the reply; escalate the read-side parameter structure | ✅ **sent 2026-08-22 to Luis** (§5.0) |
 | 7 | **Write-back field requirements (§5.1)** — drafted; §10.13/.14/.15/.16 remain un-raised | ✅ **RELEASED 2026-08-23.** The hold existed so a second ask would not bury the first; Luis replied, so the reason is gone. They now travel **with** the probe findings, which is strictly better — §10.16 is closed by evidence rather than argued, and §10.13 is sharpened by §10.20. Agenda: `labos-airtable-live-probe-findings-2026-08-23.md` §7 |
 | 8 | **Live probe of both bases** — the whole point of items 3–5 | ✅ **done 2026-08-23.** Read-only, both bases, nothing written. Six §10 items closed, six opened, §10.3 answered. `labos-airtable-live-probe-findings-2026-08-23.md` |
@@ -318,7 +318,7 @@ Kept for reference; §5.0 is what actually went out.
 | `app/airtable/contract.py` | contract §4 / §5 / §5.1 as data, so the schema diff and the payload validation are mechanical rather than by eye. **The prose contract stays authoritative; this is a view of it.** |
 | `app/airtable/envelope.py` | Builds the wire payload. LabOS names in, their names out; §5 blank rules; §5.1 matrix; the `Test Date` workaround; the JSON-valve overflow for fields they have not created. |
 | `app/airtable/probe.py` | read-only probe. `python3 -m app.airtable.probe --snapshot schema-snapshot.json`. |
-| `tests/` | **98** offline tests, stdlib `unittest`, no network and no token. |
+| `tests/` | **132** offline tests, stdlib `unittest`, no network and no token. |
 
 **Two deliberate constraints.** The client uses **only the standard library**, because `report-api`'s `app/`
 is bind-mounted into the running container — adding `requests` would have made the probe undeployable without

@@ -3,6 +3,63 @@
 **Maintained by:** Abdelrahman · **Reconciled:** 2026-08-23 (previously 2026-08-22)
 **Scope:** every LabOS ↔ Airtable integration and status document, across both repos and Notion.
 
+---
+
+## 0. Resume here — state as of 2026-08-23
+
+*Written so a session starting cold can pick up without reconstructing anything. If this section and §3
+disagree, §3 is newer and this one is the bug.*
+
+### Where the work is
+
+| | |
+|---|---|
+| `ifet-firmware` | `feature/labos-firmware-p3` — docs only, pushed, clean |
+| `ifet-management` | `feature/labos-airtable` — all integration code, pushed, clean |
+| **Deployed** | **Nothing.** Both branches are unmerged; production runs `latest` untouched |
+| Tokens | Both Airtable PATs live in `ifet-management/.env` (gitignored, mode 600). **Never** in git, docs, or a browser-served config |
+
+### What is done
+
+- **Airtable client, schema probe, envelope builder** — built, and verified against the live bases.
+- **The probe ran against both bases** on 2026-08-23, read-only. Six contract items closed, six opened.
+- **W2 / P1 complete** — append-only attempt schema, Airtable linkage, JSON columns, ORM→envelope mapping,
+  identity + lifecycle, both `/trials` endpoints wired. **132 offline tests**, stdlib-only.
+- **Migration delivery fixed** — migrations were gitignored and the chain lived only on the node; the real
+  30-revision chain is now in git, and `startup.sh` no longer autogenerates schema at boot.
+
+### The three things that matter most
+
+1. **⚠️ Airtable's requirement data is wrong.** Their PDF extractor drops blank cells, so values shift one
+   column: their sample job reads `DP (+) (PSF) = 9` where the proposal says `+60/60`. Those values drive the
+   rig. **Standing rule: nothing reads requirements from Airtable for a live test until they fix it.**
+   Contract §10.19 · findings §5.2.
+2. **A Monday message is written and unsent** — `labos-airtable-live-probe-findings-2026-08-23.md` §8. Luis
+   was away for the weekend; a joint testing session is booked. Stamp the *Sent* line when it goes.
+3. **⚠️ Deploy hazard.** Until the `startup.sh` change ships, every container restart appends a no-op
+   revision on the node and moves the head. Deploy `startup.sh` **and** the P1 migration together, and
+   re-confirm `SELECT * FROM alembic_version;` still returns `3a65a83e0463` immediately beforehand — a head
+   we do not descend from means two heads and `upgrade head` silently refuses.
+
+### Pick up with any of these — none are blocked
+
+- Send the Monday message (§8 above), then run **verification stage 3** — one live upsert round-trip into the
+  testing base. That is the last step before W3/W4.
+- **Notion is four pages behind** — Field Mapping, Response, Verification Report, 5-Week Plan.
+- **Firmware `/trials` seam** (gap H, Refs 53 ↔ 54) — must land on both sides together.
+- Answer the open question in `labos-p1-schema-and-migration-mechanism-2026-08-23.md` §7: may an operator
+  edit a *terminal* attempt's notes/photos? Likely split — artifacts appendable, results require a correction.
+
+### Two practical notes
+
+- **Rehearsing the migration needs SQLAlchemy**, which is not on the system Python. Rebuild the throwaway env
+  with `uv venv <dir> && VIRTUAL_ENV=<dir> uv pip install sqlalchemy alembic`, then
+  `<dir>/bin/python tests/rehearse_p1_migration.py /tmp/x.db`.
+- **Reaching a node:** use the `ifet-ssh` skill. Mutating commands are blocked by the auto-mode classifier and
+  have to be handed to the user; read-only ones run fine. Session record:
+  `ifet-ssh-session-record-2026-08-23.md`.
+
+
 > **Why this file exists.** The same fact was living in five places and starting to drift — three different
 > open-item lists, a contract version that had moved on, a P0 task marked "next" after it was done, and a VFD
 > Modbus address in the config docs that production stopped using in July. This index fixes the pattern rather
@@ -103,11 +160,11 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 | **Write target** | `LabOS Raw Data Table` — `tblnc9SsbXU0C0FWh`. **The only writable surface**; LabOS enforces the allowlist client-side, since PAT scopes are per-base not per-table. |
 | **Token** | ✅ **Both PATs delivered 2026-08-23** (testing + production), stored in the gitignored `.env`, in no commit or document. **Rotate after acceptance testing** — they arrived as plaintext email. |
 | **Requested fields** | **4 of 11 granted** in v2: `Schema Version`, `Max Pressure Achieved`, `Deflection Unit`, `Complete LabOS JSON Response`. All 28 promised fields confirmed live. |
-| **Done** | branch reconcile (closed) · schema review + reply · write contract v0.3 · v2 reconciliation + reply · Airtable client, schema probe and envelope builder (`feature/labos-airtable`) · P0/Ref 42 secret store (`bf4db01`, built + rehearsed off-node, **not deployed**) · **live probe of both bases + wire-level option translation, 98 tests (2026-08-23)** |
+| **Done** | branch reconcile (closed) · schema review + reply · write contract v0.3 · v2 reconciliation + reply · Airtable client, schema probe and envelope builder (`feature/labos-airtable`) · P0/Ref 42 secret store (`bf4db01`, built + rehearsed off-node, **not deployed**) · **live probe of both bases · wire-level option translation · W2/P1 attempt schema — 132 tests (2026-08-23)** |
 | **Awaiting their reply** | Luis replied 2026-08-23 with both PATs and pointed us at the populated proposal data; he is away until Monday, when a joint testing session is booked. The §5.1 write-back asks are no longer held — they go **with** the probe findings, since the probe turned two of them into blockers with evidence. Agenda: `labos-airtable-live-probe-findings-2026-08-23.md` §7. |
 | **Blocked on the Airtable team** | **the proposal-extraction shift (§10.19) — highest severity: their sample job carries `DP = 9 PSF` where the PDF says `+60/60`, and LabOS cannot detect it** · `Test Type` has only one option, so 4 of 5 test types cannot be written (§10.17) · `Corrects Attempt ID` + `Correction Reason` (§10.14) · typed `Required Value`/`Required Unit` (§10.3) · the `Test Date` collapse (§10.13/§10.20) · confirm the write model (§10.21) |
 | **Blocked on the manager** | test node up and reachable — offline since ~2026-07-24, so there is **no non-production rig** for firmware P3 |
-| **Verified against the live base** | Airtable API client + write allowlist · schema probe (run against both bases, snapshots in `docs/airtable-schema/`) · payload envelope builder with wire-level option translation · **98 offline tests** — all in `ifet-management` @ `feature/labos-airtable`, stdlib-only so none of it needs a production image rebuild |
+| **Verified against the live base** | Airtable API client + write allowlist · schema probe (run against both bases, snapshots in `docs/airtable-schema/`) · payload envelope builder with wire-level option translation · attempt schema + ORM→envelope mapping · **132 offline tests** — all in `ifet-management` @ `feature/labos-airtable`, stdlib-only so none of it needs a production image rebuild |
 | **Not blocked** | **verification stage 3 — a live upsert round-trip into the testing base** · sync worker + durable queue (W4) · firmware P3 pressure and per-gauge deflection capture (write + unit-test only, no rig) |
 | **W2 / P1** | ✅ **complete + rehearsed 2026-08-23** — attempt schema, Airtable linkage, JSON columns, ORM→envelope mapping, identity + lifecycle, both `/trials` endpoints wired, **132 offline tests**. Migration is tracked and rehearsed both directions. **Not deployed.** Evidence: `labos-p1-schema-and-migration-mechanism-2026-08-23.md` |
 | **Newly known about production** | Migrations are **gitignored and bind-mounted from the node**, and `startup.sh` autogenerates one on **every container restart** (28 empty no-ops since January). A `models.py` change merged to `latest` therefore alters the production schema at the next restart with no review. Documented, not yet changed. |

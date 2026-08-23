@@ -54,6 +54,16 @@ Use the `ifet-ssh` skill to reach any of them.
 
 ## Current work
 
-LabOS ↔ Airtable integration, Epic IFET-32, week 1 of 5. Integration branches:
-`feature/labos-firmware-p3` here, `feature/labos-airtable` in `ifet-management`.
-Status snapshot and what's blocked on whom: `docs/INDEX.md` §3.
+LabOS ↔ Airtable integration, Epic IFET-32, **week 2 of 5**. Integration branches:
+`feature/labos-firmware-p3` here, `feature/labos-airtable` in `ifet-management`. **Nothing is deployed.**
+
+**Start at `docs/INDEX.md` §0 ("Resume here")** — current state, what is blocked on whom, and what to pick up.
+
+Two standing cautions that outlive any one session:
+
+1. **Do not drive a rig from Airtable requirement values.** Their PDF extractor shifts values one column, so a
+   60 PSF requirement reads as 9. LabOS cannot detect it — every shifted value is individually plausible.
+   Contract §10.19.
+2. **The `ifet-management` repo is not ground truth for database migrations — the node is.** Migrations were
+   gitignored and the chain lived only on `management`. Before any schema work, check
+   `SELECT * FROM alembic_version;` on the live database rather than trusting the repo.

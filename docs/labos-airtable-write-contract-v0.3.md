@@ -555,7 +555,7 @@ The harness is built now, ahead of the token (item 10), so the answers land the 
 | `app/airtable/probe.py` | The read-only schema probe described above. |
 | `app/airtable/envelope.py` | Builds the wire payload from LabOS values — §4 names, §5 blank rules, §5.1 matrix, the §10.13 `Test Date` workaround, and the §10.15 JSON-valve overflow. |
 | `app/airtable/contract.py` | §4 / §5 / §5.1 as data. **This prose document stays authoritative; that file is a view of it.** |
-| `tests/` | **98** offline tests — no network, no token. |
+| `tests/` | **132** offline tests — no network, no token. |
 
 Stdlib only, deliberately: `report-api`'s `app/` is bind-mounted, so none of this needs an image rebuild of a
 production container to run.
