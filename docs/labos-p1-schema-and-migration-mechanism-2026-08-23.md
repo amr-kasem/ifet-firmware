@@ -160,8 +160,28 @@ Asserted, and passing:
 
 | | |
 |---|---|
-| **Done** | Models, migration (rehearsed both directions), ORM→envelope mapping, 119 offline tests |
-| **Blocked on one local command** | `alembic/versions/` is root-owned (container-created), so the migration file cannot be moved into place: `sudo chown -R gad:gad src/management_service/alembic/versions uploads` |
+| **Done** | Models · the migration, **now tracked** and rehearsed both directions · ORM→envelope mapping · attempt identity + lifecycle · both `/trials` endpoints wired · **132 offline tests** |
+| **Unblocked** | `alembic/versions/` was root-owned *and* gitignored, so a hand-written migration could not be committed at all. Both fixed — the directory was chowned, and `.gitignore` now excludes only `*_auto_generated_migration.py` |
 | **Not deployed** | Nothing has been deployed. Merging to `latest` and restarting is what applies this, and that is a scheduled decision |
 | **Recommended follow-up** | Remove `command.revision(autogenerate=True)` from `startup.sh` — needs an image rebuild, so fold it into the next deliberate deploy |
-| **Next in W2** | Wire `labos_attempt_id` / lifecycle into the `/trials` write path, and the firmware `/trials` seam (gap H) |
+| **Next in W2** | The firmware `/trials` seam (gap H), and the open question in §7 |
+
+## 7. One question P1 deliberately left open
+
+`PUT /test-results/{id}` still lets an operator attach a note or photo **after** an attempt is terminal.
+
+Contract §3 says a terminal attempt is final and LabOS never rewrites it, so such an edit cannot reach
+Airtable — the local record and the synced record diverge silently. Three possible answers:
+
+1. **Block the edit** once terminal. Correct by the contract, but it would change how operators use the UI
+   today, and notes are often added after a test finishes.
+2. **Allow it and re-sync.** Violates §3 — the whole point is that a written result is evidence.
+3. **Record it as a correction** — a new attempt carrying `corrects_attempt_id`. Contract-correct, but heavy
+   for "I forgot to attach a photo".
+
+Most likely the honest answer splits the difference: *artifacts* (photos, report links) are not results and
+can be appended, while *results* (values, pass/fail) require a correction. That needs confirming with Luis,
+because it decides what the Airtable record means.
+
+Not resolved unilaterally here: it is a behaviour change to a production endpoint, and picking wrong is worse
+than leaving it visible.
