@@ -41,10 +41,28 @@ disagree, §3 is newer and this one is the bug.*
    re-confirm `SELECT * FROM alembic_version;` still returns `3a65a83e0463` immediately beforehand — a head
    we do not descend from means two heads and `upgrade head` silently refuses.
 
-### Pick up with any of these — none are blocked
+### The shortest path — do these two, in this order
 
-- Send the Monday message (§8 above), then run **verification stage 3** — one live upsert round-trip into the
-  testing base. That is the last step before W3/W4.
+**1. Send the Monday message.** Authoritative wording is
+`labos-airtable-live-probe-findings-2026-08-23.md` **§8** — send it as written, don't re-draft it. The call is
+**Monday 2026-08-25** with Luis; §7 is the agenda, ordered by what blocks the most. When it goes out, stamp the
+*Sent* line at the end of §8 the same day.
+
+**2. Then verification stage 3** — one live upsert round-trip into the **testing** base. The last step before
+W3/W4. Three things to know before running it:
+
+- **It is gated on Luis's explicit OK**, which is exactly what the §8 message asks for ("For Monday", item 3).
+  Send first, get the go-ahead on the call, then run. Production base `app0OCunbmuXl7Hc9` is never touched.
+- **⚠️ The stage 3 spec in `labos-airtable-verification-report-2026-07-29.md` is stale — do not run its payload
+  as written.** It targets the retired sandbox `appYBTqIL43pmS0xN` / `LabOS Raw Test Results`, and sends
+  `Testing Start Date` / `Testing End Date`, which do not exist on the live table (it is `Test Date`, and it is
+  date-only — §10.20). The *fourteen checks* it describes still stand; re-point them at the real target from
+  contract **§0.1 + §2**: `PATCH .../app4oXS3Kd5IKWgJ7/tblnc9SsbXU0C0FWh`, upsert on `LabOS Attempt ID`.
+- **The test record must be `Static Load`.** Four of the five test types are refused by the live `Test Type`
+  option set (§10.17), so static load is the only type that can be written back at all until item 2 lands.
+
+### After that — none of these are blocked either
+
 - **Notion is four pages behind** — Field Mapping, Response, Verification Report, 5-Week Plan.
 - **Firmware `/trials` seam** (gap H, Refs 53 ↔ 54) — must land on both sides together.
 - Answer the open question in `labos-p1-schema-and-migration-mechanism-2026-08-23.md` §7: may an operator
@@ -165,7 +183,7 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 | **Blocked on the Airtable team** | **the proposal-extraction shift (§10.19) — highest severity: their sample job carries `DP = 9 PSF` where the PDF says `+60/60`, and LabOS cannot detect it** · `Test Type` has only one option, so 4 of 5 test types cannot be written (§10.17) · `Corrects Attempt ID` + `Correction Reason` (§10.14) · typed `Required Value`/`Required Unit` (§10.3) · the `Test Date` collapse (§10.13/§10.20) · confirm the write model (§10.21) |
 | **Blocked on the manager** | test node up and reachable — offline since ~2026-07-24, so there is **no non-production rig** for firmware P3 |
 | **Verified against the live base** | Airtable API client + write allowlist · schema probe (run against both bases, snapshots in `docs/airtable-schema/`) · payload envelope builder with wire-level option translation · attempt schema + ORM→envelope mapping · **132 offline tests** — all in `ifet-management` @ `feature/labos-airtable`, stdlib-only so none of it needs a production image rebuild |
-| **Not blocked** | **verification stage 3 — a live upsert round-trip into the testing base** · sync worker + durable queue (W4) · firmware P3 pressure and per-gauge deflection capture (write + unit-test only, no rig) |
+| **Not blocked** | **verification stage 3 — a live upsert round-trip into the testing base** (nothing engineering-side is blocking; it needs **Luis's OK on Monday's call**, which the §8 message asks for, and its July payload spec is stale — see §0) · sync worker + durable queue (W4) · firmware P3 pressure and per-gauge deflection capture (write + unit-test only, no rig) |
 | **W2 / P1** | ✅ **complete + rehearsed 2026-08-23** — attempt schema, Airtable linkage, JSON columns, ORM→envelope mapping, identity + lifecycle, both `/trials` endpoints wired, **132 offline tests**. Migration is tracked and rehearsed both directions. **Not deployed.** Evidence: `labos-p1-schema-and-migration-mechanism-2026-08-23.md` |
 | **Newly known about production** | Migrations are **gitignored and bind-mounted from the node**, and `startup.sh` autogenerates one on **every container restart** (28 empty no-ops since January). A `models.py` change merged to `latest` therefore alters the production schema at the next restart with no review. Documented, not yet changed. |
 

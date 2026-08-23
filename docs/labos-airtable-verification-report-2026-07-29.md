@@ -183,6 +183,13 @@ ID, and its option list, with each of our open questions marked answered or stil
 
 ### Stage 3 — writing to `LabOS Raw Test Results` only · *needs your explicit approval*
 
+> **⚠️ Do not run the payload below as written — it is the July draft.** The base `appYBTqIL43pmS0xN`, the table
+> name `LabOS Raw Test Results`, and the `Testing Start Date` / `Testing End Date` keys are all retired: the
+> live table has a single date-only `Test Date` (§10.20). The **fourteen checks below still stand** — run them
+> against the real target from `labos-airtable-write-contract-v0.3.md` §0.1 + §2:
+> `PATCH .../app4oXS3Kd5IKWgJ7/tblnc9SsbXU0C0FWh`, upserting on `LabOS Attempt ID`. The record must use
+> `Test Type: Static Load` — the live option set refuses the other four (§10.17).
+
 Fourteen small, deliberate checks against the sandbox results table, grouped by what they confirm:
 
 | Group | What it confirms |
