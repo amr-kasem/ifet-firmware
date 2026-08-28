@@ -301,6 +301,7 @@ were finished while the board still read `To Do` / `Backlog`. Everything below i
 
 | Notion page | What was done |
 |---|---|
+| **📌 LabOS × Airtable — Project Status & Revised Timeline (2026-08-28)** `3ca57bad43d581e5b28ece91494a45a7` | **The page actually sent to IFET management on 2026-08-28.** Executive view — status at a glance, the extraction defect, the five remaining Airtable items, the R1–R6 plan, and the reporting commitment. Parented under `ifet`, not under the LabOS hub; linked from the hub. **This is the page the PM reads** |
 | **🗓️ Revised Roadmap & True Timeline (2026-08-28)** `3ca57bad43d581e5b7d4fc3dda389294` | **New.** The answer to the PM's escalation: revised dates, what would move them, dated targets per Airtable ask, and four asks back to IFET (maintenance window · `test` node · weight behind the extractor fix · the review decision). View of `labos-airtable-revised-roadmap-2026-08-28.md` |
 | **📊 Delivery Status — LabOS × Airtable (2026-08-28)** `3ca57bad43d581f8b996e63764f5cbfc` | **New.** Human-readable status + a standalone *What we need from the Airtable team* section written to be lifted straight into a message. View of `labos-delivery-status-2026-08-28.md` |
 | **🧪 LabOS — Naming, Architecture & Integration** (hub) `3a357bad43d5818cb726d24c5e803c69` | §1–§7 confirmed still accurate and said so. **§8 rewritten** — all six original open questions closed with what actually answered them, and a callout naming the four items that replaced them |
@@ -346,3 +347,14 @@ still hold; it is the calendar that moved, and that is recorded on the status pa
 relabelling forty rows.
 
 **Not touched:** MCAIT / Cowork pages (different project), session logs (accurate as written).
+
+### 4.3 Sent artifacts
+
+| Artifact | Recipient | Kept at |
+|---|---|---|
+| *LabOS – Airtable Integration: Live Base Verification, Data Integrity Findings, and Requested Actions* | IFET / Airtable integration team | `docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx` |
+| *📌 LabOS × Airtable — Project Status & Revised Timeline (2026-08-28)* | IFET management | Notion `3ca57bad43d581e5b28ece91494a45a7` |
+
+The `.docx` is kept in-repo deliberately: it is what they actually received, and findings §8 is only the
+draft behind it. §8 now records the six ways the sent version improved on that draft, so the next message
+stays consistent with what they hold.
