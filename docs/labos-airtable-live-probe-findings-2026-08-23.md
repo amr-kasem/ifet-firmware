@@ -254,7 +254,12 @@ which is the last thing standing between here and W2.
 
 ## 8. The message that goes out
 
-> **Status:** ⚠️ **still unsent as of 2026-08-28.** Written 2026-08-23 for the Monday 2026-08-25 session;
+> **Status:** ✅ **SENT 2026-08-28** — see the *Sent* stamp at the end of this section. What actually went
+> out was a formalised version of this wording:
+> **`docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`**, kept in the repo as the
+> sent record. This section remains the authoritative *wording*; the docx is the authoritative *artifact*.
+>
+> **Previously:** Written 2026-08-23 for the Monday 2026-08-25 session;
 > that slot lapsed without the message going out. Re-framed below for a direct send — the four asks and their
 > ordering are unchanged, and were re-verified against both live bases on 2026-08-28 (all four still open).
 > This section is the **authoritative wording** — contract §10 owns the item *statuses*, this owns what we
@@ -391,4 +396,27 @@ LabOS
 
 ---
 
-> **Sent:** *(pending as of 2026-08-28 — re-framed for a direct send; stamp the date here the day it goes)*
+> **Sent:** ✅ **2026-08-28**, as *LabOS – Airtable Integration: Live Base Verification, Data Integrity
+> Findings, and Requested Actions* (`docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`),
+> to the IFET / Airtable integration team.
+>
+> **What the sent version added over the wording above** — all improvements, recorded so the contract and the
+> next message stay consistent with what they actually received:
+>
+> 1. **A P0/P1/P2 priority table with a *Requested from* column**, separating the two integration blockers
+>    from the contract-hardening items and naming who each is asked of.
+> 2. **`Test Type` options requested in *both* bases**, not just testing — this section had not said so.
+> 3. **A new ask: how is `+60/60` represented** once `Required Value` is numeric? Now contract **§10.23**.
+>    It is the one genuinely new item, and it is blocking: unresolved, we are back to parsing pressures out
+>    of free text.
+> 4. **Confirmation that testing and production share table *and* field IDs**, so one field-ID binding
+>    carries across environments — a real cutover-risk reduction that was in the probe data but had not been
+>    stated as a conclusion.
+> 5. **Explicit asks** to confirm Airtable automation owns the roll-up into `Protocol Sections` (§10.21) and
+>    that `LabOS Attempt ID` is opaque UUID text (§10.22).
+> 6. **"~15% of the required pressure"** rather than "roughly a seventh" — same number, stated the way the
+>    reader will check it.
+>
+> **Also sent, separately:** the project-status page for IFET management —
+> *📌 LabOS × Airtable — Project Status & Revised Timeline (2026-08-28)*,
+> `3ca57bad43d581e5b28ece91494a45a7`.

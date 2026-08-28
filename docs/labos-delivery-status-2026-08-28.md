@@ -7,6 +7,12 @@
 
 ## 0. The one-paragraph verdict
 
+> **Update, later on 2026-08-28 — the blocker below is cleared.** The verification report went to the
+> Airtable team and the status page went to IFET management. §5's item 1 is closed; everything downstream
+> now waits on *their* reply rather than on us. Sent record:
+> `docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx` · findings §8.
+> The rest of this assessment stands as written — it is the position that prompted the send.
+
 **The LabOS build is ahead of where the week counter says; the delivery is behind, and the reason is
 entirely on our side of the line.** Two of five milestones are complete, verified, and green
 (132 offline tests, re-run today). The 5-week calendar window opened 2026-07-23 and **expired on
@@ -136,10 +142,10 @@ both PATs on 2026-08-23, and have had no open request since.
 
 **On us:**
 
-1. The four asks in `labos-airtable-live-probe-findings-2026-08-23.md` §8 — **written, approved, unsent
-   for 5 days.** Every item in §4 above is downstream of this one message.
-2. Stage 3 verification (one live upsert round-trip into the **testing** base) — ready to run, gated only
-   on the approval that §8 asks for.
+1. ~~The four asks in §8 — written, approved, unsent for 5 days.~~ ✅ **SENT 2026-08-28**, as a formal
+   verification report. Now waiting on their reply, not on us.
+2. Stage 3 verification — **now a script**, `ifet-management` `tests/stage3_live_write.py`, dry-run verified.
+   Gated only on the approval the report asks for.
 3. Notion is **four pages behind**: Field Mapping, Response, Verification Report, 5-Week Plan.
 4. W3/W4/W5 not started.
 5. A re-baselined end date, which needs to be proposed rather than discovered.

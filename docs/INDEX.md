@@ -7,37 +7,30 @@
 
 ## 0. Resume here — state as of 2026-08-28
 
-> ### ⚠️ Read this before the rest of §0
+> ### ✅ Read this before the rest of §0 — state as of 2026-08-28, end of day
 >
-> **The Monday 2026-08-25 message was never sent.** The §0 below was written on 2026-08-23 and its
-> "shortest path" step 1 has not been executed. Everything it says about the *build* is still accurate and
-> was re-verified on 2026-08-28 (132 tests green; both bases probed read-only, schema unchanged).
+> **Both documents are sent. The five-day blocker is cleared.**
 >
-> **Current assessment: `labos-delivery-status-2026-08-28.md`** — build state, the schedule stated
-> honestly (day 36 of a 35-day plan, 2 of 5 milestones done), and the extraction defect measured against
-> the sample job `IFET-26-0066`.
+> - **To the Airtable team:** the live-base verification report —
+>   `docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`. Wording of record: findings §8,
+>   now stamped *Sent*, with the six things the sent version added over the draft.
+> - **To IFET management:** *📌 LabOS × Airtable — Project Status & Revised Timeline (2026-08-28)*,
+>   `3ca57bad43d581e5b28ece91494a45a7`, in answer to the PM's escalation.
 >
-> **The PM escalated on 2026-08-28** ("no activity, no Notion updates, 5 weeks nearly gone"). Answer:
-> `labos-airtable-revised-roadmap-2026-08-28.md` — **revised target pilot go-live Fri 2026-10-09**, six
-> working weeks from Mon 2026-08-31, **W4 pulled ahead of W3**. Notion twin:
-> *🗓️ Revised Roadmap & True Timeline*, `3ca57bad43d581e5b7d4fc3dda389294`.
-> Standing commitment made to the PM: **status page updated every Friday**, board reflects reality on the
-> day, anything blocked >48h goes to the chat.
+> **The build facts below are unchanged and were re-verified 2026-08-28:** 132 tests green, both bases
+> probed read-only, schema identical to 23 Aug. Nothing deployed.
 >
-> **Two things are now prepared and waiting, so neither gets rushed later:**
-> - **Stage 3 is a script**, not an improvisation: `ifet-management` `tests/stage3_live_write.py`.
->   Dry-run by default (`python3 -m tests.stage3_live_write`); a live run needs
->   `--live --approved-by "<who, when>"`, and the production base is refused unconditionally.
-> - **The deploy is a runbook**: `labos-p0-p1-deploy-runbook-2026-08-28.md`. Read its §2 first — whether
->   `alembic_version` still returns `3a65a83e0463` decides whether the deploy can happen at all that day.
+> **New open item from the sent report: contract §10.23** — how is `+60/60` represented once `Required Value`
+> is numeric? Blocking: unresolved, we are parsing pressures out of free text again.
 >
-> **Notion is now synced (2026-08-28)** — see §4 below. The new status page is the human-readable view:
-> *📊 Delivery Status — LabOS × Airtable (2026-08-28)*, `3ca57bad43d581f8b996e63764f5cbfc`.
+> **Next actions, in order — none of them is "send something":**
+> 1. **Wait on their reply.** Stage 3 is a script and is ready: `ifet-management`
+>    `tests/stage3_live_write.py`, dry-run verified, production base refused unconditionally.
+> 2. **Get the maintenance window**, then work `labos-p0-p1-deploy-runbook-2026-08-28.md` — read its §2
+>    first, `alembic_version` decides whether the deploy can happen that day.
+> 3. **Start P4** — the durable sync queue and worker. The real remaining build; needs nothing external.
 >
-> **Still step 1: send `labos-airtable-live-probe-findings-2026-08-23.md` §8.** It has been re-framed for
-> a direct send and carries one new fact — the defect has already reached a *completed* record
-> (`SMI (impacts) = 10`, `Passed`, where the proposal has no SMI value). All four asks re-confirmed open
-> against both live bases on 2026-08-28.
+> Assessment: `labos-delivery-status-2026-08-28.md` · dates: `labos-airtable-revised-roadmap-2026-08-28.md`.
 
 ### State as of 2026-08-23 (build facts still current)
 

@@ -14,12 +14,17 @@
 | Deployed | **Nothing.** Production runs the July build |
 | Original window | 2026-07-23 → **2026-08-27 — closed** |
 | Tests | 132 offline, green |
-| Blocking dependency | Four asks to the Airtable team, drafted 2026-08-23, **unsent** |
+| Blocking dependency | ~~Four asks, unsent~~ — ✅ **sent 2026-08-28** as a formal verification report. Now waiting on their reply |
 
 **Why it is behind, stated plainly.** Weeks 1 and 2 were delivered on the LabOS side. The project then
 stopped, waiting on answers that were never actually requested — the message was written and not sent, and
 the joint call booked for 2026-08-25 lapsed. That is a LabOS-side failure, not an Airtable-side one; they
 have answered every question ever put to them, usually within a day.
+
+**Cleared 2026-08-28.** Both artifacts went out the same day this was written: the verification report to
+the Airtable team (`docs/sent/…verification-report.docx`) and the project-status page to IFET management
+(`3ca57bad43d581e5b28ece91494a45a7`). From here the critical path runs through *their* response times, and
+R1–R3 proceed regardless.
 
 Notion had drifted with it. The task board still showed two completed phases as `To Do` / `Backlog`. That is
 reconciled as of today (INDEX §4).
@@ -62,7 +67,7 @@ Two tracks run in parallel. Track A is the one that has not been started.
 
 | # | Ask | Blocks | Target |
 |---|---|---|---|
-| 0 | **Send the message + request a slot** | everything below | **Fri 28 Aug** — today |
+| 0 | ~~Send the message + request a slot~~ | — | ✅ **DONE Fri 28 Aug** |
 | 1 | **Fix the proposal extraction.** Blank cells must hold their column. Re-import `IFET-26-0066`; report the blast radius **including jobs already marked tested** | R4 trust · pilot go-live | Fix agreed **Mon 31 Aug** · delivered **Fri 18 Sep** |
 | 2 | **Add four `Test Type` options** — `Cycles`, `Impact`, `Forced Entry`, `ANSI Z97.1`. A config change on their side, minutes of work | R5 · four of five test types | **Fri 4 Sep** |
 | 3 | **Approve one test write** into the testing base — one record, written then updated. Production base untouched. A one-line reply is enough | R2 | **Wed 2 Sep** |
