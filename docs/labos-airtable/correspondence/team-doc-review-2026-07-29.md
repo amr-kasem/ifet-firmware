@@ -2,7 +2,7 @@
 
 **Author:** Abdelrahman (LabOS) · **Date:** 2026-07-29 · **Status:** Internal review + ready-to-send reply
 **Their doc:** `IFET-Phase-2-LabOS-Doc.pdf` (6 pp) — test base access, read-only field list, `LabOS Raw Test Results` write table, required fields, blank/null rule, roll-up ownership.
-**Our side:** [Field Mapping (Working)](https://app.notion.com/p/3a357bad43d581c68ea1c85411429cac) · [5-Week Plan](https://app.notion.com/p/3a657bad43d581e59490f53a8eeedbf6) · internal plan `docs/labos-airtable-integration-internal-plan-2026-07-23.md` · write spec `docs/labos-airtable-write-contract-v0.3.md`
+**Our side:** [Field Mapping (Working)](https://app.notion.com/p/3a357bad43d581c68ea1c85411429cac) · [5-Week Plan](https://app.notion.com/p/3a657bad43d581e59490f53a8eeedbf6) · internal plan `docs/labos-airtable/status/internal-plan-2026-07-23.md` · write spec `docs/labos-airtable/contract/write-contract-v0.3.md`
 
 
 > ### ⚠️ Superseded in part — read this first
@@ -15,10 +15,10 @@
 > **Nothing below has been rewritten to match.**
 >
 > For the current position, read:
-> - **`labos-airtable-write-contract-v0.3.md` §0** — what v2 changed, and the live base/table IDs
-> - **`labos-airtable-write-contract-v0.3.md` §10** — the canonical open-items list (this doc's §6 is a
+> - **`docs/labos-airtable/contract/write-contract-v0.3.md` §0** — what v2 changed, and the live base/table IDs
+> - **`docs/labos-airtable/contract/write-contract-v0.3.md` §10** — the canonical open-items list (this doc's §6 is a
 >   stale view of it)
-> - **`labos-airtable-v2-guide-reconciliation-2026-08-22.md`** — the v2 delta and the outbound reply
+> - **`docs/labos-airtable/correspondence/v2-guide-reconciliation-2026-08-22.md`** — the v2 delta and the outbound reply
 >
 > In particular: base `appYBTqIL43pmS0xN` and the table name `LabOS Raw Test Results` **no longer apply.**
 > The testing base is `app4oXS3Kd5IKWgJ7` and the writable table is `LabOS Raw Data Table`
@@ -246,7 +246,7 @@ Free text is the one outcome that doesn't work — we'd be shipping a copy-typin
 
 ## 6. Open questions for them (short list, ordered)
 
-> **View, not source.** The canonical open-items list is `labos-airtable-write-contract-v0.3.md` §10.
+> **View, not source.** The canonical open-items list is `docs/labos-airtable/contract/write-contract-v0.3.md` §10.
 > This section is the subset worth raising conversationally, ordered by how much it unblocks.
 
 1. `Photos` field type — URL/long-text (multiple links newline-separated), or Attachment? We need the former
@@ -375,7 +375,7 @@ The message carries the asks; the pages carry the evidence.
 3. **Schema introspection tool** — `GET /v0/meta/bases/{baseId}/tables`, snapshot the base schema to the
    repo, and diff on every deploy so an Airtable-side rename fails loudly at deploy time rather than
    silently at test time. Runs the moment the rotated token lands.
-4. **Write contract v0.2** — `docs/labos-airtable-write-contract-v0.3.md` (their table + our envelope +
+4. **Write contract v0.2** — `docs/labos-airtable/contract/write-contract-v0.3.md` (their table + our envelope +
    the omit-vs-null rule + upsert + immutability), the artifact both teams build against.
 5. **Mapping doc update** — fill the Airtable column from their PDF, rows 🟡 → 🔵 In review, add the §4
    rows as `Requested`, replace the old Impact/Forced-Entry/ANSI rows with `Result Detail (JSON)`.

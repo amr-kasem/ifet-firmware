@@ -43,6 +43,10 @@ Use the `ifet-ssh` skill to reach any of them.
 - Per-node config lives in the repo as that node's own tracked file. Host-specific values belong in that
   node's own compose file.
 - Close open items in the authoritative document first (see `docs/INDEX.md` §1), then the views.
+- **Docs are filed by role, not topic** — `labos-airtable/{contract,status,evidence,correspondence,runbooks}`,
+  plus `operations/` and `hardware/`. `contract/` holds exactly one file; a second would mean one is a view
+  and is misfiled. `correspondence/sent/` is append-only — never edit an artifact someone already has.
+  Layout and the full inventory: `docs/INDEX.md` §2.
 
 ## Hardware gotchas that have already cost time
 

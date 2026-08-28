@@ -10,7 +10,7 @@
 > **Update, later on 2026-08-28 — the blocker below is cleared.** The verification report went to the
 > Airtable team and the status page went to IFET management. §5's item 1 is closed; everything downstream
 > now waits on *their* reply rather than on us. Sent record:
-> `docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx` · findings §8.
+> `docs/labos-airtable/correspondence/sent/2026-08-28-labos-airtable-live-base-verification-report.docx` · findings §8.
 > The rest of this assessment stands as written — it is the position that prompted the send.
 
 **The LabOS build is ahead of where the week counter says; the delivery is behind, and the reason is
@@ -173,7 +173,7 @@ Ground truth for migrations is **the node, not the repo**.
 3. **On their OK, run stage 3** — one upsert round-trip into the testing base `app4oXS3Kd5IKWgJ7`,
    table `tblnc9SsbXU0C0FWh`, upsert on `LabOS Attempt ID`, test type `Static Load` (the only option
    that exists). Production base is never touched. Do **not** run the stale stage-3 payload in
-   `labos-airtable-verification-report-2026-07-29.md` — it targets the retired sandbox and sends fields
+   `docs/labos-airtable/correspondence/verification-report-2026-07-29.md` — it targets the retired sandbox and sends fields
    that do not exist.
 4. **Start W4 ahead of W3**, per the plan's own documented mitigation. The sync queue needs no field
    names and is the highest-risk remaining work; W3 cannot be trusted until item 1 lands anyway.
@@ -188,7 +188,7 @@ Ground truth for migrations is **the node, not the repo**.
 | Build state, test count | `unittest` run 2026-08-28 · `ifet-management@94cb452` |
 | Live schema, both bases | `python3 -m app.airtable.probe` re-run 2026-08-28, read-only |
 | Extraction defect | `pdftotext -layout IFET-26-0066.pdf` vs. Protocol Sections in `app0OCunbmuXl7Hc9` |
-| Open items | `labos-airtable-write-contract-v0.3.md` §10 (authoritative) |
-| Outbound message | `labos-airtable-live-probe-findings-2026-08-23.md` §8 (authoritative) |
-| Week sequencing, W3⇄W4 swap | `labos-airtable-integration-internal-plan-2026-07-23.md` |
-| Deploy hazard, migration chain | `labos-p1-schema-and-migration-mechanism-2026-08-23.md` · `ifet-ssh-session-record-2026-08-23.md` |
+| Open items | `docs/labos-airtable/contract/write-contract-v0.3.md` §10 (authoritative) |
+| Outbound message | `docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` §8 (authoritative) |
+| Week sequencing, W3⇄W4 swap | `docs/labos-airtable/status/internal-plan-2026-07-23.md` |
+| Deploy hazard, migration chain | `docs/labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` · `docs/operations/ssh-session-record-2026-08-23.md` |

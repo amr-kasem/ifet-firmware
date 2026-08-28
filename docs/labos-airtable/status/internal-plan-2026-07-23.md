@@ -5,8 +5,8 @@
 
 > ### Update 2026-08-23 — **the gate opened.** Gap I answered (with a defect), gap J closed
 > Both PATs delivered. The schema probe and a record dump ran against **both** bases — read-only, nothing
-> written to either. Evidence: **`docs/labos-airtable-live-probe-findings-2026-08-23.md`**. Canonical open items:
-> **`docs/labos-airtable-write-contract-v0.3.md` §10**, now 22 items.
+> written to either. Evidence: **`docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md`**. Canonical open items:
+> **`docs/labos-airtable/contract/write-contract-v0.3.md` §10**, now 22 items.
 >
 > **Closed:** §10.1 `Photos` is `url` · §10.2 the four ID fields are plain text as proposed · §10.5
 > `Impact Result` is free text · §10.10 **PAT delivered** · §10.11 null/blank table verified · §10.16
@@ -31,8 +31,8 @@
 
 > ### Update 2026-08-22 — their guide **v2** landed; gap G re-based, gap I still open
 > *IFET Phase 2 · LabOS × Airtable API Integration Guide* **v2** (2026-08-17) supersedes the v1 schema doc
-> reviewed below. Delta and the outbound reply: **`docs/labos-airtable-v2-guide-reconciliation-2026-08-22.md`**.
-> Canonical open items: **`docs/labos-airtable-write-contract-v0.3.md` §10**.
+> reviewed below. Delta and the outbound reply: **`docs/labos-airtable/correspondence/v2-guide-reconciliation-2026-08-22.md`**.
+> Canonical open items: **`docs/labos-airtable/contract/write-contract-v0.3.md` §10**.
 >
 > **Changed:** the sandbox base ID below is **stale** — the testing base is now `app4oXS3Kd5IKWgJ7` and
 > production is `app0OCunbmuXl7Hc9`; all nine table IDs are published (contract §0.1). **4 of the 11
@@ -47,8 +47,8 @@
 > ### Update 2026-07-29 — the Airtable team answered; three gaps close, one new one opens
 > Their *IFET Phase 2 · LABOS Sample Schema* doc landed (sandbox base + read-only field list + a single
 > writable `LabOS Raw Test Results` table). Full review, the ten required changes, the eleven fields we need
-> added, and the reply draft: **`docs/labos-airtable-team-doc-review-2026-07-29.md`**. The write spec both
-> teams build against: **`docs/labos-airtable-write-contract-v0.3.md`**.
+> added, and the reply draft: **`docs/labos-airtable/correspondence/team-doc-review-2026-07-29.md`**. The write spec both
+> teams build against: **`docs/labos-airtable/contract/write-contract-v0.3.md`**.
 >
 > **Closed by their doc:** gap **G** (sandbox base — provisioned, ~~`appYBTqIL43pmS0xN`~~ **superseded 2026-08-22 → `app4oXS3Kd5IKWgJ7`**) · gap **E**
 > (roll-ups = Airtable automations, confirming decision **#8**) · decision **#6** (photos = links) and
@@ -160,10 +160,10 @@ My recommended call for each, so nothing stalls once bindings land:
   *Data:* ❌ **and this is the new blocker.** The values do not match the source proposal — their extractor
   drops blank cells instead of holding column position, so everything shifts one column left (§10.19).
   LabOS cannot detect it; every shifted value is individually plausible. **W3 may be built, not trusted.**
-  See `docs/labos-airtable-live-probe-findings-2026-08-23.md` §5.
+  See `docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` §5.
 - ~~**J · Field-ID binding + schema-drift detection**~~ — ✅ **CLOSED 2026-08-23.** `schema.bases:read` arrived
   on both PATs; the probe writes the `fld…`-ID snapshot and both bases are committed under
-  `docs/airtable-schema/`. Bonus: the testing base is a structural *clone* of production (identical table and
+  `docs/labos-airtable/schema/`. Bonus: the testing base is a structural *clone* of production (identical table and
   field IDs), so one snapshot binds both environments and a cutover cannot silently re-point.
 - **H · Firmware→mgmt `/trials` contract** — extend payload for IDs + pressure; Ref 53 (fw, off-board)
   ↔ Ref 54 (mgmt, on-board) must land together. *(coordinate across the seam)*
@@ -232,7 +232,7 @@ P0→P1→P4 spine and mostly my own decisions.
 the four `Airtable … ID` fields ✅ plain text · `Impact Result` ✅ free text · **the PAT** ✅ delivered ·
 option sets ✅ read from the base rather than proposed.
 
-Still open — full list with owners in `docs/labos-airtable-write-contract-v0.3.md` §10. The ones that matter:
+Still open — full list with owners in `docs/labos-airtable/contract/write-contract-v0.3.md` §10. The ones that matter:
 0. **The proposal-extraction shift** (§10.19) — *highest severity.* Their requirement values do not match the
    proposal PDF they came from. *Gates any live test driven from Airtable, which is the point of W3.*
 0b. **`Test Type` has one option** (§10.17) — 4 of 5 test types cannot be written back at all. *Gates W4.*

@@ -195,7 +195,7 @@ The one deployment actually queued — the P0/Ref 42 secret store — is built a
 ## What happens next
 
 **Monday 2026-08-25, with the Airtable team** — agenda and the full message:
-`labos-airtable-live-probe-findings-2026-08-23.md` §7 and §8.
+`docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` §7 and §8.
 
 1. Walk through the extraction defect; agree a fix and find out how many jobs are affected.
 2. Get the four missing `Test Type` options added.
@@ -217,9 +217,9 @@ The one deployment actually queued — the P0/Ref 42 secret store — is built a
 | For | Read |
 |---|---|
 | Every document, and which one is authoritative | `INDEX.md` |
-| The spec both teams build against | `labos-airtable-write-contract-v0.3.md` |
-| Open items, canonical list (22 of them) | `labos-airtable-write-contract-v0.3.md` §10 |
-| What the live bases actually contain, and today's evidence | `labos-airtable-live-probe-findings-2026-08-23.md` |
-| The message going to the Airtable team | `labos-airtable-live-probe-findings-2026-08-23.md` §8 |
-| Internal plan, gaps, week sequencing | `labos-airtable-integration-internal-plan-2026-07-23.md` |
-| Correspondence history | `labos-airtable-v2-guide-reconciliation-2026-08-22.md` §5, and the two 2026-07-29 records |
+| The spec both teams build against | `docs/labos-airtable/contract/write-contract-v0.3.md` |
+| Open items, canonical list (22 of them) | `docs/labos-airtable/contract/write-contract-v0.3.md` §10 |
+| What the live bases actually contain, and today's evidence | `docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` |
+| The message going to the Airtable team | `docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` §8 |
+| Internal plan, gaps, week sequencing | `docs/labos-airtable/status/internal-plan-2026-07-23.md` |
+| Correspondence history | `docs/labos-airtable/correspondence/v2-guide-reconciliation-2026-08-22.md` §5, and the two 2026-07-29 records |

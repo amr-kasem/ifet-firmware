@@ -21,13 +21,13 @@
 > | **Stage 3** — a write round-trip into the results table | ⏳ **not yet run** — the last thing standing before W2 |
 >
 > The stage shapes held up; §5's asks are largely answered or overtaken. **This document no longer owns the
-> "what we've verified" subject** — `labos-airtable-live-probe-findings-2026-08-23.md` does.
+> "what we've verified" subject** — `docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` does.
 >
 > For the current position, read:
-> - **`labos-airtable-live-probe-findings-2026-08-23.md`** — what the live bases actually hold, six items closed, six opened, and the Monday agenda (§7)
-> - **`labos-airtable-write-contract-v0.3.md` §10** — the canonical open-items list (this doc's §5 is a
+> - **`docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md`** — what the live bases actually hold, six items closed, six opened, and the Monday agenda (§7)
+> - **`docs/labos-airtable/contract/write-contract-v0.3.md` §10** — the canonical open-items list (this doc's §5 is a
 >   stale view of it)
-> - **`labos-airtable-write-contract-v0.3.md` §0** — the live base/table IDs, now confirmed against the API
+> - **`docs/labos-airtable/contract/write-contract-v0.3.md` §0** — the live base/table IDs, now confirmed against the API
 >
 > In particular: base `appYBTqIL43pmS0xN` and the table name `LabOS Raw Test Results` **no longer apply.**
 > The testing base is `app4oXS3Kd5IKWgJ7` and the writable table is `LabOS Raw Data Table`
@@ -186,7 +186,7 @@ ID, and its option list, with each of our open questions marked answered or stil
 > **⚠️ Do not run the payload below as written — it is the July draft.** The base `appYBTqIL43pmS0xN`, the table
 > name `LabOS Raw Test Results`, and the `Testing Start Date` / `Testing End Date` keys are all retired: the
 > live table has a single date-only `Test Date` (§10.20). The **fourteen checks below still stand** — run them
-> against the real target from `labos-airtable-write-contract-v0.3.md` §0.1 + §2:
+> against the real target from `docs/labos-airtable/contract/write-contract-v0.3.md` §0.1 + §2:
 > `PATCH .../app4oXS3Kd5IKWgJ7/tblnc9SsbXU0C0FWh`, upserting on `LabOS Attempt ID`. The record must use
 > `Test Type: Static Load` — the live option set refuses the other four (§10.17).
 

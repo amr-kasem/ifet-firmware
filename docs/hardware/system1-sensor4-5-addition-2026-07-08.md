@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-08
 **System:** ifet fleet, device `system-1` / `device1`
-**Scope:** Adding sensor4 and sensor5 to system-1, following the process in `README-sensor-debug-drill.md`, continuing from the 2026-07-07 debug (see `docs/system1-sensor-vfd-debug-report-2026-07-07.md`)
+**Scope:** Adding sensor4 and sensor5 to system-1, following the process in `README-sensor-debug-drill.md`, continuing from the 2026-07-07 debug (see `docs/hardware/system1-sensor-vfd-debug-2026-07-07.md`)
 
 ## 1. Summary
 

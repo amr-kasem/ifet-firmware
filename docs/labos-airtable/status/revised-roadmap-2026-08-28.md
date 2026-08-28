@@ -22,12 +22,12 @@ the joint call booked for 2026-08-25 lapsed. That is a LabOS-side failure, not a
 have answered every question ever put to them, usually within a day.
 
 **Cleared 2026-08-28.** Both artifacts went out the same day this was written: the verification report to
-the Airtable team (`docs/sent/…verification-report.docx`) and the project-status page to IFET management
+the Airtable team (`docs/labos-airtable/correspondence/sent/…verification-report.docx`) and the project-status page to IFET management
 (`3ca57bad43d581e5b28ece91494a45a7`). From here the critical path runs through *their* response times, and
 R1–R3 proceed regardless.
 
 Notion had drifted with it. The task board still showed two completed phases as `To Do` / `Backlog`. That is
-reconciled as of today (INDEX §4).
+reconciled as of today (INDEX §5).
 
 ---
 

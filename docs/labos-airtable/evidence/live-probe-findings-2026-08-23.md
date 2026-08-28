@@ -4,7 +4,7 @@
 **Trigger:** the Airtable team delivered both PATs on 2026-08-23 and invited us to read the original base.
 
 > **Status of this document.** It is the *evidence record* for the probe run. Contract
-> `labos-airtable-write-contract-v0.3.md` §10 stays authoritative for open-item status; this file is what §10
+> `docs/labos-airtable/contract/write-contract-v0.3.md` §10 stays authoritative for open-item status; this file is what §10
 > cites. Everything below was produced by GETs only.
 
 ---
@@ -225,7 +225,7 @@ All in `ifet-management` @ `feature/labos-airtable`. Still stdlib-only, still no
 | `tests/fake_schema.py` — the three select sets transcribed verbatim from the live base | The fixture now encodes reality, including both surprises |
 | tests: 95 → **98**, all passing | Adds §10.17 as an executable fact: four of five test types are refused against the live `Test Type` set |
 
-Schema snapshots for both bases are committed under `docs/airtable-schema/` for the §9 deploy-time diff.
+Schema snapshots for both bases are committed under `docs/labos-airtable/schema/` for the §9 deploy-time diff.
 
 ---
 
@@ -256,7 +256,7 @@ which is the last thing standing between here and W2.
 
 > **Status:** ✅ **SENT 2026-08-28** — see the *Sent* stamp at the end of this section. What actually went
 > out was a formalised version of this wording:
-> **`docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`**, kept in the repo as the
+> **`docs/labos-airtable/correspondence/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`**, kept in the repo as the
 > sent record. This section remains the authoritative *wording*; the docx is the authoritative *artifact*.
 >
 > **Previously:** Written 2026-08-23 for the Monday 2026-08-25 session;
@@ -397,7 +397,7 @@ LabOS
 ---
 
 > **Sent:** ✅ **2026-08-28**, as *LabOS – Airtable Integration: Live Base Verification, Data Integrity
-> Findings, and Requested Actions* (`docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`),
+> Findings, and Requested Actions* (`docs/labos-airtable/correspondence/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`),
 > to the IFET / Airtable integration team.
 >
 > **What the sent version added over the wording above** — all improvements, recorded so the contract and the

@@ -12,7 +12,7 @@
 > **Both documents are sent. The five-day blocker is cleared.**
 >
 > - **To the Airtable team:** the live-base verification report —
->   `docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`. Wording of record: findings §8,
+>   `labos-airtable/correspondence/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`. Wording of record: findings §8,
 >   now stamped *Sent*, with the six things the sent version added over the draft.
 > - **To IFET management:** *📌 LabOS × Airtable — Project Status & Revised Timeline (2026-08-28)*,
 >   `3ca57bad43d581e5b28ece91494a45a7`, in answer to the PM's escalation.
@@ -26,11 +26,11 @@
 > **Next actions, in order — none of them is "send something":**
 > 1. **Wait on their reply.** Stage 3 is a script and is ready: `ifet-management`
 >    `tests/stage3_live_write.py`, dry-run verified, production base refused unconditionally.
-> 2. **Get the maintenance window**, then work `labos-p0-p1-deploy-runbook-2026-08-28.md` — read its §2
+> 2. **Get the maintenance window**, then work `labos-airtable/runbooks/p0-p1-deploy-2026-08-28.md` — read its §2
 >    first, `alembic_version` decides whether the deploy can happen that day.
 > 3. **Start P4** — the durable sync queue and worker. The real remaining build; needs nothing external.
 >
-> Assessment: `labos-delivery-status-2026-08-28.md` · dates: `labos-airtable-revised-roadmap-2026-08-28.md`.
+> Assessment: `labos-airtable/status/delivery-status-2026-08-28.md` · dates: `labos-airtable/status/revised-roadmap-2026-08-28.md`.
 
 ### State as of 2026-08-23 (build facts still current)
 
@@ -61,7 +61,7 @@ disagree, §3 is newer and this one is the bug.*
    column: their sample job reads `DP (+) (PSF) = 9` where the proposal says `+60/60`. Those values drive the
    rig. **Standing rule: nothing reads requirements from Airtable for a live test until they fix it.**
    Contract §10.19 · findings §5.2.
-2. **A Monday message is written and unsent** — `labos-airtable-live-probe-findings-2026-08-23.md` §8. Luis
+2. **A Monday message is written and unsent** — `labos-airtable/evidence/live-probe-findings-2026-08-23.md` §8. Luis
    was away for the weekend; a joint testing session is booked. Stamp the *Sent* line when it goes.
 3. **⚠️ Deploy hazard.** Until the `startup.sh` change ships, every container restart appends a no-op
    revision on the node and moves the head. Deploy `startup.sh` **and** the P1 migration together, and
@@ -71,7 +71,7 @@ disagree, §3 is newer and this one is the bug.*
 ### The shortest path — do these two, in this order
 
 **1. Send the Monday message.** Authoritative wording is
-`labos-airtable-live-probe-findings-2026-08-23.md` **§8** — send it as written, don't re-draft it. The call is
+`labos-airtable/evidence/live-probe-findings-2026-08-23.md` **§8** — send it as written, don't re-draft it. The call is
 **Monday 2026-08-25** with Luis; §7 is the agenda, ordered by what blocks the most. When it goes out, stamp the
 *Sent* line at the end of §8 the same day.
 
@@ -80,7 +80,7 @@ W3/W4. Three things to know before running it:
 
 - **It is gated on Luis's explicit OK**, which is exactly what the §8 message asks for ("For Monday", item 3).
   Send first, get the go-ahead on the call, then run. Production base `app0OCunbmuXl7Hc9` is never touched.
-- **⚠️ The stage 3 spec in `labos-airtable-verification-report-2026-07-29.md` is stale — do not run its payload
+- **⚠️ The stage 3 spec in `labos-airtable/correspondence/verification-report-2026-07-29.md` is stale — do not run its payload
   as written.** It targets the retired sandbox `appYBTqIL43pmS0xN` / `LabOS Raw Test Results`, and sends
   `Testing Start Date` / `Testing End Date`, which do not exist on the live table (it is `Test Date`, and it is
   date-only — §10.20). The *fourteen checks* it describes still stand; re-point them at the real target from
@@ -92,7 +92,7 @@ W3/W4. Three things to know before running it:
 
 - ~~**Notion is four pages behind**~~ — ✅ **synced 2026-08-28**, see §4.
 - **Firmware `/trials` seam** (gap H, Refs 53 ↔ 54) — must land on both sides together.
-- Answer the open question in `labos-p1-schema-and-migration-mechanism-2026-08-23.md` §7: may an operator
+- Answer the open question in `labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` §7: may an operator
   edit a *terminal* attempt's notes/photos? Likely split — artifacts appendable, results require a correction.
 
 ### Two practical notes
@@ -102,7 +102,7 @@ W3/W4. Three things to know before running it:
   `<dir>/bin/python tests/rehearse_p1_migration.py /tmp/x.db`.
 - **Reaching a node:** use the `ifet-ssh` skill. Mutating commands are blocked by the auto-mode classifier and
   have to be handed to the user; read-only ones run fine. Session record:
-  `ifet-ssh-session-record-2026-08-23.md`.
+  `operations/ssh-session-record-2026-08-23.md`.
 
 
 > **Why this file exists.** The same fact was living in five places and starting to drift — three different
@@ -115,114 +115,168 @@ W3/W4. Three things to know before running it:
 
 ## 1. Single source of truth — which document owns which subject
 
+*Paths in this file are relative to `docs/`. Documents elsewhere in the repo, and in `ifet-management`, are
+written out in full.*
+
 | Subject | **Authoritative document** | Views that must follow it |
 |---|---|---|
-| **Open integration items / what blocks what** | `labos-airtable-write-contract-v0.3.md` **§10** | review doc §6 · verification report §5 · Notion mapping §5 · Notion response §9 |
-| **The write envelope** — fields, types, required-per-test-type, blank rules, upsert, immutability | `labos-airtable-write-contract-v0.3.md` | Notion *Field Mapping* §2 · Notion *Response* §4 |
-| **Field-name mapping** LabOS ↔ Airtable, and ratification status per row | Notion *[Field Mapping (Working)](https://app.notion.com/p/3a357bad43d581c68ea1c85411429cac)* | the contract's field tables |
-| **What we asked the Airtable team for, and why** | `labos-airtable-v2-guide-reconciliation-2026-08-22.md` | Notion *[Response page](https://app.notion.com/p/3ac57bad43d581c49ff9cf1e125c40c3)* · review doc `…-2026-07-29.md` (superseded, kept as the sent record) |
-| **The exact message that goes out** | `labos-airtable-live-probe-findings-2026-08-23.md` **§8** — the Monday message | reconciliation doc §5 and review doc §7 (the 2026-08-22 and 2026-07-29 messages, both already sent) |
-| **Readiness summary — one readable overview for a human** | `labos-airtable-readiness-2026-08-23.md` | explicitly a **view of everything above**; it names its sources per section |
-| **What we've verified against the live base** | `labos-airtable-live-probe-findings-2026-08-23.md` | `labos-airtable-verification-report-2026-07-29.md` (**historical** — the 2026-07-29 sent record) · Notion *[Verification Report](https://app.notion.com/p/3ac57bad43d5811b84a2da22288d0edb)* |
-| **Internal plan, gaps A–J, pre-closed decisions, week sequencing** | `ifet-ssh-session-record-2026-08-23.md` | **Record of the 2026-08-23 SSH session on `management`.** Every command run, what it returned, what it established, and an explicit statement of what was *not* touched. All read-only. | current |
-| `labos-p1-schema-and-migration-mechanism-2026-08-23.md` | **W2 / P1 evidence record.** The attempt schema, and the discovery that migrations are gitignored, bind-mounted from the node, and autogenerated at every container boot — production had 29 revisions, the repo had none. | current |
-| `labos-airtable-integration-internal-plan-2026-07-23.md` | Notion internal copy (private) |
+| **Open integration items / what blocks what** | `labos-airtable/contract/write-contract-v0.3.md` **§10** | §3 of this file · Notion *Field Mapping* §5 · Notion *Delivery Status* |
+| **The write envelope** — fields, types, required-per-test-type, blank rules, upsert, immutability | `labos-airtable/contract/write-contract-v0.3.md` §4/§5 | Notion *Field Mapping* §2 · `ifet-management` `app/airtable/contract.py` — **a view; the prose wins on disagreement** |
+| **Airtable environments, base IDs, table IDs, PAT scopes** | `labos-airtable/contract/write-contract-v0.3.md` **§0.1** | `ifet-management` `app/config.py` · §2 of this file · everything else |
+| **Field-name mapping** LabOS ↔ Airtable, and ratification per row | Notion *[Field Mapping (Working)](https://app.notion.com/p/3a357bad43d581c68ea1c85411429cac)* | the contract's field tables |
+| **Where the project stands** | `labos-airtable/status/delivery-status-2026-08-28.md` | Notion *Delivery Status* · §3 of this file |
+| **Dates, sequencing, and what would move them** | `labos-airtable/status/revised-roadmap-2026-08-28.md` | Notion *📌 Project Status & Revised Timeline* (**the page management holds**) · Notion *5-Week Plan* |
+| **Internal plan — gaps A–J, pre-closed decisions, week sequencing** | `labos-airtable/status/internal-plan-2026-07-23.md` | Notion *Internal Engineering Plan* (private copy) |
+| **What we have verified against the live bases** | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` | `labos-airtable/correspondence/verification-report-2026-07-29.md` (historical) · Notion *Verification Report* |
+| **How our envelope compares to their actual data** | `labos-airtable/evidence/reference-row-reconciliation-2026-08-28.md` | contract §10.24–§10.26 |
+| **How a schema change reaches production** (alembic, bind mounts, autogenerate-at-boot) | `labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` | `ifet-management` `startup.sh` + `compose.yaml` are the mechanism it documents |
+| **What we asked the Airtable team for, and why** | `labos-airtable/correspondence/sent/2026-08-28-…-verification-report.docx` — **the artifact they hold** | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` §8 (the wording, plus what the sent version added) · `labos-airtable/correspondence/v2-guide-reconciliation-2026-08-22.md` §5 |
+| **How to deploy P0/P1 to `management`** | `labos-airtable/runbooks/p0-p1-deploy-2026-08-28.md` | `ifet-management/deployment/SECRETS.md` §2 |
+| **How to run the stage-3 write** | `ifet-management` `src/management_service/tests/stage3_live_write.py` — **the script is the spec** | `labos-airtable/correspondence/verification-report-2026-07-29.md` §4 (the original fourteen checks; **its payload is retired**) |
+| **Secret handling** | `ifet-management/deployment/SECRETS.md` | this index |
+| **Repo/branch/production ground truth, and node git guardrails** | `operations/branch-reconcile-plan-2026-07-24.md` | Notion *Execution Record* |
+| **What was run on a node, when, and with what blast radius** | `operations/ssh-session-record-2026-08-23.md` | — each session gets its own record |
 | **Cross-team schedule and per-week deliverables** | Notion *[5-Week Integration Plan](https://app.notion.com/p/3a657bad43d581e59490f53a8eeedbf6)* | — |
 | **Live task status** | Notion *Delivery & Progress Tracker* (Epic IFET-32) | — |
-| **Repo/branch/production ground truth** | `labos-branch-reconcile-plan-2026-07-24.md` | Notion *[Execution Record](https://app.notion.com/p/3a957bad43d581b4a091d1c1459de641)* |
-| **Secret handling and the gated deploy runbook** | `ifet-management/deployment/SECRETS.md` | this index |
-| **Airtable environments, base IDs, table IDs, PAT scopes** | `labos-airtable-write-contract-v0.3.md` **§0.1** | reconciliation doc §1 · `ifet-management` `app/config.py` · everything else |
-| **The write envelope as executable rules** | `labos-airtable-write-contract-v0.3.md` §4/§5/§5.1 | `ifet-management` `app/airtable/contract.py` — **a view; the prose wins on disagreement** |
-| **What was run on a node, when, and with what blast radius** | `ifet-ssh-session-record-2026-08-23.md` (2026-08-23) | — each SSH session gets its own record |
-| **How a schema change reaches production** (alembic, bind mounts, autogenerate-at-boot) | `ifet-ssh-session-record-2026-08-23.md` | **Record of the 2026-08-23 SSH session on `management`.** Every command run, what it returned, what it established, and an explicit statement of what was *not* touched. All read-only. | current |
-| `labos-p1-schema-and-migration-mechanism-2026-08-23.md` | `ifet-management` `startup.sh` + `compose.yaml` are the mechanism it documents |
-| **Hardware config — Modbus, VFD, valve pins** | `README.md` (this directory) | — |
+| **Hardware config — Modbus, VFD, valve pins** | `hardware/README.md` | — |
 
-**Rule:** when an item closes, close it in the authoritative document **first**, then update the views the same
-day. If two documents disagree, the authoritative one wins and the other is a bug.
+**Rule:** when an item closes, close it in the authoritative document **first**, then update the views the
+same day. If two documents disagree, the authoritative one wins and the other is a bug.
 
 ---
 
 ## 2. Document inventory
 
-### `ifet-firmware/docs/`
+### How this directory is organised
+
+Folders encode **what a document is for** — the same distinction §1 makes between an authoritative document
+and a view of it. A file's location tells you how much weight to give it.
+
+```
+docs/
+  INDEX.md                     the map - start here, and the only path referenced from outside docs/
+  labos-airtable/              the integration (Epic IFET-32)
+    contract/                  THE SPEC. Authoritative. Everything else defers to it
+    status/                    where we are - views, each naming its source
+    evidence/                  what we verified, and how. Records, not opinions
+    correspondence/            what was exchanged with the Airtable team
+      sent/                    the exact artifacts they received
+    runbooks/                  how to execute something risky, step by step
+    schema/                    field-ID snapshots of both live bases
+  operations/                  node and repository operations
+  hardware/                    rig configuration and bring-up records
+```
+
+**Rules that keep it usable:**
+
+- **A document is filed by role, not by topic.** A status page about the contract belongs in `status/`, not
+  `contract/`. If you cannot tell which folder something goes in, it is probably two documents.
+- **`contract/` holds exactly one file.** If it ever holds two, one of them is a view and is misfiled.
+- **`correspondence/sent/` is append-only.** Those are artifacts other people hold; they are never edited
+  after sending. Corrections go in a new document.
+- **Dates in filenames are when the work happened**, not when the file was last touched. That is how a
+  superseded record stays findable.
+
+---
+
+### `labos-airtable/` — the integration
 
 | Document | Purpose | Status |
 |---|---|---|
-| `INDEX.md` | this file | current |
-| `labos-airtable-write-contract-v0.3.md` | **The spec both teams build against.** Identity, idempotency, the attempt lifecycle, retest vs. correction, the field envelope, blank rules, JSON shapes, retry classes, the live base/table IDs (§0.1), and the canonical open-items list. | **`v0.3 DRAFT`** — ratifies to `v1.0` when §10 closes |
-| `labos-airtable-v2-guide-reconciliation-2026-08-22.md` | Delta against their *API Integration Guide v2*, and **§5 — the correspondence record.** Its §5.0 ask was **answered on 2026-08-23** (both PATs delivered). | current — but the **outbound artifact is now `labos-airtable-live-probe-findings-2026-08-23.md` §7**, the Monday agenda |
-| `labos-airtable-readiness-2026-08-23.md` | **Start here for a human overview.** Where the integration stands, what is built, what today's probe proved, the one serious risk, what blocks and on whom, and the real position of the 5-week plan. A view — it names its authoritative source per section. | current |
-| `labos-airtable-live-probe-findings-2026-08-23.md` | **Evidence record for the first live probe of both bases**, and **§8 the message going to the Airtable team.** What the schema actually holds, the six items it closes, the six it opens, §10.3 answered, and the proposal-extraction defect (§5.2). | current — **the outbound artifact** |
-| `labos-airtable-team-doc-review-2026-07-29.md` | Review of their **v1** schema doc: the verdict, ten required changes, eleven requested fields, §7 the message sent on 2026-07-29. | ⚠️ **superseded in part** by their v2 — bannered, kept verbatim as the sent record |
-| `labos-airtable-verification-report-2026-07-29.md` | The ownership boundary, and the exact HTTP requests LabOS proposed to run. | 📕 **Historical — the 2026-07-29 sent record.** Its stage 1 and 2 were **executed on 2026-08-23** against `app4oXS3Kd5IKWgJ7` and `app0OCunbmuXl7Hc9`; results live in `labos-airtable-live-probe-findings-2026-08-23.md`, which now owns this subject. Base ID and table name in the header are stale by design |
-| `ifet-ssh-session-record-2026-08-23.md` | **Record of the 2026-08-23 SSH session on `management`.** Every command run, what it returned, what it established, and an explicit statement of what was *not* touched. All read-only. | current |
-| `labos-p1-schema-and-migration-mechanism-2026-08-23.md` | **W2 / P1 evidence record.** The attempt schema, and the discovery that migrations are gitignored, bind-mounted from the node, and autogenerated at every container boot — production had 29 revisions, the repo had none. | current |
-| `labos-airtable-integration-internal-plan-2026-07-23.md` | Internal superset: gaps A–J, nine pre-closed decisions, the five-week sequencing with off-dashboard firmware work. | current (updated 2026-08-22) |
-| `labos-branch-reconcile-plan-2026-07-24.md` | Repo ↔ production reconcile. Node baselines, container audit, the safety guardrails for git on a live node, and the Step E deploy runbook. | 🔒 **CLOSED** — only Step E/F remain, folded into the next deliberate deploy |
-| `system1-sensor-vfd-debug-report-2026-07-07.md` | system-1 bring-up: sensors, the VFD-at-address-12 finding, PSF scaling. | historical record |
-| `system1-sensor4-5-addition-2026-07-08.md` | system-1 sensor 4/5 addition. | historical record |
-| `README.md` | Hardware configuration — Modbus RTU, Delta C2000 Plus VFD over serial and TCP, valve pin maps. | current (VFD address corrected to `12`, 2026-07-29) |
+| **`contract/write-contract-v0.3.md`** | **The spec both teams build against.** Identity, idempotency, the attempt lifecycle, retest vs. correction, the field envelope, blank rules, JSON shapes, retry classes, the live base/table IDs (§0.1), and **§10 — the canonical open-items list, now 26 items**. | **`v0.3 DRAFT`** — ratifies to `v1.0` when §10 closes |
+| `status/delivery-status-2026-08-28.md` | **Current assessment.** What is built and verified, the schedule stated plainly, the extraction defect measured against the sample job, what is blocked and on whom. | **current** |
+| `status/revised-roadmap-2026-08-28.md` | **The dates.** R1–R6 to a pilot go-live of 2026-10-09, what would move them, a dated target per Airtable ask, and four asks back to IFET. | **current** |
+| `status/readiness-2026-08-23.md` | Human overview written at the end of W2. Superseded on dates and open items by the two above; still the clearest single narrative of how the integration fits together. | superseded on status |
+| `status/internal-plan-2026-07-23.md` | Internal superset: gaps A–J, nine pre-closed decisions, week sequencing with off-dashboard firmware work. | current (updated 2026-08-23) |
+| `evidence/live-probe-findings-2026-08-23.md` | **First live read of both bases.** What the schema holds, six items closed and six opened, the proposal-extraction defect (§5.2), and **§8 — the message wording, now stamped *Sent*** with the six ways the sent version improved on it. | current |
+| `evidence/reference-row-reconciliation-2026-08-28.md` | **Our envelope vs. the Airtable team's own sample row** `recxZWiVa5Wuy0ZV6`. The `Inches`/`in` divergence, the JSON-shape divergence, and why the empty testing base does not block stage 3. | **current** |
+| `evidence/p1-schema-and-migration-mechanism-2026-08-23.md` | W2/P1 evidence: the attempt schema, and the discovery that migrations were gitignored, bind-mounted from the node, and autogenerated at every container boot. | current |
+| `correspondence/sent/2026-08-28-…-verification-report.docx` | **The artifact the Airtable team actually received.** Five asks with a P0/P1/P2 priority table. | 📨 sent — do not edit |
+| `correspondence/v2-guide-reconciliation-2026-08-22.md` | Delta against their *API Integration Guide v2*, plus §5, the correspondence record. | historical |
+| `correspondence/team-doc-review-2026-07-29.md` | Review of their **v1** schema doc, and §7, the message sent 2026-07-29. | ⚠️ superseded by their v2 — kept verbatim as the sent record |
+| `correspondence/verification-report-2026-07-29.md` | The ownership boundary and the proposed HTTP requests. Stages 1–2 executed 2026-08-23. | 📕 historical — **its stage 3 payload is retired; the script and runbook replace it** |
+| `runbooks/p0-p1-deploy-2026-08-28.md` | **The `management` deploy.** Its §2 is the decision point — whether `alembic_version` has moved decides if the deploy can happen that day at all. | **ready to execute** |
+| `schema/schema-{testing,production}-2026-08-23.json` | Field-ID snapshots of both bases, for drift detection at deploy. | current |
+
+### `operations/` — nodes and repositories
+
+| Document | Purpose | Status |
+|---|---|---|
+| `branch-reconcile-plan-2026-07-24.md` | Repo ↔ production reconcile. Node baselines, container audit, and **the git guardrails for a live node** — still load-bearing for any deploy. | 🔒 CLOSED — Step E/F fold into the next deploy |
+| `ssh-session-record-2026-08-23.md` | The 2026-08-23 session on `management`: every command, what it returned, and what was *not* touched. All read-only. | current |
+
+### `hardware/` — rigs
+
+| Document | Purpose | Status |
+|---|---|---|
+| `README.md` | Hardware configuration — Modbus RTU, Delta C2000 Plus VFD over serial and TCP, valve pin maps. | current (VFD address corrected to `12`) |
+| `system1-sensor-vfd-debug-2026-07-07.md` | system-1 bring-up: sensors, the VFD-at-address-12 finding, PSF scaling. | historical |
+| `system1-sensor4-5-addition-2026-07-08.md` | system-1 sensor 4/5 addition. | historical |
 
 ### `ifet-management/`
 
 | Document | Purpose | Status |
 |---|---|---|
-| `deployment/SECRETS.md` | Where every credential lives, the secret-hygiene guard, and the **gated** migration runbook for the production management node. | current — P0 built and rehearsed, **deployment gated** |
+| `deployment/SECRETS.md` | Where every credential lives, the secret-hygiene guard, and the gated migration runbook. | current — **deployment gated** |
+| `src/management_service/tests/stage3_live_write.py` | **Stage 3, as a script.** Dry-run by default; `--live` requires `--approved-by`; the production base is refused unconditionally. | ready, awaiting approval |
 | `src/management_service/DATABASE_MIGRATIONS.md` | Alembic usage. | pre-existing |
 
 ### Airtable (theirs — read-only to us)
 
 | Resource | Link / ID | Notes |
 |---|---|---|
-| Production dashboard | [interface page](https://airtable.com/app0OCunbmuXl7Hc9/pagGRZZBAH691m3x5) | Human-facing only; interface pages are not exposed by the Meta API. Confirms production base `app0OCunbmuXl7Hc9`. |
-| Testing base | `app4oXS3Kd5IKWgJ7` | Where LabOS builds. Contract §0.1. |
-| Write target | `tblnc9SsbXU0C0FWh` | The only writable surface. |
+| Production dashboard | [interface page](https://airtable.com/app0OCunbmuXl7Hc9/pagGRZZBAH691m3x5) | Human-facing only; interfaces are not exposed by the Meta API |
+| Testing base | `app4oXS3Kd5IKWgJ7` | Where LabOS builds. **Completely empty** — 0 records in every table |
+| Production base | `app0OCunbmuXl7Hc9` | Holds the sample job `IFET-26-0066` and their reference row `recxZWiVa5Wuy0ZV6` |
+| Write target | `tblnc9SsbXU0C0FWh` | The only writable surface, in either base |
 
 ### Notion — [LabOS hub](https://app.notion.com/p/3a357bad43d5818cb726d24c5e803c69)
 
+All reconciled 2026-08-28 (§5). Ordered by who reads them.
+
 | Page | Audience | Status |
 |---|---|---|
-| *5-Week Integration Plan (LabOS × Airtable)* | cross-team | current — W1 progress note added 2026-07-29 |
-| *LabOS ↔ Airtable — Field Mapping (Working)* | cross-team | current — real Airtable field names folded in 2026-07-29; 🟡→🔵, plus 🟠 `Requested` rows |
-| *LabOS Response — Airtable Schema Review & Write Contract v0.2* | cross-team | current |
-| *LabOS Verification Report & API Pre-Flight* | cross-team | current |
-| *Branch Reconcile — Execution Record* | internal | 🔒 closed 2026-07-29 |
-| *LabOS ↔ Airtable — Internal Engineering Plan* | private | mirrors the repo internal plan |
-| *Codebase Readiness Evaluation (2026-07-20)* | internal | ⚠️ **partly superseded** — it read management branch `main`; production runs `latest`, which is further along. Its line-number citations are off. Read the internal plan §1 instead. |
-| *Delivery & Progress Tracker* (Epic IFET-32) | cross-team | live board |
+| *📌 Project Status & Revised Timeline (2026-08-28)* | **management — sent to the PM** | **current — the executive view** |
+| *📊 Delivery Status (2026-08-28)* | internal | current |
+| *🗓️ Revised Roadmap & True Timeline (2026-08-28)* | internal | current |
+| *🗓️ 5-Week Integration Plan* | cross-team | current — dates superseded, asks rewritten |
+| *🗺️ Field Mapping (Working)* | cross-team | ⚠️ §1–§3 tables predate the live probe — **corrections table at the top**; §5 rewritten |
+| *Delivery & Progress Tracker* (Epic IFET-32) | cross-team | live board — statuses reconciled against the code |
+| *📕 Verification Report* · *Response v0.2* · *Contract v0.1* · *Readiness Evaluation* · *Adaptation Plan* · *Change Summary* | internal | historical — all bannered |
+| *Internal Engineering Plan* | private | current-position banner added |
+| *Branch Reconcile — Execution Record* | internal | 🔒 closed |
 
 ---
 
-## 3. Status snapshot — 2026-08-23
+## 3. Status snapshot — 2026-08-28
+
+*A view. The assessment is `labos-airtable/status/delivery-status-2026-08-28.md`; the dates are
+`labos-airtable/status/revised-roadmap-2026-08-28.md`; the open items are contract §10.*
 
 | | |
 |---|---|
-| **Week** | **2 of 5 — started 2026-08-23.** W1 closed on the LabOS side; P1 schema, identity and the ORM→envelope mapping are built and rehearsed. W3 stays gated on §10.19. |
-| **Contract** | `v0.3 DRAFT`. §10 now runs to **22 items: 6 closed on 2026-08-23**, 6 opened by the live probe. Ratifies to `v1.0` when §10 closes. |
-| **Their latest** | *API Integration Guide* **v2**, 2026-08-17. Delta: `labos-airtable-v2-guide-reconciliation-2026-08-22.md` |
-| **Testing base** | `app4oXS3Kd5IKWgJ7` — *LabOS Testing Base*. Production `app0OCunbmuXl7Hc9`. All nine table IDs published (contract §0.1). **First requests made 2026-08-23 — read-only, both bases; nothing was written to either.** Every table ID confirmed live; the testing base is a schema-only clone holding no records. |
-| **Write target** | `LabOS Raw Data Table` — `tblnc9SsbXU0C0FWh`. **The only writable surface**; LabOS enforces the allowlist client-side, since PAT scopes are per-base not per-table. |
-| **Token** | ✅ **Both PATs delivered 2026-08-23** (testing + production), stored in the gitignored `.env`, in no commit or document. **Rotate after acceptance testing** — they arrived as plaintext email. |
-| **Requested fields** | **4 of 11 granted** in v2: `Schema Version`, `Max Pressure Achieved`, `Deflection Unit`, `Complete LabOS JSON Response`. All 28 promised fields confirmed live. |
-| **Done** | branch reconcile (closed) · schema review + reply · write contract v0.3 · v2 reconciliation + reply · Airtable client, schema probe and envelope builder (`feature/labos-airtable`) · P0/Ref 42 secret store (`bf4db01`, built + rehearsed off-node, **not deployed**) · **live probe of both bases · wire-level option translation · W2/P1 attempt schema — 132 tests (2026-08-23)** |
-| **Awaiting their reply** | Luis replied 2026-08-23 with both PATs and pointed us at the populated proposal data; he is away until Monday, when a joint testing session is booked. The §5.1 write-back asks are no longer held — they go **with** the probe findings, since the probe turned two of them into blockers with evidence. Agenda: `labos-airtable-live-probe-findings-2026-08-23.md` §7. |
-| **Blocked on the Airtable team** | **the proposal-extraction shift (§10.19) — highest severity: their sample job carries `DP = 9 PSF` where the PDF says `+60/60`, and LabOS cannot detect it** · `Test Type` has only one option, so 4 of 5 test types cannot be written (§10.17) · `Corrects Attempt ID` + `Correction Reason` (§10.14) · typed `Required Value`/`Required Unit` (§10.3) · the `Test Date` collapse (§10.13/§10.20) · confirm the write model (§10.21) |
-| **Blocked on the manager** | test node up and reachable — offline since ~2026-07-24, so there is **no non-production rig** for firmware P3 |
-| **Verified against the live base** | Airtable API client + write allowlist · schema probe (run against both bases, snapshots in `docs/airtable-schema/`) · payload envelope builder with wire-level option translation · attempt schema + ORM→envelope mapping · **132 offline tests** — all in `ifet-management` @ `feature/labos-airtable`, stdlib-only so none of it needs a production image rebuild |
-| **Not blocked** | **verification stage 3 — a live upsert round-trip into the testing base** (nothing engineering-side is blocking; it needs **Luis's OK on Monday's call**, which the §8 message asks for, and its July payload spec is stale — see §0) · sync worker + durable queue (W4) · firmware P3 pressure and per-gauge deflection capture (write + unit-test only, no rig) |
-| **W2 / P1** | ✅ **complete + rehearsed 2026-08-23** — attempt schema, Airtable linkage, JSON columns, ORM→envelope mapping, identity + lifecycle, both `/trials` endpoints wired, **132 offline tests**. Migration is tracked and rehearsed both directions. **Not deployed.** Evidence: `labos-p1-schema-and-migration-mechanism-2026-08-23.md` |
-| **Newly known about production** | Migrations are **gitignored and bind-mounted from the node**, and `startup.sh` autogenerates one on **every container restart** (28 empty no-ops since January). A `models.py` change merged to `latest` therefore alters the production schema at the next restart with no review. Documented, not yet changed. |
+| **Milestones** | **2 of 5 delivered and verified** — W1 foundations, W2 schema & identity. W3/W4/W5 not started. The original window (2026-07-23 → 2026-08-27) has **closed** |
+| **Revised target** | **Pilot go-live Friday 2026-10-09**, six working weeks from 2026-08-31, **W4 pulled ahead of W3** |
+| **Deployed** | **Nothing.** Production runs the July build. Both integration branches are pushed, clean, unmerged |
+| **Tests** | **132 offline, green** — re-verified 2026-08-28, stdlib-only |
+| **Contract** | `v0.3 DRAFT`. §10 now runs to **26 items** — 23–26 opened 2026-08-28 by writing up the verification report and diffing their reference row |
+| **Correspondence** | ✅ **Both documents sent 2026-08-28** — the verification report to the Airtable team, the status page to IFET management. **The blocker is now their reply, not our send** |
+| **Their latest** | *API Integration Guide* **v2**, 2026-08-17 · their sample row `recxZWiVa5Wuy0ZV6`, written 2026-08-10 |
+| **Tokens** | Both PATs held in the gitignored `.env` (mode 600). **Rotate after acceptance testing** — they arrived by plaintext email |
+| **Ready and waiting** | **Stage 3 as a script** (`tests/stage3_live_write.py`, dry-run verified, production base refused unconditionally) · **the P0/P1 deploy runbook** (its §2 decides whether the deploy can run that day) |
+| **Blocked on the Airtable team** | §10.19 extraction defect (**highest severity — already reached a `Passed`/`Completed` record**) · §10.17 `Test Type` has one option · §10.24 unit vocabulary (**our envelope refuses their `Inches`**) · §10.25 JSON shape · §10.14 correction fields · §10.23 how `+60/60` is represented · §10.3 typed requirement values · approval for the stage-3 write |
+| **Blocked on IFET** | a **maintenance window** for the P0/P1 deploy · the **`test` node**, offline since ~2026-07-24, leaving no non-production rig · a decision on reviewing already-reported results, once the extraction blast radius is known |
+| **Not blocked** | **W4 — the durable sync queue and worker.** Retry/backoff (Ref 57) and the upsert mechanism (Ref 56) are already built; the queue, the worker and the sync-status UI are not. This is the real remaining build |
 
-> **The honest read, 2026-08-23.** The token arrived and the gate opened: six open items closed in one probe
-> run, and §10.3 — the critical path since July — is answered. W3 is unblocked *on structure*.
+> **The honest read, 2026-08-28.** The build is in good shape and further along than the week counter
+> suggested — two milestones delivered, 132 tests green, both bases read end to end. The delivery is behind,
+> and until today the reason was ours: a message written on 2026-08-23 and not sent. That is now closed.
 >
-> But the probe also found something worse than a missing spec. **The requirement values in their sample job do
-> not match the proposal PDF they were extracted from** (§10.19): the extractor drops blank cells instead of
-> holding the column position, so `DP (+) (PSF)` reads `9` where the proposal says `+60/60`. Those are the
-> numbers that drive the rig. LabOS cannot defend against it — every shifted value is individually plausible —
-> so **nothing may read requirements from Airtable for a live test until the extraction is corrected.** W3 can
-> be built against this structure; it must not be trusted with a rig yet.
+> Two things carry forward. **The extraction defect is a safety item, not a data-quality one** — a rig driven
+> from `DP = 9` would under-load a specimen sevenfold, pass it, and certify it, and a `Passed`/`Completed`
+> record already exists against a requirement the proposal does not contain. And **free-text unit fields are
+> quietly dangerous**: their row says `Inches`, ours says `in`, the column would accept both, and our own
+> envelope refuses theirs — so it is unsendable rather than merely untidy.
 
 ## 4. Keeping these consistent
 
@@ -268,7 +322,7 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 
 ### Fixed in the 2026-08-23 reconcile
 
-- **Subject ownership moved.** "What we've verified" now belongs to `labos-airtable-live-probe-findings-2026-08-23.md`; the 2026-07-29 verification report
+- **Subject ownership moved.** "What we've verified" now belongs to `labos-airtable/evidence/live-probe-findings-2026-08-23.md`; the 2026-07-29 verification report
   is re-labelled **historical** rather than "superseded in part", because its stage 1 and 2 were actually
   *executed* on 2026-08-23. Its banner now scores the plan against the outcome instead of just warning.
 - **Six §10 items closed with evidence** rather than argument, and six opened. §10 went from 16 items to 22.
@@ -276,7 +330,7 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
   contract was wrong. Recorded that way in contract §4.3, in the reconciliation doc's §6.1 post-mortem, and
   here, because a reconcile that only ever finds the *other* side wrong is not being honest.
 - **Gap J closed, gap I answered.** The internal plan's gap list had both open; J's `fld…`-ID snapshot now
-  exists for both bases under `docs/airtable-schema/`, and I turned out to have a third answer neither side
+  exists for both bases under `labos-airtable/schema/`, and I turned out to have a third answer neither side
   had proposed (row-per-parameter).
 - **The held §5.1 message was released.** It was held so a second ask would not bury the first; Luis replied,
   so the reason expired. It now travels with the probe findings, which is strictly better — two of its asks
@@ -291,19 +345,19 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 
 ---
 
-## 4. Notion reconciliation — 2026-08-28
+## 5. Notion reconciliation — 2026-08-28
 
 Notion had drifted a month behind the repo, and the **task board was the worst of it**: Phases 0 and 1
 were finished while the board still read `To Do` / `Backlog`. Everything below is now reconciled.
 **Repo docs stay authoritative** (§1); Notion pages are views.
 
-### 4.1 Documents
+### 5.1 Documents
 
 | Notion page | What was done |
 |---|---|
 | **📌 LabOS × Airtable — Project Status & Revised Timeline (2026-08-28)** `3ca57bad43d581e5b28ece91494a45a7` | **The page actually sent to IFET management on 2026-08-28.** Executive view — status at a glance, the extraction defect, the five remaining Airtable items, the R1–R6 plan, and the reporting commitment. Parented under `ifet`, not under the LabOS hub; linked from the hub. **This is the page the PM reads** |
-| **🗓️ Revised Roadmap & True Timeline (2026-08-28)** `3ca57bad43d581e5b7d4fc3dda389294` | **New.** The answer to the PM's escalation: revised dates, what would move them, dated targets per Airtable ask, and four asks back to IFET (maintenance window · `test` node · weight behind the extractor fix · the review decision). View of `labos-airtable-revised-roadmap-2026-08-28.md` |
-| **📊 Delivery Status — LabOS × Airtable (2026-08-28)** `3ca57bad43d581f8b996e63764f5cbfc` | **New.** Human-readable status + a standalone *What we need from the Airtable team* section written to be lifted straight into a message. View of `labos-delivery-status-2026-08-28.md` |
+| **🗓️ Revised Roadmap & True Timeline (2026-08-28)** `3ca57bad43d581e5b7d4fc3dda389294` | **New.** The answer to the PM's escalation: revised dates, what would move them, dated targets per Airtable ask, and four asks back to IFET (maintenance window · `test` node · weight behind the extractor fix · the review decision). View of `labos-airtable/status/revised-roadmap-2026-08-28.md` |
+| **📊 Delivery Status — LabOS × Airtable (2026-08-28)** `3ca57bad43d581f8b996e63764f5cbfc` | **New.** Human-readable status + a standalone *What we need from the Airtable team* section written to be lifted straight into a message. View of `labos-airtable/status/delivery-status-2026-08-28.md` |
 | **🧪 LabOS — Naming, Architecture & Integration** (hub) `3a357bad43d5818cb726d24c5e803c69` | §1–§7 confirmed still accurate and said so. **§8 rewritten** — all six original open questions closed with what actually answered them, and a callout naming the four items that replaced them |
 | **🗓️ 5-Week Integration Plan** `3a657bad43d581e59490f53a8eeedbf6` | Month-old progress callout demoted to *Historical*; **§"What we need from the Airtable team" fully rewritten** — its original five asks are all closed |
 | **🗺️ Field Mapping (Working)** `3a357bad43d581c68ea1c85411429cac` | Added a **corrections table** (base ID, table name, `Airtable Mockup ID`, `Test Date` date-only, three option sets, `Required Value`/`Required Unit` absent) and **rewrote §5 open items**. §1–§3 tables not yet rewritten — tracked as a LabOS item inside its own §5 |
@@ -317,7 +371,7 @@ were finished while the board still read `To Do` / `Backlog`. Everything below i
 | **🔒 Branch Reconcile Execution Record** `3a957bad43d581b4a091d1c1459de641` | Confirmed closed and still accurate; re-stated the node git guardrails, which remain load-bearing |
 | **🏭 ifet** (project hub) `38b57bad43d58178b9b6dcef50401fc9` | Integration status line added; fleet table now records **`test` offline since ~2026-07-24** and why that matters (no non-prod rig to rehearse on) |
 
-### 4.2 Delivery & Progress Tracker — Epic IFET-32
+### 5.2 Delivery & Progress Tracker — Epic IFET-32
 
 Every status below was verified against the code before it was changed, not inferred from the plan.
 
@@ -348,11 +402,11 @@ relabelling forty rows.
 
 **Not touched:** MCAIT / Cowork pages (different project), session logs (accurate as written).
 
-### 4.3 Sent artifacts
+### 5.3 Sent artifacts
 
 | Artifact | Recipient | Kept at |
 |---|---|---|
-| *LabOS – Airtable Integration: Live Base Verification, Data Integrity Findings, and Requested Actions* | IFET / Airtable integration team | `docs/sent/2026-08-28-labos-airtable-live-base-verification-report.docx` |
+| *LabOS – Airtable Integration: Live Base Verification, Data Integrity Findings, and Requested Actions* | IFET / Airtable integration team | `labos-airtable/correspondence/sent/2026-08-28-labos-airtable-live-base-verification-report.docx` |
 | *📌 LabOS × Airtable — Project Status & Revised Timeline (2026-08-28)* | IFET management | Notion `3ca57bad43d581e5b28ece91494a45a7` |
 
 The `.docx` is kept in-repo deliberately: it is what they actually received, and findings §8 is only the

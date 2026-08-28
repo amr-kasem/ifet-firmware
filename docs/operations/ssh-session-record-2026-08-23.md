@@ -150,7 +150,7 @@ restart since — which is itself the quickest way to confirm the mechanism is s
 
 | For | Read |
 |---|---|
-| The full W2 / P1 record and the migration mechanism | `labos-p1-schema-and-migration-mechanism-2026-08-23.md` |
-| The Airtable-side probe of the same day (HTTPS, not SSH) | `labos-airtable-live-probe-findings-2026-08-23.md` |
-| Where the integration stands overall | `labos-airtable-readiness-2026-08-23.md` |
+| The full W2 / P1 record and the migration mechanism | `docs/labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` |
+| The Airtable-side probe of the same day (HTTPS, not SSH) | `docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` |
+| Where the integration stands overall | `docs/labos-airtable/status/readiness-2026-08-23.md` |
 | Secret handling and the gated deploy runbook | `ifet-management/deployment/SECRETS.md` |
