@@ -284,20 +284,57 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
 
 ---
 
-## 4. Notion sync — 2026-08-28
+## 4. Notion reconciliation — 2026-08-28
 
-Notion had drifted a month behind the repo. Reconciled as follows. **Repo docs stay authoritative**
-(§1); these are views.
+Notion had drifted a month behind the repo, and the **task board was the worst of it**: Phases 0 and 1
+were finished while the board still read `To Do` / `Backlog`. Everything below is now reconciled.
+**Repo docs stay authoritative** (§1); Notion pages are views.
+
+### 4.1 Documents
 
 | Notion page | What was done |
 |---|---|
-| **📊 Delivery Status — LabOS × Airtable (2026-08-28)** `3ca57bad43d581f8b996e63764f5cbfc` | **New.** The human-readable status: what's built, what isn't, the schedule stated honestly, the extraction defect with the `IFET-26-0066` table, and a standalone *What we need from the Airtable team* section written so it can be lifted straight into a message. View of `labos-delivery-status-2026-08-28.md` |
-| **🗓️ 5-Week Integration Plan** `3a657bad43d581e59490f53a8eeedbf6` | Progress callout was a month stale → demoted to *Historical*, current banner added. **§"What we need from the Airtable team" fully rewritten** — the original five asks are all closed; the four current ones replace them |
-| **🗺️ Field Mapping (Working)** `3a357bad43d581c68ea1c85411429cac` | Wrote against their *v1* doc, so several names are simply wrong against the live base. Added a **corrections table** (base ID, table name, `Airtable Mockup ID`, `Test Date` date-only, `Test Result` / `Test Status` / `Test Type` option sets, `Required Value`/`Required Unit` absent) and **rewrote §5 open items**. The §1–§3 tables themselves are *not yet* rewritten — that is now a tracked LabOS item in its own §5 |
-| **📕 Verification Report (2026-07-29)** `3ac57bad43d5811b84a2da22288d0edb` | Marked historical; stages 1–2 recorded as executed. **Red banner on the Stage 3 payload** — retired base, wrong table name, two fields that don't exist, and `Static Load` as the only accepted type. The fourteen checks still stand |
-| **📕 Response — Schema Review & Contract v0.2** `3ac57bad43d581c49ff9cf1e125c40c3` | Marked historical, superseded by their v2 guide and the live probe. Calls out the one place **their spelling was right and ours was wrong** (`Passed`/`Failed`) |
-| **📕 Integration Contract v0.1** `3a357bad43d581669d73d203375acfd5` | Superseded banner — v0.3 is current, don't build against it |
-| **🧪 Epic IFET-32** `3a357bad43d581a499e4f3d21a247898` | Tracker `Notes` and `Last update` refreshed to the 2026-08-28 position |
+| **📊 Delivery Status — LabOS × Airtable (2026-08-28)** `3ca57bad43d581f8b996e63764f5cbfc` | **New.** Human-readable status + a standalone *What we need from the Airtable team* section written to be lifted straight into a message. View of `labos-delivery-status-2026-08-28.md` |
+| **🧪 LabOS — Naming, Architecture & Integration** (hub) `3a357bad43d5818cb726d24c5e803c69` | §1–§7 confirmed still accurate and said so. **§8 rewritten** — all six original open questions closed with what actually answered them, and a callout naming the four items that replaced them |
+| **🗓️ 5-Week Integration Plan** `3a657bad43d581e59490f53a8eeedbf6` | Month-old progress callout demoted to *Historical*; **§"What we need from the Airtable team" fully rewritten** — its original five asks are all closed |
+| **🗺️ Field Mapping (Working)** `3a357bad43d581c68ea1c85411429cac` | Added a **corrections table** (base ID, table name, `Airtable Mockup ID`, `Test Date` date-only, three option sets, `Required Value`/`Required Unit` absent) and **rewrote §5 open items**. §1–§3 tables not yet rewritten — tracked as a LabOS item inside its own §5 |
+| **📕 Verification Report (2026-07-29)** `3ac57bad43d5811b84a2da22288d0edb` | Historical; stages 1–2 recorded as executed. **Red banner on Stage 3** — retired base, wrong table name, two non-existent fields, `Static Load` the only accepted type |
+| **📕 Response — Schema Review & Contract v0.2** `3ac57bad43d581c49ff9cf1e125c40c3` | Historical. Names the one place **their spelling was right and ours wrong** (`Passed`/`Failed`) |
+| **📕 Integration Contract v0.1** `3a357bad43d581669d73d203375acfd5` | Superseded — v0.3 is current, don't build against it |
+| **📕 Codebase Readiness Evaluation (2026-07-20)** `3a357bad43d581f1bcfaed12cf59ac31` | Historical, **plus its factual error called out**: it assessed `main`, but production runs `latest`, which already had Alembic and `TestResult`. Several "gaps" it found were never real |
+| **📕 Adaptation Plan** `3a357bad43d581e1a770ecf01d6185c4` | Historical; contract v0.3 wins on any disagreement. Inherits the same `main`/`latest` error |
+| **📕 Change Summary for Review** `3a357bad43d5815e9f8bed140f9ba4f2` | Historical — describes as *proposed* what has since been built (P0, P1) and still isn't deployed |
+| **📄 Internal Engineering Plan (5-week)** `3a657bad43d581fa9778e5c361abd190` | Current-position banner: structure holds, dates don't; **W3⇄W4 swap now in effect**; gap I answered but split |
+| **🔒 Branch Reconcile Execution Record** `3a957bad43d581b4a091d1c1459de641` | Confirmed closed and still accurate; re-stated the node git guardrails, which remain load-bearing |
+| **🏭 ifet** (project hub) `38b57bad43d58178b9b6dcef50401fc9` | Integration status line added; fleet table now records **`test` offline since ~2026-07-24** and why that matters (no non-prod rig to rehearse on) |
 
-**Not touched:** *Adaptation Plan*, *Change Summary for Review*, *Internal Engineering Plan*, *Branch
-Reconcile Execution Record* — historical by nature and not misleading as they stand.
+### 4.2 Delivery & Progress Tracker — Epic IFET-32
+
+Every status below was verified against the code before it was changed, not inferred from the plan.
+
+| Ref | Item | Was | Now |
+|---|---|---|---|
+| 32 | Epic IFET-32 | In Progress | *(unchanged)* — `Notes` + `Last update` refreshed |
+| 34 | **Phase 0 · Foundations** | `To Do` | **Delivered** |
+| 41 | Alembic migrations | `To Do` | **Delivered** — and bigger than planned; the chain lived only on the node |
+| 42 | Server-side secrets | `To Do` | **Delivered** (`bf4db01`) |
+| 43 | Airtable client + package | `To Do` | **Delivered** — title corrected to the real path `app/airtable/` |
+| 35 | **Phase 1 · Schema & identity** | `Backlog` | **Delivered** |
+| 44 | External-ID columns | `Backlog` | **Delivered** |
+| 45 | Mock-up / Protocol / Section entities | `Backlog` | **Delivered — closed by design change.** Lightweight reference columns, *not* mirrored tables. The note says so explicitly so nobody builds it |
+| 46 | Append-only Attempt model | `Backlog` | **Delivered** |
+| 47 | Results-out fields | `Backlog` | **Delivered** |
+| 54 | Persist attempts on `/trials` | `Backlog` | **Delivered** — firmware half (Ref 53) still open; they land together |
+| 57 | Retry / backoff + error classes | `Backlog` | **Delivered** — built early, ahead of its W4 sprint |
+| 56 | Idempotent Airtable upsert | `Backlog` | **In Progress** — mechanism built and unit-tested; unproven live, blocked on the write approval |
+| 36 | **Phase 2 · Requirements IN** | `Blocked` | **Blocked** — *reason replaced*: old blocker (unknown structure) closed; new blocker is the extraction defect |
+| 38 | **Phase 4 · Results OUT** | `Backlog` | **To Do — pulled forward ahead of Phase 2** |
+| 30 | Implement integration with Airtable | In Progress | *(unchanged)* — notes refreshed |
+
+Unchanged and correct: Refs 33, 37, 39, 40, 48–53, 55, 58–65.
+
+**Sprint labels (`Week 1`…`Week 5`) were deliberately left alone.** They name the plan's *phases*, which
+still hold; it is the calendar that moved, and that is recorded on the status page rather than by
+relabelling forty rows.
+
+**Not touched:** MCAIT / Cowork pages (different project), session logs (accurate as written).
