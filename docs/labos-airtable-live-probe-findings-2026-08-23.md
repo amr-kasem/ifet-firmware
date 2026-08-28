@@ -254,18 +254,24 @@ which is the last thing standing between here and W2.
 
 ## 8. The message that goes out
 
-> **Status:** ready to send to Luis for the Monday session. This section is the **authoritative wording** —
-> contract §10 owns the item *statuses*, this owns what we actually say. Sent record to be stamped below.
+> **Status:** ⚠️ **still unsent as of 2026-08-28.** Written 2026-08-23 for the Monday 2026-08-25 session;
+> that slot lapsed without the message going out. Re-framed below for a direct send — the four asks and their
+> ordering are unchanged, and were re-verified against both live bases on 2026-08-28 (all four still open).
+> This section is the **authoritative wording** — contract §10 owns the item *statuses*, this owns what we
+> actually say. Sent record to be stamped below.
 
 **To:** Luis Macias (IFET) · **Cc:** Airtable team
-**Subject:** LabOS ↔ Airtable — we've connected and read both bases; one issue we need to flag before Monday
+**Subject:** LabOS ↔ Airtable — we've read both bases; one issue to flag before anything goes live
 
 ---
 
 Hi Luis,
 
 Thanks for the tokens and for pointing us at the populated proposal data — that was exactly what we needed.
-Both tokens work, and we've now connected to both bases for the first time.
+Both tokens work, and we've now connected to both bases and read them end to end.
+
+Apologies for not getting this to you before the slot we'd pencilled in — that one is on me. Everything below
+still stands; I re-checked it against both bases this morning.
 
 To be clear about what we did: **we only read.** Every request was a `GET`. We wrote nothing to either base,
 including the LabOS Raw Data Table, so nothing has changed on your side. We'll keep it that way until you give
@@ -299,10 +305,17 @@ Passed. The water requirement disappears entirely.
 We can't defend against this from our side, because every shifted value is individually plausible: 9 is a
 perfectly legal design pressure. Nothing short of comparing against the original proposal reveals it.
 
+**One more thing worth knowing: this has already reached a completed record.** On this same job, the
+`SMI (impacts)` section holds `Value = 10` with `Result = Passed` and `Status = Completed` — but the proposal
+has no SMI value at all; the 10 belongs to `# Dials`. So it isn't only a risk to future tests: there is a
+result already recorded as passed against a requirement that isn't in the source document. That's why we'd
+like to know the scope of the re-extraction rather than just the fix.
+
 What we'd ask:
 
 1. Make the extraction **column-positional**, so a blank cell keeps its slot.
-2. **Re-extract IFET-26-0066**, and let us know how many other jobs were loaded the same way.
+2. **Re-extract IFET-26-0066**, and let us know how many other jobs were loaded the same way — including any
+   where testing has already been marked complete, since those may need their results reviewed.
 3. Add a **sanity check** before a job is released for testing — even simple range limits on the pressure
    fields would have caught `DP = 9`.
 
@@ -352,14 +365,17 @@ Nothing you do today would need to change.
 - **Please rotate both tokens** once we're through acceptance testing. They came through email, so it's worth
   replacing them as a matter of routine.
 
-### For Monday
+### What we need from you next
 
 We're ready for the last verification step: **a single test write** into the LabOS Raw Data Table in the
 **testing** base (`app4oXS3Kd5IKWgJ7`) — one record, written and then updated, to confirm the round-trip and
 the duplicate-prevention behave as expected. We won't touch the production base. **We just need your OK to run
-it.**
+it** — a one-line reply is enough, it doesn't have to wait for a call.
 
-Suggested order for the call:
+Could we also put a new slot in the diary for the testing session, since the last one lapsed? Any time that
+suits you works for us.
+
+Suggested order when we do talk, most-blocking first:
 
 1. The extraction issue (item 1) — the only one that affects test results
 2. Test Type options (item 2) — blocks writing back anything but static load
@@ -375,4 +391,4 @@ LabOS
 
 ---
 
-> **Sent:** *(pending — hold for Monday's session)*
+> **Sent:** *(pending as of 2026-08-28 — re-framed for a direct send; stamp the date here the day it goes)*

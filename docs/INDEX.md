@@ -1,11 +1,28 @@
 # IFET Project — Documentation Index
 
-**Maintained by:** Abdelrahman · **Reconciled:** 2026-08-23 (previously 2026-08-22)
+**Maintained by:** Abdelrahman · **Reconciled:** 2026-08-28 (previously 2026-08-23)
 **Scope:** every LabOS ↔ Airtable integration and status document, across both repos and Notion.
 
 ---
 
-## 0. Resume here — state as of 2026-08-23
+## 0. Resume here — state as of 2026-08-28
+
+> ### ⚠️ Read this before the rest of §0
+>
+> **The Monday 2026-08-25 message was never sent.** The §0 below was written on 2026-08-23 and its
+> "shortest path" step 1 has not been executed. Everything it says about the *build* is still accurate and
+> was re-verified on 2026-08-28 (132 tests green; both bases probed read-only, schema unchanged).
+>
+> **Current assessment: `labos-delivery-status-2026-08-28.md`** — build state, the schedule stated
+> honestly (day 36 of a 35-day plan, 2 of 5 milestones done), and the extraction defect measured against
+> the sample job `IFET-26-0066`.
+>
+> **Still step 1: send `labos-airtable-live-probe-findings-2026-08-23.md` §8.** It has been re-framed for
+> a direct send and carries one new fact — the defect has already reached a *completed* record
+> (`SMI (impacts) = 10`, `Passed`, where the proposal has no SMI value). All four asks re-confirmed open
+> against both live bases on 2026-08-28.
+
+### State as of 2026-08-23 (build facts still current)
 
 *Written so a session starting cold can pick up without reconstructing anything. If this section and §3
 disagree, §3 is newer and this one is the bug.*
