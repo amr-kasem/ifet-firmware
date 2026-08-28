@@ -17,6 +17,13 @@
 > honestly (day 36 of a 35-day plan, 2 of 5 milestones done), and the extraction defect measured against
 > the sample job `IFET-26-0066`.
 >
+> **The PM escalated on 2026-08-28** ("no activity, no Notion updates, 5 weeks nearly gone"). Answer:
+> `labos-airtable-revised-roadmap-2026-08-28.md` — **revised target pilot go-live Fri 2026-10-09**, six
+> working weeks from Mon 2026-08-31, **W4 pulled ahead of W3**. Notion twin:
+> *🗓️ Revised Roadmap & True Timeline*, `3ca57bad43d581e5b7d4fc3dda389294`.
+> Standing commitment made to the PM: **status page updated every Friday**, board reflects reality on the
+> day, anything blocked >48h goes to the chat.
+>
 > **Notion is now synced (2026-08-28)** — see §4 below. The new status page is the human-readable view:
 > *📊 Delivery Status — LabOS × Airtable (2026-08-28)*, `3ca57bad43d581f8b996e63764f5cbfc`.
 >
@@ -294,6 +301,7 @@ were finished while the board still read `To Do` / `Backlog`. Everything below i
 
 | Notion page | What was done |
 |---|---|
+| **🗓️ Revised Roadmap & True Timeline (2026-08-28)** `3ca57bad43d581e5b7d4fc3dda389294` | **New.** The answer to the PM's escalation: revised dates, what would move them, dated targets per Airtable ask, and four asks back to IFET (maintenance window · `test` node · weight behind the extractor fix · the review decision). View of `labos-airtable-revised-roadmap-2026-08-28.md` |
 | **📊 Delivery Status — LabOS × Airtable (2026-08-28)** `3ca57bad43d581f8b996e63764f5cbfc` | **New.** Human-readable status + a standalone *What we need from the Airtable team* section written to be lifted straight into a message. View of `labos-delivery-status-2026-08-28.md` |
 | **🧪 LabOS — Naming, Architecture & Integration** (hub) `3a357bad43d5818cb726d24c5e803c69` | §1–§7 confirmed still accurate and said so. **§8 rewritten** — all six original open questions closed with what actually answered them, and a callout naming the four items that replaced them |
 | **🗓️ 5-Week Integration Plan** `3a657bad43d581e59490f53a8eeedbf6` | Month-old progress callout demoted to *Historical*; **§"What we need from the Airtable team" fully rewritten** — its original five asks are all closed |
