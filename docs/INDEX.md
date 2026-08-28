@@ -17,6 +17,9 @@
 > honestly (day 36 of a 35-day plan, 2 of 5 milestones done), and the extraction defect measured against
 > the sample job `IFET-26-0066`.
 >
+> **Notion is now synced (2026-08-28)** — see §4 below. The new status page is the human-readable view:
+> *📊 Delivery Status — LabOS × Airtable (2026-08-28)*, `3ca57bad43d581f8b996e63764f5cbfc`.
+>
 > **Still step 1: send `labos-airtable-live-probe-findings-2026-08-23.md` §8.** It has been re-framed for
 > a direct send and carries one new fact — the defect has already reached a *completed* record
 > (`SMI (impacts) = 10`, `Passed`, where the proposal has no SMI value). All four asks re-confirmed open
@@ -80,7 +83,7 @@ W3/W4. Three things to know before running it:
 
 ### After that — none of these are blocked either
 
-- **Notion is four pages behind** — Field Mapping, Response, Verification Report, 5-Week Plan.
+- ~~**Notion is four pages behind**~~ — ✅ **synced 2026-08-28**, see §4.
 - **Firmware `/trials` seam** (gap H, Refs 53 ↔ 54) — must land on both sides together.
 - Answer the open question in `labos-p1-schema-and-migration-mechanism-2026-08-23.md` §7: may an operator
   edit a *terminal* attempt's notes/photos? Likely split — artifacts appendable, results require a correction.
@@ -277,3 +280,24 @@ day. If two documents disagree, the authoritative one wins and the other is a bu
   statements that it is retired. Verified by sweep.
 - **New standing safety rule recorded in three places** (INDEX §3, contract §10.19, internal plan gap I):
   nothing reads requirements from Airtable for a live test until their extractor is fixed.
+
+
+---
+
+## 4. Notion sync — 2026-08-28
+
+Notion had drifted a month behind the repo. Reconciled as follows. **Repo docs stay authoritative**
+(§1); these are views.
+
+| Notion page | What was done |
+|---|---|
+| **📊 Delivery Status — LabOS × Airtable (2026-08-28)** `3ca57bad43d581f8b996e63764f5cbfc` | **New.** The human-readable status: what's built, what isn't, the schedule stated honestly, the extraction defect with the `IFET-26-0066` table, and a standalone *What we need from the Airtable team* section written so it can be lifted straight into a message. View of `labos-delivery-status-2026-08-28.md` |
+| **🗓️ 5-Week Integration Plan** `3a657bad43d581e59490f53a8eeedbf6` | Progress callout was a month stale → demoted to *Historical*, current banner added. **§"What we need from the Airtable team" fully rewritten** — the original five asks are all closed; the four current ones replace them |
+| **🗺️ Field Mapping (Working)** `3a357bad43d581c68ea1c85411429cac` | Wrote against their *v1* doc, so several names are simply wrong against the live base. Added a **corrections table** (base ID, table name, `Airtable Mockup ID`, `Test Date` date-only, `Test Result` / `Test Status` / `Test Type` option sets, `Required Value`/`Required Unit` absent) and **rewrote §5 open items**. The §1–§3 tables themselves are *not yet* rewritten — that is now a tracked LabOS item in its own §5 |
+| **📕 Verification Report (2026-07-29)** `3ac57bad43d5811b84a2da22288d0edb` | Marked historical; stages 1–2 recorded as executed. **Red banner on the Stage 3 payload** — retired base, wrong table name, two fields that don't exist, and `Static Load` as the only accepted type. The fourteen checks still stand |
+| **📕 Response — Schema Review & Contract v0.2** `3ac57bad43d581c49ff9cf1e125c40c3` | Marked historical, superseded by their v2 guide and the live probe. Calls out the one place **their spelling was right and ours was wrong** (`Passed`/`Failed`) |
+| **📕 Integration Contract v0.1** `3a357bad43d581669d73d203375acfd5` | Superseded banner — v0.3 is current, don't build against it |
+| **🧪 Epic IFET-32** `3a357bad43d581a499e4f3d21a247898` | Tracker `Notes` and `Last update` refreshed to the 2026-08-28 position |
+
+**Not touched:** *Adaptation Plan*, *Change Summary for Review*, *Internal Engineering Plan*, *Branch
+Reconcile Execution Record* — historical by nature and not misleading as they stand.
