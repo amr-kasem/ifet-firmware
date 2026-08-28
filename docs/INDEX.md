@@ -24,6 +24,13 @@
 > Standing commitment made to the PM: **status page updated every Friday**, board reflects reality on the
 > day, anything blocked >48h goes to the chat.
 >
+> **Two things are now prepared and waiting, so neither gets rushed later:**
+> - **Stage 3 is a script**, not an improvisation: `ifet-management` `tests/stage3_live_write.py`.
+>   Dry-run by default (`python3 -m tests.stage3_live_write`); a live run needs
+>   `--live --approved-by "<who, when>"`, and the production base is refused unconditionally.
+> - **The deploy is a runbook**: `labos-p0-p1-deploy-runbook-2026-08-28.md`. Read its §2 first — whether
+>   `alembic_version` still returns `3a65a83e0463` decides whether the deploy can happen at all that day.
+>
 > **Notion is now synced (2026-08-28)** — see §4 below. The new status page is the human-readable view:
 > *📊 Delivery Status — LabOS × Airtable (2026-08-28)*, `3ca57bad43d581f8b996e63764f5cbfc`.
 >
