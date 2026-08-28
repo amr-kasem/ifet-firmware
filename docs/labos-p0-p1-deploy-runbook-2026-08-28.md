@@ -1,0 +1,229 @@
+# P0 + P1 deploy runbook — `management`
+
+**Author:** Abdelrahman · **Date:** 2026-08-28 · **Target:** `management` (`ManIfet`), repo `ifet-management`
+**Ships:** `startup.sh` (no more autogenerate-at-boot) **+** migration `b7c2e9a41d38` **+** the tracked
+30-revision chain **+** the P0/P1 application code. **These deploy together or not at all.**
+
+> **Every command below is for a human to run.** Mutating commands on a node are handed over, not executed
+> by an assistant. Read-only checks can be run either way.
+
+---
+
+## 0. Why this is not a routine deploy
+
+Three things make it unusual, and all three are already known:
+
+1. **`alembic/versions` is bind-mounted from the node and was gitignored**, so until 2026-08-23 the real
+   revision chain existed on exactly one machine. It is now tracked in git — but the node's copy and git's
+   copy can disagree, and reconciling them wrongly produces two Alembic heads.
+2. **Until this ships, every container restart appends a fresh no-op revision and moves the head.** So the
+   longer this waits, the more the node has drifted from the baseline the migration was written against.
+3. **Code is baked into the image; config is bind-mounted.** A code change needs a rebuild. Never
+   `docker cp` a patch in.
+
+---
+
+## 1. Pre-window checks — read-only, run these first
+
+Run any time before the window. Nothing here changes anything.
+
+```bash
+# 1a. What revision does the live database think it is on?
+docker exec -it <postgres-container> psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
+  -c 'SELECT * FROM alembic_version;'
+
+# 1b. What revision files does the node actually hold?
+ls -1 /home/labadm/ifet-management/src/management_service/alembic/versions/*.py | wc -l
+ls -lt /home/labadm/ifet-management/src/management_service/alembic/versions/*.py | head -10
+
+# 1c. Node repo state
+cd /home/labadm/ifet-management && git status --short && git log --oneline -3
+
+# 1d. What is actually running
+docker compose ps
+```
+
+**Record all four outputs before going further.** They decide which branch of §2 you take.
+
+---
+
+## 2. The decision that matters
+
+Compare **1a** against `3a65a83e0463`.
+
+### Case A — `alembic_version` is still `3a65a83e0463`
+
+The baseline holds. `b7c2e9a41d38.down_revision = '3a65a83e0463'` applies cleanly. **Go to §3.**
+
+*(Only true if the container has not restarted since 2026-08-23. Verify rather than assume — `docker compose ps` shows uptime.)*
+
+### Case B — `alembic_version` is something else
+
+Expected if any restart has happened. The head has moved to a no-op that exists **on the node and not in
+git**. Applying our migration now would create a **second head**, and `alembic upgrade head` refuses on
+multiple heads — silently not applying P1.
+
+**Do not deploy today.** Do this instead, off the node:
+
+```bash
+# On the node — read-only: copy the revisions git does not have
+cd /home/labadm/ifet-management/src/management_service/alembic/versions
+git status --short .                      # untracked files = the node-only no-ops
+tar cf /tmp/node-only-revisions.tar $(git ls-files --others --exclude-standard .)
+```
+
+Then, **in your clone**:
+
+1. Add those revision files to `feature/labos-airtable` so the chain resolves everywhere.
+2. Re-point `b7c2e9a41d38.down_revision` to the node's **current** head.
+3. Re-run the rehearsal (§5) and confirm it still passes both directions.
+4. Commit, push, and restart this runbook from §1.
+
+> **Rehearsal needs SQLAlchemy**, which is not on the system Python:
+> `uv venv /tmp/p1 && VIRTUAL_ENV=/tmp/p1 uv pip install sqlalchemy alembic`
+> then `/tmp/p1/bin/python tests/rehearse_p1_migration.py /tmp/x.db`
+
+---
+
+## 3. Backup — not optional
+
+The contents of this database are certification evidence.
+
+```bash
+docker exec <postgres-container> pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB" \
+  > ~/backup-management-$(date +%Y%m%d-%H%M).sql
+ls -lh ~/backup-management-*.sql        # confirm it is not zero bytes
+```
+
+**Confirm the file is non-empty before continuing.** A silent zero-byte dump is the classic way this goes
+wrong.
+
+---
+
+## 4. Sync the node to origin — Step E, history/index only
+
+From `labos-branch-reconcile-plan-2026-07-24.md` §Step E. **Never `reset --hard`.**
+
+```bash
+cd /home/labadm/ifet-management
+git fetch --prune origin
+git reset --mixed origin/feature/labos-airtable    # HEAD + index only, rewrites no files
+git status --short
+```
+
+`git status` will now list files that differ. **Check each one against this rule before touching it:**
+
+| File | Action |
+|---|---|
+| `src/management_service/startup.sh` | `git checkout --` it. **This is the point of the deploy.** |
+| `src/management_service/alembic/versions/*.py` | `git checkout --` the tracked ones. **Leave untracked node-only files alone for now** — see the warning below |
+| `compose.yaml`, `config/fstab` | **Do not touch.** These are `skip-worktree` on this node and hold host-specific values |
+| `deployment/config/config.json`, `src/ifet_ui_react/config.json` | **Do not touch.** Browser-served runtime config |
+| Anything else | Do not touch until you have confirmed it is not a live bind mount |
+
+> **⚠️ The trap.** `git checkout -- alembic/versions/` restores the tracked files but **does not remove
+> untracked ones**. Any node-only no-op left in that directory is still a revision Alembic will find, and it
+> will produce a second head. If §2 put you in Case A there should be none; if there are any, you are
+> actually in Case B — stop and go back.
+>
+> Verify explicitly: `git status --short src/management_service/alembic/versions/` must show **nothing
+> untracked**.
+
+---
+
+## 5. Rebuild and deploy
+
+Rebuild from the now-clean checkout. **Not `docker cp`. Not a restart of the old image.**
+
+```bash
+cd /home/labadm/ifet-management
+docker compose build --no-cache report-api      # or whichever service carries startup.sh
+docker compose up -d
+docker compose logs -f --tail=100 report-api
+```
+
+**Watch the logs through startup.** The new `startup.sh` makes migration failure *fatal* — that is
+deliberate. What you want to see:
+
+- the readiness probe waiting for Postgres, then connecting
+- `upgrade` running and reaching `b7c2e9a41d38`
+- **no** `autogenerate` line — its absence is the P0 fix working
+- the API binding its port
+
+If it exits non-zero, `restart: always` will retry it in a loop. That is the intended loud failure. Go to §7.
+
+---
+
+## 6. Post-deploy verification
+
+```bash
+# 6a. Head is where we expect
+docker exec -it <postgres-container> psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
+  -c 'SELECT * FROM alembic_version;'          # expect b7c2e9a41d38
+
+# 6b. Exactly one head, no forks
+docker exec -it <api-container> alembic heads  # expect a single revision
+
+# 6c. The backfill did its job — this is the load-bearing one
+docker exec -it <postgres-container> psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
+  -c "SELECT airtable_sync_state, count(*) FROM test_results GROUP BY 1;"
+```
+
+**6c matters more than it looks.** All 623 pre-existing attempts must read `Excluded`. If they do not, the
+first sync run would upload every test IFET has ever performed into Airtable.
+
+```bash
+# 6d. Restart once, deliberately, and confirm no new revision appears
+docker compose restart report-api
+ls -1 src/management_service/alembic/versions/*.py | wc -l   # unchanged from before
+```
+
+**6d is the actual proof that P0 worked.** Before this deploy, that count went up by one on every restart.
+
+---
+
+## 7. Rollback
+
+The migration has a tested downgrade, but the faster and safer rollback is the image.
+
+```bash
+# Fastest: bring back the previous image
+docker compose down
+git reset --mixed <previous-commit>     # index only
+git checkout -- src/management_service/ # restore the previous code
+docker compose build --no-cache report-api && docker compose up -d
+```
+
+If the schema itself must come back:
+
+```bash
+docker exec -it <api-container> alembic downgrade 3a65a83e0463
+```
+
+Last resort, if data is wrong rather than just the schema — restore §3's dump. **This loses anything written
+since the backup**, so it is a decision, not a step.
+
+---
+
+## 8. What this deploy does *not* do
+
+Stating it so nobody expects it:
+
+- **No Airtable sync is enabled.** `AIRTABLE_SYNC_ENABLED` stays `false`. This ships the schema and the
+  boot fix, nothing that talks to Airtable.
+- **No production Airtable write becomes possible.** That needs a second explicit flag, and stage 3 has not
+  run yet.
+- **No firmware change.** The `/trials` seam still needs its firmware half (Ref 53) — the two land together,
+  later.
+
+---
+
+## 9. Window shape
+
+| | |
+|---|---|
+| Realistic duration | **30–45 minutes**, most of it the rebuild and watching logs |
+| Downtime | The API restarts. Reports and the UI are briefly unavailable |
+| Do not run during | An active test. Testing does not depend on `management`, but do not add a variable |
+| Abort points | After §1 (free) · after §2 Case B (free) · after §3 (free) · after §5 → §7 rollback |
+| Who to tell | The deployment owner, before §4 |
