@@ -80,10 +80,20 @@ always been two columns: `projects.inward_design_pressure` and `projects.outward
 
 ### 2.1 The ask is smaller than it looks — two numbers
 
-**LabOS derives the entire test programme from that pair** (evidence §1): six static stages at
+**LabOS derives the entire preset test programme from that pair** (evidence §1): six static stages at
 `× [0.75, 0.75, 1.0, 1.0, 1.5, 1.5]`, eight cyclic stages with their own low/high factors and cycle counts
 `[3500, 300, 600, 100 | 50, 1050, 50, 3350]`, and the water stage at `× 0.15`. All of it recalculated whenever
 a design pressure changes.
+
+**Confirmed in production, to full float precision.** Every factor above reproduces the live maxima exactly
+across 1127 rows — `395.00518092874876 × 1.5 = 592.5077713931231`, and so on for all ten stages
+(evidence §6.2). So this is not "our code does this", it is what the lab's data *is*. *"Preset"* is the one
+honest qualifier: operators can add ad-hoc stages, and 2 of 626 cyclic rows are hand-entered — but an
+operator-authored stage has no Airtable requirement behind it either way.
+
+**And the pair is genuinely two independent numbers in real jobs:** of 78 projects, **36 — 46% — have inward ≠
+outward design pressure**, spanning 3 → 491 PSF (evidence §6.1). Collapsing `+60/60` into one value loses real
+data in nearly half of all jobs, and the halves are not recoverable from each other.
 
 So the read-side dependency is not "model our requirements". It is:
 
@@ -163,7 +173,7 @@ and it was wrong in both directions: it missed five units the lab actually measu
 | `Deflection Unit` | `in` · `mm` |
 
 Stored value is the short form. Display (`Inches`, `pounds per square foot`) belongs to the interface, not the
-column. **`kg`, `m/s`, `m²`, `cfm/ft²` and `minutes` deliberately get no column** — they belong to impact and
+column. **`kg`, `m/s`, `m²` and `cfm/ft²` deliberately get no column** — they belong to impact and
 infiltration detail, which §5.1 already routes into `Complete LabOS JSON Response` with the unit declared per
 value. Worth telling them that air leakage (`cfm/ft²`) is the one candidate for a first-class field later.
 
@@ -241,9 +251,18 @@ precisely why the reference has to be a real column rather than something buried
 ### 3.3 The ask, and two fallbacks — in order of preference
 
 > **Worth saying, because it changes how the ask sounds.** `corrects_attempt_id` is not a hypothetical field
-> we would like. It is already a `String` column, indexed, migrated, and written by our envelope
-> (`test_results.corrects_attempt_id`, with `correction_reason` as `Text` beside it — evidence §2.2). The data
-> exists on our side today. What is missing is a destination for it.
+> we would like. It is a `String` column, indexed, with `correction_reason` as `Text` beside it, **built,
+> migrated and tested on our integration branch** — and written by our envelope today. What is missing is a
+> destination for it.
+>
+> ⚠️ **Say "built and tested", not "already migrated".** The live production database is still at
+> `alembic_version = 3a65a83e0463` and `test_results` has five columns; none of the P1 attempt columns are
+> deployed (evidence §7.1). Both statements are true of the branch; only the careful one is true of
+> production.
+>
+> **And the ambiguity is already real, not prospective:** across 507 real tests, **106 — one in five — already
+> have more than one attempt**, and some have three (evidence §6.3). Today nothing in that data distinguishes a
+> retest from a correction.
 
 1. **Preferred — two fields on `LabOS Raw Data Table`:** `Corrects Attempt ID` (**plain text**, not a
    computed field, not a link) and `Correction Reason` (long text). Blank on every retest; populated only on a
@@ -347,6 +366,12 @@ their message. **Order the call by blast radius, not by their agenda.**
 > stages with their own low/high pressures and cycle counts (3500, 300, 600, 100 inward; 50, 1050, 50, 3350
 > outward), and the water stage at 0.15× — and it recalculates all of them whenever a design pressure changes.
 >
+> It's also worth saying the pair really is two independent numbers in practice, not a formality: across the 78
+> specimens in our database, **36 of them — 46% — have a different inward and outward design pressure**, and
+> they range from 3 to 491 PSF. So a single `Required Value` would lose real information on nearly half the
+> jobs we've run, and the two halves can't be recovered from each other afterwards. It's also why a `9` doesn't
+> look wrong on its own — it sits comfortably inside the range of real design pressures.
+>
 > So **you don't need to model ranges, cycle sequences, cycle counts or hold times at all.** We don't read
 > them; we compute them. That removes most of what your question was worried about.
 >
@@ -390,9 +415,10 @@ their message. **Order the call by blast radius, not by their agenda.**
 > - `Deflection Unit` — `in`, `mm`
 >
 > Short form as the stored value; long forms like "Inches" are a display choice for the interface. Our impact
-> and infiltration measurements use units that deliberately get no column — kg, m/s, m², cfm/ft², minutes —
+> and infiltration measurements use units that deliberately get no column — kg, m/s, m², cfm/ft² —
 > and travel inside `Complete LabOS JSON Response` with the unit declared per value. The one that might earn a
-> real field later is air leakage in cfm/ft², if you ever want to report on it.
+> real field later is air leakage in cfm/ft² — we measure it between 0.25 and 4.98 — if you ever want to report
+> on it.
 >
 > While you're in there — **could `Unit` and `Deflection Unit` on the raw table become single selects over
 > those lists?** Both are free text today, and your sample row has `Deflection Unit = "Inches"` where our spec
@@ -419,13 +445,17 @@ their message. **Order the call by blast radius, not by their agenda.**
 > So any automation that counts attempts or works out a pass rate is wrong in one of the two cases — and it
 > will look right, which is the part that concerns us.
 >
+> This isn't a hypothetical shape, either: across 507 tests in our database, **106 — about one in five —
+> already have more than one attempt**, and some have three. Right now nothing in that data says which of the
+> two situations each one was.
+>
 > A real example from this project: in July we found a rig logging PSI as PSF, so a result already written as
 > `40 PSF` was actually `5760`. We can't edit the old row — it's terminal, and a report had already cited it —
 > so the only honest fix is a new row that states what it supersedes and why. Marking the old row `Superseded`
 > is then yours, from that field. We deliberately don't want the ability to alter a record we already wrote.
 >
 > To be concrete about the size of the ask: **the column already exists on our side** —
-> `corrects_attempt_id`, indexed, with `correction_reason` beside it, already migrated and already written by
+> `corrects_attempt_id`, indexed, with `correction_reason` beside it, built and tested, and already written by
 > our client. What's missing is somewhere to put it. Two plain fields on the raw table would do it:
 > **`Corrects Attempt ID`** (plain text — not a formula or link, since it's a branch target) and
 > **`Correction Reason`** (long text). Both blank on every retest; populated only on a correction, which is

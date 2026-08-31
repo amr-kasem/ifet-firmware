@@ -1,6 +1,6 @@
 # What LabOS actually stores — real types, real derivations, real units
 
-**Author:** Abdelrahman · **Date:** 2026-08-31 · **Method:** source of record + live read (§6 pending)
+**Author:** Abdelrahman · **Date:** 2026-08-31 · **Method:** source of record + live read of production (§6, run 2026-08-31)
 **Trigger:** the Airtable team asked us to specify `Required Value` and the unit per protocol section. This
 document is the evidence the answer is built on, so the specification is *derived*, not preferred.
 
@@ -131,7 +131,7 @@ Units in actual use across the LabOS model, read off the columns and the report 
 | Pressure — design, static, cyclic, infiltration | **PSF** | `projects`, `static_tests`, `cyclic_tests`, `infiltration_tests` |
 | Deflection — max, permanent set, recovery | **in** | `deflections` |
 | Hold / stage duration | **s** | `static_tests.duration` (30, 900) |
-| Infiltration duration | **minutes** | `infiltration_tests.duration` — `Float` |
+| Infiltration duration | **s** (not minutes — see §7.2) | `infiltration_tests.duration` — `Float` |
 | Air leakage | **cfm/ft²** | `infiltration_tests.leakage` |
 | Cycle count | **cycles** | `cyclic_tests.cycles` |
 | Impact count | **impacts** | `LMI` / `SMI` sections |
@@ -151,7 +151,7 @@ The right resolution is not one giant option list, it is **three lists scoped to
 | `Unit` (raw table, `Measured Value`) | `PSF` · `PSI` · `in` · `mm` · `cycles` · `s` · `impacts` | the governing measured result |
 | `Deflection Unit` | `in` · `mm` | unchanged |
 
-**`kg`, `m/s`, `m²`, `cfm/ft²` and `minutes` deliberately do not get columns.** They belong to impact and
+**`kg`, `m/s`, `m²` and `cfm/ft²` deliberately do not get columns.** They belong to impact and
 infiltration detail, which §5.1 already routes into `Complete LabOS JSON Response` with the unit declared
 per value. If Airtable later wants air leakage as a first-class field, that is when `cfm/ft²` earns a column —
 worth flagging to them, not worth asking for now.
@@ -186,23 +186,159 @@ becomes an error instead of two spellings living in one free-text column.
 
 ---
 
-## 6. Live value ranges — pending
+## 6. Live value ranges — production, read 2026-08-31
 
-The queries are written and read-only: `scratchpad/probe-real-data.sql` (row counts and the alembic head,
-design-pressure ranges and how many pairs are asymmetric, real static factors and holds, the cyclic sequence
-as stored, deflection ranges across all three measurements, infiltration and impact units, retest frequency,
-and the live `information_schema` types for `test_results`).
+Read-only, against `report_db` on `management`. Queries kept verbatim as `probe-real-data-2026-08-31.sql` beside this file. `alembic_version` = **`3a65a83e0463`** — unchanged, so P1 is
+still undeployed (§7.1).
 
-They must be run by hand — the auto-mode classifier blocks `docker exec` against a production node, correctly.
-
-**What each answer is for, so the numbers are not collected idly:**
-
-| Query | The claim it evidences |
+| Table | Rows |
 |---|---|
-| asymmetric design-pressure pairs | that inward ≠ outward happens in real jobs — so `+60/60` collapsing to one number is a real data loss, not a theoretical one |
-| static factors + holds as stored | that §1's derivation is what production actually contains, not just what the code says |
-| deflection ranges, all three columns | that permanent set is populated in real rows — §2.3's argument |
-| retest frequency (attempts per test) | how often the retest/correction distinction actually fires — the §10.14 argument, quantified |
-| `information_schema` on `test_results` | which P1 columns are live vs. pending deploy |
+| `projects` | **78** |
+| `static_tests` | 501 |
+| `cyclic_tests` | 626 |
+| `test_results` | **637** (was 623 on 2026-08-23 — production is live and accumulating) |
+| `deflections` | 1082 |
+| `infiltration_tests` | 37 |
+| `missile_impact_tests` / `shots` | 39 / 114 |
 
-Fill this section in, then re-check §2 and §3 against it before the numbers go into a message.
+### 6.1 The headline number — asymmetric design pressures are the norm, not an edge case
+
+| | |
+|---|---|
+| Projects | 78 |
+| Inward design pressure | **5 → 395.01 PSF** |
+| Outward design pressure | **3 → 491.05 PSF** |
+| **Projects where inward ≠ outward** | **36 — 46% of all real jobs** |
+
+**Nearly half of every job this lab has run has a different inward and outward design pressure.** So
+`+60/60` collapsing into a single `Required Value` is not a theoretical loss of fidelity — it is a loss of real
+data in 46% of cases, and the two halves are not recoverable from each other.
+
+It also shows why `9` was individually plausible: real design pressures span 3 → 491 PSF. Nothing about a `9`
+looks wrong.
+
+### 6.2 The derivation, confirmed to full float precision
+
+Every factor in §1 reproduces the live maxima **exactly** — not approximately:
+
+| Live value | Derivation | Match |
+|---|---|---|
+| `static_tests` max inward `592.5077713931231` | `395.00518092874876 × 1.5` | **exact** |
+| `static_tests` max outward `736.5791671374297` | `491.0527780916198 × 1.5` | **exact** |
+| `static_tests` min inward / outward `3.75` / `2.25` | `5 × 0.75` / `3 × 0.75` | **exact** |
+| cyclic inward, 3500 cycles, high `197.50259046437438` | `× 0.5` | **exact** |
+| cyclic inward, 600 cycles, high `316.004144742999` | `× 0.8` | **exact** |
+| cyclic inward, 300 cycles, high `237.00310855724925` | `× 0.6` | **exact** |
+| cyclic inward, 100 cycles, high `395.00518092874876` | `× 1.0` | **exact** |
+| cyclic outward, 3350 cycles, high `245.5263890458099` | `× 0.5` | **exact** |
+| cyclic outward, 1050 cycles, high `392.84222247329586` | `× 0.8` | **exact** |
+| cyclic outward, 50 cycles, high `491.0527780916198` | `× 1.0` | **exact** |
+| `static_tests` holds | 30 s throughout, **900 s** present on inward only | the water stage |
+
+Cycle counts as stored are exactly `[3500, 300, 600, 100]` inward and `[3350, 1050, 50, 50]` outward — the
+`50` appearing on 156 rows because two of the eight stages carry it. `8 × 78 = 624` of the 626 cyclic rows are
+preset.
+
+**So §1 is not a reading of the source. It is arithmetically verifiable in 1127 production rows.** That is the
+form of the claim to make to the Airtable team: not "our code does this", but "this is what the lab's data
+is".
+
+### 6.3 Retests, quantified — the §10.14 argument stops being theoretical
+
+| | Tests with attempts | Tests with **more than one** attempt | Max attempts |
+|---|---|---|---|
+| Static | 255 | **41** | 2 |
+| Cyclic | 252 | **65** | 3 |
+| **Total** | **507** | **106 — 21%** | **3** |
+
+**One test in five already has more than one attempt, and some have three.** Today nothing in the data says
+whether attempt 2 was a second physical test or a correction of a mis-recorded first — because
+`corrects_attempt_id` has nowhere to land. This is the number to put in front of them: the ambiguity they are
+proposing to accept already applies to 106 real tests.
+
+`test_results.result` is `191 true · 84 false · 362 NULL`. The NULL majority is consistent with contract §4.3
+— `Test Result` is omitted while an attempt is not terminal — and it means a required `Test Result` on every
+row would be wrong.
+
+### 6.4 The rest, briefly
+
+- **Infiltration** — `Air Infiltration` (13) and `Water Infiltration` (24). Pressure 17.8 → 74.3 PSF.
+  Leakage **0.25 → 4.98 cfm/ft²**, plausible for air leakage and consistent with the report contract.
+- **Missile impact** — three real missile classes with fixed masses: `2x4 Lumber` **9 kg**,
+  `Large Missile` **15 kg**, `Steel Ball` **2 kg**. Shots: velocity **15.3 → 49.9 m/s**, area
+  **0.50 → 2.47 m²**, 72 of 114 passed. So `Impact Result` free text (§10.5) is backed by a small, stable set
+  of missile classes — worth knowing if an option list is ever wanted.
+- **Manual (non-preset) stages exist.** 10 of 501 static rows carry a blank `pressure_factor`, and 2 of 626
+  cyclic rows hold hand-entered counts (`6` and `500`). See §7.3.
+- **A real `0` measurement exists** — one static stage at 0 PSF with a 0 s hold. Contract §5's rule that `0`
+  is data rather than a blank is not hypothetical.
+
+---
+
+## 7. What the live read corrected — including in this document
+
+Three claims changed on contact with production. Recording them because two of them had already reached the
+draft reply.
+
+### 7.1 "The column is already migrated" — wrong, and it was in the reply
+
+Live `test_results` holds **five columns**: `id`, `trial_number`, `result`, `note`, `image_path`. None of the
+P1 attempt columns — `labos_attempt_id`, `corrects_attempt_id`, `correction_reason`, the datetimes, the
+measurements — exist in production. `alembic_version` is still `3a65a83e0463`.
+
+They are **built, tested and migrated on `feature/labos-airtable`, and not deployed.** The draft reply said
+"already migrated", which is true of the branch and false of production. **Corrected in the reply** to "built
+and tested, waiting on a deploy window", which is both accurate and still makes the point that the ask is for
+a destination rather than a feature.
+
+This is exactly the class of statement that would be indefensible if they checked, and the reason the standing
+rule is that the node is ground truth rather than the repo.
+
+### 7.2 `infiltration_tests.duration` is seconds, not minutes
+
+`REPORT_DATA_STRUCTURE.md` annotates it `# minutes`. Live values run **321 → 1691**. As minutes that is 5 to
+28 hours for an infiltration test; as seconds it is 5 to 28 minutes, which is the real procedure. **The
+docstring is wrong and the data is right.** §3's unit inventory is corrected, and `minutes` is removed from
+the unit vocabulary entirely — it was never a real unit here.
+
+### 7.3 The derivation claim needs one honest qualifier
+
+98% of stages are preset and derived (624/626 cyclic, 491/501 static), but **operators can and do add ad-hoc
+stages** — two cyclic tests with hand-entered cycle counts, ten static tests with a blank `pressure_factor`,
+one of them at 0 PSF.
+
+That does not weaken anything said to Airtable: **the pair is still all they need to supply**, and an
+operator-authored stage is a LabOS-side act with no Airtable requirement behind it. But "LabOS derives the
+entire programme" should be stated as *the preset programme*, or a fair reader will find the counterexample.
+
+### 7.4 ⚠️ A data-quality problem of our own — deflection values
+
+Do **not** quote deflection ranges to the Airtable team. Live values:
+
+| Column | Min | Max |
+|---|---|---|
+| `max_deflection` | **−1280.91** | **1288.86** |
+| `permanent_deflection` | **−1274.17** | 1284.13 |
+| `recovery` | 0.3 | **60** |
+
+**These are not inches.** A fenestration specimen does not deflect 1288 inches, and a 60-inch recovery is not
+physical either. Either some rows hold raw gauge counts rather than converted inches, or a scale factor is
+missing on some path — the same class of defect as the PSI→PSF sensor bug of 2026-07-09, which is the worked
+example in contract §3.1.
+
+`deflection_gauge` is also inconsistent free text: **20 distinct labels in two naming schemes** — `1-1` … `2-8`
+(16 labels) and `Gauge 1` … `Gauge 4`. So any JSON keyed on gauge identity inherits that inconsistency.
+
+**Consequences, and they are ours not theirs:**
+
+1. **The §2.3 argument stands** — deflection is structurally three measurements per gauge, and permanent set is
+   a required column of the IFET report. That claim comes from the schema and the report contract, not from
+   the values, so it is unaffected.
+2. **The values are not evidence of anything yet.** Nothing in the message to Airtable should cite a deflection
+   range or claim the unit is inches for existing rows.
+3. **This is a new LabOS-side investigation**, not an integration item: which rows are affected, whether a
+   scale factor is missing, and whether any of it reached a published report. It belongs on the R-week plan,
+   and it must be understood **before** LabOS writes `Deflection Value` + `Deflection Unit` to Airtable — or
+   we export the problem into someone else's base and it becomes certification evidence there.
+4. **Normalise `deflection_gauge`** before the JSON shape is agreed, or the two naming schemes become two
+   shapes in Airtable's long-text field.
