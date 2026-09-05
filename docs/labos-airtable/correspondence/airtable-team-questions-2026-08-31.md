@@ -1,6 +1,31 @@
 # Airtable team's three questions — answer, and the agenda for tonight
 
-**Author:** Abdelrahman · **Date:** 2026-08-31 · **Epic:** IFET-32 · **Status:** answer drafted, meeting tonight
+**Author:** Abdelrahman · **Date:** 2026-08-31 · **Epic:** IFET-32
+**Status:** 🗄️ **SUPERSEDED 2026-09-06 — never sent. Text preserved verbatim; do not edit or send.**
+
+> ### Superseded by `airtable-team-questions-2026-09-06.md`
+>
+> This draft was written for a call that did not produce a sent artifact, and it was overtaken by events on
+> 2026-09-05: the Airtable team shipped all five `Test Type` options, `Test Date` as a `dateTime`, and
+> `Correction Reason`, without announcing them. Two of the P0 items this document is organised around —
+> §10.17 and §10.20 — closed before it could be sent.
+>
+> **It is superseded rather than sent**, so the two documents never both reach them.
+>
+> **What carried forward**, into the 2026-09-06 reply: §2's read-side field specification (intact, and now
+> argued from live production counts as well as our own columns), §2.4's section→kind→unit mapping, §3's
+> argument that a shared `LabOS Test ID` cannot express supersession, and §4 on `Test Date`.
+>
+> **What did not**, and why: §0's framing ("their message does not touch the two P0 items") is no longer
+> true; §5's call agenda is obsolete; §7's reply text predates the schema changes and would read as though
+> we had not noticed them.
+>
+> **Kept because the reasoning is still the reasoning.** §2 in particular is the longest-standing piece of
+> analysis in the integration and the 2026-09-06 document cites it rather than restating it.
+
+---
+
+**Original header, as written 2026-08-31:** *answer drafted, meeting tonight*
 **Trigger:** the Airtable team's reply to the 2026-08-28 verification report
 (`correspondence/sent/2026-08-28-labos-airtable-live-base-verification-report.docx`).
 
