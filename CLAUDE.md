@@ -44,9 +44,12 @@ Use the `ifet-ssh` skill to reach any of them.
   node's own compose file.
 - Close open items in the authoritative document first (see `docs/INDEX.md` §1), then the views.
 - **Docs are filed by role, not topic** — `labos-airtable/{contract,status,evidence,correspondence,runbooks}`,
-  plus `operations/` and `hardware/`. `contract/` holds exactly one file; a second would mean one is a view
-  and is misfiled. `correspondence/sent/` is append-only — never edit an artifact someone already has.
-  Layout and the full inventory: `docs/INDEX.md` §2.
+  plus `schema/`, `operations/` and `hardware/`. **Two documents are authoritative and both are edited in
+  place:** `contract/write-contract-v0.4.md` (what things mean) and `status/delivery-plan.md` (where the work
+  stands). `contract/` holds one prose spec plus the register CSV it names; `status/` holds exactly one file.
+  **New dated `.md` files belong in `evidence/` and `correspondence/` only** — superseded status and design go
+  to git history, not the tree. `correspondence/sent/` is append-only — never edit an artifact someone already
+  has. Layout and the full inventory: `docs/INDEX.md` §2.
 
 ## Hardware gotchas that have already cost time
 
@@ -61,7 +64,8 @@ Use the `ifet-ssh` skill to reach any of them.
 LabOS ↔ Airtable integration, Epic IFET-32, **week 2 of 5**. Integration branches:
 `feature/labos-firmware-p3` here, `feature/labos-airtable` in `ifet-management`. **Nothing is deployed.**
 
-**Start at `docs/INDEX.md` §0 ("Resume here")** — current state, what is blocked on whom, and what to pick up.
+**Start at `docs/INDEX.md` §0 ("Resume here")**, which points at the two authoritative documents. Current
+state, gaps, milestones and asks all live in `docs/labos-airtable/status/delivery-plan.md`.
 
 Two standing cautions that outlive any one session:
 
