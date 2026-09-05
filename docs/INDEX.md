@@ -5,9 +5,64 @@
 
 ---
 
-## 0. Resume here — state as of 2026-08-31
+## 0. Resume here — state as of 2026-09-05
 
-> ### ✅ Read this first — state as of 2026-08-31
+> ### ✅ Read this first — state as of 2026-09-05
+>
+> **Scope widened to all five test types, and the design package is drafted and awaiting review:**
+> `labos-airtable/design/integration-design-2026-09-05.md` + `design/field-register-2026-09-05.csv`.
+> **Nothing has been applied** — no Airtable schema mutation, no migration, no container.
+>
+> **The Airtable team shipped schema changes without announcing them.** Today's read-only baseline
+> (`schema/baseline-2026-09-05/`) diffed against 2026-08-23 shows **all five `Test Type` options live in both
+> bases** (**§10.17 closes** — the P0 that blocked every manual-test write is gone), **`Test Date` is now
+> `dateTime`** (**§10.20 closes**), and **`Correction Reason` was added**. Always diff the baseline before
+> assuming §10 is current.
+>
+> **Six decisions settled, five gates left, each with one owner:** G1 deflection calibration (**ours** —
+> needs a rig), G2 the `+110/110` sign convention and the section→kind map (**theirs**), G3 the extraction
+> defect (**theirs**), **G4 no measurement source for pressure** (**ours**), **G5 `Corrects Attempt ID` not
+> delivered** (**theirs**). Design package §2 and §3.
+>
+> **G4 is the one to read — §3.1.** The firmware → Management trial payload is **exactly one field**,
+> `deflections[]`: no pressure, no duration, no cycles, no timestamps. So **`Max Pressure Achieved` has no
+> source at all**, and `Measured Value` has one only for operator-entered tests. Static pressure is an
+> open-loop browser slider, so the configured setpoint is not an achieved value either. Both fields are
+> omitted, on the same terms as deflection.
+>
+> **§3.2 — a completeness check, stated at the right strength.** `Cyclic present ∧ DP absent` proves the
+> required input for LabOS's own execution is missing — certain, and it coincides with 3 of the 6 live
+> specimens. It does **not** by itself prove an extraction defect; that needs Airtable to confirm the
+> cross-protocol requirement (Q10). And the safeguard is an **execution rule**, not an acknowledgement: the
+> backend refuses to start a pressure-driven test without a `proposal`- or `operator`-sourced pair.
+>
+> **Polling is full reads, not deltas.** There is **no whole-record modification timestamp anywhere in the
+> base** — the three `lastModifiedTime` fields that exist are field-scoped. At 85 records that is four
+> requests a cycle; revisit around 10⁴.
+>
+> **D7 decides the data model — read it before touching any constraint.** A LabOS `StaticTest`/`CyclicTest`
+> row is a **stage**, not a test: one `DP (+) (PSF)` section expands into **6 static / 8 cyclic** derived
+> stages (verified live — min 6, min 8, 498 of 508 `preset`). So **one Airtable attempt row per *programme
+> run*, not per stage**, via a new `test_programme_runs` entity; `labos_test_id` identifies the programme.
+> This revises P1's mapping — cheap now, expensive later — and it overturns the draft's
+> "`airtable_section_id` unique across test rows", which would have rejected every correct programme.
+>
+> **Corrections never rewrite.** A recorded verdict is immutable (`verdict_at` set once, enforced in the
+> database); a correction mints a **new attempt** carrying `Corrects Attempt ID`. That is what makes **G5**
+> block more than it appears to. And delivery is **ordered per attempt** (`sync_outbox.attempt_seq`,
+> head-of-line blocking per attempt, parallel across attempts) so a verdict can never land ahead of the
+> measurements it refers to.
+>
+> **Also established today:** `Protocol Sections` is an **EAV table** (`Section Name` / `Value` free text) —
+> the requirements *do* exist in Airtable, they are just untyped. LabOS holds **32 jobs / 79 specimens / 640
+> attempts** against Airtable's **1 / 6**, so linkage is a going-forward exercise, not a backfill. The React
+> UI source exists in **no** repo or node but is recoverable from the deployed bundle's sourcemap.
+> Production `alembic_version` re-confirmed **`3a65a83e0463`**.
+>
+> **Next:** review the design package → send its §9 questions → Testing Base changes → outbox/sync service.
+> UI work stays deferred.
+
+> ### State as of 2026-08-31 — superseded above, kept for the record
 >
 > **They replied, in one working day. The blocker is no longer "waiting on Airtable" — it is tonight's call.**
 >
@@ -176,6 +231,7 @@ written out in full.*
 | **What we have verified against the live bases** | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` | `labos-airtable/correspondence/verification-report-2026-07-29.md` (historical) · Notion *Verification Report* |
 | **What LabOS really stores — types, derivations, units** | `labos-airtable/evidence/labos-real-data-types-2026-08-31.md` | the read-side spec in `labos-airtable/correspondence/airtable-team-questions-2026-08-31.md` §2 · contract §10.3 · §10.19 · §10.24 · §10.25 |
 | **How our envelope compares to their actual data** | `labos-airtable/evidence/reference-row-reconciliation-2026-08-28.md` | contract §10.24–§10.26 |
+| **What the rigs actually receive, do and return — the Management ↔ Firmware execution contract** | `labos-airtable/evidence/firmware-production-runtime-contract-2026-08-31.md` | `labos-airtable/evidence/labos-real-data-types-2026-08-31.md` (the read side of the same boundary) · contract §10.19 · §10.27 · `hardware/README.md` · the VFD/serial gotchas in `CLAUDE.md` |
 | **How a schema change reaches production** (alembic, bind mounts, autogenerate-at-boot) | `labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` | `ifet-management` `startup.sh` + `compose.yaml` are the mechanism it documents |
 | **What we asked the Airtable team for, and why** | `labos-airtable/correspondence/sent/2026-08-28-…-verification-report.docx` — **the artifact they hold** | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` §8 (the wording, plus what the sent version added) · `labos-airtable/correspondence/v2-guide-reconciliation-2026-08-22.md` §5 |
 | **Our answer to their three questions of 2026-08-31, and the read-side field spec** | `labos-airtable/correspondence/airtable-team-questions-2026-08-31.md` — **the wording of record** | contract §10 items 3 · 8 · 13 · 14 · 15 · 20 · 23 · 24 · 25 (the *statuses*) · the sent artifact once it goes out |
@@ -210,6 +266,8 @@ docs/
     correspondence/            what was exchanged with the Airtable team
       sent/                    the exact artifacts they received
     runbooks/                  how to execute something risky, step by step
+    design/                    proposals under internal review. Each file names where its parts fold
+                               on approval - this folder is a staging area, never authoritative
     schema/                    field-ID snapshots of both live bases
   operations/                  node and repository operations
   hardware/                    rig configuration and bring-up records
@@ -239,6 +297,8 @@ docs/
 | `evidence/live-probe-findings-2026-08-23.md` | **First live read of both bases.** What the schema holds, six items closed and six opened, the proposal-extraction defect (§5.2), and **§8 — the message wording, now stamped *Sent*** with the six ways the sent version improved on it. | current |
 | `evidence/reference-row-reconciliation-2026-08-28.md` | **Our envelope vs. the Airtable team's own sample row** `recxZWiVa5Wuy0ZV6`. The `Inches`/`in` divergence, the JSON-shape divergence, and why the empty testing base does not block stage 3. | **current** |
 | **`evidence/labos-real-data-types-2026-08-31.md`** | **The real types behind the read-side spec.** That LabOS derives 14+ test stages from the design-pressure pair (so Airtable models no ranges); that `60 × 0.15 = 9` proves the extraction shift arithmetically; that deflection is three numbers per gauge, not one; and the true unit inventory, which corrects §4.4. | **current** |
+| **`evidence/firmware-production-runtime-contract-2026-08-31.md`** | **What the rigs actually do.** Read-only audit of `system-1`, `system-2`, `management`. Establishes that Management owns 100% of programme derivation (Model B via callback pull, validated to full precision against project 78); that the firmware→Management result payload is `deflections[]` and nothing else — no pressure, duration, cycle count, timestamp or verdict; that **`recovery` is the `recovery_time` config constant (60 s), not a measurement**; that the implausible deflections are raw IO-Link counts × 0.0393701 mislabelled as inches, with the defect in the SICK gateway rather than the firmware; that **`Gauge 1..4` rows and every populated `result` are `populate_db.py` seed data**, separable by `deflection_gauge ~ '^[12]-[1-8]$'`; that **nothing writes `TestResult.result`**, so Pass/Fail has no owner; that cyclic cycles are open-loop at 2.02 s each and static pressure is driven by the operator's browser slider; and that water infiltration executes as a 900 s static hold at 0.15 × inward DP. Closes the `recovery` limb of contract §10.27 and sharpens §10.19. §20 is the meeting decision table. | **current** |
+| `evidence/firmware-production-probe-2026-08-31.txt` | Command log for the above — every read-only command, the SELECT-only SQL, and what was deliberately **not** run. | current |
 | `evidence/p1-schema-and-migration-mechanism-2026-08-23.md` | W2/P1 evidence: the attempt schema, and the discovery that migrations were gitignored, bind-mounted from the node, and autogenerated at every container boot. | current |
 | `correspondence/sent/2026-08-28-…-verification-report.docx` | **The artifact the Airtable team actually received.** Five asks with a P0/P1/P2 priority table. | 📨 sent — do not edit |
 | **`correspondence/airtable-team-questions-2026-08-31.md`** | **Their three questions and our answer.** §2 the read-side field spec they asked for (typed `Required Value` + `Requirement Kind` + the unit-per-section table), §3 why the shared `LabOS Test ID` cannot replace `Corrects Attempt ID`, §4 `Test Date`, §5 the agenda ordered by blast radius, **§7 the reply, ready to send**. | **current — not yet sent** |
@@ -246,6 +306,9 @@ docs/
 | `correspondence/team-doc-review-2026-07-29.md` | Review of their **v1** schema doc, and §7, the message sent 2026-07-29. | ⚠️ superseded by their v2 — kept verbatim as the sent record |
 | `correspondence/verification-report-2026-07-29.md` | The ownership boundary and the proposed HTTP requests. Stages 1–2 executed 2026-08-23. | 📕 historical — **its stage 3 payload is retired; the script and runbook replace it** |
 | `runbooks/p0-p1-deploy-2026-08-28.md` | **The `management` deploy.** Its §2 is the decision point — whether `alembic_version` has moved decides if the deploy can happen that day at all. | **ready to execute** |
+| **`design/integration-design-2026-09-05.md`** | **The draft design package for the five-test-type flow and the sync service.** Six decisions settled in session (deflection export blocked; the verdict stays in LabOS; operator is a *declared* identity; UTC on the wire with `date` fields rendered `America/New_York`; keep the DB names and fix the vocabulary at the boundary; free-text pressures preserved, typed fields for execution). **Five gates** with named owners — including **G4, no measurement source for pressure** (§3.1), which the register itself exposed by demanding a source for two fields that had none. The transactional-outbox architecture, the four-phase "eventually complete" write that amends v0.3's terminal rule (with the monotonic guard and the measurement freeze that make it safe), **full-read polling** because the base has no whole-record modification timestamp, remote-authoritative attachment dedup, per-entity uniqueness, the endpoint list, the programme-vs-stage identity resolution (**D7**) that decides every uniqueness rule, correction immutability, per-attempt delivery ordering, a nine-step sequence and a 50-case acceptance suite. | **`DRAFT` — under review, nothing applied** |
+| **`design/field-register-2026-09-05.csv`** | **The machine-readable field mapping**, 57 rows, both directions, keyed on field *names* because IDs differ per base. Carries `write_phase`, the rule, and `AGREED`/`PROPOSED`/`BLOCKED` with the gate named. Folds into contract `v0.4`. | **`DRAFT`** |
+| **`schema/baseline-2026-09-05/`** | **Pre-change baseline, both bases, read-only** (`app/airtable/baseline.py`). Schema JSON + flat field CSV, 8 tables and 142 fields each. Diffing it against 2026-08-23 is what found that the Airtable team **shipped all five `Test Type` options, `Test Date` as `dateTime`, and `Correction Reason`** — closing §10.17 and §10.20. Record CSVs are deliberately **not** here: both repos are public and `IFET Projects` carries customer emails and invoice amounts. They live outside every work tree. | **current** |
 | `schema/schema-{testing,production}-2026-08-23.json` | Field-ID snapshots of both bases, for drift detection at deploy. | current |
 
 ### `operations/` — nodes and repositories
