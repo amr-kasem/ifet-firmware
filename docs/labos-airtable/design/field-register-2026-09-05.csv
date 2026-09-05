@@ -10,7 +10,7 @@ OUT,LabOS Raw Data Table,Airtable Protocol ID,singleLineText,tests.airtable_prot
 OUT,LabOS Raw Data Table,Airtable Section ID,singleLineText,tests.airtable_section_id,create,"Permanent record ID. Unique per PROGRAMME; REPEATS across the 6 static / 8 cyclic stages it expands into, and across runs. See D7.",AGREED,
 OUT,LabOS Raw Data Table,Test Type,singleSelect,test_results.test_type,create,All five options live in both bases since 2026-09-05. Closes contract 10.17.,AGREED,
 OUT,LabOS Raw Data Table,Test Status,singleSelect,test_results.status,create+terminal,Not Started / In Progress / Completed / Abborted. Their spelling of Aborted wins on the wire.,AGREED,
-OUT,LabOS Raw Data Table,Test Date,dateTime,test_results.testing_start_date,create,"UTC instant, ISO-8601 with Z. dateTime stores an instant; client-timezone display does not change it.",AGREED,
+OUT,LabOS Raw Data Table,Test Date,dateTime,test_results.testing_start_date,create,"UTC instant, ISO-8601 with Z. Mapped from testing_start_date PROVISIONALLY - start vs completion is undecided (10.13, Q11). Both instants preserved in LabOS and the JSON valve.",AGREED,
 OUT,LabOS Raw Data Table,Operator Name,singleLineText,test_results.operator_name,create,"Declared identity, selected per session, snapshotted per attempt. No authentication behind it.",AGREED,
 OUT,LabOS Raw Data Table,LabOS Created At,dateTime,test_results.labos_created_at,create,UTC.,AGREED,
 OUT,LabOS Raw Data Table,LabOS Updated At,dateTime,test_results.labos_updated_at,every,UTC. Refreshed every phase. Also the monotonic guard - a queued payload older than the record's value is dropped as superseded.,AGREED,

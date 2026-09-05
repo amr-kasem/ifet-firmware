@@ -95,6 +95,11 @@ Because there is no authentication behind it, the payload says so: `identity_ass
 **Decision.** Store and transmit UTC. Render lab reports in `America/New_York` including the offset.
 Airtable's client-timezone *display* does not change the stored instant.
 
+**One thing `dateTime` does not settle: whether `Test Date` means start or completion.** Accepted as a type,
+undecided as a meaning — contract §10.13. Until it is agreed, LabOS maps it from `testing_start_date` and
+**preserves both `testing_start_date` and `testing_end_date` in the database and in the JSON valve
+regardless**, so whichever way it lands, no re-derivation is needed and nothing was discarded. §9 Q11.
+
 **The exception, and it is easy to get wrong.** `Test Date` on the raw table is `dateTime` — an instant, so
 UTC is correct. But **`Testing Date` on Protocol Sections is a plain `date`**, and a date has no instant. A
 test finishing 21:00 EDT is already tomorrow in UTC. Date-typed fields must therefore be rendered in
@@ -142,6 +147,11 @@ repeating references are accepted.
 Until the sign convention is confirmed (§3 G2), the parser **stores and refuses**: `required_value_raw`
 persists, `required_value_inward` / `required_value_outward` stay null, and nothing auto-fills a rig. Neither
 the sign convention nor the section→test-type map is decided from six symmetric examples.
+
+**An unrecognised shape is non-executable, never best-effort.** A `Section Name` outside the ratified nine,
+or a `Requirement Kind` LabOS does not implement, must not fall through to a guess. It is displayed, it is
+recorded in the snapshot, and it cannot start a test. Silent best-effort parsing is how the extraction defect
+would have reached a rig in the first place.
 
 **The safeguard is an execution rule, not an acknowledgement.** A checkbox — even one naming the proposal
 revision — is provenance, not protection. The backend **refuses to start a pressure-driven test** unless
@@ -381,6 +391,12 @@ not by convention. If the verdict was wrong — or the data behind it was — La
 
 So `Corrects Attempt ID` and `Correction Reason` are written at the **`create`** phase of the *new* row, not
 at the `verdict` phase of the old one. The register carries them that way.
+
+**A retest and a correction are different events, and only one of them is expressible today.** A retest is a
+physical rerun: new `Attempt ID`, incremented `Attempt Number`, same `Test ID` — the Airtable team's own
+proposal, and it is correct. A correction fixes a *wrongly recorded* result and must say **which attempt it
+supersedes**. The shared `Test ID` cannot carry that: it groups records, it does not order or supersede them.
+That is the whole argument for **G5**, and it is unchanged since contract v0.2.
 
 **This is why G5 blocks more than it looks like it does.** Without `Corrects Attempt ID`, a correcting attempt
 is indistinguishable from an ordinary retest — same test id, higher attempt number, no way to say *why*. And
@@ -743,6 +759,10 @@ closed", a LabOS verdict and an operational state merge silently.
 `lastModifiedTime` fields in the base are *field-scoped* (`Project Status Modified Time` watches Project
 Status alone), so LabOS reads all four tables in full every cycle. That is fine at 85 records and would not
 be at 10⁴. Not blocking — worth knowing before volume grows.
+
+**Q11 — does `Test Date` mean the start of testing or its completion?** The type is settled and delivered;
+the semantics are not. LabOS holds both instants either way, so this costs us nothing to defer — but a report
+that mixes the two conventions across jobs is not correctable afterwards.
 
 **Q10 — does your model require `DP` whenever `Cyclic` is populated?** §3.2 rests on it. If yes, three of the
 six live specimens are provably incomplete. If no, our check is narrower than we think.
