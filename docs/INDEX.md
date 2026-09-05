@@ -7,6 +7,10 @@
 
 ## 0. Resume here — design closed 2026-09-06
 
+**Reader’s walkthrough:** `labos-airtable/status/design-walkthrough-2026-09-06.md` ·
+[Notion summary with attached evidence](https://app.notion.com/p/3d257bad43d5810aa7a9c5bb68eed6ef)
+(private draft). Six sections explain the investigation, decisions, workflow, delivery state and M1–M7.
+
 **The user authorized LabOS to define Testing Base fields/types and close the design.** No further design
 approval question remains. This does not claim fields are applied, measurements validated, messages sent or
 production deployed. Current authority: `labos-airtable/contract/write-contract-v0.4.md`.
