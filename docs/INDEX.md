@@ -36,7 +36,9 @@ evidence, correspondence or a runbook.
 | **What a field, guarantee or state means** — envelope, identity, immutability, upsert, §7.1 concurrency | `labos-airtable/contract/write-contract-v0.4.md` | `labos-airtable/contract/field-register.csv` · `ifet-management` `app/airtable/contract.py` — **a view, and currently stale at v0.3; the prose wins** |
 | **Open integration items and what blocks what** | `labos-airtable/contract/write-contract-v0.4.md` **§10** | the plan's §4 and §8 · Notion *Field Mapping* §5 |
 | **Airtable environments, base and table IDs, PAT scope** | `labos-airtable/contract/write-contract-v0.4.md` **§0** | `ifet-management` `app/config.py` · §3 below |
-| **Field mapping and delivery state** | `labos-airtable/contract/field-register.csv` (73 rows) | Notion *Field Mapping* |
+| **Field mapping and delivery state** | `labos-airtable/contract/field-register.csv` (73 rows) | `labos-airtable/contract/interface-schema.csv` (generated) · Notion *Field Mapping* |
+| **What each base actually holds, per field, both bases** | `labos-airtable/contract/interface-schema.csv` — **generated, never hand-edited** by `ifet-management` `app/airtable/interface_schema.py` | the saved baselines in `labos-airtable/schema/` |
+| **What we changed in the Testing Base, and why** | `labos-airtable/evidence/testing-base-changes-2026-09-06/` | the register's APPLIED rows |
 | **Where the project stands · sequence · gaps · dates · asks** | `labos-airtable/status/delivery-plan.md` | Notion *Project Status & Revised Timeline* (**the page management holds**) · *Delivery Status* · *Internal Engineering Plan* · *5-Week Plan* |
 | **What we verified against the live bases** | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` | Notion *Verification Report* |
 | **The pre-change schema baseline of both bases** | `labos-airtable/schema/baseline-2026-09-05/` | diffed by `ifet-management` `app/airtable/baseline.py` |
@@ -93,6 +95,8 @@ docs/
 |---|---|
 | **`labos-airtable/contract/write-contract-v0.4.md`** | **The spec.** Environments (§0), ownership (§1), identity (§2), requirements (§3), review/measurements/envelope (§§4–6), sync and §7.1 concurrency mechanisms, legacy dispositions and release checks (§10) |
 | **`labos-airtable/contract/field-register.csv`** | 73 mapping rows — 66 DECIDED (44 BASELINE, 15 PLANNED, 4 CONDITIONAL, 3 OMITTED) plus 7 OPEN/PROPOSED raised by IFET's 2026-09-06 workflow message. **14 decided field additions**, 7 proposed pending agreement. BASELINE means the field exists, never that mapping code exists. One LOCAL_ONLY row is queue metadata and is never created in Airtable |
+| **`labos-airtable/contract/interface-schema.csv`** | **Generated.** 168 rows joining both live base schemas to the register: per-base field IDs, `in_testing`/`in_production`, and `labos_use` — including the 95 fields LabOS deliberately ignores, which is the machine-readable form of "no billing, pricing, invoices or scheduling". Regenerate rather than edit |
+| `labos-airtable/evidence/testing-base-changes-2026-09-06/` | **The change document IFET asked for.** 14 fields added 2026-09-06, 142 → 156, with before/after schema, field IDs and the reason for each. Also records the 7 fields deliberately not created, and the three things to settle before production |
 | **`labos-airtable/status/delivery-plan.md`** | **The plan.** Probed state, the ten-leg data path, A1–A8, entities/API/concurrency/envelope, open gaps G1–G6, milestones M1–M7 + MF, acceptance, committed-groundwork deviations, Airtable and IFET asks, operating rules |
 | `labos-airtable/evidence/design-closure-2026-09-06.md` | Register/contract consistency checks and verified Notion updates at design closure |
 | `labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md` | The pre-closure v0.3 spec. Old `labos-airtable/contract/write-contract-v0.3.md` links resolve here |

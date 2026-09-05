@@ -1,0 +1,105 @@
+{
+ "mode": "APPLY",
+ "base": "app4oXS3Kd5IKWgJ7",
+ "utc": "20260905T230411Z",
+ "changes": [
+  {
+   "table": "Protocol Sections",
+   "field": "Requirement Code",
+   "action": "created",
+   "type": "singleSelect",
+   "field_id": "fld9Fzjj25ngrVIOB"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Requirement Kind",
+   "action": "created",
+   "type": "singleSelect",
+   "field_id": "fldWGpL9gJh89wSK8"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Applicability",
+   "action": "created",
+   "type": "singleSelect",
+   "field_id": "fldh3VS09fonTLHsS"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Value",
+   "action": "created",
+   "type": "number",
+   "field_id": "fldpL2dyGzKj9xowY"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Value Inward",
+   "action": "created",
+   "type": "number",
+   "field_id": "fld1wR9ojdmESax0m"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Value Outward",
+   "action": "created",
+   "type": "number",
+   "field_id": "fld7GLStvnPnYJPpd"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Unit",
+   "action": "created",
+   "type": "singleSelect",
+   "field_id": "fldTjNKeQe7oxxl33"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Option",
+   "action": "created",
+   "type": "singleLineText",
+   "field_id": "fldflOxCkAK1BkU9l"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Corrects Attempt ID",
+   "action": "created",
+   "type": "singleLineText",
+   "field_id": "fldV4ucQNEA0gYfMc"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "LabOS Verdict By",
+   "action": "created",
+   "type": "singleLineText",
+   "field_id": "fldVedw9cOgne8UeX"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "LabOS Verdict At",
+   "action": "created",
+   "type": "dateTime",
+   "field_id": "fldqCkqAh7aTckxSR"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Testing Start Date",
+   "action": "created",
+   "type": "dateTime",
+   "field_id": "fldYU1BtWVuWv5DBV"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Testing End Date",
+   "action": "created",
+   "type": "dateTime",
+   "field_id": "fldTsjf78Y5fA85fz"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "LabOS Photos",
+   "action": "created",
+   "type": "multipleAttachments",
+   "field_id": "fldsEfhtH9wXPAl1Y"
+  }
+ ]
+}

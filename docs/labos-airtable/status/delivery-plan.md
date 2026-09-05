@@ -25,6 +25,8 @@ design and roadmap are one document, this one. Superseded snapshots live in git 
 | `ifet-management` | `feature/labos-airtable` @ `d61f6f5` — all integration code, unmerged, **unwired** (`main.py` imports nothing from `app.sync`) |
 | `ifet-firmware` | `feature/labos-firmware-p3` — **docs only**; `git diff --stat dev...HEAD` shows `CLAUDE.md` alone |
 | Committed envelope code | `app/airtable/contract.py` pins `CONTRACT_VERSION = "0.3"` — **stale, rewrite to v0.4, do not extend** |
+| **Testing Base schema** | **M1 applied 2026-09-06** — 14 fields added, 142 → 156. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
+| Production Base schema | Unchanged, 142 fields. The 14 above are exactly the production delta (M5) |
 
 Nothing above is a blocker on its own. Together they mean: **every leg of this integration is greenfield
 against production, and no code has ever carried a result end to end.**
@@ -331,7 +333,7 @@ before M3, because it changes what a Protocol Section has to carry.
 
 | M | Deliverable | Owner | Exit evidence | Depends on |
 |---|---|---|---|---|
-| **M1** | Testing Base additions (14 fields) + synthetic linked fixture | LabOS | Schema diff, field IDs per base, asymmetric pair, blank/N-A/unknown examples | — |
+| ~~**M1**~~ | Testing Base additions — **14 fields applied 2026-09-06**; synthetic linked fixture still outstanding | LabOS | ✅ Schema diff, before/after, field IDs and per-field reasons captured. ⬜ Fixture: asymmetric pair, blank/N-A/unknown examples | — |
 | **M2** | **Disposable PostgreSQL harness first**, then local migration and the first vertical flow | LabOS | Two independent worker processes on separate connections; concurrent-enqueue, competing-worker, slow-send, stale-owner green; import → run → finish → worker restart → one Testing Base attempt | — |
 | **MF** | **Firmware run/stage association — G1 + G2** | LabOS + firmware | A rig start carries a run identity; a `/trials` callback lands on a known run and stage with a stable event ID; replay is safe; an unmapped callback is excluded, not guessed | M2 identity |
 | **M3** | All five backend workflows, review, corrections, evidence — **including G3 capture for Impact / Forced Entry / ANSI** | LabOS | §7 acceptance cases | M2, MF |
@@ -431,9 +433,31 @@ out of browser-served config.
 
 **Schema is no longer a permission question.** LabOS is authorized to define and add the required fields in
 the Testing Base with a documented change register. 73 register rows — **66 DECIDED** (44 BASELINE,
-15 PLANNED, 4 CONDITIONAL, 3 OMITTED) → **14 field additions to make now**, plus **7 OPEN/PROPOSED** raised by
-their 2026-09-06 workflow message and held until §5 G7/G8 are settled with them. Do not create a PROPOSED
-field: `OPEN` means we have not agreed it, and an unwanted field is harder to remove than to add.
+**14 APPLIED**, 4 CONDITIONAL, 3 OMITTED, 1 PLANNED local-only) plus **7 OPEN/PROPOSED** raised by their
+2026-09-06 workflow message and held until §5 G7/G8 are settled with them.
+
+**The 14 decided additions were applied to the Testing Base on 2026-09-06** — field IDs, before/after schema
+and the reason for each are in `../evidence/testing-base-changes-2026-09-06/`. Production is unchanged and
+those 14 are exactly its delta.
+
+**Do not create a PROPOSED field.** `OPEN` means we have not agreed it — and now that the shared Airtable
+view is to become the confirmed schema that production is built from, a speculative field would propagate
+rather than sit harmlessly in a sandbox. An unwanted field is harder to remove than to add.
+
+**Their automations run on this schema and we cannot see them** — the Meta API refuses
+`/meta/bases/{base}/automations` with `403`. Every change we made was additive, which rules out the usual
+breakages, but two things need their eyes: an unfiltered "when record updated" trigger will now fire more
+often, and their `Protocol Sections` automation must keep exclusive ownership of `Result`, `Status` and
+`Testing Date`. **Production's existing automations are not assumed compatible merely because fields exist.**
+
+**Keep it small.** No new tables, no new relationships, no parsing or backfill of `Value`, no delta-cursor
+field, one writable table, and no dedicated scalar per outcome. If the Airtable team wants fewer fields
+still, `Requirement Kind` is the one to drop — contract §3.2 already implies it from `Requirement Code`.
+
+**Authority, once their view is confirmed.** The Airtable schema becomes the shared source of truth for
+**which fields exist**; `../contract/write-contract-v0.4.md` remains authoritative for **what they mean and
+when LabOS writes them**, and `../contract/interface-schema.csv` is the generated join of the two. That split
+already exists — confirming their view does not move it.
 
 | Where | Fields |
 |---|---|
