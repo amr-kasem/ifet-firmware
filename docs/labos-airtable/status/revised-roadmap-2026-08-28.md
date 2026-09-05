@@ -1,5 +1,17 @@
 # LabOS ↔ Airtable — revised roadmap and true timeline
 
+> **Current update — 2026-09-06:** Design is decided in `../contract/write-contract-v0.4.md`;
+> A1–A8 are closed. Testing Base field setup is authorized but not applied. The 66-row register separates
+> decisions from delivery. Existing client/P1/outbox code remains groundwork; the programme/run flow,
+> migrations and v0.4 acceptance are not delivered. No runtime code or production deployment is part of closure.
+> Next implementation: M1 Testing Base diff/fixtures → M2 local PostgreSQL import/run/offline replay →
+> M3 APIs/review/evidence → actual-change document → coordinated cutover. UI and water integration deferred.
+> Independent source verification, measurement quarantine and automation/deployment checks remain.
+> All five Test Type options, datetime Test Date and Correction Reason existed at the September 5 baseline.
+> The September 6 notice is NOT SENT. No further field-design approval question remains.
+> **The older assessment below is historical.** Its dates, approval waits, field gaps and test counts are
+> dated observations, not current instructions. October 9 is an earlier target, not revalidated here.
+
 **Author:** Abdelrahman · **Date:** 2026-08-28 · **Epic:** IFET-32
 **Trigger:** the project manager asked for the true timeline and current position.
 **Supersedes the dates** in the 5-week plan. It does **not** supersede its shape — the milestones are unchanged.

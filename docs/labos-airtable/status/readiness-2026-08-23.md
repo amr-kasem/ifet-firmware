@@ -1,5 +1,17 @@
 # LabOS ↔ Airtable Integration — Readiness Report
 
+> **Current update — 2026-09-06:** Design is decided in `../contract/write-contract-v0.4.md`;
+> A1–A8 are closed. Testing Base field setup is authorized but not applied. The 66-row register separates
+> decisions from delivery. Existing client/P1/outbox code remains groundwork; the programme/run flow,
+> migrations and v0.4 acceptance are not delivered. No runtime code or production deployment is part of closure.
+> Next implementation: M1 Testing Base diff/fixtures → M2 local PostgreSQL import/run/offline replay →
+> M3 APIs/review/evidence → actual-change document → coordinated cutover. UI and water integration deferred.
+> Independent source verification, measurement quarantine and automation/deployment checks remain.
+> All five Test Type options, datetime Test Date and Correction Reason existed at the September 5 baseline.
+> The September 6 notice is NOT SENT. No further field-design approval question remains.
+> **The older assessment below is historical.** Its dates, approval waits, field gaps and test counts are
+> dated observations, not current instructions. October 9 is an earlier target, not revalidated here.
+
 **As of:** 2026-08-23 · **Epic:** IFET-32 · **Author:** Abdelrahman
 **Contract:** `v0.3 DRAFT` · **Week:** 2 of 5 · **Last updated:** 2026-08-23 (end of W2/P1)
 
@@ -217,8 +229,8 @@ The one deployment actually queued — the P0/Ref 42 secret store — is built a
 | For | Read |
 |---|---|
 | Every document, and which one is authoritative | `INDEX.md` |
-| The spec both teams build against | `docs/labos-airtable/contract/write-contract-v0.3.md` |
-| Open items, canonical list (22 of them) | `docs/labos-airtable/contract/write-contract-v0.3.md` §10 |
+| The spec both teams build against | `docs/labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md` |
+| Open items, canonical list (22 of them) | `docs/labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md` §10 |
 | What the live bases actually contain, and today's evidence | `docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` |
 | The message going to the Airtable team | `docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` §8 |
 | Internal plan, gaps, week sequencing | `docs/labos-airtable/status/internal-plan-2026-07-23.md` |

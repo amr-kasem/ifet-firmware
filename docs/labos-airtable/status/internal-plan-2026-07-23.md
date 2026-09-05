@@ -1,12 +1,24 @@
 # LabOS ↔ Airtable Integration — Internal Engineering Plan
 
+> **Current update — 2026-09-06:** Design is decided in `../contract/write-contract-v0.4.md`;
+> A1–A8 are closed. Testing Base field setup is authorized but not applied. The 66-row register separates
+> decisions from delivery. Existing client/P1/outbox code remains groundwork; the programme/run flow,
+> migrations and v0.4 acceptance are not delivered. No runtime code or production deployment is part of closure.
+> Next implementation: M1 Testing Base diff/fixtures → M2 local PostgreSQL import/run/offline replay →
+> M3 APIs/review/evidence → actual-change document → coordinated cutover. UI and water integration deferred.
+> Independent source verification, measurement quarantine and automation/deployment checks remain.
+> All five Test Type options, datetime Test Date and Correction Reason existed at the September 5 baseline.
+> The September 6 notice is NOT SENT. No further field-design approval question remains.
+> **The older assessment below is historical.** Its dates, approval waits, field gaps and test counts are
+> dated observations, not current instructions. October 9 is an earlier target, not revalidated here.
+
 **Author:** Abdelrahman · **Date:** 2026-07-23 · **Updated:** 2026-07-29 · **Status:** Working (internal) · **Mode:** Solo
 **Companion (external) view:** the *Delivery & Progress Tracker* dashboard on Notion (Epic **IFET-32**).
 
 > ### Update 2026-08-23 — **the gate opened.** Gap I answered (with a defect), gap J closed
 > Both PATs delivered. The schema probe and a record dump ran against **both** bases — read-only, nothing
 > written to either. Evidence: **`docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md`**. Canonical open items:
-> **`docs/labos-airtable/contract/write-contract-v0.3.md` §10**, now 22 items.
+> **`docs/labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md` §10**, now 22 items.
 >
 > **Closed:** §10.1 `Photos` is `url` · §10.2 the four ID fields are plain text as proposed · §10.5
 > `Impact Result` is free text · §10.10 **PAT delivered** · §10.11 null/blank table verified · §10.16
@@ -32,7 +44,7 @@
 > ### Update 2026-08-22 — their guide **v2** landed; gap G re-based, gap I still open
 > *IFET Phase 2 · LabOS × Airtable API Integration Guide* **v2** (2026-08-17) supersedes the v1 schema doc
 > reviewed below. Delta and the outbound reply: **`docs/labos-airtable/correspondence/v2-guide-reconciliation-2026-08-22.md`**.
-> Canonical open items: **`docs/labos-airtable/contract/write-contract-v0.3.md` §10**.
+> Canonical open items: **`docs/labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md` §10**.
 >
 > **Changed:** the sandbox base ID below is **stale** — the testing base is now `app4oXS3Kd5IKWgJ7` and
 > production is `app0OCunbmuXl7Hc9`; all nine table IDs are published (contract §0.1). **4 of the 11
@@ -48,7 +60,7 @@
 > Their *IFET Phase 2 · LABOS Sample Schema* doc landed (sandbox base + read-only field list + a single
 > writable `LabOS Raw Test Results` table). Full review, the ten required changes, the eleven fields we need
 > added, and the reply draft: **`docs/labos-airtable/correspondence/team-doc-review-2026-07-29.md`**. The write spec both
-> teams build against: **`docs/labos-airtable/contract/write-contract-v0.3.md`**.
+> teams build against: **`docs/labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md`**.
 >
 > **Closed by their doc:** gap **G** (sandbox base — provisioned, ~~`appYBTqIL43pmS0xN`~~ **superseded 2026-08-22 → `app4oXS3Kd5IKWgJ7`**) · gap **E**
 > (roll-ups = Airtable automations, confirming decision **#8**) · decision **#6** (photos = links) and
@@ -232,7 +244,7 @@ P0→P1→P4 spine and mostly my own decisions.
 the four `Airtable … ID` fields ✅ plain text · `Impact Result` ✅ free text · **the PAT** ✅ delivered ·
 option sets ✅ read from the base rather than proposed.
 
-Still open — full list with owners in `docs/labos-airtable/contract/write-contract-v0.3.md` §10. The ones that matter:
+Still open — full list with owners in `docs/labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md` §10. The ones that matter:
 0. **The proposal-extraction shift** (§10.19) — *highest severity.* Their requirement values do not match the
    proposal PDF they came from. *Gates any live test driven from Airtable, which is the point of W3.*
 0b. **`Test Type` has one option** (§10.17) — 4 of 5 test types cannot be written back at all. *Gates W4.*

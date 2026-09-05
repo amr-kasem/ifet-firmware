@@ -1,3 +1,6 @@
+> HISTORICAL v0.3, superseded on 2026-09-06 by `../contract/write-contract-v0.4.md`.
+> Preserved as the pre-closure specification; its open questions and implementation claims are historical.
+
 # LabOS → Airtable Write Contract — `v0.3 DRAFT`
 
 **Owner:** LabOS (Abdelrahman) · **Date:** 2026-08-22 · **Supersedes:** contract `v0.2 DRAFT`

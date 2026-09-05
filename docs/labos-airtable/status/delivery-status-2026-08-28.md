@@ -1,5 +1,17 @@
 # LabOS ↔ Airtable — real delivery status
 
+> **Current update — 2026-09-06:** Design is decided in `../contract/write-contract-v0.4.md`;
+> A1–A8 are closed. Testing Base field setup is authorized but not applied. The 66-row register separates
+> decisions from delivery. Existing client/P1/outbox code remains groundwork; the programme/run flow,
+> migrations and v0.4 acceptance are not delivered. No runtime code or production deployment is part of closure.
+> Next implementation: M1 Testing Base diff/fixtures → M2 local PostgreSQL import/run/offline replay →
+> M3 APIs/review/evidence → actual-change document → coordinated cutover. UI and water integration deferred.
+> Independent source verification, measurement quarantine and automation/deployment checks remain.
+> All five Test Type options, datetime Test Date and Correction Reason existed at the September 5 baseline.
+> The September 6 notice is NOT SENT. No further field-design approval question remains.
+> **The older assessment below is historical.** Its dates, approval waits, field gaps and test counts are
+> dated observations, not current instructions. October 9 is an earlier target, not revalidated here.
+
 **Author:** Abdelrahman · **Date:** 2026-08-28 · **Epic:** IFET-32 · **Contract:** `v0.3 DRAFT`
 **Type:** status assessment. A *view* — every claim names the document or the command that backs it.
 
@@ -188,7 +200,7 @@ Ground truth for migrations is **the node, not the repo**.
 | Build state, test count | `unittest` run 2026-08-28 · `ifet-management@94cb452` |
 | Live schema, both bases | `python3 -m app.airtable.probe` re-run 2026-08-28, read-only |
 | Extraction defect | `pdftotext -layout IFET-26-0066.pdf` vs. Protocol Sections in `app0OCunbmuXl7Hc9` |
-| Open items | `docs/labos-airtable/contract/write-contract-v0.3.md` §10 (authoritative) |
+| Open items | `docs/labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md` §10 (authoritative) |
 | Outbound message | `docs/labos-airtable/evidence/live-probe-findings-2026-08-23.md` §8 (authoritative) |
 | Week sequencing, W3⇄W4 swap | `docs/labos-airtable/status/internal-plan-2026-07-23.md` |
 | Deploy hazard, migration chain | `docs/labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` · `docs/operations/ssh-session-record-2026-08-23.md` |

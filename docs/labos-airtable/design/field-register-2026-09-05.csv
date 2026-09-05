@@ -1,59 +1,67 @@
-direction,airtable_table,airtable_field,airtable_type,labos_source,write_phase,rule,status,gate
-OUT,LabOS Raw Data Table,LabOS Attempt ID,singleLineText,test_programme_runs.labos_attempt_id,create,"Merge key. One per PROGRAMME RUN, not per stage trial - see D7. Unique, never reused. Airtable upserts on this.",AGREED,
-OUT,LabOS Raw Data Table,LabOS Test ID,singleLineText,test_programme_runs.labos_test_id,create,"Identifies the PROGRAMME, shared by every run of it. Programme = (project_id, airtable_section_id). Not a substitute for Corrects Attempt ID.",AGREED,
-OUT,LabOS Raw Data Table,Attempt Number,number,test_programme_runs.attempt_number,create,"Run ordinal for the programme. Never a stage index, never an impact ordinal.",AGREED,
-OUT,LabOS Raw Data Table,Corrects Attempt ID,singleLineText,test_programme_runs.corrects_attempt_id,create,"Written at CREATE of the CORRECTING attempt, never onto the corrected one. A recorded verdict is immutable. Field is ABSENT from both bases.",BLOCKED,G5 field not delivered
-OUT,LabOS Raw Data Table,Schema Version,singleLineText,test_results.schema_version,create,Tracks the write contract version on the wire.,AGREED,
-OUT,LabOS Raw Data Table,Airtable Project ID,singleLineText,project_parents.airtable_project_id,create,Permanent record ID. REPEATS across specimens of one project - not a uniqueness key.,AGREED,
-OUT,LabOS Raw Data Table,Airtable Mockup ID,singleLineText,projects.airtable_mockup_id,create,Permanent record ID. Unique per LabOS project row.,AGREED,
-OUT,LabOS Raw Data Table,Airtable Protocol ID,singleLineText,tests.airtable_protocol_id,create,Permanent record ID. REPEATS across sections of one protocol.,AGREED,
-OUT,LabOS Raw Data Table,Airtable Section ID,singleLineText,tests.airtable_section_id,create,"Permanent record ID. Unique per PROGRAMME; REPEATS across the 6 static / 8 cyclic stages it expands into, and across runs. See D7.",AGREED,
-OUT,LabOS Raw Data Table,Test Type,singleSelect,test_results.test_type,create,All five options live in both bases since 2026-09-05. Closes contract 10.17.,AGREED,
-OUT,LabOS Raw Data Table,Test Status,singleSelect,test_results.status,create+terminal,Not Started / In Progress / Completed / Abborted. Their spelling of Aborted wins on the wire.,AGREED,
-OUT,LabOS Raw Data Table,Test Date,dateTime,test_results.testing_start_date,create,"UTC instant, ISO-8601 with Z. Mapped from testing_start_date PROVISIONALLY - start vs completion is undecided (10.13, Q11). Both instants preserved in LabOS and the JSON valve.",AGREED,
-OUT,LabOS Raw Data Table,Operator Name,singleLineText,test_results.operator_name,create,"Declared identity, selected per session, snapshotted per attempt. No authentication behind it.",AGREED,
-OUT,LabOS Raw Data Table,LabOS Created At,dateTime,test_results.labos_created_at,create,UTC.,AGREED,
-OUT,LabOS Raw Data Table,LabOS Updated At,dateTime,test_results.labos_updated_at,every,UTC. Refreshed every phase. Also the monotonic guard - a queued payload older than the record's value is dropped as superseded.,AGREED,
-OUT,LabOS Raw Data Table,Measured Value,number,test_results.measured_value,terminal,Operator-entered manual test types only. NO SOURCE for Static Load / Cycles - the firmware trial payload carries deflections[] and nothing else.,BLOCKED,G4 no measurement source
-OUT,LabOS Raw Data Table,Unit,singleLineText,test_results.unit,terminal,Short form: PSF PSI in mm cycles s impacts. Not display text.,PROPOSED,
-OUT,LabOS Raw Data Table,Max Pressure Achieved,number,-,terminal,"NO SOURCE. Firmware sends no pressure; static pressure is an open-loop operator slider, so the configured setpoint is not an achieved value. Omitted from the payload.",BLOCKED,G4 no measurement source
-OUT,LabOS Raw Data Table,Deflection Value,number,test_results.deflection_value,terminal,OMITTED. envelope.build() raises if populated. Evidence retained LOCALLY only - not carried in the JSON valve.,BLOCKED,G1 deflection calibration
-OUT,LabOS Raw Data Table,Deflection Unit,singleLineText,test_results.deflection_unit,terminal,"OMITTED. When unblocked: short form in / mm, never Inches. Contract 10.24.",BLOCKED,G1 deflection calibration
-OUT,LabOS Raw Data Table,Impact Result,singleLineText,derived from impact_shots roll-up,terminal,Roll-up summary only. Per-shot detail goes to Complete LabOS JSON Response.,PROPOSED,
-OUT,LabOS Raw Data Table,Test Result,singleSelect,test_results.test_result,verdict,Pending on terminal write. Passed/Failed/Inconclusive only after a reviewer records it. LabOS owns the verdict.,AGREED,
-OUT,LabOS Raw Data Table,Retest Required,checkbox,test_results.retest_required,verdict,Set with the verdict.,AGREED,
-OUT,LabOS Raw Data Table,Testing Continued,singleLineText,test_results.testing_continued,terminal,Continued / Stopped.,AGREED,
-OUT,LabOS Raw Data Table,Correction Reason,multilineText,test_results.correction_reason,create,"Written at CREATE of the correcting attempt. Required when Corrects Attempt ID is set; meaningless without it, which is why G5 blocks the pair.",AGREED,
-OUT,LabOS Raw Data Table,LabOS Verdict By,singleLineText,test_results.verdict_by,verdict,NEW FIELD. Reviewer declared identity. Ships inside Complete LabOS JSON Response until the field exists.,PROPOSED,
-OUT,LabOS Raw Data Table,LabOS Verdict At,dateTime,test_results.verdict_at,verdict,NEW FIELD. UTC. Ships inside Complete LabOS JSON Response until the field exists.,PROPOSED,
-OUT,LabOS Raw Data Table,Notes,multilineText,test_results.note,terminal,Operator free text.,AGREED,
-OUT,LabOS Raw Data Table,Complete LabOS JSON Response,multilineText,result_detail + required_params,terminal+verdict,"Extensibility valve. Rewritten at BOTH phases. Carries per-stage results, shot detail, requirements snapshot with provenance, identity_assurance, verdict_by/at. Measurements frozen after terminal.",PROPOSED,
-OUT,LabOS Raw Data Table,Photos,url,test_results.photo_links,terminal,Retained unchanged. First link only. LabOS keeps the originals.,AGREED,
-OUT,LabOS Raw Data Table,LabOS Photos,multipleAttachments,uploads/ downscaled copy,attachment,"NEW FIELD. Direct byte upload, 5 MB cap. Deterministic filename {attempt_id}__{sha256[:12]}.jpg. Remote list-and-match BEFORE any retry - local state cannot resolve an ambiguous timeout.",PROPOSED,
-OUT,LabOS Raw Data Table,Excel File Link,url,test_results.excel_file_link,terminal,,AGREED,
-OUT,LabOS Raw Data Table,LabOS Report Link,url,test_results.report_link,terminal,Reachability is a separate open issue.,AGREED,
-OUT,LabOS Raw Data Table,Raw Modified Time,lastModifiedTime,-,n/a,"Airtable-owned. Never written by LabOS. Field-scoped, not whole-record.",AGREED,
-IN,IFET Projects,record_id,-,project_parents.airtable_project_id,n/a,UNIQUE across project_parents. The import key for a job.,AGREED,
-IN,IFET Projects,IFET job number,singleLineText,project_parents.name,n/a,"Display only. Linkage is by record ID, never by job name.",AGREED,
-IN,IFET Projects,Project name,singleLineText,mirror.project_name,n/a,Display only.,AGREED,
-IN,IFET Projects,Project Status Modified Time,lastModifiedTime,-,n/a,Field-scoped to Project Status only. NOT usable as a delta-poll cursor.,AGREED,
-IN,Mock-Ups/Specimens,record_id,-,projects.airtable_mockup_id,n/a,UNIQUE across projects. The import key for a specimen.,AGREED,
-IN,Mock-Ups/Specimens,Project Name,multipleRecordLinks,projects.airtable_project_id,n/a,RELATIONSHIP specimen->project. Repeats by design - 6 specimens share 1 project.,AGREED,
-IN,Mock-Ups/Specimens,Mock-up/specimen name,singleLineText,projects.airtable_mockup_name,n/a,Display only.,AGREED,
-IN,Mock-Ups/Specimens,Specimen status,singleSelect,mirror.specimen_status,n/a,Airtable-owned operational status. Read-only to LabOS.,AGREED,
-IN,Tests Protocols,record_id,-,mirror.protocol_record_id,n/a,UNIQUE across mirrored protocols.,AGREED,
-IN,Tests Protocols,Mock-Up,multipleRecordLinks,mirror.mockup_record_id,n/a,RELATIONSHIP protocol->specimen. Repeats by design.,AGREED,
-IN,Tests Protocols,Protocol Name,singleLineText,mirror.protocol_name,n/a,TAS-201 / TAS-202 / TAS-203 / ANSI Z97.1 observed live. Does NOT determine test type - the section does.,AGREED,
-IN,Protocol Sections,record_id,-,test_programme_runs.airtable_section_id,n/a,Identifies a PROGRAMME with the project id. REPEATS across stage rows and across runs - it is NOT unique across LabOS test rows. See D7.,AGREED,
-IN,Protocol Sections,Test Protocol,multipleRecordLinks,mirror.protocol_record_id,n/a,RELATIONSHIP section->protocol. Repeats by design.,AGREED,
-IN,Protocol Sections,Section Name,singleLineText,mirror.section_name,n/a,"Attribute name in their EAV model. 9 observed live. Determines LabOS test type - or marks the row a parameter, not a test.",AGREED,
-IN,Protocol Sections,Value,singleLineText,mirror.required_value_raw,n/a,Human-facing display string. Retained for reference. LabOS stops parsing it once the typed fields exist.,AGREED,
-IN,Protocol Sections,Requirement Kind,singleSelect,mirror.requirement_kind,n/a,NEW FIELD. Magnitude / Directional Pair / Count / Enum / Not Applicable. Makes the row self-describing.,PROPOSED,
-IN,Protocol Sections,Required Value,number,mirror.required_value,n/a,NEW FIELD. Magnitude and Count kinds. Blank is not zero.,PROPOSED,
-IN,Protocol Sections,Required Value Inward,number,projects.inward_design_pressure,n/a,NEW FIELD. Positive magnitude PSF. Sign convention unconfirmed - do not infer from symmetric samples.,BLOCKED,G2 sign convention
-IN,Protocol Sections,Required Value Outward,number,projects.outward_design_pressure,n/a,NEW FIELD. Positive magnitude PSF. Sign convention unconfirmed.,BLOCKED,G2 sign convention
-IN,Protocol Sections,Required Unit,singleSelect,mirror.required_unit,n/a,NEW FIELD. PSF / in / s / cycles / impacts.,PROPOSED,
-IN,Protocol Sections,Result,singleSelect,mirror.result,n/a,Airtable-owned. Read-only to LabOS. Semantics unconfirmed - see Q8.,AGREED,
-IN,Protocol Sections,Status,singleSelect,mirror.status,n/a,Airtable-owned. Read-only to LabOS.,AGREED,
-IN,Protocol Sections,Testing Date,date,-,n/a,"date has no instant. Render America/New_York BEFORE writing, not UTC.",AGREED,
-OUT,LabOS Raw Data Table,(delivery metadata),-,sync_outbox.attempt_seq,every,"Not a wire field. Per-attempt FIFO ordering key - phases deliver in seq order, head-of-line blocking per attempt only. See 5.2.2.",AGREED,
+direction,airtable_table,airtable_field,airtable_type,labos_source,write_phase,rule,status,gate,owner,delivery_state
+OUT,LabOS Raw Data Table,LabOS Attempt ID,singleLineText,test_programme_runs.labos_attempt_id,create,Persisted programme-run UUID; unique merge key on every phase/retry. Stages have separate child IDs. Contract section 2.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,LabOS Test ID,singleLineText,test_programmes.labos_test_id (via run.programme_id),create,Stable programme UUID shared by runs. Linked programme uniqueness: specimen_id + primary_section_id + test_type. Not correction linkage.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Attempt Number,number,test_programme_runs.attempt_number,create,"Run ordinal for the programme. Never a stage index, never an impact ordinal.",DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Corrects Attempt ID,singleLineText,test_programme_runs.corrects_attempt_id,create,Required on a new correction row; references original UUID. Never update original or disguise correction as retest.,DECIDED,,LabOS,PLANNED
+OUT,LabOS Raw Data Table,Schema Version,singleLineText,run.schema_version,create,"Literal 0.4, matching detailed JSON schema. Existing sample versions unchanged.",DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Airtable Project ID,singleLineText,project_parents.airtable_project_id,create,Permanent job record ID from imported hierarchy. Repeats across specimens and runs.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Airtable Mockup ID,singleLineText,projects.airtable_mockup_id,create,Permanent specimen record ID from imported hierarchy; repeats across runs. Imported specimen unique by base_id + record ID.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Airtable Protocol ID,singleLineText,programme.airtable_protocol_id,create,Permanent record ID. REPEATS across sections of one protocol.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Airtable Section ID,singleLineText,programme.airtable_section_id,create,Primary section for the programme. Repeats across stages/runs; run UUID is the outbound merge key.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Test Type,singleSelect,run.test_type,create,All five options live in both bases since 2026-09-05. Closes contract 10.17.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Test Status,singleSelect,run.status,create+terminal,Not Started / In Progress / Completed / Abborted. Their spelling of Aborted wins on the wire.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Test Date,dateTime,run.testing_end_date,terminal,Completion instant in UTC; absent at create. Corrections preserve original execution time.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Operator Name,singleLineText,run.operator_name,create,"Declared identity, selected per session, snapshotted per attempt. No authentication behind it.",DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,LabOS Created At,dateTime,run.labos_created_at,create,UTC.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,LabOS Updated At,dateTime,run.labos_updated_at,every,"UTC domain revision time. Audit metadata, not remote compare-and-swap. FIFO uses attempt_seq.",DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Measured Value,number,run.measured_value,terminal,"Omit for rig Static Load/Cycles. Manual observations require genuine value, quantity, declared unit and source; never a target.",DECIDED,measurement validation,LabOS,CONDITIONAL
+OUT,LabOS Raw Data Table,Unit,singleLineText,run.unit,terminal,"Canonical outbound pressure PSF; length in/mm, time s, counts cycles/impacts. Explicit quantity/unit/source for manual measurements.",DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Max Pressure Achieved,number,-,terminal,"NO SOURCE. Firmware sends no pressure; static pressure is an open-loop operator slider, so the configured setpoint is not an achieved value. Omitted from the payload.",DECIDED,measurement validation,LabOS,OMITTED
+OUT,LabOS Raw Data Table,Deflection Value,number,run.deflection_value,terminal,Omitted; v0.4 envelope must reject quarantined values in scalars and JSON. Evidence retained locally. Validation not yet implemented.,DECIDED,measurement validation,LabOS,OMITTED
+OUT,LabOS Raw Data Table,Deflection Unit,singleLineText,run.deflection_unit,terminal,"OMITTED. When unblocked: short form in / mm, never Inches. Contract 10.24.",DECIDED,measurement validation,LabOS,OMITTED
+OUT,LabOS Raw Data Table,Impact Result,singleLineText,derived from impact_shots roll-up,terminal,Roll-up summary only. Per-shot detail goes to Complete LabOS JSON Response.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Test Result,singleSelect,run.test_result,create+terminal+verdict,Pending at creation and termination; first review once to Passed/Failed/Inconclusive. Corrections create new rows.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Retest Required,checkbox,run.retest_required,verdict,Explicit with first review. A blank/false checkbox before review is not a decision that no retest is needed.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Testing Continued,singleLineText,run.testing_continued,terminal,Continued / Stopped.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Correction Reason,multilineText,run.correction_reason,create,Required on a new correction row alongside Corrects Attempt ID.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,LabOS Verdict By,singleLineText,run.verdict_by,verdict,Declared reviewer identity. Required with first review in scalars and detailed JSON; missing schema parks delivery.,DECIDED,,LabOS,PLANNED
+OUT,LabOS Raw Data Table,LabOS Verdict At,dateTime,run.verdict_at,verdict,UTC first-review timestamp. Required with first review in scalars and detailed JSON; missing schema parks delivery.,DECIDED,,LabOS,PLANNED
+OUT,LabOS Raw Data Table,Notes,multilineText,run.note,terminal,Operator free text.,DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Complete LabOS JSON Response,multilineText,result_detail + required_params,create+terminal+verdict,"Version 0.4; identity, attempt_kind, execution times, snapshot, procedure/stages, observations, review, data_quality. No quarantined numbers.",DECIDED,,LabOS,BASELINE
+OUT,LabOS Raw Data Table,Photos,url,run.photo_links,terminal,Optional reachable URL only. Omit localhost/LAN/unconfigured links. Photos holds at most one URL; originals retained locally.,DECIDED,,LabOS,CONDITIONAL
+OUT,LabOS Raw Data Table,LabOS Photos,multipleAttachments,uploads/ downscaled copy,attachment,"Persisted immutable JPEG preview; artifact ID/full hash/deterministic filename. Single owner; reconcile uncertain remote uploads, park ambiguity instead of blind append.",DECIDED,,LabOS,PLANNED
+OUT,LabOS Raw Data Table,Excel File Link,url,run.excel_file_link,terminal,Optional validated reachable URL. Omit localhost/LAN/unconfigured links; validate consumer access before publishing.,DECIDED,,LabOS,CONDITIONAL
+OUT,LabOS Raw Data Table,LabOS Report Link,url,run.report_link,terminal,Optional validated reachable URL. Omit localhost/LAN/unconfigured links; validate consumer access before publishing.,DECIDED,,LabOS,CONDITIONAL
+READ_ONLY,LabOS Raw Data Table,Raw Modified Time,lastModifiedTime,-,n/a,"Airtable-owned. Never written by LabOS. Field-scoped, not whole-record.",DECIDED,,Airtable,BASELINE
+IN,IFET Projects,record_id,-,project_parents.airtable_project_id,n/a,"Airtable record metadata, not a schema field. Import/mirror identity is unique by base_id + record ID; display names never match identity.",DECIDED,,Airtable,BASELINE
+IN,IFET Projects,IFET job number,singleLineText,project_parents.name,n/a,"Display only. Linkage is by record ID, never by job name.",DECIDED,,Airtable,BASELINE
+IN,IFET Projects,Project name,singleLineText,mirror.project_name,n/a,Display only.,DECIDED,,Airtable,BASELINE
+IN,IFET Projects,Project Status Modified Time,lastModifiedTime,-,n/a,Field-scoped to Project Status only. NOT usable as a delta-poll cursor.,DECIDED,,Airtable,BASELINE
+IN,Mock-Ups/Specimens,record_id,-,projects.airtable_mockup_id,n/a,"Airtable record metadata, not a schema field. Import/mirror identity is unique by base_id + record ID; display names never match identity.",DECIDED,,Airtable,BASELINE
+IN,Mock-Ups/Specimens,Project Name,multipleRecordLinks,projects.airtable_project_id,n/a,RELATIONSHIP specimen->project. Repeats by design - 6 specimens share 1 project.,DECIDED,,Airtable,BASELINE
+IN,Mock-Ups/Specimens,Mock-up/specimen name,singleLineText,projects.airtable_mockup_name,n/a,Display only.,DECIDED,,Airtable,BASELINE
+IN,Mock-Ups/Specimens,Specimen status,singleSelect,mirror.specimen_status,n/a,Airtable-owned operational status. Read-only to LabOS.,DECIDED,,Airtable,BASELINE
+IN,Tests Protocols,record_id,-,mirror.protocol_record_id,n/a,"Airtable record metadata, not a schema field. Import/mirror identity is unique by base_id + record ID; display names never match identity.",DECIDED,,Airtable,BASELINE
+IN,Tests Protocols,Mock-Up,multipleRecordLinks,mirror.mockup_record_id,n/a,RELATIONSHIP protocol->specimen. Repeats by design.,DECIDED,,Airtable,BASELINE
+IN,Tests Protocols,Protocol Name,singleLineText,mirror.protocol_name,n/a,TAS-201 / TAS-202 / TAS-203 / ANSI Z97.1 observed live. Does NOT determine test type - the section does.,DECIDED,,Airtable,BASELINE
+IN,Protocol Sections,record_id,-,mirror.section_record_id,n/a,"Airtable record metadata, not a schema field. Import/mirror identity is unique by base_id + record ID; display names never match identity.",DECIDED,,Airtable,BASELINE
+IN,Protocol Sections,Test Protocol,multipleRecordLinks,mirror.protocol_record_id,n/a,RELATIONSHIP section->protocol. Repeats by design.,DECIDED,,Airtable,BASELINE
+IN,Protocol Sections,Section Name,singleLineText,mirror.section_name,n/a,Display only. Requirement Code selects supported semantics; unknown codes remain non-executable.,DECIDED,,Airtable,BASELINE
+IN,Protocol Sections,Value,singleLineText,mirror.required_value_raw,n/a,Preserve display string verbatim. Never parse or best-effort convert into execution requirements.,DECIDED,,Airtable,BASELINE
+IN,Protocol Sections,Requirement Kind,singleSelect,mirror.requirement_kind,n/a,NEW FIELD. Magnitude / Directional Pair / Count / Enum / Not Applicable. Makes the row self-describing.,DECIDED,,Airtable,PLANNED
+IN,Protocol Sections,Required Value,number,mirror.required_value,n/a,NEW FIELD. Magnitude and Count kinds. Blank is not zero.,DECIDED,,Airtable,PLANNED
+IN,Protocol Sections,Required Value Inward,number,mirror.required_value_inward,n/a,Independent finite positive PSF magnitude; no legacy string parsing. Execution uses frozen independently verified values while extractor defect persists.,DECIDED,,Airtable,PLANNED
+IN,Protocol Sections,Required Value Outward,number,mirror.required_value_outward,n/a,Independent finite positive PSF magnitude; no legacy string parsing. Execution uses frozen independently verified values while extractor defect persists.,DECIDED,,Airtable,PLANNED
+IN,Protocol Sections,Required Unit,singleSelect,mirror.required_unit,n/a,"PSF/in/s/cycles/impacts; blank for unitless count, Enum or Not Applicable. Shape and code must agree.",DECIDED,,Airtable,PLANNED
+IN,Protocol Sections,Result,singleSelect,mirror.result,n/a,Airtable-owned read-only operational projection. Historical values are not inferred as LabOS verdicts.,DECIDED,,Airtable,BASELINE
+IN,Protocol Sections,Status,singleSelect,mirror.status,n/a,Airtable-owned. Read-only to LabOS.,DECIDED,,Airtable,BASELINE
+IN,Protocol Sections,Testing Date,date,mirror.testing_date,n/a,READ ONLY. Airtable automation derives completion date in America/New_York; LabOS never writes it.,DECIDED,,Airtable,BASELINE
+LOCAL_ONLY,LabOS Raw Data Table,(delivery metadata),-,sync_outbox.attempt_seq,every,"Local ordering metadata, never an Airtable schema field or payload. Transactional per-attempt FIFO; PostgreSQL migration and validation pending. Contract section 7.",DECIDED,,LabOS,PLANNED
+IN,Protocol Sections,Requirement Code,singleSelect,mirror.requirement_code,n/a,STATIC_PRESSURE/CYCLIC_PRESSURE/IMPACT_LMI/IMPACT_SMI/FORCED_ENTRY/ANSI_IMPACT/GAUGE_COUNT/STATIC_PROGRAMME/WATER_PRESSURE. Water visible but unsupported; names are labels.,DECIDED,,Airtable,PLANNED
+IN,Protocol Sections,Required Option,singleLineText,mirror.required_option,n/a,Explicit Enum value. Full is the initial supported static programme. Unknown options non-executable.,DECIDED,,Airtable,PLANNED
+IN,Protocol Sections,Applicability,singleSelect,mirror.applicability,n/a,"Required/Not Required/Unconfirmed. Blank=Unconfirmed, never infer from Value or historical Result. Only Required is executable.",DECIDED,,Airtable,PLANNED
+OUT,LabOS Raw Data Table,Testing Start Date,dateTime,run.testing_start_date,create,UTC physical execution start; corrections preserve original.,DECIDED,,LabOS,PLANNED
+OUT,LabOS Raw Data Table,Testing End Date,dateTime,run.testing_end_date,terminal,UTC completion/abort time; absent while running; also Test Date.,DECIDED,,LabOS,PLANNED
+IN,Mock-Ups/Specimens,Height (Inches),number,mirror.height_in,n/a,"Specimen context, finite positive inches when provided; not an automatic acceptance criterion.",DECIDED,,Airtable,BASELINE
+IN,Mock-Ups/Specimens,Width (Inches),number,mirror.width_in,n/a,"Specimen context, finite positive inches when provided; not an automatic acceptance criterion.",DECIDED,,Airtable,BASELINE
+IN,IFET Projects,Product Type,singleLineText,mirror.product_type,n/a,Product context only; no billing/customer fields.,DECIDED,,Airtable,BASELINE
