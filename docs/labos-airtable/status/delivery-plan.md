@@ -4,7 +4,7 @@
 **Authority split:** `../contract/write-contract-v0.4.md` governs *meaning* (identity, envelope, semantics,
 concurrency guarantees). This file governs *delivery* (state, sequence, gaps, ownership, asks). On a conflict
 about what a field or a guarantee means, the contract wins; on a conflict about what is built or scheduled,
-this file wins. Machine-readable mapping: `../contract/field-register.csv` (66 rows).
+this file wins. Machine-readable mapping: `../contract/field-register.csv` (73 rows).
 
 Dated files belong in `evidence/` and `correspondence/` only — those are point-in-time artifacts. Status,
 design and roadmap are one document, this one. Superseded snapshots live in git history, not in the tree.
@@ -68,11 +68,59 @@ is a complete specification of the Airtable boundary and an incomplete specifica
 
 ---
 
-## 2. Scope and decisions
+## 2. The operator's journey — and what delivers it
 
-Five test types: Static Load, Cycles, Impact, Forced Entry, ANSI Z97.1. Backend first. **UI and water
-infiltration deferred.** Existing local water behaviour unchanged. Historical attempts excluded from sync;
-no name-based backfill.
+§1 is the system view. This is the same integration seen by the person holding the wrench, and it is the view
+IFET's 2026-09-06 workflow message is written in. **Every requirement in that message maps to a milestone
+here, or to a gap in §5 — nothing is left implicit.** Keep it that way: when they send a new workflow
+statement, it gets a row, not a new document.
+
+| Step | What the operator does | Delivered by | Watch out |
+|---|---|---|---|
+| 1 · Pick the work | Selects Project → Mock-up → Protocol → Section, **from the local cache** — never a live Airtable call, so a network blip cannot block them. Sections show Required/Not Required/Unconfirmed, supported or not, complete or not | M2 read cache · M3 pickers · **MU** screens | Names are display only; permanent record IDs route everything |
+| 2 · **Verify the numbers** | Enters the actual inward/outward pair from the trusted proposal, the proposal reference, who verified, and when. Airtable's values are shown alongside for comparison but **cannot start a rig** | M3 backend gate · **MU** form | **This step adds operator work, and is the one thing we cannot remove from our side.** It relaxes to a one-click confirm the day the extractor is fixed. Contradicts their "no double entry" rule — say so explicitly, do not let them discover it |
+| 3 · Set up the run | Picks attached gauges, reviews the derived loading sequence, starts. Requirement snapshot, procedure version, stage plan and identity all **freeze** here | M3 run create · **MU** | A later Airtable edit never mutates a live run — it means a new run. Gauge selection vs `GAUGE_COUNT` is unreconciled (§5 G6) |
+| 4a · Static Load / Cycles | Watches the rig execute; stages and trials record themselves | **MF** + M3 | Until MF lands, the verified pair from step 2 sits on the run while the rig reads the old `static_tests` row (§5 G1, G2) |
+| 4b · Impact / Forced Entry / ANSI | Presses the test button and types results, notes and photos into a form that **already knows** project, mock-up, protocol, system, operator and attempt number | M3 entities/routes · **MU** screens | No model, no route, no table exists today (§5 G3). Impact *requirements* are not in the register either (§5 G7) |
+| 5 · Finish | Explicitly completes, or aborts with a reason. Evidence freezes | M3 | Never infer completion from a timeout or a disconnect; missing telemetry is not a pass |
+| 6 · Review | A **named reviewer** records Pass/Fail/Inconclusive and Retest Required, once, with reasoning | M3 verdict route · **MU** | Nothing writes pass/fail today — this step is new. Operator and reviewer are stored separately even when the same person |
+| 7 · It reaches Airtable | Sees a status chip: Synced / Pending / Sync Failed / Retry Required | M2 outbox + worker · **MU** chip | Their four words are our four contractual values. A correction is a new attempt, never an edit of the old |
+
+### Their operating rules — already ours
+
+Airtable never controls equipment (write allowlist is one table) · an outage never stops testing
+(transactional outbox) · LabOS keeps the detail, Airtable gets the summary · never duplicate records
+(upsert on `LabOS Attempt ID`) · permanent IDs for sync, names for display · every attempt retained ·
+the four sync-status words · no billing, pricing, invoice or scheduling data crosses the boundary.
+
+### Where the benefit actually lands
+
+Worth stating plainly, because it drives priority and it affects adoption:
+
+| | Gains |
+|---|---|
+| PM / office | **The big one.** Live project status without chasing the lab; results stop being retyped |
+| Lab manager | Real attempt and retest history, which does not exist today |
+| Reviewer | A defined pass/fail step with a name and a timestamp on it |
+| Operator | **The least — and initially a net cost**, because of step 2 |
+
+**The outbound half of the sync pays off immediately; the inbound half does not pay off until the extractor
+is fixed.** Until then, pre-filled requirements are a display convenience and a cross-check, not a time
+saver. If anything has to slip, slip inbound polish, not the outbound queue.
+
+---
+
+## 3. Scope and decisions
+
+Five test types: Static Load, Cycles, Impact, Forced Entry, ANSI Z97.1. Backend first. Water infiltration
+deferred; existing local water behaviour unchanged. Historical attempts excluded from sync; no name-based
+backfill.
+
+**The UI is no longer "deferred" — it is scoped as MU and owned.** A8 deferred it when this was an internal
+engineering plan. IFET's 2026-09-06 workflow message is written entirely in screens, buttons and forms, and
+§2 step 2 only exists if there is somewhere to type it. Deferring it by omission would have meant delivering
+an API with no consumer and calling it done. MU may still be scheduled after M3 — that is a sequencing
+decision — but it is no longer absent from the plan.
 
 | | Decision |
 |---|---|
@@ -95,9 +143,9 @@ plausible. Contract §10.19.
 
 ---
 
-## 3. The build
+## 4. The build
 
-### 3.1 Local entities
+### 4.1 Local entities
 
 | Entity | Holds |
 |---|---|
@@ -116,7 +164,7 @@ linked programmes; evidence and first review immutable; correction chains acycli
 section references **repeat by design**. New local-only runs default to Excluded until explicitly linked;
 historical rows stay Excluded dynamically, never by a hard-coded count such as 640.
 
-### 3.2 API surface
+### 4.2 API surface
 
 Logical routes; use the existing application's prefix consistently.
 
@@ -138,7 +186,7 @@ Logical routes; use the existing application's prefix consistently.
 
 All repeated creates use **persisted** request/event IDs — never a freshly minted attempt ID per HTTP retry.
 
-### 3.3 Concurrency — named mechanisms, not properties to assume
+### 4.3 Concurrency — named mechanisms, not properties to assume
 
 Each fails silently without its mechanism, and **none is observable in a SQLite test**. Contract §7.1.
 
@@ -153,7 +201,7 @@ Each fails silently without its mechanism, and **none is observable in a SQLite 
 `is_superseded` is evaluated before a request is issued and sees nothing in flight. Wire timestamps are audit
 data, never remote compare-and-swap.
 
-### 3.4 Outbound envelope
+### 4.4 Outbound envelope
 
 Upsert on `LabOS Attempt ID` only. Phases: create → terminal → first review, plus a separately tracked
 attachment channel. Never `typecast`; never create select options; never clear a cell with `null`; never
@@ -169,7 +217,7 @@ ask about when they see M3.
 
 ---
 
-## 4. Open gaps — close before M3 can be demonstrated
+## 5. Open gaps — close before M3 can be demonstrated
 
 ### G1 · The work order never reaches the rig — **critical**
 
@@ -196,7 +244,7 @@ Firmware posts to `/projects/{pid}/static_tests/{idx}/trials` (`api/api.py:28-45
 {"deflections": [{"deflection_gauge": 1, "max_deflection": …, "permanent_deflection": …, "recovery": 60}]}
 ```
 
-No run ID, no stage ID, **no event ID** — so §3.2's "duplicates replay safely" is unachievable through it.
+No run ID, no stage ID, **no event ID** — so §4.2's "duplicates replay safely" is unachievable through it.
 That makes this a firmware change, not a backend adaptation.
 
 **Decide:** firmware calls the new route · backend resolves `(project_id, test_index)` → active run · or both
@@ -222,18 +270,56 @@ items **51** (capture actual & max pressure) and **53** (thread IDs through `sta
 for **W2** — which is now. The September design's M0–M7 are entirely backend, Airtable and metrology. Item 51
 survived as **M7** under a new name; **item 53 and gap H were lost.** They are G1 and G2 above.
 
-### G5 · No operator surface is in scope
+### G5 · No operator surface — now scoped as MU, not closed
 
-§3.3 requires the operator to enter the verified pair, its reference, verifier and time; the UI is deferred
-(A8); M3 is "all five backend workflows". The release is therefore an API with no consumer, and **no rig can
-lawfully start until a UI exists**. Acceptable as sequencing — but M5 currently reads as though testing could
-begin. State that acceptance is API-level and that "cannot drive a rig" persists past M5.
+Contract §3.3 requires the operator to enter the verified pair, its reference, verifier and time. A8 deferred
+the UI, and M3 is "all five backend workflows" — so the release was an API with no consumer, and **no rig
+could lawfully start.** IFET's 2026-09-06 message is written entirely from the operator's seat, which settles
+it: the UI is a deliverable, tracked as **MU**.
+
+Still true and still worth writing down: **M1–M5 acceptance is API-level**, and "cannot drive a rig from
+Airtable values" persists past M5 regardless of MU, because that constraint belongs to the extractor, not to
+the interface.
+
+### G7 · Impact requirements are not in the register
+
+Their message asks LabOS to receive "impact requirements" so the operator stops retyping them. The register
+carries only a **count** of impacts (`IMPACT_LMI` / `IMPACT_SMI` as Count/impacts). Missile type, missile
+weight and target velocity — the values our own `missile_impact_tests` and `shots` tables hold — appear
+nowhere in it, so an LMI operator would still type them by hand.
+
+Four rows are now in the register as `OPEN`/`PROPOSED`. **The open question is whether they belong in Airtable
+at all**: the protocol normally fixes the missile and velocity, so Airtable may only need to carry per-job
+deviations, plus `Impact Locations`, whose relationship to the total-impacts count is itself unsettled.
+Decide with them before creating the fields.
+
+### G8 · Forced Entry, ANSI and failure notes — output shape reopened
+
+Their message lists "forced-entry results", "ANSI Z97.1 results" and "failure notes" as things LabOS sends
+back. §7 decided sub-detail lives in JSON with `Test Result` carrying pass/fail, and to add a dedicated scalar
+**only when a named operational report requires one**. Their message may be exactly that request — or it may
+be a description of what they want visible, which the JSON plus `Test Result` already satisfies.
+
+Three rows are in the register as `OPEN`/`PROPOSED`. **Ask which report needs them before creating them**, and
+decide Forced Entry and ANSI together or not at all. `Failure Notes` is the easiest of the three and the most
+likely to be genuinely wanted: today one `Notes` field carries both meanings.
+
+### G9 · Loading sequences — ownership never agreed
+
+Their message lists loading sequences as flowing **from** Airtable into LabOS. Nothing in Airtable holds
+them; LabOS derives 14+ stages from the verified inward/outward pair, and that derivation is validated to
+full precision against production data.
+
+**Recommendation: LabOS keeps deriving them**, and Airtable supplies only the pair. It works today, it is
+already proven, and it removes a thing that would otherwise have to stay in sync between two systems. But
+that is currently an assumption on our side and a different assumption on theirs — settle it in writing
+before M3, because it changes what a Protocol Section has to carry.
 
 ### G6 · Register and entity drift — small, mechanical
 
 | Item | Problem |
 |---|---|
-| `completion_source` | Required by contract §2; absent from the register **and** from §3.1's run columns (now added above) |
+| `completion_source` | Required by contract §2; absent from the register **and** from §4.1's run columns (now added above) |
 | `identity_assurance = declared` | Required by contract §4; same absence (now added above) |
 | Sync service deployment | Contract §7 says "one container, no public port" and stops — no compose service, env var names, credential source or health policy, in a design that specifies fencing semantics to the sentence |
 | Gauge selection | `GAUGE_COUNT` is a snapshotted programme parameter (contract §3.2); firmware takes `selectedSensors[]` live at MQTT start. Never reconciled; a mismatch at start has no defined behaviour |
@@ -241,14 +327,15 @@ begin. State that acceptance is API-level and that "cannot drive a rig" persists
 
 ---
 
-## 5. Milestones
+## 6. Milestones
 
 | M | Deliverable | Owner | Exit evidence | Depends on |
 |---|---|---|---|---|
 | **M1** | Testing Base additions (14 fields) + synthetic linked fixture | LabOS | Schema diff, field IDs per base, asymmetric pair, blank/N-A/unknown examples | — |
 | **M2** | **Disposable PostgreSQL harness first**, then local migration and the first vertical flow | LabOS | Two independent worker processes on separate connections; concurrent-enqueue, competing-worker, slow-send, stale-owner green; import → run → finish → worker restart → one Testing Base attempt | — |
 | **MF** | **Firmware run/stage association — G1 + G2** | LabOS + firmware | A rig start carries a run identity; a `/trials` callback lands on a known run and stage with a stable event ID; replay is safe; an unmapped callback is excluded, not guessed | M2 identity |
-| **M3** | All five backend workflows, review, corrections, evidence — **including G3 capture for Impact / Forced Entry / ANSI** | LabOS | §6 acceptance cases | M2, MF |
+| **M3** | All five backend workflows, review, corrections, evidence — **including G3 capture for Impact / Forced Entry / ANSI** | LabOS | §7 acceptance cases | M2, MF |
+| **MU** | **Operator interface — the seven steps in §2.** Pickers, the verification form, run setup, the three manual-entry screens, review, and the sync-status chip | LabOS | An operator completes each of the five test types end to end without retyping anything Airtable already holds, and without a rig starting on unverified numbers | M3 · G7/G8 decided |
 | **M4** | Change document with actual implementation results | LabOS | Every planned change marked applied/verified or outstanding | M1–M3 |
 | **M5** | Production cutover, separately scheduled | LabOS + IFET | Schema/automation acceptance, migration rehearsal, preflight, agreed window | M4 · window |
 | **M6** | Deflection calibration (legacy item 27) | LabOS | Known displacement applied to a gauge, transform identified end to end; `Deflection Value`/`Unit` unquarantined **or** the omission reconfirmed with evidence | bench/rig hardware |
@@ -264,7 +351,7 @@ P1 and the new revision rehearse as **one ordered upgrade** on local PostgreSQL.
 
 ---
 
-## 6. Acceptance checks
+## 7. Acceptance checks
 
 Grouped; all must pass on **PostgreSQL** — SQLite-only tests are not accepted as proof of any guarantee here.
 
@@ -312,7 +399,7 @@ requires it, not because `Impact Result` happens to exist.
 
 ---
 
-## 7. Known deviations in the committed groundwork
+## 8. Known deviations in the committed groundwork
 
 `ifet-management` `app/sync/{outbox,state,worker}.py` @ `d61f6f5` predates the contract and is **unwired**, so
 every item is latent — nothing has ever passed through it. Listed so nobody mistakes "committed and green"
@@ -333,7 +420,7 @@ for "contract-compliant".
 
 ---
 
-## 8. Airtable team — what we need, what we owe
+## 9. Airtable team — what we need, what we owe
 
 **Environments.** Testing `app4oXS3Kd5IKWgJ7` · Production `app0OCunbmuXl7Hc9`.
 Read: `IFET Projects` `tblLYcRC7q6Srjfk3` · `Mock-Ups/Specimens` `tblcrGv0WJn6FTTGO` ·
@@ -343,8 +430,10 @@ Schema-write credentials belong to setup, never to the runtime worker. Tokens st
 out of browser-served config.
 
 **Schema is no longer a permission question.** LabOS is authorized to define and add the required fields in
-the Testing Base with a documented change register. 66 register rows: 44 BASELINE, 15 PLANNED, 4 CONDITIONAL,
-3 OMITTED → **14 actual field additions**.
+the Testing Base with a documented change register. 73 register rows — **66 DECIDED** (44 BASELINE,
+15 PLANNED, 4 CONDITIONAL, 3 OMITTED) → **14 field additions to make now**, plus **7 OPEN/PROPOSED** raised by
+their 2026-09-06 workflow message and held until §5 G7/G8 are settled with them. Do not create a PROPOSED
+field: `OPEN` means we have not agreed it, and an unwanted field is harder to remove than to add.
 
 | Where | Fields |
 |---|---|
@@ -371,7 +460,7 @@ implementation. `correspondence/sent/` is append-only; never edit an artifact th
 
 ---
 
-## 9. Asks to IFET — operational
+## 10. Asks to IFET — operational
 
 | Ask | Why | When |
 |---|---|---|
@@ -387,7 +476,7 @@ quoting the October target as live would be a fabrication.
 
 ---
 
-## 10. Operating rules
+## 11. Operating rules
 
 - **Nothing is deployed and nothing gets deployed as an experiment.** No rebuild, recreate or restart of a
   production container to try something out. No `docker cp` hot patches — deploy means rebuild from a clean
