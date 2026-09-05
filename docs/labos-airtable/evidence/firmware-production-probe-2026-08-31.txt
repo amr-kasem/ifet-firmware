@@ -1,0 +1,253 @@
+LabOS production firmware/runtime probe — command log
+=====================================================
+Date:      2026-08-31
+Operator:  gad
+Scope:     system-1, system-2, management (read-only)
+Companion: firmware-production-runtime-contract-2026-08-31.md
+
+READ-ONLY GUARANTEE
+-------------------
+Every command below is read-only. Nothing was started, stopped, restarted,
+rebuilt, deployed, written or deleted. No rig motion, no VFD command, no valve
+command, no test created, no MQTT publish, no DB write, no migration, no
+docker cp into a container, no git operation that touches a worktree.
+
+Three classes of command were used and nothing else:
+  * inspection      — docker ps / images / inspect / logs, git rev-parse, md5sum
+  * file reads      — cat, sed -n, grep, find, python3 -c json.load(...)
+  * SELECT-only SQL — psql -f with a file containing only SELECT and \echo
+
+Two writes to *scratch* paths outside any container's app tree were made purely
+to carry SELECT-only SQL to the database host:
+    ssh-copy.sh push management probeN.sql /tmp/probeN.sql
+    docker cp /tmp/probeN.sql ifet-management-db-1:/tmp/probeN.sql
+These touch /tmp only. They are not hot patches: no file under /app, no config,
+no bind-mounted path and no image layer was modified.
+
+Deliberately NOT done (would have changed state — see report §17):
+  * publishing device{N}/command to start a test
+  * publishing sick/assign or sick/release to exercise a deflection gauge
+  * POST/PUT to report-api (would create a trial or flip finished/resume)
+  * writing UNIT_OF_MEASUREMENT or restarting a gateway to test unit handling
+
+ACCESS
+------
+bash bin/check-deps.sh
+bash bin/show-session.sh
+  -> STATUS: fresh; stable *.at.remote.it proxies, user labadm
+
+1. FLEET / DEPLOYED FIRMWARE INVENTORY
+--------------------------------------
+ssh-run.sh system -- 'hostname; uptime;
+  docker ps --format "{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.CreatedAt}}";
+  docker images --format "{{.Repository}}:{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}"'
+
+ssh-exec.sh management -- 'hostname;
+  docker ps --format "{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.CreatedAt}}";
+  cd ~/ifet-management; git rev-parse --abbrev-ref HEAD; git rev-parse --short HEAD;
+  git status --porcelain'
+  -> branch latest, HEAD 90f9595, worktree clean
+
+2. DEPLOYED CODE IDENTITY (image contents, not the repo)
+-------------------------------------------------------
+ssh-run.sh system -- 'for c in state_machine serial; do
+  docker exec ifet-firmware-${c}_service-1 sh -c "cd /app &&
+    find . -name \"*.py\" -not -path \"*/venve/*\" -not -path \"*/site-packages/*\" \
+      -not -path \"*/__pycache__/*\" | sort | xargs md5sum"; done'
+
+Local comparison baseline (feature/labos-firmware-p3):
+  (cd src/state_machine && find . -name '*.py' -not -path '*__pycache__*' | sort | xargs md5sum)
+  (cd src/serial_service && find . -name '*.py' -not -path '*__pycache__*' | sort | xargs md5sum)
+
+Divergent files extracted and diffed:
+  ssh-exec.sh system-1 -- 'docker exec ifet-firmware-serial_service-1 \
+      cat /app/vfd_handler/vfd_node.py'          > sys1-vfd_node.py
+  ssh-exec.sh system-2 -- 'docker exec ifet-firmware-state_machine_service-1 \
+      cat /app/states/idle.py'                   > sys2-idle.py
+  diff -u src/serial_service/vfd_handler/vfd_node.py sys1-vfd_node.py
+  diff -u src/state_machine/states/idle.py         sys2-idle.py
+
+3. LIVE CONFIG (bind-mounted = authoritative)
+---------------------------------------------
+ssh-run.sh system -- 'docker inspect ifet-firmware-state_machine_service-1 \
+    --format "{{range .Mounts}}{{.Source}} -> {{.Destination}}{{\"\n\"}}{{end}}";
+  docker exec ifet-firmware-state_machine_service-1 cat /app/config.json'
+
+ssh-run.sh system -- 'docker exec ifet-firmware-state_machine_service-1 python3 -c "
+import json; c=json.load(open(\"/app/config.json\"))
+print(c.get(\"device_id\"), c.get(\"id\"), c[\"api\"][\"base_url\"], c[\"mqtt\"][\"broker_host\"])
+print(c[\"vfd\"], c.get(\"recovery_time\"), c.get(\"cyclic_skip_recovery\"))
+print([(s[\"name\"],s[\"address\"],s[\"type\"],s.get(\"scale\"),s.get(\"unit\")) for s in c[\"sensors\"]])
+for v in c[\"valves\"]: print(v[\"name\"], v[\"pin\"], v[\"role\"])"'
+
+Per-service mount comparison (found the system-1 config split):
+ssh-exec.sh system-1 -- '
+  docker inspect ifet-firmware-state_machine_service-1 --format "SM : {{range .Mounts}}{{.Source}}->{{.Destination}} {{end}}";
+  docker inspect ifet-firmware-serial_service-1        --format "SER: {{range .Mounts}}{{.Source}}->{{.Destination}} {{end}}";
+  docker inspect ifet-firmware-valves_service-1        --format "VAL: {{range .Mounts}}{{.Source}}->{{.Destination}} {{end}}"'
+  -> state_machine + valves : config1-site-b.json
+     serial_service          : config1.json          (md5 differs)
+
+ssh-run.sh system -- 'docker inspect ifet-firmware-serial_service-1 \
+    --format "{{json .HostConfig.Devices}}"'
+  -> system-1 /dev/ttyUSB0 ; system-2 /dev/ttyACM0
+
+4. LIVE SENSOR / VFD RUNTIME
+----------------------------
+ssh-run.sh system -- 'docker logs --tail 400 ifet-firmware-serial_service-1 2>&1 |
+    grep -Ei "value|feedback|failed" | tail -18'
+  -> both rigs log "... value <float> PSF"
+  -> system-1: repeated "Failed to read VFD feedback: No communication with the
+     instrument (no answer)"  (VFD unpowered while idle; see §9 of the report)
+
+5. TEST-EXECUTION HISTORY (the boundary, observed)
+-------------------------------------------------
+ssh-run.sh system -- 'docker logs --tail 3000 ifet-firmware-state_machine_service-1 2>&1 |
+    grep -Ei "Entering state|command:|test data|test event|Triggering|finish|Holding" | tail -25'
+
+Full window of the 2026-08-26 cyclic run on system-1 (the primary runtime exhibit):
+ssh-exec.sh system-1 -- 'docker logs --tail 6000 ifet-firmware-state_machine_service-1 2>&1 |
+    awk "!seen[\$0]++" | sed -n "/2026-08-26 16:48:2[0-9]/,/2026-08-26 16:51:0[0-9]/p"'
+  -> MQTT start command, GET /devices/1, GET /projects/78/next-cyclic-test,
+     the VFD ramp trace, the 50-cycle loop, and the POST /trials response.
+
+6. MANAGEMENT: API, DERIVATION, GATEWAY
+---------------------------------------
+ssh-exec.sh management -- 'docker exec ifet-management-report-api-1 sh -c "
+  find /app -name \"*.py\" -not -path \"*site-packages*\" -not -path \"*__pycache__*\" | sort;
+  wc -l /app/app/main.py /app/app/data/models.py /app/app/data/schema.py;
+  grep -n \"@app\.\(get\|post\|put\|patch\|delete\)\" /app/app/main.py"'
+
+ssh-exec.sh management -- 'docker exec ifet-management-report-api-1 sh -c "
+  cat /app/app/domain/static_test_pressure_calculator.py;
+  cat /app/app/domain/cyclic_test_pressure_calculator.py;
+  cat /app/app/data/models.py;
+  sed -n \"124,225p;335,450p;547,700p;735,800p\" /app/app/main.py;
+  sed -n \"19,60p;95,130p\" /app/app/data/schema.py;
+  grep -n \"\.result\b\|result=\|result =\" /app/app/main.py;
+  grep -n \"Gauge\|recovery\|random\|deflection\" /app/app/utils/populate_db.py"'
+
+ssh-exec.sh management -- 'docker exec ifet-management-sick_gateway-1-1 \
+    cat /app/sick_mqtt_gateway.py;
+  docker exec ifet-management-sick_gateway-1-1 cat /app/config.json'
+
+ssh-exec.sh management -- 'for c in ifet-management-sick_gateway-1-1 ifet-management-sick_gateway-2-1; do
+  docker inspect $c --format "{{range .Config.Env}}{{println .}}{{end}}" |
+    grep -Ei "SICK|UNIT|MQTT|POLL|LOG";
+  docker exec $c python3 -c "import json;print([d[\"id\"] for d in
+    json.load(open(\"/app/config.json\"))[\"devices\"]])"; done'
+  -> UNIT_OF_MEASUREMENT=inch on both; masters 10.1.10.229 / 10.1.10.85
+  -> gauge ids 1-1..1-8 and 2-1..2-8
+
+Gauge reachability (read-only GET + ICMP, no command issued):
+ssh-exec.sh management -- 'for p in 1 2 3 4; do
+    curl -s --max-time 5 "http://10.1.10.229:80/iolink/v1/devices/master1port${p}/processdata/getdata/value"; done;
+  docker logs --tail 6 ifet-management-sick_gateway-1-1;
+  docker logs --tail 6 ifet-management-sick_gateway-2-1;
+  ping -c1 -W2 10.1.10.229; ping -c1 -W2 10.1.10.85'
+  -> both masters "No route to host"; gateway-1 first failure 2026-08-29 23:08,
+     45861 consecutive failures, no success in the retained log
+
+ssh-exec.sh management -- 'docker exec ifet-management-mosquitto-1 sh -c \
+    "grep -v \"^#\" /mosquitto/config/mosquitto.conf | grep -v \"^$\""'
+  -> listener 1883 mqtt / listener 8084 websockets / allow_anonymous true
+
+ssh-exec.sh management -- 'docker exec ifet-management-ui-1 sh -c \
+    "grep -rlo \"vfd/command\" /usr/local/apache2/htdocs/"'
+  -> the React bundle publishes vfd/command directly over websockets
+
+7. DATABASE (SELECT-only; probe1..probe4)
+-----------------------------------------
+Database identified first:
+ssh-exec.sh management -- 'docker exec ifet-management-db-1 psql -U user -l;
+  docker inspect ifet-management-db-1 --format "{{range .Config.Env}}{{println .}}{{end}}" |
+    grep -i "POSTGRES_DB\|POSTGRES_USER"'
+  -> report_db, user "user"
+
+Then, for N in 1..4:
+  ssh-copy.sh push management probeN.sql /tmp/probeN.sql
+  ssh-exec.sh management -- 'docker cp /tmp/probeN.sql ifet-management-db-1:/tmp/probeN.sql &&
+    docker exec ifet-management-db-1 psql -U user -d report_db -f /tmp/probeN.sql'
+
+Statements used (all SELECT):
+
+  SELECT * FROM alembic_version;                       -- 3a65a83e0463
+
+  SELECT COALESCE(result::text,'NULL'), count(*) FROM test_results GROUP BY 1;
+  SELECT (SELECT count(*) FROM test_results), (SELECT count(*) FROM deflections),
+         (SELECT count(*) FROM projects);
+
+  SELECT count(*), min(max_deflection), max(max_deflection),
+         min(permanent_deflection), max(permanent_deflection),
+         min(recovery), max(recovery) FROM deflections;
+
+  SELECT deflection_gauge, count(*) FROM deflections GROUP BY 1 ORDER BY 1;
+
+  -- provenance split: the single most load-bearing query in the report
+  SELECT CASE WHEN deflection_gauge LIKE 'Gauge%' THEN 'GaugeN' ELSE 'SICK' END scheme,
+         count(*), count(DISTINCT recovery), min(test_id), max(test_id),
+         round(min(max_deflection)::numeric,2), round(max(max_deflection)::numeric,2)
+  FROM deflections GROUP BY 1;
+
+  SELECT CASE WHEN EXISTS(SELECT 1 FROM deflections d WHERE d.test_id=tr.id
+                            AND d.deflection_gauge LIKE 'Gauge%') THEN 'has GaugeN'
+              WHEN EXISTS(SELECT 1 FROM deflections d WHERE d.test_id=tr.id) THEN 'has SICK'
+              ELSE 'no deflections' END,
+         COALESCE(tr.result::text,'NULL'), count(*)
+  FROM test_results tr GROUP BY 1,2;
+
+  -- raw-count reconstruction (0.0393701 = the gateway's MM_TO_INCH)
+  SELECT max_deflection, round((max_deflection/0.0393701)::numeric,3) implied_raw_count,
+         abs(round((max_deflection/0.0393701)::numeric)
+             - (max_deflection/0.0393701)::numeric) int_residual
+  FROM deflections WHERE max_deflection <> 0 ORDER BY abs(max_deflection) DESC LIMIT 12;
+
+  SELECT length(split_part(abs(max_deflection)::text,'.',2)) dp, count(*)
+  FROM deflections GROUP BY 1 ORDER BY 1;
+
+  SELECT type, count(*), min(pressure), max(pressure), min(duration), max(duration),
+         min(leakage), max(leakage) FROM infiltration_tests GROUP BY 1;
+  SELECT duration, count(*) FROM infiltration_tests GROUP BY 1 ORDER BY 2 DESC;
+
+  SELECT duration, count(*) FROM static_tests GROUP BY 1 ORDER BY 2 DESC;
+  SELECT COALESCE(NULLIF(pressure_factor,''),'(empty)'), count(*),
+         min(duration), max(duration) FROM static_tests GROUP BY 1;
+  SELECT preset, count(*), count(DISTINCT project_id) FROM static_tests GROUP BY 1;
+  SELECT preset, count(*), count(DISTINCT project_id) FROM cyclic_tests GROUP BY 1;
+  SELECT cycles, count(*) FROM cyclic_tests GROUP BY 1 ORDER BY 2 DESC;
+  SELECT n_stages, count(*) FROM (SELECT project_id, count(*) n_stages
+      FROM static_tests GROUP BY 1) q GROUP BY 1 ORDER BY 1;
+
+  -- the water stage is 0.15 x INWARD design pressure, 900 s, filed as a static test
+  SELECT s.project_id, s.index, s.pressure, p.inward_design_pressure,
+         round((s.pressure/NULLIF(p.inward_design_pressure,0))::numeric,4) ratio
+  FROM static_tests s JOIN projects p ON p.id=s.project_id WHERE s.duration=900;
+
+  SELECT project_id,index,type,pressure,pressure_factor,duration,preset,finished
+  FROM static_tests WHERE preset=false ORDER BY project_id;
+  SELECT project_id,index,type,cycles,low_pressure,high_pressure,preset,finished,current_cycle
+  FROM cyclic_tests WHERE preset=false;
+
+  -- the project behind the 2026-08-26 runtime exhibit
+  SELECT id,name,device_id,inward_design_pressure,outward_design_pressure
+  FROM projects WHERE id=78;
+  SELECT index,type,cycles,low_pressure,high_pressure,finished,resume,current_cycle,preset
+  FROM cyclic_tests WHERE project_id=78 ORDER BY index;
+  SELECT project_id,index,type,pressure,pressure_factor,duration,preset,finished
+  FROM static_tests WHERE project_id=78 ORDER BY index;
+
+  SELECT id,name,turbo_mode,turbo_slave,turbo_charger FROM devices ORDER BY id;
+  SELECT (SELECT count(*) FROM missile_impact_tests), (SELECT count(*) FROM shots);
+  SELECT COALESCE(result::text,'NULL'), count(*) FROM shots GROUP BY 1;
+  SELECT count(*) FROM test_results tr
+    WHERE NOT EXISTS (SELECT 1 FROM deflections d WHERE d.test_id=tr.id);
+
+REDACTION NOTE
+--------------
+No credential, PAT, token, password or private key appears in this file or in
+the companion report. The MQTT broker credentials in the rig configs are empty
+strings in production and are recorded only as "empty" in the report. Private
+LAN addresses (10.1.10.x) are retained: they are not secrets, they already exist
+in tracked deployment/config/*.json, and the api.base_url IS the boundary under
+investigation. Note for the record, not as a secret: mosquitto runs with
+allow_anonymous true and no TLS (report §9.6).

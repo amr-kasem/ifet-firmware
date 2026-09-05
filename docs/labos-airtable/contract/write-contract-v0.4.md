@@ -5,6 +5,8 @@
 **Authority:** the user authorized LabOS to define/add the required fields and types in the Testing Base,
 with a documented change register. This is not a claim of counterparty ratification or deployment approval.
 **Supersedes:** v0.3 and the open alternatives in the September 5–6 design drafts.
+**Amended 2026-09-06** — §7.1 concurrency mechanisms, §8 sequencing, §10 measurement milestones. Delivery
+mechanism only: **A1–A8 and the wire envelope are unchanged, and `Schema Version` stays `0.4`.**
 
 ## 0. Scope and environments
 
@@ -232,6 +234,39 @@ An ambiguous predecessor is reconciled/retried before advancing; correction deli
 original-attempt dependency. Park failures with payload/error intact. Distinguish transient network/429/5xx
 retry from schema/value errors needing repair and authentication failures needing credential restoration.
 
+### 7.1 Concurrency mechanisms — required, not implied
+
+The FIFO and single-owner properties above are guarantees, not hopes. Each needs a named mechanism, because
+each fails silently without one and none of them is observable in a SQLite test.
+
+**Sequence allocation.** `attempt_seq` must be allocated so two concurrent enqueues for one attempt cannot
+compute the same value. A read-then-insert `max(seq)+1` is not sufficient: the unique constraint rejects the
+loser, and because enqueue shares the caller's transaction that rejection **fails the operator's save** —
+inverting the guarantee the outbox exists to provide. Use a per-attempt database sequence, or
+`INSERT … ON CONFLICT` with a bounded retry. Never let allocation surface as a domain-write error.
+
+**Exclusive claim.** Claiming must lock the rows it leases — `SELECT … FOR UPDATE SKIP LOCKED` on
+PostgreSQL. Read-then-write leasing lets two workers hold the same entry. One owner is a property to enforce,
+not a deployment convention to rely on.
+
+**Lease at send time, not batch time.** A batch claim that stamps every lease with one timestamp starts the
+clock on the last entry before the first has been sent; ten entries at twenty seconds each expire a
+two-minute lease while still queued behind their own batch. Re-assert the lease immediately before each send
+and skip the entry if it has been lost.
+
+**Fencing token.** Every claim increments a monotonic `owner_epoch` on the row. Before recording an outcome,
+verify the epoch still matches; if it does not, **discard the result rather than record it.** This is the
+only mechanism that stops a late lander — a process paused by GC or a CPU limit can always complete after
+its lease expired, and upserting on `LabOS Attempt ID` prevents a duplicate *row* while doing nothing about
+which write lands last. Without fencing, a stale `terminal` can overwrite a reviewed verdict silently.
+
+**Client deadline.** The Airtable client's total retry wall-clock must be bounded well below the lease, so an
+expired-lease send is structurally improbable rather than merely unlikely. Lease duration and retry budget
+are one decision, not two independent constants.
+
+**Local pre-send checks are not ordering control.** `is_superseded` is evaluated before a request is issued
+and sees nothing already in flight; timestamps on the wire are audit data, never remote compare-and-swap.
+
 Full paginated reads of four tables every 60 s, configurable and coalesced with Refresh now. Hash canonical
 allowlisted field content, excluding acquisition timestamps. Stage a complete successful read cycle, validate
 links and atomically publish its changes; never hold a DB transaction open while waiting on Airtable.
@@ -247,20 +282,26 @@ give results priority without starving cache refresh. No delta cursor or extra t
 
 report-api serves /sync/status from persisted worker heartbeat, successful pull/push times, queue counts and
 mirror revision, even if the worker is down. Include attachment backlog and parked entries. Use Synced,
-Pending, Sync Failed, Retry Required; errors/stale heartbeat override Pending. Spinner only while a request
+Pending, Sync Failed, Retry Required; errors/stale heartbeat override Pending. These four are the
+contractual values. A colour hint may be returned **alongside** them as a presentation convenience, never
+instead of them. Queue and attachment counts are computed at read time; a count cached by the worker is
+exactly the number that is wrong when the worker is down. Spinner only while a request
 is outstanding; timeout shows LabOS unreachable. UI polling never calls Airtable.
 
 ## 8. Implementation sequence
 
 1. Generate the Testing Base schema diff and reviewed synthetic linked fixtures from the register. Apply
    authorized additions there, capture post-change schema/IDs, and maintain the change register throughout.
-2. Rehearse local migrations on synthetic PostgreSQL: programme/run identity, stage linkage, outbox, mirror,
+2. **Stand up the disposable PostgreSQL harness first** — isolated instance, synthetic data, and the
+   ability to run **two independent worker processes on separate connections**. Two sessions inside one
+   process share too much and will pass while §7.1's defects stand. Then rehearse local migrations: programme/run identity, stage linkage, outbox, mirror,
    first review, corrections and artifacts. Existing P1 migrations are dependencies in the upgrade chain,
    not a demand for a separate production deployment before development can start.
 3. Wire one complete local flow: import → start → save/finish → restart worker → one testing-base row.
 4. Add all manual forms' backend APIs, review/corrections, preview uploads and status. UI remains deferred.
-5. Validate PostgreSQL concurrency, offline replay, missing measurements, full-read failure, schema drift and
-   Airtable automation behavior. SQLite tests are useful groundwork, not proof of PostgreSQL locking.
+5. Validate PostgreSQL concurrency against §7.1 with four named cases — **concurrent enqueue, competing
+   workers, slow send, stale owner** — plus offline replay, missing measurements, full-read failure, schema
+   drift and Airtable automation behaviour. SQLite tests are useful groundwork, never proof of locking.
 6. Produce the actual-change document with rationale, examples, validation, migration/rollback notes and
    known delivery limits. A design notice is not evidence that a field or feature has shipped.
 7. Production requires owner coordination, schema/automation replication, validated migration rehearsal and
@@ -302,8 +343,8 @@ The full pre-closure wording is retained in `../evidence/write-contract-v0.3-sup
 | 17, 20 | CLOSED by September 5 baseline: all five test types and datetime Test Date delivered in both bases |
 | 19 | Extractor defect unresolved; independently verified local requirements remain mandatory for rig execution |
 | 21, 22, 25, 26 | Decided: raw table only, UUIDs, version 0.4 JSON, explicit review/disposition; validate automation compatibility |
-| 27 | Deflection calibration unresolved; quarantined measurements omitted from all outbound payloads |
-| G4 | Actual pressure acquisition unimplemented; omitted for rig runs; separately build and validate measurement source |
+| 27 | Deflection calibration unresolved; quarantined measurements omitted from all outbound payloads. **Tracked as milestone M6** |
+| G4 | Actual pressure acquisition unimplemented; omitted for rig runs. **Tracked as milestone M7**, not left unscheduled |
 | Release | Local PostgreSQL tests, testing-base acceptance, report reachability if offered, API allowance, migration and production window |
 
 Runtime code, schema fixtures and Notion are views of this document. Existing code still targets prior

@@ -31,8 +31,19 @@ production deployed. Current authority: `labos-airtable/contract/write-contract-
   Reason. Legacy items 17/20 are closed in contract §10. Other additions remain PLANNED until verified.
 - **Correspondence:** `labos-airtable/correspondence/airtable-team-questions-2026-09-06.md` is now a change
   notice, NOT SENT; it no longer asks permission to choose fields. Actual-change evidence follows implementation.
-- **Next:** M1 Testing Base diff/fixtures → M2 local import/run/offline-replay flow → M3 remaining APIs/evidence
-  → actual-change document → separately coordinated production cutover. See the implementation design §7.
+- **Concurrency is a named mechanism, not a property to assume — contract §7.1 (amended 2026-09-06).**
+  Sequence allocation that cannot fail a domain save, `FOR UPDATE SKIP LOCKED` claims, leases re-asserted
+  per send not per batch, an `owner_epoch` fencing token checked before recording any outcome, and a client
+  retry deadline bounded under the lease. **Without fencing, a stale `terminal` can silently overwrite a
+  reviewed verdict** — upsert on `LabOS Attempt ID` prevents a duplicate row, never a stale last write.
+- **The committed outbox does not yet satisfy §7.1**, and the deviations are listed in the implementation
+  design §9. All latent: `main.py` imports nothing from `app.sync`, so nothing has passed through it.
+- **Next:** M1 Testing Base diff/fixtures → **M2, whose first deliverable is the disposable PostgreSQL
+  harness with two independent worker processes** (concurrent-enqueue, competing-worker, slow-send,
+  stale-owner), then local import/run/offline-replay → M3 remaining APIs/evidence → actual-change document →
+  separately coordinated production cutover. **M2 is one unit: fixing allocation alone leaves ordering
+  unsafe.** M6/M7 track deflection calibration and achieved-pressure acquisition, owned by LabOS, gated on
+  bench hardware, not blocking M1–M5. See the implementation design §7.
 - **Closure verified:** contract/register consistency and both saved schema baselines checked; four current
   Notion views updated and fetched back. Evidence: `labos-airtable/evidence/design-closure-2026-09-06.md`.
 

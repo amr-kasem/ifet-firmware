@@ -97,7 +97,11 @@ attempt is not Synced while required preview delivery is pending. Correction pub
 schema and original identity to be available. An uncertain write cannot be passed by a later phase.
 Retry does not regenerate IDs, payloads, sequences or preview bytes. Park data/schema errors with evidence;
 back off transient failures and stop hammering invalid credentials. Timestamp comparison is not concurrency
-control. Validate lease and single-owner behavior under PostgreSQL, including worker death and slow requests.
+control. **The mechanisms that make ordering and single ownership real are contract §7.1** — sequence
+allocation that cannot fail a domain save, `FOR UPDATE SKIP LOCKED` claims, leases re-asserted per send
+rather than per batch, an `owner_epoch` fencing token checked before any outcome is recorded, and a client
+retry deadline bounded under the lease. Validate all of it under PostgreSQL, including worker death,
+slow requests and a second worker.
 
 Full reads stage results outside a DB transaction and publish atomically after all pages and relationships
 validate. No deletion inference on failed/truncated reads. Differentiate removed records from changed links;
@@ -113,8 +117,9 @@ integrations. An unavailable worker is shown through a stale heartbeat; spinner 
 - **Schema setup:** LabOS adds the contract's fields/types to Testing Base and records before/after/IDs.
   No field-design permission question remains. Test fixtures carry synthetic values and provenance.
 - **Extractor:** unresolved source defect; keep independent verification. No legacy pair parser/backfill.
-- **Deflection/actual pressure:** omit until a separately tested measurement source exists. Bench/rig testing
-  is necessary for metrology, not for local migration or queue rehearsal.
+- **Deflection/actual pressure:** omit until a separately tested measurement source exists — **M6 and M7**,
+  owned by LabOS and tracked rather than parked. Bench/rig testing is necessary for metrology, not for local
+  migration or queue rehearsal.
 - **Automations:** test UUID linkage, completion dates, review-only verdicts, correction supersession and
   parameter-row exclusion. Production's existing automations are not assumed compatible merely because fields exist.
 - **Reports:** original/detailed data stays local. Publish external links only after access is validated.
@@ -127,10 +132,16 @@ integrations. An unavailable worker is shown through a stale heartbeat; spinner 
 |---|---|---|
 | M0 | This decided contract, field register and change notice | No unanswered design alternatives; delivery status explicit |
 | M1 | Testing Base additions and synthetic linked fixture | Schema diff, field IDs, asymmetric pair, blank/N/A/unknown examples |
-| M2 | Local PostgreSQL migration and first vertical flow | Import → run → finish → worker restart → one Testing Base attempt |
+| M2 | **Disposable PostgreSQL harness first**, then local migration and the first vertical flow | Two independent worker processes on separate connections; concurrent-enqueue, competing-worker, slow-send and stale-owner cases green; import → run → finish → worker restart → one Testing Base attempt |
 | M3 | All five backend workflows, review/corrections and evidence | Repeatable acceptance cases below |
 | M4 | Change document with actual implementation results | Every planned change marked applied/verified or outstanding |
 | M5 | Separately scheduled production cutover | Schema/automation acceptance, migration rehearsal, preflight and window |
+| **M6** | **Deflection calibration** (legacy item 27) — owned by LabOS | Known displacement applied to a gauge; the transform identified end to end; `Deflection Value`/`Unit` unquarantined or the omission reconfirmed with evidence |
+| **M7** | **Achieved-pressure acquisition** (G4) — owned by LabOS | A measurement source for `Max Pressure Achieved` built and validated, or the omission reconfirmed with evidence |
+
+**M6 and M7 are tracked, not blocking.** Omission stays the initial-release behaviour, so M1–M5 do not wait
+for them. Their scheduling dependency is **bench/rig hardware**, which is also the dependency the offline
+`test` node represents — one hardware ask covers both, and neither blocks local sync or migration work.
 
 Existing outbox code is groundwork, not proof M2 is delivered. P1 is a migration dependency and can be
 rehearsed in one ordered upgrade with the new revision; it need not be deployed separately before local work.
@@ -166,8 +177,40 @@ UI development remains a later task. No email/message is sent merely by committi
     is explicit, duplicate stage events replay safely, and missing telemetry cannot imply a passing test.
 21. Local PostgreSQL migration rehearsal covers constraints, leases, P1 ancestry and restart behavior; SQLite-only
     tests are not accepted as proof of those guarantees. Production deployment has separate recorded checks.
+22. **Concurrent enqueue:** two simultaneous enqueues for one attempt yield distinct `attempt_seq` values and
+    **neither domain save fails.** Allocation never surfaces as an error on the operator's save path.
+23. **Competing workers:** two worker processes on separate connections never hold the same entry; every
+    entry is delivered by exactly one owner, and per-attempt phase order holds throughout.
+24. **Slow send:** a batch whose later entries wait longer than the lease does not release them to another
+    worker — the lease is re-asserted per send, not per batch.
+25. **Stale owner:** a sender whose lease expired and whose `owner_epoch` no longer matches has its outcome
+    **discarded, not recorded**, and cannot overwrite a later phase. Verified specifically against a
+    reviewed verdict: a late `terminal` must not reset it.
 
-## 9. Communication
+**Forced Entry and ANSI Z97.1 outcome visibility — decided, not deferred by accident.** `Test Type` and
+`Test Result` are both `singleSelect`, so Airtable filters and groups both workflows natively; sub-detail
+lives in the JSON. No dedicated scalar fields are added for this release. Add one only when a named
+operational report requires it — not pre-emptively, and not because `Impact Result` happens to exist.
+
+## 9. Known deviations in the committed groundwork
+
+`ifet-management` `app/sync/{outbox,state,worker}.py` predates this contract. It is unwired — `main.py`
+imports nothing from `app.sync` — so no result has ever passed through it, and every item below is latent.
+Listed so nobody mistakes "committed and green" for "contract-compliant":
+
+| Deviation | Contract |
+|---|---|
+| `enqueue()` allocates `max(seq)+1` read-then-insert; a collision fails the caller's transaction | §7.1 sequence allocation |
+| `claim()` leases without row locking | §7.1 exclusive claim |
+| One `leased_until` stamped for a whole batch, then sequential sends | §7.1 lease at send time |
+| No `owner_epoch`; a late lander's outcome is recorded | §7.1 fencing token |
+| Lease (120 s) unrelated to the client's retry budget | §7.1 client deadline |
+| `/sync/status` returns `green/amber/red`, no attachment backlog | §7 status vocabulary |
+| 23 tests are SQLite-only | §8 step 5, acceptance 21–25 |
+
+Closing these is the M2 package, and it is **one unit**: fixing allocation alone leaves ordering unsafe.
+
+## 10. Communication
 
 `../correspondence/airtable-team-questions-2026-09-06.md` is now a planned-change notice, not a permission
 request. It remains NOT SENT. Report what is designed, then actual changes with evidence after implementation.
