@@ -546,7 +546,7 @@ firmware half, and most of M2 — harness, the migration that did not exist, and
 | **2** | **Send the change document** — `../evidence/testing-base-changes-2026-09-06/` (README, `production-change-spec.csv`, before/after schema) plus the cover letter's §7 | §3.0 commitment 3 | **IFET/you** | 1 | The send record is filled in and a copy is in `correspondence/sent/`. **This is what lets the Airtable team update production** — we never touch their production base ourselves |
 | ~~**3**~~ | ~~`app/airtable/contract.py` → v0.4~~ **✅ 2026-09-07** | §8 (9th deviation) | LabOS | — | Done. 172 tests pass on Postgres, 163 + 9 skipped on SQLite. Closes the last §8 deviation |
 | **4** | **The worker's compose service and its env vars** | DG6 | LabOS | nothing | A service in `compose.yaml` with no public port, `.env.example` entries, and a second instance observably refusing to start |
-| **5** | **The vertical flow** | M2 | LabOS | 3, 4 | import → run → finish → worker restart → **one** attempt in the Testing Base. This is the last of M2 and the one that gates M3 |
+| **5** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | 3, 4 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally in LabOS with no Airtable origin at all. Neither path may block the other. Last of M2, and the one that gates M3 |
 | **6** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 5 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed |
 | **7** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | DG3 → M3 | LabOS | 5 | Model, route and table for each; the §7 acceptance cases pass with Forced Entry and ANSI as **capture** cases, not just as filters |
 | **8** | **M1's fixture, and DG6's remaining drift** | M1 · DG6 | LabOS | nothing | Fixture: asymmetric pair plus blank/N-A/unknown examples (also contract legacy item 11). Drift: register rows for `completion_source` and `identity_assurance`, a defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the `Test Name`/`Abort Reason` note in the register header |
@@ -556,6 +556,44 @@ firmware half, and most of M2 — harness, the migration that did not exist, and
 
 **Steps 1, 3, 4 and 8 have no prerequisites and can run in any order or in parallel.** Step 2 waits only on
 step 1, and everything from 5 onwards is a chain.
+
+### 6.1 What step 5 actually means — two origins that must merge
+
+Clarified 2026-09-07, and it widens the step. "Import" is not one path, it is the
+narrower of two, and the plan had only described that one.
+
+**Origin A — the job is registered in Airtable.** Sync fetches what the
+`management` node needs to run it: the job, specimen, protocol and section
+identity, plus `Requirement Code` so LabOS knows which of the five tests a
+section is. The operator picks it and runs. Results flow back against that
+section's record IDs.
+
+**Origin B — the job is created in LabOS.** An operator sets up a project and a
+test on the node directly. **This must work with Airtable absent, unreachable,
+stale, or never involved at all** — LabOS is fully operational and functional
+whether or not it is in sync, and that is not a degraded mode, it is the normal
+one. Nothing about origin B may depend on a mirror being fresh, or present.
+
+**And the two must merge, not fork.** A job that began locally can later turn out
+to be a job Airtable knows about; when it does, the local work is *linked* to the
+Airtable record rather than re-created beside it. That link is what makes
+subsequent attempts eligible to sync.
+
+| Rule | Why |
+|---|---|
+| **Import is idempotent on the `rec…` record ID** | Re-importing a job reuses the local rows. Anything else quietly produces two of the same job, and the second one looks exactly as legitimate as the first |
+| **Linking is an explicit operator action, never a name match** | `IFET job number` is hand-typed and project names repeat. Auto-merging on either would silently attach one job's results to another — and names never route work anywhere else in this contract, so they must not route a merge |
+| **Unlinked local work is `Excluded` from sync, not queued** | It has no Airtable identity to upsert against. Excluded is a decision the operator reverses by linking, not a failure to retry |
+| **A stale or missing mirror never blocks a test** | The mirror is a convenience for picking work. If it is empty, origin B still works, and origin A degrades to "you cannot pick from the list yet" rather than "you cannot test" |
+
+**One question this opens, and it needs an answer before MU.** When a local job is
+linked to an Airtable record, do the attempts *already completed* against it
+become eligible to sync, or only new ones? §3 says historical attempts are
+excluded with no name-based backfill, which settles the 640 pre-integration rows
+— but it does not settle a run recorded locally yesterday and linked today. The
+safe default is **forward-only, with an explicit operator action to publish an
+earlier attempt**; that keeps the decision with a person rather than making a
+link retroactively publish work nobody re-examined.
 
 ### Out of band — do not queue these behind the ten
 
