@@ -1,8 +1,13 @@
-# Testing Base changes applied, and how LabOS will use them
+# The production change specification, and how LabOS will use it
 
 **Author:** Abdelrahman · **Date:** 2026-09-06 · **Status:** **READY TO SEND — not yet sent**
 **Authority:** LabOS is authorized to define and add the required Testing Base fields, with a documented
-change register. This is a change *report* plus a scope narrowing — it asks no blocking questions.
+change register.
+
+**What this document is for.** LabOS has applied the fields to the **Testing** Base; the Airtable team
+applies the same delta to **production**. This is that specification, plus what LabOS does and does not read
+under A9, plus the one thing only they can check. **It asks no blocking questions, and it repeats nothing
+already asked** — the extractor fix and the blast-radius report were sent on 2026-08-28 and still stand.
 **Specification:** `../contract/write-contract-v0.4.md` · **Mapping:** `../contract/field-register.csv`
 **Change document:** `../evidence/testing-base-changes-2026-09-06/`
 
@@ -36,8 +41,10 @@ America/New_York in lab reports. Existing records are not reinterpreted or rewri
 
 ## 2. What we changed — applied, with evidence
 
-**14 fields added, 142 → 156. Production `app0OCunbmuXl7Hc9` was not touched.** No field was renamed,
-retyped or removed; no record was created, edited or deleted. Re-running the tool is a no-op.
+**14 fields added to Testing, 142 → 156. Production `app0OCunbmuXl7Hc9` is untouched and still at 142 —
+so these 14 are exactly the production delta to apply.** No field was renamed, retyped or removed; no record
+was created, edited or deleted. Re-running the tool is a no-op. Production was verified unchanged against
+our 2026-09-05 baseline on 2026-09-06 (read-only, schema only): +0 / −0 / ~0.
 
 | Table | Fields |
 |---|---|
@@ -95,21 +102,20 @@ alongside. The record ID is what actually routes a result; the job number is wha
 deliberate — the job number is hand-typed, so if it were the only key a renumber or a typo would silently
 re-point a job's results and nothing would notice.
 
-## 4. Three things we need you to do
+## 4. What we need from you — one thing, plus one already asked
 
-1. **Validate your automations against the new mapping.** We cannot see them — the Meta API refuses
-   `/meta/bases/{base}/automations` with `403`. Every change we made was additive, which rules out the usual
-   breakages, but two things need your eyes: **an unfiltered "when record updated" trigger will now fire more
-   often**, and your `Protocol Sections` automation must keep exclusive ownership of `Result`, `Status` and
-   `Testing Date`. We are not assuming production's automations are compatible merely because the fields
-   exist; that gets verified before cutover.
-2. **The extractor defect still needs remediation on your side.** It no longer gates *us* — A9 means we read
-   no requirement values — but it still misstates requirements inside your own records. See §5.
-3. **A blast-radius report — including jobs already marked tested.** A shifted value has already reached a
-   Passed/Completed record, so this is not hypothetical. Which results are affected is a quality and business
-   call, not an engineering one.
+**One new item.** **Please check your automations against the new fields before production cutover.** We
+cannot: the Meta API refuses `/meta/bases/{base}/automations` with `403`, so their behaviour is invisible to
+us. Every change we made was additive, which rules out the usual breakages, but two things need your eyes —
+an unfiltered "when record updated" trigger will now fire more often, and your `Protocol Sections`
+automation must keep exclusive ownership of `Result`, `Status` and `Testing Date`. Production's existing
+automations are not assumed compatible merely because the fields exist.
 
----
+**Already asked on 2026-08-28, not repeated here.** The verification report you hold asks for the extractor
+fix (item 1) and the re-extraction blast radius including jobs already marked tested (item 2). Both still
+stand and neither has changed. **Under A9 neither blocks us any more** — we read no requirement values — but
+they still mean some requirement values inside your own records are wrong, and a shifted value has already
+reached a Passed record. Restating them would only imply we had lost track of the ask.
 
 ## 5. The extraction defect, and why it no longer blocks us
 
@@ -180,16 +186,16 @@ This also settles the double-entry question. Earlier we were going to ask operat
 pressures before a rig would start, which cut against your "no double entry" goal. Since we now read no
 requirement values, there is nothing to re-key and nothing to check — the operator's workflow is unchanged.
 
-**Three things we do need from you.**
+**One thing we need from you.**
 
-- **Please check your automations against the new fields.** We can't see them — the API returns 403 for
-  automations — so we can't verify this ourselves. Everything we added was additive, but an unfiltered
-  "when record updated" trigger will now fire more often, and your `Protocol Sections` automation should
-  keep sole ownership of `Result`, `Status` and `Testing Date`.
-- **The proposal extraction issue still needs fixing at source.** It no longer blocks us, but it still means
-  some requirement values inside your own records are wrong.
-- **A blast-radius report, including jobs already marked tested.** A shifted value has already reached a
-  Passed record, so deciding what to do about previously reported results is a quality call on your side.
+**Please check your automations against the new fields before we go to production.** We can't — the API
+returns 403 for automations — so their behaviour is invisible to us. Everything we added was additive, but an
+unfiltered "when record updated" trigger will now fire more often, and your `Protocol Sections` automation
+should keep sole ownership of `Result`, `Status` and `Testing Date`.
+
+The two items from our 28 August report still stand and we're not restating them: the extraction fix, and
+the re-extraction scope including jobs already marked tested. Neither blocks us now, but they do still affect
+values inside your own records.
 
 Production replication and the cutover window we'll coordinate separately.
 
