@@ -1,6 +1,6 @@
 # The production change specification, and how LabOS will use it
 
-**Author:** Abdelrahman · **Date:** 2026-09-06 · **Status:** **READY TO SEND — not yet sent**
+**Author:** Abdelrahman · **Date:** 2026-09-06 · **Status:** **WRITTEN — held until the schema is validated locally against all five test types (A10)**
 **Authority:** LabOS is authorized to define and add the required Testing Base fields, with a documented
 change register.
 
@@ -117,18 +117,18 @@ stand and neither has changed. **Under A9 neither blocks us any more** — we re
 they still mean some requirement values inside your own records are wrong, and a shifted value has already
 reached a Passed record. Restating them would only imply we had lost track of the ask.
 
-## 5. The extraction defect, and why it no longer blocks us
+## 5. The extraction defect — recorded, not an ask
 
-Earlier drafts of this document warned that our operators would have to re-enter the verified
-inward/outward pair before a rig would start — a step that contradicted your "no double entry" goal.
+Kept here as a finding, because it is the reason A9 is safe rather than merely convenient, and because the
+earlier drafts of this document asked them to fix it.
 
-**A9 removes that.** Because LabOS reads no requirement values from Airtable, there is no path by which a
-shifted value could reach a rig, and therefore nothing for the operator to double-check. The operator's
-workflow is exactly what it is today. No double entry is introduced.
+**We are no longer asking.** LabOS reads no requirement values, so nothing in our path depends on the
+extraction being corrected, and we are not waiting on it. It still means some requirement values inside
+their own records are wrong, and a shifted value has already reached a Passed/Completed record — the
+2026-08-28 verification report they hold covers that, and it stands. We do not restate it.
 
-The defect still matters, on your side: a shifted value has already reached a Passed/Completed record, and
-deciding what to do about previously reported results is a quality call rather than an engineering one. It
-just is not a gate on our delivery any more.
+Full evidence: `../evidence/labos-real-data-types-2026-08-31.md` and
+`../evidence/live-probe-findings-2026-08-23.md` §5.2.
 
 ## 6. What happens next
 
@@ -188,14 +188,15 @@ requirement values, there is nothing to re-key and nothing to check — the oper
 
 **One thing we need from you.**
 
-**Please check your automations against the new fields before we go to production.** We can't — the API
-returns 403 for automations — so their behaviour is invisible to us. Everything we added was additive, but an
-unfiltered "when record updated" trigger will now fire more often, and your `Protocol Sections` automation
-should keep sole ownership of `Result`, `Status` and `Testing Date`.
+**Please check your automations against the new fields before you apply them to production.** We can't — the
+API returns 403 for automations — so their behaviour is invisible to us. Everything we added was additive,
+but an unfiltered "when record updated" trigger will now fire more often, and your `Protocol Sections`
+automation should keep sole ownership of `Result`, `Status` and `Testing Date`.
 
-The two items from our 28 August report still stand and we're not restating them: the extraction fix, and
-the re-extraction scope including jobs already marked tested. Neither blocks us now, but they do still affect
-values inside your own records.
+**The attached `production-change-spec.csv` is the sheet to work from.** One row per field across all 156:
+`ADD` for the 14 production still needs, `KEEP` for the 142 it already has, whether LabOS reads or writes
+each one, and why. Six of the 14 are marked PARITY ONLY — we do not read or write them today and are asking
+for them so the two bases stay identical and a later change round is not needed.
 
 Production replication and the cutover window we'll coordinate separately.
 

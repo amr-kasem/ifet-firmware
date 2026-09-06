@@ -13,6 +13,36 @@ design and roadmap are one document, this one. Superseded snapshots live in git 
 
 ## 0. State — probed 2026-09-06, not asserted
 
+### 0.1 "Production" means two different things — always say which
+
+This bit us in review, and it is worth reading before any sentence in this file that uses the word.
+
+| Term | What it is | Who owns it | Our access |
+|---|---|---|---|
+| **Airtable production base** `app0OCunbmuXl7Hc9` | IFET's live business base — jobs, specimens, protocols, **and** customer emails, proposal amounts, QuickBooks invoice IDs | IFET / the Airtable team | **Read-only.** `AIRTABLE_TOKEN_PRODUCTION` reads it; every write path refuses it unconditionally, even with `AIRTABLE_ALLOW_PRODUCTION_WRITE=true` |
+| **Airtable Testing base** `app4oXS3Kd5IKWgJ7` | Our sandbox, where the 14 fields were applied | LabOS, by agreement | Read and write, one writable table |
+| **LabOS production** — the `management` node | The Raspberry Pi running Postgres, `report-api`, the React UI and the MQTT broker, on branch `latest` | us | Full, and the reason for every rule in §11 |
+
+So **"nothing is deployed"** is about the `management` node, and **"production is untouched at 142 fields"**
+is about the Airtable base. Both are true at once and they are unrelated claims.
+
+### 0.2 The share link is a strict subset of what the token already gives us
+
+`https://airtable.com/app0OCunbmuXl7Hc9/shr18UCpayz45a4D5` is a **`shr…` shared-view link**: a read-only
+browser view of **one view of one table** (`IFET Projects`), exposing only the fields that view chooses and
+only the records its filter admits. No API, no schema, no field IDs, no other table.
+
+The **PAT** is the grounding: it reads the whole base over the Meta and REST APIs — all 8 tables, 142 fields,
+field IDs, types and select options. That is what produced `../schema/baseline-2026-09-05/production/` and
+what let us verify on 2026-09-06 that production is unchanged: **+0 / −0 / ~0.**
+
+**So the link adds nothing we did not already have**, and the CSV asked for is generated from the token, not
+scraped from the link: `../evidence/testing-base-changes-2026-09-06/production-change-spec.csv`. The one
+thing the link *is* good for is being openable by anyone without a token — useful for a human cross-check,
+not as a data source.
+
+
+
 | | |
 |---|---|
 | **Deployed** | **Nothing of this integration.** `management` runs branch `latest` @ `90f9595` |
@@ -121,6 +151,22 @@ inbound left to slip. If anything has to slip, it is not the outbound queue.
 
 ## 3. Scope and decisions
 
+### 3.0 The three meeting commitments — and where each one stands
+
+What was agreed with IFET, traced to the artifact that satisfies it. **Nothing here depends on the Airtable
+team**; all three are ours to finish.
+
+| Commitment | Artifact | State |
+|---|---|---|
+| **1. Prepare the structured schema for fetching and posting data between LabOS and Airtable** | `../contract/interface-schema.csv` — generated; every field in both bases with `labos_use` = read / write / ignore. Meaning: `../contract/write-contract-v0.4.md` §§2–6. Mapping: `../contract/field-register.csv` | ✅ **Drafted, A9-narrowed** — 10 fields read plus the record IDs, 35 written, 114 deliberately ignored. ⬜ **Not yet validated** against all five test types locally — that is the gate on commitment 3 |
+| **2. Make the required changes in the Testing Base only** | 14 fields applied 2026-09-06; production untouched and verified unchanged | ✅ **Done.** Evidence: `../evidence/testing-base-changes-2026-09-06/` |
+| **3. Prepare and share a document of all changes made, with the reason for each** | `../evidence/testing-base-changes-2026-09-06/README.md` (per-field reasons, before/after schema, field IDs) · `production-change-spec.csv` (**one row per field: KEEP or ADD, whether LabOS reads or writes it, and why**) · cover letter `../correspondence/airtable-team-questions-2026-09-06.md` | ✅ **Written.** ⬜ **Deliberately not sent** — it goes out after commitment 1 is validated locally. Asking them to change production on an unvalidated schema is how we would end up asking twice |
+
+**The document is what unlocks their side.** They update production from it; we do not touch production
+ourselves. So the sequence is: validate the schema locally → send the document → they apply → M5 cutover.
+
+
+
 Five test types: Static Load, Cycles, Impact, Forced Entry, ANSI Z97.1. Backend first. Water infiltration
 deferred; existing local water behaviour unchanged. Historical attempts excluded from sync; no name-based
 backfill.
@@ -141,6 +187,7 @@ decision — but it is no longer absent from the plan.
 | **A6** | Unsupported codes/shapes/applicability stay visible but non-executable. Codes route work, not names. Legacy `Value` is never parsed |
 | **A7** | Keep `ProjectParent` / `Project` in the DB; expose projects/specimens at the API boundary |
 | **A8** | Water infiltration excluded from this release |
+| **A10** | **No extractor dependency, and the document is sent only after local validation (2026-09-06).** We do not wait for, or ask for, an extractor fix — A9 removed our need for it. The three meeting commitments are ours to complete: the structured fetch/post schema, the Testing-Base-only changes, and the change document. **The document goes to the Airtable team only once the schema is validated locally against all five test types** — we do not ask them to change production on the strength of an unvalidated design |
 | **A9** | **LabOS is standalone; Airtable is management's mirror (2026-09-06).** LabOS stays fully functional without Airtable. The integration syncs **jobs and reports**, joined by `IFET job number` for humans and `rec…` IDs for machines. LabOS reads **14 inbound fields and no requirement values at all** — the operator sets a test up in LabOS exactly as today. Both bases keep all 14 applied fields; unread ones are `IGNORED` in the register, not deleted |
 
 Settled defaults: `Test Date` = completion; explicit UTC `Testing Start/End Date`; declared operator and
@@ -501,19 +548,20 @@ firmware half, and most of M2 — harness, the migration that did not exist, and
 
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
-| **1** | **Send the notice.** Rewritten again for A9 and paste-ready at `../correspondence/airtable-team-questions-2026-09-06.md` §7 | §9 | **IFET/you** | nothing | The send record in §8 of that file is filled in and a copy is in `correspondence/sent/`. **No longer blocking** — A9 closed DG7–DG9 without their answer, so this reports what we did and asks only for the three things that are genuinely theirs |
-| **2** | **`app/airtable/contract.py` → v0.4** | §8 (9th deviation) | LabOS | nothing | `CONTRACT_VERSION = "0.4"`; retired Wall/`Test Name`/`Abort Reason` gone; `Test Type` no longer one-option-blocking; reconciled field-by-field against the 14 applied fields |
-| **3** | **The worker's compose service and its env vars** | DG6 | LabOS | nothing | A service in `compose.yaml` with no public port, `.env.example` entries, and a second instance observably refusing to start |
-| **4** | **The vertical flow** | M2 | LabOS | 2, 3 | import → run → finish → worker restart → **one** attempt in the Testing Base. This is the last of M2 and the one that gates M3 |
-| **5** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 4 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed |
-| **6** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | DG3 → M3 | LabOS | 4 | Model, route and table for each; the §7 acceptance cases pass with Forced Entry and ANSI as **capture** cases, not just as filters |
-| **7** | **M1's fixture, and DG6's remaining drift** | M1 · DG6 | LabOS | nothing | Fixture: asymmetric pair plus blank/N-A/unknown examples (also contract legacy item 11). Drift: register rows for `completion_source` and `identity_assurance`, a defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the `Test Name`/`Abort Reason` note in the register header |
-| **8** | **MU — the operator interface** | DG5 → MU | LabOS | 6 | An operator completes all five test types end to end and sees the sync status of each. **Smaller than it was**: A9 deleted the verification form, which was its most awkward screen, and no longer waits on anyone's answer |
-| **9** | **M4 — the change document with actual results** | M4 | LabOS | 1–8 | Every planned change marked applied/verified or outstanding, with evidence |
-| **10** | **M5 — production cutover** | M5 | LabOS + IFET | 9, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
+| **1** | **Validate the schema locally against all five test types** — the gate on sending anything | §3.0 · A10 | LabOS | nothing | For each of Static Load, Cycles, Impact, Forced Entry and ANSI Z97.1: the fields we read are enough to identify the work, and the fields we write carry the result. Anything missing or unnecessary is corrected **before** the document goes out |
+| **2** | **Send the change document** — `../evidence/testing-base-changes-2026-09-06/` (README, `production-change-spec.csv`, before/after schema) plus the cover letter's §7 | §3.0 commitment 3 | **IFET/you** | 1 | The send record is filled in and a copy is in `correspondence/sent/`. **This is what lets the Airtable team update production** — we never touch their production base ourselves |
+| **3** | **`app/airtable/contract.py` → v0.4** | §8 (9th deviation) | LabOS | nothing | `CONTRACT_VERSION = "0.4"`; retired Wall/`Test Name`/`Abort Reason` gone; `Test Type` no longer one-option-blocking; reconciled field-by-field against the 14 applied fields |
+| **4** | **The worker's compose service and its env vars** | DG6 | LabOS | nothing | A service in `compose.yaml` with no public port, `.env.example` entries, and a second instance observably refusing to start |
+| **5** | **The vertical flow** | M2 | LabOS | 3, 4 | import → run → finish → worker restart → **one** attempt in the Testing Base. This is the last of M2 and the one that gates M3 |
+| **6** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 5 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed |
+| **7** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | DG3 → M3 | LabOS | 5 | Model, route and table for each; the §7 acceptance cases pass with Forced Entry and ANSI as **capture** cases, not just as filters |
+| **8** | **M1's fixture, and DG6's remaining drift** | M1 · DG6 | LabOS | nothing | Fixture: asymmetric pair plus blank/N-A/unknown examples (also contract legacy item 11). Drift: register rows for `completion_source` and `identity_assurance`, a defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the `Test Name`/`Abort Reason` note in the register header |
+| **9** | **MU — the operator interface** | DG5 → MU | LabOS | 7 | An operator completes all five test types end to end and sees the sync status of each. **Smaller than it was**: A9 deleted the verification form, which was its most awkward screen, and no longer waits on anyone's answer |
+| **10** | **M4 — the change document with actual results** | M4 | LabOS | 1–9 | Every planned change marked applied/verified or outstanding, with evidence |
+| **11** | **M5 — production cutover** | M5 | LabOS + IFET | 10, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
 
-**Steps 1, 2, 3 and 7 have no prerequisites and can run in any order or in parallel.** Everything from 4
-onwards is a chain.
+**Steps 1, 3, 4 and 8 have no prerequisites and can run in any order or in parallel.** Step 2 waits only on
+step 1, and everything from 5 onwards is a chain.
 
 ### Out of band — do not queue these behind the ten
 
