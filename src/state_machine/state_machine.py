@@ -8,6 +8,7 @@ import copy
 import threading
 import traceback
 import os
+import uuid
 from logging.handlers import RotatingFileHandler
 
 from api.api import Api
@@ -87,6 +88,13 @@ class StateMachine:
         self.sensors = config.get('sensors', [])
         self.valves = config.get('valves', [])
         self.device_id = config.get('device_id', 'device0')
+        # Five states read machine.turbo_id on every test (initialize, relief,
+        # stopping, start_vfd), so it has to exist even when the config carries no
+        # turbo block - otherwise the first start raises AttributeError inside the
+        # state loop thread and the rig stops responding. Latent on the production
+        # rigs only because every one of their configs happens to define `turbo`.
+        self.turbo_id = None
+        self.turbo_valves = []
         turbo = config.get('turbo',None)
         if turbo is not None: 
             self.turbo_id = turbo.get('id',None)
@@ -127,6 +135,15 @@ class StateMachine:
 
         self.selected_deflection_sensors = []
         self.selected_deflection_sensors_topics = []
+
+        # MF - run/stage association. `run_binding` is whatever identity the backend
+        # attached to the test it handed us at start; None means a pre-MF backend, and
+        # the callback then goes out in the legacy shape for the backend to record as
+        # unmapped. It is reassigned on EVERY start so a stale run can never be reused.
+        # `stage_event_id` is minted per stage attempt and reused across POST retries,
+        # which is what makes a retry a replay rather than a second trial.
+        self.run_binding = None
+        self.stage_event_id = None
 
         self.current_status = 'initial'
         self.feedback_loop = threading.Thread(target=self.pub_feedback)
@@ -321,6 +338,33 @@ class StateMachine:
             self.logger.error(traceback.format_exc())
             
         
+    def bind_run(self, test_data):
+        """Take the run/stage identity off the test the backend just handed us.
+
+        Called on every start, for both modes, and always reassigns: a start whose
+        response carries no `run` clears the previous one, so a later callback can
+        never carry a stale identity. The event ID is minted here, once per stage
+        attempt - a rerun of the same stage is a new attempt and gets a new one.
+        """
+        binding = None
+        if isinstance(test_data, dict):
+            candidate = test_data.get('run')
+            if isinstance(candidate, dict) and candidate.get('labos_attempt_id'):
+                binding = candidate
+        self.run_binding = binding
+        self.stage_event_id = str(uuid.uuid4())
+        if binding:
+            self.logger.info(
+                f"Run bound: attempt={binding.get('labos_attempt_id')} "
+                f"stage={binding.get('stage_id')} event={self.stage_event_id}"
+            )
+        else:
+            self.logger.info(
+                f"No run binding in the test payload; callback will be unmapped "
+                f"(event={self.stage_event_id})"
+            )
+        return binding
+
     def get_topic_parts(self,topic):
         # Split the topic string by "/"
         topic_parts = topic.split("/")
@@ -362,6 +406,7 @@ class StateMachine:
                     self.project_id = event['project_id']
                     self.current_test = event['test_index']
                     data = self.api.get_static_test(self.project_id,self.current_test)
+                    self.bind_run(data)
                     self.cyclic_mode = False
                     self.mode = event['mode']
                     self.sensor_id = event['sensor_id']
@@ -382,6 +427,7 @@ class StateMachine:
                     self.logger.info(f'test event: {event}')
                     self.project_id = event['project_id']
                     data = self.api.get_next_cyclic_test(self.project_id)
+                    self.bind_run(data)
                     self.cyclic_mode = True
                     self.logger.info(f'test data: {data}')
                     self.test_index_wanted = data['index']
@@ -530,7 +576,9 @@ class StateMachine:
                                 self.project_id,
                                 self.test_index_wanted,
                                 self.deflection_sensors_values,
-                                0
+                                0,
+                                run=self.run_binding,
+                                event_id=self.stage_event_id
                             )
                         except Exception as e:
                             self.logger.error(f"Error finishing cyclic test: {e}")

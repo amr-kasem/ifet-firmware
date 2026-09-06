@@ -26,7 +26,7 @@ class StartVDFState(State):
         self.machine.logger.info("Waiting for VDF to start...")
         start_time = time.time()
         while not self.machine.force_stop:
-            if self.machine.vdf_feedback == 0 and (self.machine.turbo_vdf_feedback == 0 or self.turbo_id is None):
+            if self.machine.vdf_feedback == 0 and (self.machine.turbo_vdf_feedback == 0 or self.machine.turbo_id is None):
                 self.machine.logger.info("VDF feedback is 0, VDF initialized successfully.")
                 break
             if time.time() - start_time > 90:  # 90 seconds timeout
