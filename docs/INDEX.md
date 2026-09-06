@@ -42,7 +42,8 @@ evidence, correspondence or a runbook.
 | **Field mapping and delivery state** | `labos-airtable/contract/field-register.csv` (73 rows) | `labos-airtable/contract/interface-schema.csv` (generated) · Notion *Field Mapping* |
 | **What each base actually holds, per field, both bases** | `labos-airtable/contract/interface-schema.csv` — **generated, never hand-edited** by `ifet-management` `app/airtable/interface_schema.py` | the saved baselines in `labos-airtable/schema/` |
 | **What we changed in the Testing Base, and why** | `labos-airtable/evidence/testing-base-changes-2026-09-06/` | the register's APPLIED rows |
-| **Where the project stands · sequence · gaps · dates · asks** | `labos-airtable/status/delivery-plan.md` | Notion *Project Status & Revised Timeline* (**the page management holds**) · *Delivery Status* · *Internal Engineering Plan* · *5-Week Plan* |
+| **Where the project stands · gaps · dates · asks** | `labos-airtable/status/delivery-plan.md` | Notion *Project Status & Revised Timeline* (**the page management holds**) · *Delivery Status* · *Internal Engineering Plan* · *5-Week Plan* |
+| **What to do next, and what remains** | `labos-airtable/status/delivery-plan.md` **§6.0** — the ordered remaining work, keyed to milestone and `DG` IDs. It owns sequence; state stays in §5 and §8 | the milestone table (§6) · §10 asks |
 | **What we verified against the live bases** | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` | Notion *Verification Report* |
 | **The pre-change schema baseline of both bases** | `labos-airtable/schema/baseline-2026-09-05/` | diffed by `ifet-management` `app/airtable/baseline.py` |
 | **What LabOS really stores — types, derivations, units** | `labos-airtable/evidence/labos-real-data-types-2026-08-31.md` | contract §10.3 · §10.19 · §10.24 · §10.25 |

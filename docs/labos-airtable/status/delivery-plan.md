@@ -31,6 +31,9 @@ design and roadmap are one document, this one. Superseded snapshots live in git 
 Nothing above is a blocker on its own. Together they mean: **every leg of this integration is greenfield
 against production, and no code has ever carried a result end to end.**
 
+**For what to do next, go straight to §6.0** — it is the ordered list of everything remaining, keyed to the
+milestone and `DG` identifiers, plus the four items that must not be queued behind it.
+
 ---
 
 ## 1. The whole data path
@@ -380,8 +383,6 @@ the interface.
 
 ---
 
----
-
 ## 5b. Open — waiting on the Airtable team
 
 **All three are unblocked by the same unsent notice**, `../correspondence/airtable-team-questions-2026-09-06.md`.
@@ -471,30 +472,43 @@ with MF.
 
 ## 6. Milestones
 
-### 6.0 What happens next, in order — and why that order
+### 6.0 The remaining work, in order
 
-Sequenced by dependency, not by size. Steps 1 and 2 have no prerequisites and can run in parallel.
+**This section owns *sequence* only.** Per-item state lives in §5 (gaps) and §8 (deviations); milestone
+definitions live in the table below. Do not restate status here — that is how five status surfaces drifted
+apart once already.
 
-| # | Do this | Why now | Closes |
+**`#` is an order, not an identifier.** The identifiers are the `Ref` column: existing milestone and `DG`
+IDs. Nothing here invents a new numbering scheme.
+
+**Landed so far:** the Testing Base additions (M1's 14 fields), the design and contract at v0.4, MF's
+firmware half, and most of M2 — harness, the migration that did not exist, and 8 of 9 §8 deviations.
+**Nothing is deployed.**
+
+| # | Do this | Ref | Owner | Waits on | Done when |
+|---|---|---|---|---|---|
+| **1** | **Send the notice.** Rewritten and paste-ready at `../correspondence/airtable-team-questions-2026-09-06.md` §7 | §9 · DG7 · DG8 · DG9 | **IFET/you** | nothing | The send record in §8 of that file is filled in and a copy is in `correspondence/sent/`. Then DG7–DG9 can be *answered*, not just asked |
+| **2** | **`app/airtable/contract.py` → v0.4** | §8 (9th deviation) | LabOS | nothing | `CONTRACT_VERSION = "0.4"`; retired Wall/`Test Name`/`Abort Reason` gone; `Test Type` no longer one-option-blocking; reconciled field-by-field against the 14 applied fields |
+| **3** | **The worker's compose service and its env vars** | DG6 | LabOS | nothing | A service in `compose.yaml` with no public port, `.env.example` entries, and a second instance observably refusing to start |
+| **4** | **The vertical flow** | M2 | LabOS | 2, 3 | import → run → finish → worker restart → **one** attempt in the Testing Base. This is the last of M2 and the one that gates M3 |
+| **5** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 4 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed |
+| **6** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | DG3 → M3 | LabOS | 4 | Model, route and table for each; the §7 acceptance cases pass with Forced Entry and ANSI as **capture** cases, not just as filters |
+| **7** | **M1's fixture, and DG6's remaining drift** | M1 · DG6 | LabOS | nothing | Fixture: asymmetric pair plus blank/N-A/unknown examples (also contract legacy item 11). Drift: register rows for `completion_source` and `identity_assurance`, a defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the `Test Name`/`Abort Reason` note in the register header |
+| **8** | **MU — the operator interface** | DG5 → MU | LabOS | 6, and **1's answers** | An operator completes all five test types end to end without retyping anything Airtable already holds, and no rig starts on unverified numbers |
+| **9** | **M4 — the change document with actual results** | M4 | LabOS | 1–8 | Every planned change marked applied/verified or outstanding, with evidence |
+| **10** | **M5 — production cutover** | M5 | LabOS + IFET | 9, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
+
+**Steps 1, 2, 3 and 7 have no prerequisites and can run in any order or in parallel.** Everything from 4
+onwards is a chain.
+
+### Out of band — do not queue these behind the ten
+
+| Item | Ref | Owner | Why it is not in the sequence |
 |---|---|---|---|
-| **1** | **Send `../correspondence/airtable-team-questions-2026-09-06.md`** | The only work on this whole plan that **cannot start on our side**, and it gates three gaps and MU. It is a planned-change notice, not a permission request, so nothing is waiting on us to decide first. Every day it sits is a day of calendar, not a day of work | unblocks **DG7 · DG8 · DG9** |
-| **2** | ~~M2 harness · migration · §8 deviations~~ **✅ 2026-09-06.** What remains of M2: `contract.py` → v0.4, the compose service, and the vertical flow | The harness, the migration (**which did not exist**) and 8 of 9 deviations are done and rehearsed on postgres:13. The remaining three are independent of each other, and only the vertical flow gates M3 | **M2** (part) |
-| **3** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record unbound callbacks as unmapped | Cheapest remaining win. The wire contract is fixed, the firmware side is done and provable locally, and `simulation/mf_harness/` already asserts what the backend must honour. Needs M2's run table to exist first | **DG1 · DG2** → **MF** |
-| **4** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | The largest piece of work left, and the only one of the five test types' workflows that has no model, no route and no table. M3 cannot be demonstrated without it | **DG3** → **M3** |
-| **5** | **M1's outstanding fixture**, and **DG6**'s mechanical drift | Small, and both feed M2/M3 exit evidence — the fixture is also contract legacy item 11 | **M1**, **DG6** |
-| **6** | **MU — the operator interface** | Last, because it needs M3 and the answers from step 1. Also the only thing that makes the release usable: §2 step 2 exists only if there is somewhere to type it | **DG5** → **MU** |
-
-**Out of band — do not queue these behind the six.**
-
-- **DG11 is a live-rig fault, not integration work.** `start_vfd.py` would kill the state loop on **system-2's
-  turbo path**. It is fixed and committed but **not deployed**, and it deserves its own deploy decision
-  rather than waiting for M5's window.
-- **Verify the running firmware matches this tree.** The harness builds from the repo; production runs a
-  baked image, and system-1 is known to carry an uncommitted `recovery_time` edit. A read-only
-  `sha256sum` of the `*.py` inside each running `state_machine` container settles it. Until then, "the
-  harness proves the firmware" has an unmeasured gap in it.
-- **M6 and M7 need bench/rig hardware.** One ask covers both, and the rig now being connected to the fleet
-  may be it — confirm which node and when.
+| **Deploy the system-2 turbo fix** | DG11 | **IFET/you** | It is a **live-rig fault**, not integration work: `start_vfd.py` would kill the state loop on system-2's turbo path. Fixed and committed, **not deployed**, and it should not wait for M5's window |
+| **Verify the running firmware matches this tree** | — | **IFET/you** (node) | A read-only `sha256sum` of the `*.py` inside each running `state_machine` container. The harness builds from the repo while production runs a baked image, and system-1 carries an uncommitted `recovery_time` edit — so until this is done, "the harness proves the firmware" has an unmeasured gap in it |
+| **Bench/rig hardware** | M6 · M7 | IFET | One ask covers both. The rig now being connected to the fleet may be it — confirm which node and when |
+| **The extractor fix, automations check, blast-radius report** | §9 | Airtable | Requested in step 1. None of them blocks steps 2–10; the extractor one blocks *trusting* Airtable requirement values, which persists past M5 regardless |
 
 | M | Deliverable | Owner | Exit evidence | Depends on |
 |---|---|---|---|---|
