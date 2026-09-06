@@ -87,7 +87,7 @@ statement, it gets a row, not a new document.
 | Step | What the operator does | Delivered by | Watch out |
 |---|---|---|---|
 | 1 · Pick the work | Selects Project → Mock-up → Protocol → Section, **from the local cache** — never a live Airtable call, so a network blip cannot block them. Sections show Required/Not Required/Unconfirmed, supported or not, complete or not | M2 read cache · M3 pickers · **MU** screens | Names are display only; permanent record IDs route everything |
-| 2 · **Verify the numbers** | Enters the actual inward/outward pair from the trusted proposal, the proposal reference, who verified, and when. Airtable's values are shown alongside for comparison but **cannot start a rig** | M3 backend gate · **MU** form | **This step adds operator work, and is the one thing we cannot remove from our side.** It relaxes to a one-click confirm the day the extractor is fixed. Contradicts their "no double entry" rule — say so explicitly, do not let them discover it |
+| 2 · ~~Verify the numbers~~ **Removed by A9** | Nothing. The operator enters the test's parameters in LabOS exactly as they do today | — | **This step existed only because LabOS planned to execute from Airtable values.** Under A9 it reads none, so there is no verification burden, no contradiction with their "no double entry" rule, and no path for a shifted value to reach a rig. The single largest piece of operator cost in this design, removed by deciding not to consume the data |
 | 3 · Set up the run | Picks attached gauges, reviews the derived loading sequence, starts. Requirement snapshot, procedure version, stage plan and identity all **freeze** here | M3 run create · **MU** | A later Airtable edit never mutates a live run — it means a new run. Gauge selection vs `GAUGE_COUNT` is unreconciled (§5 DG6) |
 | 4a · Static Load / Cycles | Watches the rig execute; stages and trials record themselves | **MF** + M3 | Until MF lands, the verified pair from step 2 sits on the run while the rig reads the old `static_tests` row (§5 DG1, DG2) |
 | 4b · Impact / Forced Entry / ANSI | Presses the test button and types results, notes and photos into a form that **already knows** project, mock-up, protocol, system, operator and attempt number | M3 entities/routes · **MU** screens | No model, no route, no table exists today (§5 DG3). Impact *requirements* are not in the register either (§5 DG7) |
@@ -111,11 +111,11 @@ Worth stating plainly, because it drives priority and it affects adoption:
 | PM / office | **The big one.** Live project status without chasing the lab; results stop being retyped |
 | Lab manager | Real attempt and retest history, which does not exist today |
 | Reviewer | A defined pass/fail step with a name and a timestamp on it |
-| Operator | **The least — and initially a net cost**, because of step 2 |
+| Operator | **Neutral.** Was a net cost while step 2 existed; A9 removed it, so the operator's workflow is unchanged from today |
 
-**The outbound half of the sync pays off immediately; the inbound half does not pay off until the extractor
-is fixed.** Until then, pre-filled requirements are a display convenience and a cross-check, not a time
-saver. If anything has to slip, slip inbound polish, not the outbound queue.
+**The outbound half of the sync is now the whole point.** A9 reduced the inbound half to identity — enough
+to know which job a result belongs to — so there is no pre-filled-requirement payoff to wait for and nothing
+inbound left to slip. If anything has to slip, it is not the outbound queue.
 
 ---
 
@@ -141,6 +141,7 @@ decision — but it is no longer absent from the plan.
 | **A6** | Unsupported codes/shapes/applicability stay visible but non-executable. Codes route work, not names. Legacy `Value` is never parsed |
 | **A7** | Keep `ProjectParent` / `Project` in the DB; expose projects/specimens at the API boundary |
 | **A8** | Water infiltration excluded from this release |
+| **A9** | **LabOS is standalone; Airtable is management's mirror (2026-09-06).** LabOS stays fully functional without Airtable. The integration syncs **jobs and reports**, joined by `IFET job number` for humans and `rec…` IDs for machines. LabOS reads **14 inbound fields and no requirement values at all** — the operator sets a test up in LabOS exactly as today. Both bases keep all 14 applied fields; unread ones are `IGNORED` in the register, not deleted |
 
 Settled defaults: `Test Date` = completion; explicit UTC `Testing Start/End Date`; declared operator and
 reviewer identity stored separately; originals local, previews in Airtable; no mandatory report link before a
@@ -149,6 +150,11 @@ reachable origin exists; a not-required section receives no fabricated passing a
 **Standing caution — do not drive a rig from Airtable requirement values.** Their PDF extractor drops blank
 cells, so a 60 PSF requirement reads as 9. LabOS cannot detect it; every shifted value is individually
 plausible. Contract §10.19.
+
+**A9 satisfies that caution by construction rather than by discipline.** LabOS reads no requirement values,
+so there is no path by which a shifted one could start a rig. The caution stays written down because it
+still binds *them* — a shifted value has already reached a Passed record on their side — and because it
+applies in full the day any future release consumes requirement values.
 
 ---
 
@@ -267,19 +273,20 @@ almost certainly `Deflection Value` and `Deflection Unit`, which makes them **M6
 | **DG2** | Callback has no run / stage / event ID | 🟡 **Decided · firmware landed** | LabOS + firmware | MF, M3 | backend: key `/trials` on `event_id`; record unbound as unmapped |
 | **DG5** | No operator surface | 🟡 **Scoped as MU** | LabOS | whether the release is usable | M3, plus DG7/DG8 decided |
 | **DG6** | Register / entity drift · sync deployment unspecified | 🟡 **OPEN — mechanical** | LabOS | M2 exit tidiness | our own edit; an hour |
-| **DG7** | Impact requirements not in the register | 🔵 **OPEN — needs Airtable** | Airtable + LabOS | MU, register close | **the 2026-09-06 notice being sent**, then their answer |
-| **DG8** | Forced Entry / ANSI / failure-note output shape | 🔵 **OPEN — needs Airtable** | Airtable + LabOS | MU, field creation | same notice. Ask which report needs them |
-| **DG9** | Loading-sequence ownership never agreed | 🔵 **OPEN — needs Airtable** | Airtable + LabOS | what a Protocol Section must carry | same notice. Our recommendation already stands |
+| **DG7** | Impact requirements not in the register | ✅ **Closed by A9** | LabOS | — | not needed — requirements are entered in LabOS |
+| **DG8** | Forced Entry / ANSI / failure-note output shape | ✅ **Closed by A9** | LabOS | — | no dedicated scalar; `Test Result` + JSON. Revisit only for a named report |
+| **DG9** | Loading-sequence ownership never agreed | ✅ **Closed by A9** | LabOS | — | LabOS derives; Airtable supplies nothing |
 | **DG4** | Firmware leg had no milestone (`gap H`) | ✅ **Closed** | — | — | MF exists; July item 53 delivered |
 | **DG10** | Sim harness undocumented, and aimed at production | ✅ **Closed** | LabOS | — | `simulation/mf_harness/` + warnings + §11 rule |
 | **DG11** | Two latent firmware crashes | ✅ **Fixed, not deployed** | LabOS | system-2's turbo path | **a deploy decision of its own** |
 
-**Read the colours as ownership, not severity.** 🔵 is the only work that cannot start today, and all three
-🔵 gaps are unblocked by one unsent document. 🔴 and 🟡 are entirely ours.
+**Nothing is blocked on anyone outside the team any more.** The three 🔵 gaps closed on 2026-09-06 when A9
+decided that LabOS reads no requirement values — they were questions about an inbound surface that no longer
+exists. Every remaining item is 🔴 or 🟡 and entirely ours.
 
 ---
 
-## 5a. Open — ours, and nothing external blocks them
+## 5a. Open — all of them ours, none blocked externally
 
 ### DG3 · Three of five test types have no backend at all — **critical**
 
@@ -362,7 +369,12 @@ unmapped rather than attaching it to a guessed run.
 
 ### DG5 · No operator surface — now scoped as MU, not closed
 
-Contract §3.3 requires the operator to enter the verified pair, its reference, verifier and time. A8 deferred
+> **Reduced by A9, 2026-09-06.** The verification form — the screen this gap was mostly about — is gone,
+> because LabOS reads no Airtable requirement values and the operator sets tests up as they do today. What
+> remains of MU is the sync-status chip, the manual-entry screens for the three non-rig test types, and the
+> job/section picker that links a LabOS test to an Airtable record. Still a deliverable, materially smaller.
+
+Contract §3.3 required the operator to enter the verified pair, its reference, verifier and time. A8 deferred
 the UI, and M3 is "all five backend workflows" — so the release was an API with no consumer, and **no rig
 could lawfully start.** IFET's 2026-09-06 message is written entirely from the operator's seat, which settles
 it: the UI is a deliverable, tracked as **MU**.
@@ -383,11 +395,11 @@ the interface.
 
 ---
 
-## 5b. Open — waiting on the Airtable team
+## 5c. Closed — kept for the record, and because each one changed the plan
 
-**All three are unblocked by the same unsent notice**, `../correspondence/airtable-team-questions-2026-09-06.md`.
+### DG7 · Impact requirements are not in the register — **CLOSED by A9**
 
-### DG7 · Impact requirements are not in the register
+> **Closed 2026-09-06 without needing their answer.** A9 means impact requirements are entered in LabOS as they are today, so the four proposed fields are not needed and were never created. The question of whether Airtable should carry missile type, weight and velocity does not arise while LabOS reads no requirement values.
 
 Their message asks LabOS to receive "impact requirements" so the operator stops retyping them. The register
 carries only a **count** of impacts (`IMPACT_LMI` / `IMPACT_SMI` as Count/impacts). Missile type, missile
@@ -399,7 +411,9 @@ at all**: the protocol normally fixes the missile and velocity, so Airtable may 
 deviations, plus `Impact Locations`, whose relationship to the total-impacts count is itself unsettled.
 Decide with them before creating the fields.
 
-### DG8 · Forced Entry, ANSI and failure notes — output shape reopened
+### DG8 · Forced Entry, ANSI and failure notes — output shape reopened — **CLOSED by A9**
+
+> **Closed 2026-09-06 without needing their answer.** No dedicated scalar. `Test Type` and `Test Result` are both `singleSelect`, so Airtable filters and groups both workflows natively and the sub-detail travels in the JSON. The standing rule survives: add one **only** when a named operational report requires it. `Failure Notes` stays inside `Notes`.
 
 Their message lists "forced-entry results", "ANSI Z97.1 results" and "failure notes" as things LabOS sends
 back. §7 decided sub-detail lives in JSON with `Test Result` carrying pass/fail, and to add a dedicated scalar
@@ -410,7 +424,9 @@ Three rows are in the register as `OPEN`/`PROPOSED`. **Ask which report needs th
 decide Forced Entry and ANSI together or not at all. `Failure Notes` is the easiest of the three and the most
 likely to be genuinely wanted: today one `Notes` field carries both meanings.
 
-### DG9 · Loading sequences — ownership never agreed
+### DG9 · Loading sequences — ownership never agreed — **CLOSED by A9**
+
+> **Closed 2026-09-06 without needing their answer.** LabOS derives the loading sequence from the pair it already holds, and under A9 reads nothing from Airtable to do it. There is no longer a shared assumption to reconcile — the recommendation became the design.
 
 Their message lists loading sequences as flowing **from** Airtable into LabOS. Nothing in Airtable holds
 them; LabOS derives 14+ stages from the verified inward/outward pair, and that derivation is validated to
@@ -422,8 +438,6 @@ that is currently an assumption on our side and a different assumption on theirs
 before M3, because it changes what a Protocol Section has to carry.
 
 ---
-
-## 5c. Closed — kept for the record, and because each one changed the plan
 
 ### DG4 · The firmware leg had no milestone — a regression, now closed
 
@@ -487,14 +501,14 @@ firmware half, and most of M2 — harness, the migration that did not exist, and
 
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
-| **1** | **Send the notice.** Rewritten and paste-ready at `../correspondence/airtable-team-questions-2026-09-06.md` §7 | §9 · DG7 · DG8 · DG9 | **IFET/you** | nothing | The send record in §8 of that file is filled in and a copy is in `correspondence/sent/`. Then DG7–DG9 can be *answered*, not just asked |
+| **1** | **Send the notice.** Rewritten again for A9 and paste-ready at `../correspondence/airtable-team-questions-2026-09-06.md` §7 | §9 | **IFET/you** | nothing | The send record in §8 of that file is filled in and a copy is in `correspondence/sent/`. **No longer blocking** — A9 closed DG7–DG9 without their answer, so this reports what we did and asks only for the three things that are genuinely theirs |
 | **2** | **`app/airtable/contract.py` → v0.4** | §8 (9th deviation) | LabOS | nothing | `CONTRACT_VERSION = "0.4"`; retired Wall/`Test Name`/`Abort Reason` gone; `Test Type` no longer one-option-blocking; reconciled field-by-field against the 14 applied fields |
 | **3** | **The worker's compose service and its env vars** | DG6 | LabOS | nothing | A service in `compose.yaml` with no public port, `.env.example` entries, and a second instance observably refusing to start |
 | **4** | **The vertical flow** | M2 | LabOS | 2, 3 | import → run → finish → worker restart → **one** attempt in the Testing Base. This is the last of M2 and the one that gates M3 |
 | **5** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 4 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed |
 | **6** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | DG3 → M3 | LabOS | 4 | Model, route and table for each; the §7 acceptance cases pass with Forced Entry and ANSI as **capture** cases, not just as filters |
 | **7** | **M1's fixture, and DG6's remaining drift** | M1 · DG6 | LabOS | nothing | Fixture: asymmetric pair plus blank/N-A/unknown examples (also contract legacy item 11). Drift: register rows for `completion_source` and `identity_assurance`, a defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the `Test Name`/`Abort Reason` note in the register header |
-| **8** | **MU — the operator interface** | DG5 → MU | LabOS | 6, and **1's answers** | An operator completes all five test types end to end without retyping anything Airtable already holds, and no rig starts on unverified numbers |
+| **8** | **MU — the operator interface** | DG5 → MU | LabOS | 6 | An operator completes all five test types end to end and sees the sync status of each. **Smaller than it was**: A9 deleted the verification form, which was its most awkward screen, and no longer waits on anyone's answer |
 | **9** | **M4 — the change document with actual results** | M4 | LabOS | 1–8 | Every planned change marked applied/verified or outstanding, with evidence |
 | **10** | **M5 — production cutover** | M5 | LabOS + IFET | 9, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
 
@@ -508,7 +522,7 @@ onwards is a chain.
 | **Deploy the system-2 turbo fix** | DG11 | **IFET/you** | It is a **live-rig fault**, not integration work: `start_vfd.py` would kill the state loop on system-2's turbo path. Fixed and committed, **not deployed**, and it should not wait for M5's window |
 | **Verify the running firmware matches this tree** | — | **IFET/you** (node) | A read-only `sha256sum` of the `*.py` inside each running `state_machine` container. The harness builds from the repo while production runs a baked image, and system-1 carries an uncommitted `recovery_time` edit — so until this is done, "the harness proves the firmware" has an unmeasured gap in it |
 | **Bench/rig hardware** | M6 · M7 | IFET | One ask covers both. The rig now being connected to the fleet may be it — confirm which node and when |
-| **The extractor fix, automations check, blast-radius report** | §9 | Airtable | Requested in step 1. None of them blocks steps 2–10; the extractor one blocks *trusting* Airtable requirement values, which persists past M5 regardless |
+| **The extractor fix, automations check, blast-radius report** | §9 | Airtable | Requested in step 1 and **none of them blocks anything of ours** — A9 removed our dependency on their requirement values entirely. The extractor still matters to *them*: a shifted value has already reached a Passed record on their side |
 
 | M | Deliverable | Owner | Exit evidence | Depends on |
 |---|---|---|---|---|

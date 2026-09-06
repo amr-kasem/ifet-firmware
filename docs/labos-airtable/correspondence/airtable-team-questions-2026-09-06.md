@@ -1,16 +1,16 @@
-# Testing Base changes applied, and three decisions we need
+# Testing Base changes applied, and how LabOS will use them
 
 **Author:** Abdelrahman · **Date:** 2026-09-06 · **Status:** **READY TO SEND — not yet sent**
 **Authority:** LabOS is authorized to define and add the required Testing Base fields, with a documented
-change register. This is a change *report* plus three open questions — not a permission request.
+change register. This is a change *report* plus a scope narrowing — it asks no blocking questions.
 **Specification:** `../contract/write-contract-v0.4.md` · **Mapping:** `../contract/field-register.csv`
 **Change document:** `../evidence/testing-base-changes-2026-09-06/`
 
-> **What changed in this draft, and why.** The earlier version of this file said the additions were
-> "planned, not applied yet." That is no longer true — **the 14 fields were applied to the Testing Base on
-> 2026-09-06** and the change document exists. Sending the old wording would have understated what we had
-> already done and would have asked for permission we already had. It also never asked the three questions
-> that are actually blocking us. The August 31 draft stays historical.
+> **What changed in this draft, and why.** Two rewrites on 2026-09-06. First, the earlier version still said
+> the additions were "planned, not applied yet" — untrue once the 14 fields went in — so it understated the
+> work and asked for permission we already had. Then **decision A9** narrowed the integration: LabOS runs
+> standalone and reads no requirement values, which withdrew all three of the questions this document had
+> been written to ask. What is left is a report and three requests. The August 31 draft stays historical.
 
 ---
 
@@ -52,62 +52,48 @@ human-readable original.
 No validated measurement source exists for them yet, and we would rather omit a number than publish one we
 cannot stand behind. Tracked as our own work (M6/M7).
 
-**Seven fields were requested by the workflow message and deliberately NOT created.** They are §3 below.
-An unwanted field is harder to remove than to add, and now that this schema becomes the shared source of
-truth for production, a speculative field would propagate rather than sit harmlessly in a sandbox.
+**Seven further fields were requested by the workflow message and deliberately NOT created**, and under A9
+(§3) they are no longer wanted at all. An unwanted field is harder to remove than to add, and now that this
+schema becomes the shared source of truth for production, a speculative field would propagate rather than
+sit harmlessly in a sandbox.
 
 ---
 
-## 3. Three decisions we need from you — this is the blocking part
+## 3. How LabOS uses this schema — narrowed, 2026-09-06
 
-Your workflow message asked for things that are not yet in the mapping. We have not created any of these
-fields, because each one needs an answer first.
+**Decision A9: LabOS runs standalone, and Airtable is management's mirror.** LabOS is fully functional
+without Airtable and stays that way. The integration exists so management can see jobs and reports without
+chasing the lab — it is not a dependency of testing, and an Airtable outage cannot affect a test.
 
-### 3.1 Impact requirements — what should Airtable actually carry?
+That narrows what we read to almost nothing:
 
-The register carries only a **count** of impacts. Missile type, missile weight and target velocity — the
-values our own tables hold — are nowhere in it, so an LMI operator still types them by hand, which is
-exactly the double entry you asked us to remove.
+| We read (14 fields) | Table |
+|---|---|
+| `record_id`, `IFET job number`, `Project name` | IFET Projects |
+| `record_id`, `Project Name`, `Mock-up/specimen name` | Mock-Ups/Specimens |
+| `record_id`, `Mock-Up`, `Protocol Name` | Tests Protocols |
+| `record_id`, `Test Protocol`, `Section Name`, `Requirement Code`, `Applicability` | Protocol Sections |
 
-**Our question:** the protocol normally fixes the missile and the velocity. Should Airtable carry these at
-all, or only where a specific job **deviates** from the protocol default?
+`Requirement Code` is the only one that is not pure identity, and it is there to say **which of the five
+tests a section is**. Everything else is the join and the display names.
 
-| Candidate field | Type | Our assumption |
-|---|---|---|
-| `Missile Type` | singleSelect | Blank means "use the protocol default" |
-| `Missile Weight` | number | Unit to be agreed **before** creation |
-| `Impact Velocity` | number | Target only. Never an achieved value |
-| `Impact Locations` | number | Count of distinct impact points |
+**We do not read any requirement values.** Not `Required Value`, not the inward/outward pair, not `Value`,
+not units or options. The operator sets a test up in LabOS exactly as they do today. Those fields stay in
+both bases and we simply do not consume them.
 
-**`Impact Locations` needs care:** it is **not** the same number as the total impact count already in
-`Required Value`. Before we create it, we need to know which of the two your reports use.
+**Three earlier questions therefore withdraw**, and none of them needs your answer:
 
-### 3.2 Forced Entry, ANSI Z97.1 and failure notes — which report needs a dedicated field?
+- **Impact requirements** (missile type, weight, target velocity) — not needed. Operators enter these in
+  LabOS. We have not created those fields and will not.
+- **Forced Entry and ANSI result fields** — not needed. `Test Type` and `Test Result` are both single
+  selects, so you can filter and group both workflows already, and the detail travels in the JSON. We will
+  add a dedicated field only if a specific report of yours turns out to need one — tell us and we will.
+- **Loading sequences** — LabOS derives them and needs nothing from Airtable.
 
-`Test Type` and `Test Result` are both `singleSelect`, so Airtable can already filter and group both
-workflows natively, and the sub-detail travels in JSON. Our standing decision is to add a dedicated scalar
-only when a **named operational report** requires one.
-
-**Our question:** is your message asking for dedicated fields, or describing what you want *visible* — which
-`Test Result` plus the JSON already satisfies? If a report needs them, name it and we will add them.
-
-- `Forced Entry Result` and `ANSI Result` — decide **both together or neither**; splitting them would leave
-  the schema inconsistent.
-- `Failure Notes` — the most likely to be genuinely wanted. Today one `Notes` field carries both general
-  commentary and failure description. Separate field, or a structured section inside `Notes`?
-
-### 3.3 Loading sequences — who owns them?
-
-Your message lists loading sequences as flowing **from** Airtable **into** LabOS. Nothing in Airtable holds
-them today. LabOS derives 14+ stages from the verified inward/outward pair, and that derivation is validated
-to full precision against production data.
-
-**Our recommendation: LabOS keeps deriving them, and Airtable supplies only the pressure pair.** It works
-today, it is already proven, and it removes something that would otherwise have to stay in sync between two
-systems. But this is currently an assumption on our side and a different assumption on yours, and it changes
-what a `Protocol Section` has to carry — so we would like it settled in writing before we build further.
-
----
+**The join key.** Everything hangs off `IFET job number`, with the Airtable `rec…` record IDs carried
+alongside. The record ID is what actually routes a result; the job number is what a person reads. That is
+deliberate — the job number is hand-typed, so if it were the only key a renumber or a typo would silently
+re-point a job's results and nothing would notice.
 
 ## 4. Three things we need you to do
 
@@ -117,32 +103,26 @@ what a `Protocol Section` has to carry — so we would like it settled in writin
    often**, and your `Protocol Sections` automation must keep exclusive ownership of `Result`, `Status` and
    `Testing Date`. We are not assuming production's automations are compatible merely because the fields
    exist; that gets verified before cutover.
-2. **The extractor defect still needs remediation on your side.** It remains the only true gate on running a
-   rig from Airtable requirement values. See §5.
+2. **The extractor defect still needs remediation on your side.** It no longer gates *us* — A9 means we read
+   no requirement values — but it still misstates requirements inside your own records. See §5.
 3. **A blast-radius report — including jobs already marked tested.** A shifted value has already reached a
    Passed/Completed record, so this is not hypothetical. Which results are affected is a quality and business
    call, not an engineering one.
 
 ---
 
-## 5. One thing our design does that you should hear from us, not discover
+## 5. The extraction defect, and why it no longer blocks us
 
-**We are adding a step that contradicts your "no double entry" requirement, deliberately, and only until the
-extractor is fixed.**
+Earlier drafts of this document warned that our operators would have to re-enter the verified
+inward/outward pair before a rig would start — a step that contradicted your "no double entry" goal.
 
-Before a rig can start, the operator must enter the actual inward/outward pair from the trusted proposal,
-along with the proposal reference, who verified it and when. Airtable's values are shown next to it for
-comparison, but **they cannot start a rig.**
+**A9 removes that.** Because LabOS reads no requirement values from Airtable, there is no path by which a
+shifted value could reach a rig, and therefore nothing for the operator to double-check. The operator's
+workflow is exactly what it is today. No double entry is introduced.
 
-The reason is that the extractor drops blank cells, so a `+60/60` requirement can arrive as `9`. LabOS cannot
-detect that — every shifted value is individually plausible, which is precisely what makes it dangerous. We
-are not willing to drive a physical test from a number we cannot trust.
-
-This costs the operator real work, and it is the one thing we cannot remove from our side. **It relaxes to a
-one-click confirmation the day the extraction is fixed.** The typed `Protocol Sections` fields above are what
-make that verification expressible in the first place.
-
----
+The defect still matters, on your side: a shifted value has already reached a Passed/Completed record, and
+deciding what to do about previously reported results is a quality call rather than an engineering one. It
+just is not a gate on our delivery any more.
 
 ## 6. What happens next
 
@@ -166,49 +146,52 @@ correction linkage, reviewer identity and time, explicit execution start/end, an
 was renamed, retyped or removed, no records were touched, and the production base was not modified. A full
 change document is attached: before/after schema, the field ID for each, and why each one exists.
 
-To close out your three earlier questions: `Value` is preserved and never parsed — the new typed fields carry
-inward and outward pressures as separate positive PSF magnitudes, plus a requirement code, kind, unit,
-applicability and enum option. Your retest model is retained: one row per programme run with its own Attempt
-ID under a shared Test ID, corrections as a new row identifying the superseded attempt and reason, original
-untouched. `Test Date` now means execution completion, with explicit start and end timestamps in UTC.
+To close out your three earlier questions: `Value` is preserved and never parsed; your retest model is
+retained, with one row per programme run under a shared Test ID and corrections as a new row naming the
+superseded attempt; and `Test Date` now means execution completion, with explicit start and end timestamps
+in UTC.
 
-**Three things we need decided before we build further.**
+**One thing has changed on our side, and it makes this simpler for both of us.**
 
-1. **Impact requirements.** You asked us to stop the operator retyping them. The protocol normally fixes the
-   missile and velocity — should Airtable carry missile type, weight and target velocity at all, or only
-   where a job deviates from the protocol default? And `Impact Locations` is not the same number as the total
-   impact count: which one do your reports use? We have not created these fields yet.
-2. **Forced Entry and ANSI Z97.1 results, and failure notes.** `Test Type` and `Test Result` are both
-   single-selects, so you can already filter and group both workflows, with the detail in JSON. Are you
-   asking for dedicated fields, or for those results to be *visible*? If a specific report needs dedicated
-   fields, tell us which report and we will add them — Forced Entry and ANSI together. `Failure Notes` is the
-   one we think you genuinely want, since today a single `Notes` field carries both meanings.
-3. **Loading sequences.** Your message has these flowing from Airtable into LabOS, but nothing in Airtable
-   holds them, and LabOS already derives the full stage sequence from the verified pressure pair — validated
-   against production data. **We recommend LabOS keeps deriving them and Airtable supplies only the pair**,
-   which avoids keeping the same thing in sync in two systems. We would like that confirmed in writing, since
-   it changes what a Protocol Section needs to carry.
+LabOS runs standalone. It is fully functional without Airtable and will stay that way — the integration
+exists so you can see jobs and results without chasing the lab, not as something testing depends on. An
+Airtable outage cannot stop or affect a test.
 
-**Three things we need from you.**
+Concretely, that means **we read almost nothing from Airtable**: the record IDs, the IFET job number, the
+project/specimen/protocol/section names, plus `Requirement Code` and `Applicability` on a section. Fourteen
+fields, and only `Requirement Code` is more than identity — it tells us which of the five tests a section
+is. Everything hangs off the IFET job number for people, with the Airtable record IDs carried alongside as
+the key that actually routes a result.
 
-- **Please check your automations against the new fields.** We cannot see them — the API returns 403 for
-  automations — so we cannot verify this ourselves. Everything we added was additive, but an unfiltered
-  "when record updated" trigger will now fire more often, and your `Protocol Sections` automation should keep
-  sole ownership of `Result`, `Status` and `Testing Date`.
-- **The proposal extraction issue still needs fixing at source.** It is the one genuine blocker on trusting
-  requirement values.
+**We do not read any requirement values at all** — not `Required Value`, not the inward/outward pair, not
+`Value`, units or options. Our operators set a test up in LabOS exactly as they do today. Those fields stay
+where they are; we simply do not consume them.
+
+Three things we had been about to ask you therefore withdraw, and none needs an answer:
+
+- **Impact requirements** (missile type, weight, target velocity) — not needed; operators enter these in
+  LabOS. We have not created those fields and won't.
+- **Forced Entry and ANSI result fields** — not needed. `Test Type` and `Test Result` are both single
+  selects, so you can already filter and group both workflows, and the detail travels in the JSON. If a
+  particular report of yours needs a dedicated field, tell us which and we'll add it.
+- **Loading sequences** — LabOS derives these itself and needs nothing from Airtable.
+
+This also settles the double-entry question. Earlier we were going to ask operators to re-key the verified
+pressures before a rig would start, which cut against your "no double entry" goal. Since we now read no
+requirement values, there is nothing to re-key and nothing to check — the operator's workflow is unchanged.
+
+**Three things we do need from you.**
+
+- **Please check your automations against the new fields.** We can't see them — the API returns 403 for
+  automations — so we can't verify this ourselves. Everything we added was additive, but an unfiltered
+  "when record updated" trigger will now fire more often, and your `Protocol Sections` automation should
+  keep sole ownership of `Result`, `Status` and `Testing Date`.
+- **The proposal extraction issue still needs fixing at source.** It no longer blocks us, but it still means
+  some requirement values inside your own records are wrong.
 - **A blast-radius report, including jobs already marked tested.** A shifted value has already reached a
   Passed record, so deciding what to do about previously reported results is a quality call on your side.
 
-**One thing we want you to hear from us directly.** Until the extraction is fixed, our operators must enter
-the verified inward/outward pair from the approved proposal before a rig will start, with the proposal
-reference and who checked it. Airtable's values are displayed alongside for comparison but cannot start a
-test. This does contradict the "no double entry" goal, and we are doing it deliberately: the extractor drops
-blank cells, so a +60/60 requirement can read as 9, and every shifted value looks individually plausible. We
-are not willing to drive a physical pressure test from a number we cannot verify. **It becomes a one-click
-confirmation the day extraction is fixed.**
-
-Production replication and the cutover window we will coordinate separately.
+Production replication and the cutover window we'll coordinate separately.
 
 Best,
 Abdelrahman

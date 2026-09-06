@@ -32,6 +32,26 @@ Production replication and automation acceptance are release work, not prerequis
 
 ## 1. Ownership
 
+**A9 — LabOS is standalone; Airtable is management's mirror (decided 2026-09-06).** LabOS is fully
+functional without Airtable and stays so. The integration exists so that management can see jobs and
+reports without chasing the lab; it is **not** a dependency of testing. Two consequences bind the rest of
+this document:
+
+1. **LabOS reads the minimum needed to identify work, and no requirement values at all.** The operator sets
+   a test up in LabOS exactly as today. Fourteen inbound fields — record IDs, the job number, the display
+   names, `Requirement Code` and `Applicability` — are the whole read surface. `Requirement Code` is the
+   only non-identity field among them, and it exists to say *which of the five tests* a section is.
+2. **The join is `IFET job number` for humans and the `rec…` record ID for machines.** The job number is
+   hand-entered text, so a renumber or a typo would silently re-point a job's results if it were the only
+   key. Names and numbers are for display and reconciliation; permanent record IDs route everything.
+
+**This removes the extraction defect from the execution path entirely.** §3.3 exists because LabOS once
+planned to pre-fill requirements from Airtable; under A9 no Airtable value can reach a rig, because none is
+read. §3.3's verification requirement therefore applies to nothing in this release and is retained only for
+the day a future release consumes requirement values again — at which point it applies in full and
+unchanged. Fields such as `Required Value Inward` remain in both bases and are marked `IGNORED` in the
+register: **they exist, and LabOS does not read them.**
+
 HubSpot supplies approved commercial scope. Airtable owns the assigned project/specimen/protocol hierarchy,
 requirements and operational roll-ups. LabOS owns executable procedures, hardware, local attempts,
 operator/reviewer decisions and original evidence. LabOS can run local unlinked work; it does not create
@@ -123,6 +143,11 @@ fields define direction by their field names; firmware sign/direction encoding r
 procedure logic. No automatic parse or mass backfill of `+110/110` is authorized by this design decision.
 
 ### 3.3 Source verification
+
+**Superseded in practice by A9 (§1) for this release: LabOS reads no Airtable requirement values, so there
+is nothing to verify against and no path by which a shifted value could start a rig.** Retained in full
+because it becomes load-bearing again the moment a future release consumes requirement values, and because
+the reasoning below is the reason A9 is safe rather than merely convenient.
 
 The known extraction defect remains unresolved evidence, not a design question. While it remains unresolved,
 Airtable requirements are displayed but cannot directly drive a rig. The operator must record the actual
