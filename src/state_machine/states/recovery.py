@@ -37,7 +37,9 @@ class RecoveryState(State):
                         self.machine.project_id,
                         self.machine.test_index_wanted,
                         self.machine.deflection_sensors_values,
-                        self.recovery_time
+                        self.recovery_time,
+                        run=getattr(self.machine, 'run_binding', None),
+                        event_id=getattr(self.machine, 'stage_event_id', None)
                     )
                 else:
                     # Cyclic mode reaches RecoveryState only when cyclic_skip_recovery
@@ -48,7 +50,9 @@ class RecoveryState(State):
                             self.machine.project_id,
                             self.machine.test_index_wanted,
                             self.machine.deflection_sensors_values,
-                            self.recovery_time
+                            self.recovery_time,
+                            run=getattr(self.machine, 'run_binding', None),
+                            event_id=getattr(self.machine, 'stage_event_id', None)
                         )
                     except Exception as e:
                         self.machine.logger.error(f"Error finishing cyclic test: {e}")

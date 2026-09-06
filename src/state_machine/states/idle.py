@@ -53,3 +53,9 @@ class IdleState(State):
             sensor_ownership.clear(self.machine.client, self.machine.device_id)
             self.machine.selected_deflection_sensors = []
             self.machine.selected_deflection_sensors_topics = []
+
+            # Drop the run/stage identity with the rest of the test state. bind_run
+            # reassigns on every start, so this is belt-and-braces against a stale
+            # attempt ID ever reaching a callback.
+            self.machine.run_binding = None
+            self.machine.stage_event_id = None
