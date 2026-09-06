@@ -14,8 +14,12 @@ import paho.mqtt.client as mqtt
 import pytest
 import sensor_ownership
 
-BROKER_HOST = "localhost"
-BROKER_PORT = 1883
+# These tests PUBLISH to the broker they are pointed at. On a workstation running
+# ifet-management-tunnel.service, localhost:1883 is the PRODUCTION broker - so the
+# host and port are overridable, and the harness broker is the safe target:
+#   IFET_TEST_BROKER_HOST=127.0.0.1 IFET_TEST_BROKER_PORT=11883 pytest
+BROKER_HOST = os.environ.get("IFET_TEST_BROKER_HOST", "localhost")
+BROKER_PORT = int(os.environ.get("IFET_TEST_BROKER_PORT", "1883"))
 
 
 def make_connected_client():

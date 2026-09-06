@@ -1,3 +1,20 @@
+# ⚠️  DO NOT BRING THIS UP ON A WORKSTATION RUNNING THE MANAGEMENT TUNNEL.
+#
+# These services use network_mode: "host" with ../../deployment/config/config1-d.json,
+# whose broker is localhost:1883, whose API is http://localhost:8000, and whose
+# device_id is "device1" - production system-1's own identity.
+#
+# With ifet-management-tunnel.service active, localhost:1883 and localhost:8000 are the
+# PRODUCTION management broker and API. Starting this attaches a fake rig impersonating
+# system-1 to the production broker and lets it POST trials into the production
+# database.
+#
+# For run/stage association work and anything else that needs a simulated rig, use
+# ../mf_harness/ instead: private bridge network, ports 11883/18000, identity device901,
+# a stub backend, and deflection gauges the two fakes here never had.
+#
+# See ifet-firmware/docs/labos-airtable/status/delivery-plan.md - §5 G10 and §11.
+
 services:
   state_machine_service:
     build: ../../src/state_machine/

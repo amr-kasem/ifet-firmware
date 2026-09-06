@@ -1,0 +1,96 @@
+# MF harness - an isolated simulated rig for run/stage association (delivery-plan MF, gaps G1/G2).
+#
+# ISOLATION IS THE POINT. On a workstation that runs ifet-management-tunnel.service,
+# 127.0.0.1:1883 and 127.0.0.1:8000 are the PRODUCTION management broker and API.
+# The older simulation/ifet_device_node compose uses network_mode: "host" with
+# config1-d.json (device_id "device1", broker localhost:1883), so bringing that up on
+# a tunnelled workstation attaches a fake rig impersonating system-1 to production.
+#
+# This harness cannot do that:
+#   * no host networking - services talk over the private `mf` bridge by name;
+#   * host ports are published on 11883/18000, never 1883/8000;
+#   * the rig identity is device901, which is not any real rig.
+#
+# Bring up:   docker compose -f simulation/mf_harness/docker-compose.yaml up --build -d
+# Drive it:   docker compose -f simulation/mf_harness/docker-compose.yaml run --rm driver
+# Tear down:  docker compose -f simulation/mf_harness/docker-compose.yaml down -v
+
+name: ifet-mf-harness
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    ports:
+      - "127.0.0.1:11883:1883"
+    networks: [mf]
+    restart: unless-stopped
+
+  stub-api:
+    build: ./stub_api
+    environment:
+      # `off` reproduces today's production response shape: no run binding at all.
+      RUN_BINDING: "${RUN_BINDING:-on}"
+      STUB_PRESSURE: "${STUB_PRESSURE:-5.0}"
+      STUB_DURATION: "${STUB_DURATION:-2}"
+    ports:
+      - "127.0.0.1:18000:8000"
+    networks: [mf]
+    restart: unless-stopped
+
+  state_machine_service:
+    build: ../../src/state_machine/
+    volumes:
+      - ./config-mf-sim.json:/app/config.json:ro
+      - ./logs/state_machine:/app/logs
+    depends_on: [mosquitto, stub-api]
+    networks: [mf]
+    restart: unless-stopped
+
+  fake_serial_service:
+    build: ../../src/fake_serial_service/
+    volumes:
+      - ./config-mf-sim.json:/app/config.json:ro
+      - ./logs/fake_serial:/app/logs
+    depends_on: [mosquitto]
+    networks: [mf]
+    restart: unless-stopped
+
+  fake_valves_service:
+    build: ../../src/fake_valves_node/
+    volumes:
+      - ./config-mf-sim.json:/app/config.json:ro
+      - ./logs/fake_valves:/app/logs
+    depends_on: [mosquitto]
+    networks: [mf]
+    restart: unless-stopped
+
+  fake_sick_service:
+    build: ../../src/fake_sick_service/
+    volumes:
+      - ./config-mf-sim.json:/app/config.json:ro
+      - ./logs/fake_sick:/app/logs
+    depends_on: [mosquitto]
+    networks: [mf]
+    restart: unless-stopped
+
+  # Plays the operator: sends the MQTT start command, then ramps the VFD slider
+  # until the setpoint is reached (static pressure is an operator slider on the real
+  # rigs - see evidence/firmware-production-runtime-contract-2026-08-31.md), then
+  # reads the stub's ledger and asserts the MF properties.
+  driver:
+    build: ./driver
+    volumes:
+      - ./driver:/app:ro
+    environment:
+      BROKER_HOST: mosquitto
+      API_BASE: http://stub-api:8000
+      DEVICE_ID: device901
+      PROJECT_ID: mf-project-1
+    networks: [mf]
+    profiles: [driver]
+
+networks:
+  mf:
+    driver: bridge

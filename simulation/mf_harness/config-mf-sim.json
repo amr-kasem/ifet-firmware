@@ -1,0 +1,114 @@
+{
+  "_comment": "MF harness rig config. Isolated by construction: the broker and API names resolve only inside the harness compose network, and the device identity is deliberately NOT device1/device2/test-device so it can never collide with a real rig on a shared broker. device_id must stay 'device' + id, because set_vfd_speed publishes to device{id}/vfd/command. Schema parity with deployment/config/config{1,2}.json is deliberate and checked; the only intended differences are identity, endpoints, the `sick` block, and the omitted `turbo` block.",
+  "device_id": "device901",
+  "id": "901",
+  "status": "idle",
+  "current_speed": 0,
+  "toggleBtn": "static_load",
+  "recovery_time": 3,
+  "cyclic_skip_recovery": false,
+  "serial": {
+    "port": "/dev/null",
+    "baudrate": 9600,
+    "bytesize": 8,
+    "parity": "PARITY_NONE",
+    "stopbits": 1,
+    "timeout": 0.05,
+    "mode": "MODE_RTU",
+    "clear_buffers_before_each_transaction": true,
+    "close_port_after_each_call": true,
+    "retries": 3
+  },
+  "mqtt": {
+    "broker_host": "mosquitto",
+    "broker_port": 1883,
+    "username": "",
+    "password": ""
+  },
+  "api": {
+    "base_url": "http://stub-api:8000"
+  },
+  "sick": {
+    "gauges": [
+      "1",
+      "2"
+    ],
+    "unit": "mm",
+    "poll_interval": 0.2
+  },
+  "sensors": [
+    {
+      "name": "1",
+      "address": "1",
+      "debug": false,
+      "value": "",
+      "active": true,
+      "type": "pressure",
+      "scale": 144,
+      "unit": "PSF"
+    }
+  ],
+  "vfd": {
+    "name": "vfd901",
+    "address": "12",
+    "debug": false,
+    "frequency": 20
+  },
+  "valves": [
+    {
+      "name": "1",
+      "pin": 13,
+      "role": [
+        "ACTIVE",
+        "POSITIVE",
+        "POSITIVE_TURBO"
+      ],
+      "value": 0,
+      "address": "1"
+    },
+    {
+      "name": "2",
+      "pin": 35,
+      "role": [
+        "ACTIVE",
+        "NEGATIVE",
+        "RELIEF",
+        "NEGATIVE_TURBO_SLAVE"
+      ],
+      "value": 0,
+      "address": "2"
+    },
+    {
+      "name": "3",
+      "pin": 31,
+      "role": [
+        "ACTIVE",
+        "POSITIVE",
+        "NEGATIVE_RELEASE",
+        "RELIEF"
+      ],
+      "value": 0,
+      "address": "3"
+    },
+    {
+      "name": "4",
+      "pin": 15,
+      "role": [
+        "ACTIVE",
+        "NEGATIVE",
+        "POSITIVE_RELEASE",
+        "NEGATIVE_TURBO",
+        "POSITIVE_TURBO_SLAVE"
+      ],
+      "value": 0,
+      "address": "4"
+    }
+  ],
+  "valves_status": {
+    "valve1": 1,
+    "valve2": 1,
+    "valve3": 1,
+    "valve4": 1
+  },
+  "_comment_turbo": "`turbo` is deliberately absent. Every production config defines it, which is why the missing turbo_id default in StateMachine.__init__ stayed latent; omitting it here keeps the non-turbo path covered."
+}
