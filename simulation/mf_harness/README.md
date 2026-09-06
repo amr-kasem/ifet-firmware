@@ -1,7 +1,7 @@
 # MF harness — an isolated simulated rig
 
 Exercises **run/stage association** end to end without a rig: the delivery plan's **MF**
-milestone, closing gaps **G1** (the work order never reaches the rig) and **G2** (the
+milestone, closing gaps **DG1** (the work order never reaches the rig) and **DG2** (the
 callback shape has no run, stage or event ID).
 
 ## Read this before you bring up any simulated rig

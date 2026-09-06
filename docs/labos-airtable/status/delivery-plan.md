@@ -56,10 +56,10 @@ against production, and no code has ever carried a result end to end.**
 |---|---|---|---|---|
 | 1 | Airtable → mirror, 60 s full paginated read, staged then atomically published | **Full** | LabOS | contract §7 |
 | 2 | mirror → import by permanent IDs → programme / specimen | **Full** | LabOS | contract §2 |
-| 3 | requirement → independently verified snapshot → run create | data ✔ · **no capture surface** | LabOS | contract §3.3 · gap **G5** |
-| 4 | run → work order the rig can execute | **decided + firmware landed**; backend half open | LabOS + firmware | gap **G1** |
-| 5 | rig → `/trials` → stage trial bound to a run | **decided + firmware landed**; backend half open | LabOS + firmware | gap **G2** |
-| 6 | manual capture — Impact, Forced Entry, ANSI Z97.1 | **one sentence for 3 of 5 types** | LabOS | gap **G3** |
+| 3 | requirement → independently verified snapshot → run create | data ✔ · **no capture surface** | LabOS | contract §3.3 · gap **DG5** |
+| 4 | run → work order the rig can execute | **decided + firmware landed**; backend half open | LabOS + firmware | gap **DG1** |
+| 5 | rig → `/trials` → stage trial bound to a run | **decided + firmware landed**; backend half open | LabOS + firmware | gap **DG2** |
+| 6 | manual capture — Impact, Forced Entry, ANSI Z97.1 | **one sentence for 3 of 5 types** | LabOS | gap **DG3** |
 | 7 | terminal → first review → verdict, corrections | **Full** | LabOS | contract §4 |
 | 8 | run → outbox → worker → Airtable upsert | **Full — strongest part** | LabOS | contract §7.1 |
 | 9 | original photo → persisted preview → attachment | **Full** | LabOS | contract §6 |
@@ -68,9 +68,9 @@ against production, and no code has ever carried a result end to end.**
 **Six legs solid, one partial, three holes — and all three holes are on the rig side of a run.** The design
 is a complete specification of the Airtable boundary and an incomplete specification of LabOS internals.
 
-**Legs 4 and 5 now have an agreed wire contract and a working firmware implementation** (§5 G1/G2), proven
+**Legs 4 and 5 now have an agreed wire contract and a working firmware implementation** (§5 DG1/DG2), proven
 against an isolated simulated rig. What is left on both is the backend half: minting the binding on the two
-GETs, and keying the trials route on `event_id`. Leg 6 (G3) is untouched.
+GETs, and keying the trials route on `event_id`. Leg 6 (DG3) is untouched.
 
 ---
 
@@ -85,9 +85,9 @@ statement, it gets a row, not a new document.
 |---|---|---|---|
 | 1 · Pick the work | Selects Project → Mock-up → Protocol → Section, **from the local cache** — never a live Airtable call, so a network blip cannot block them. Sections show Required/Not Required/Unconfirmed, supported or not, complete or not | M2 read cache · M3 pickers · **MU** screens | Names are display only; permanent record IDs route everything |
 | 2 · **Verify the numbers** | Enters the actual inward/outward pair from the trusted proposal, the proposal reference, who verified, and when. Airtable's values are shown alongside for comparison but **cannot start a rig** | M3 backend gate · **MU** form | **This step adds operator work, and is the one thing we cannot remove from our side.** It relaxes to a one-click confirm the day the extractor is fixed. Contradicts their "no double entry" rule — say so explicitly, do not let them discover it |
-| 3 · Set up the run | Picks attached gauges, reviews the derived loading sequence, starts. Requirement snapshot, procedure version, stage plan and identity all **freeze** here | M3 run create · **MU** | A later Airtable edit never mutates a live run — it means a new run. Gauge selection vs `GAUGE_COUNT` is unreconciled (§5 G6) |
-| 4a · Static Load / Cycles | Watches the rig execute; stages and trials record themselves | **MF** + M3 | Until MF lands, the verified pair from step 2 sits on the run while the rig reads the old `static_tests` row (§5 G1, G2) |
-| 4b · Impact / Forced Entry / ANSI | Presses the test button and types results, notes and photos into a form that **already knows** project, mock-up, protocol, system, operator and attempt number | M3 entities/routes · **MU** screens | No model, no route, no table exists today (§5 G3). Impact *requirements* are not in the register either (§5 G7) |
+| 3 · Set up the run | Picks attached gauges, reviews the derived loading sequence, starts. Requirement snapshot, procedure version, stage plan and identity all **freeze** here | M3 run create · **MU** | A later Airtable edit never mutates a live run — it means a new run. Gauge selection vs `GAUGE_COUNT` is unreconciled (§5 DG6) |
+| 4a · Static Load / Cycles | Watches the rig execute; stages and trials record themselves | **MF** + M3 | Until MF lands, the verified pair from step 2 sits on the run while the rig reads the old `static_tests` row (§5 DG1, DG2) |
+| 4b · Impact / Forced Entry / ANSI | Presses the test button and types results, notes and photos into a form that **already knows** project, mock-up, protocol, system, operator and attempt number | M3 entities/routes · **MU** screens | No model, no route, no table exists today (§5 DG3). Impact *requirements* are not in the register either (§5 DG7) |
 | 5 · Finish | Explicitly completes, or aborts with a reason. Evidence freezes | M3 | Never infer completion from a timeout or a disconnect; missing telemetry is not a pass |
 | 6 · Review | A **named reviewer** records Pass/Fail/Inconclusive and Retest Required, once, with reasoning | M3 verdict route · **MU** | Nothing writes pass/fail today — this step is new. Operator and reviewer are stored separately even when the same person |
 | 7 · It reaches Airtable | Sees a status chip: Synced / Pending / Sync Failed / Retry Required | M2 outbox + worker · **MU** chip | Their four words are our four contractual values. A correction is a new attempt, never an edit of the old |
@@ -223,9 +223,65 @@ ask about when they see M3.
 
 ---
 
-## 5. Open gaps — close before M3 can be demonstrated
+## 5. Gaps — consolidated
 
-### G1 · The work order never reaches the rig — **DECIDED; firmware half landed**
+**`DG*` are delivery gaps and this file owns them.** They were plain `G*` until 2026-09-06, which collided
+with a second, older vocabulary: `G1`–`G5` and `gap H` in `../contract/write-contract-v0.4.md` §9–§10 are
+**legacy July item labels** meaning entirely different subjects. Five letters, two meanings, no marker for
+which — so a reference to "G1" could not be resolved without knowing who wrote it. The prefix fixes that.
+The contract keeps its legacy labels untouched; nothing there needs to change.
+
+| Legacy label | Subject | Where it lives now | Evidence |
+|---|---|---|---|
+| `G2` | the sign question | **Closed** — typed magnitudes, no legacy parsing | contract §9 |
+| `G4` | achieved-pressure acquisition | milestone **M7** | contract §10 |
+| `G5` | field creation | **authorized delivery work** — the 14 applied fields | contract §9 |
+| `G1`, `G3` | **not recoverable** — see below | probably **M6** | contract §9 |
+| `gap H` | the firmware leg had no milestone | **DG4**, below — closed by MF | this file |
+
+Legacy `G1` and `G3` did not survive the consolidation: no definition of either exists in the current
+doc set, and git history carries only the labels. Contract §9 groups them with `G4` as "retain the
+release behavior until evidence supports widening it", and that is the omission trio — so they are
+almost certainly `Deflection Value` and `Deflection Unit`, which makes them **M6** / legacy item 27.
+**Read that as an inference, not a record.** If the July plan resurfaces, confirm it.
+
+### Status of all eleven
+
+| | Gap | State | Owner | Blocks | What actually unblocks it |
+|---|---|---|---|---|---|
+| **DG3** | Impact / Forced Entry / ANSI have no backend | 🔴 **OPEN — the largest piece of work left** | LabOS | M3, MU | nobody else. Ours to build |
+| **DG1** | Work order never reaches the rig | 🟡 **Decided · firmware landed** | LabOS + firmware | MF, M3 | backend: mint `run` on the two GETs |
+| **DG2** | Callback has no run / stage / event ID | 🟡 **Decided · firmware landed** | LabOS + firmware | MF, M3 | backend: key `/trials` on `event_id`; record unbound as unmapped |
+| **DG5** | No operator surface | 🟡 **Scoped as MU** | LabOS | whether the release is usable | M3, plus DG7/DG8 decided |
+| **DG6** | Register / entity drift · sync deployment unspecified | 🟡 **OPEN — mechanical** | LabOS | M2 exit tidiness | our own edit; an hour |
+| **DG7** | Impact requirements not in the register | 🔵 **OPEN — needs Airtable** | Airtable + LabOS | MU, register close | **the 2026-09-06 notice being sent**, then their answer |
+| **DG8** | Forced Entry / ANSI / failure-note output shape | 🔵 **OPEN — needs Airtable** | Airtable + LabOS | MU, field creation | same notice. Ask which report needs them |
+| **DG9** | Loading-sequence ownership never agreed | 🔵 **OPEN — needs Airtable** | Airtable + LabOS | what a Protocol Section must carry | same notice. Our recommendation already stands |
+| **DG4** | Firmware leg had no milestone (`gap H`) | ✅ **Closed** | — | — | MF exists; July item 53 delivered |
+| **DG10** | Sim harness undocumented, and aimed at production | ✅ **Closed** | LabOS | — | `simulation/mf_harness/` + warnings + §11 rule |
+| **DG11** | Two latent firmware crashes | ✅ **Fixed, not deployed** | LabOS | system-2's turbo path | **a deploy decision of its own** |
+
+**Read the colours as ownership, not severity.** 🔵 is the only work that cannot start today, and all three
+🔵 gaps are unblocked by one unsent document. 🔴 and 🟡 are entirely ours.
+
+---
+
+## 5a. Open — ours, and nothing external blocks them
+
+### DG3 · Three of five test types have no backend at all — **critical**
+
+| Type | Model | Route | Table |
+|---|---|---|---|
+| Static Load, Cycles | ✔ | ✔ | ✔ |
+| Impact | `MissileImpactTest` / `Shot` exist — **read-only, report generation only** (`main.py:992-1009`) | ✗ | ✔ |
+| Forced Entry | ✗ | ✗ | ✗ |
+| ANSI Z97.1 | ✗ | ✗ | ✗ |
+
+`grep -rniE 'forced.?entry|ansi' app/` hits only the unwired v0.3 `contract.py` and the LaTeX template.
+Against that, the plan gives Static/Cycles a full identity design and gives these three one sentence.
+Neither Forced Entry nor ANSI appears in any acceptance check as a **capture** case.
+
+### DG1 · The work order never reaches the rig — **DECIDED; firmware half landed**
 
 `grep -niE 'mqtt|state.?machine|test_index|device'` over contract v0.4 **and** the design returns zero hits.
 The real path (`ifet-firmware/src/state_machine/state_machine.py:337-372`):
@@ -247,7 +303,7 @@ object — `labos_attempt_id`, `programme_id`, `stage_id`, `stage_ordinal`. Cons
 - **`test_index` allocation and `static_tests` materialisation stay exactly where they are.** MF adds
   identity to an existing exchange rather than replacing the addressing scheme, which is what kept the
   change additive enough to be safe on production rigs.
-- **Cyclic works the same way for free.** G1/G2 were written around static's `(project_id, test_index)`, but
+- **Cyclic works the same way for free.** DG1/DG2 were written around static's `(project_id, test_index)`, but
   cyclic never had a `test_index` at start — it calls `GET /projects/{pid}/next-cyclic-test` and the server
   already chooses. That made cyclic the *easier* binding, not a second problem.
 
@@ -256,7 +312,7 @@ payload at every start and mints one stage event ID. **Still open — the backen
 those two GETs. Until then a real rig gets no binding and every callback is unmapped, which is the designed
 degradation, not a failure.
 
-### G2 · Two incompatible callback shapes — **DECIDED; firmware half landed**
+### DG2 · Two incompatible callback shapes — **DECIDED; firmware half landed**
 
 Firmware posts to `/projects/{pid}/static_tests/{idx}/trials` (`api/api.py:28-45`):
 
@@ -291,30 +347,7 @@ receives today. Three rules, all three now covered by tests:
 **Still open — the backend half:** keying the trials route on `event_id`, and recording an unbound callback as
 unmapped rather than attaching it to a guessed run.
 
-### G3 · Three of five test types have no backend at all — **critical**
-
-| Type | Model | Route | Table |
-|---|---|---|---|
-| Static Load, Cycles | ✔ | ✔ | ✔ |
-| Impact | `MissileImpactTest` / `Shot` exist — **read-only, report generation only** (`main.py:992-1009`) | ✗ | ✔ |
-| Forced Entry | ✗ | ✗ | ✗ |
-| ANSI Z97.1 | ✗ | ✗ | ✗ |
-
-`grep -rniE 'forced.?entry|ansi' app/` hits only the unwired v0.3 `contract.py` and the LaTeX template.
-Against that, the plan gives Static/Cycles a full identity design and gives these three one sentence.
-Neither Forced Entry nor ANSI appears in any acceptance check as a **capture** case.
-
-### G4 · The firmware leg has no milestone — and this is a regression
-
-The July internal plan — retired into this file, recoverable from git history — tracked it as **gap H** and off-dashboard
-items **51** (capture actual & max pressure) and **53** (thread IDs through `start` + result POST), scheduled
-for **W2** — which is now. The September design's M0–M7 are entirely backend, Airtable and metrology. Item 51
-survived as **M7** under a new name; **item 53 and gap H were lost.** They are G1 and G2 above.
-
-**Item 53 is now delivered on the firmware side, in W2 as originally scheduled** — `bind_run()`, the echoed
-binding and the stage event ID. Gap H's remaining half is the backend. Item 51 stays M7, still hardware-bound.
-
-### G5 · No operator surface — now scoped as MU, not closed
+### DG5 · No operator surface — now scoped as MU, not closed
 
 Contract §3.3 requires the operator to enter the verified pair, its reference, verifier and time. A8 deferred
 the UI, and M3 is "all five backend workflows" — so the release was an API with no consumer, and **no rig
@@ -325,7 +358,25 @@ Still true and still worth writing down: **M1–M5 acceptance is API-level**, an
 Airtable values" persists past M5 regardless of MU, because that constraint belongs to the extractor, not to
 the interface.
 
-### G7 · Impact requirements are not in the register
+### DG6 · Register and entity drift — small, mechanical
+
+| Item | Problem |
+|---|---|
+| `completion_source` | Required by contract §2; absent from the register **and** from §4.1's run columns (now added above) |
+| `identity_assurance = declared` | Required by contract §4; same absence (now added above) |
+| Sync service deployment | Contract §7 says "one container, no public port" and stops — no compose service, env var names, credential source or health policy, in a design that specifies fencing semantics to the sentence |
+| Gauge selection | `GAUGE_COUNT` is a snapshotted programme parameter (contract §3.2); firmware takes `selectedSensors[]` live at MQTT start. Never reconciled; a mismatch at start has no defined behaviour |
+| `Test Name`, `Abort Reason` | JSON-only by contract §6 — correct, but they have no register row, so a register-vs-JSON diff reports them missing. Note it in the register header |
+
+---
+
+---
+
+## 5b. Open — waiting on the Airtable team
+
+**All three are unblocked by the same unsent notice**, `../correspondence/airtable-team-questions-2026-09-06.md`.
+
+### DG7 · Impact requirements are not in the register
 
 Their message asks LabOS to receive "impact requirements" so the operator stops retyping them. The register
 carries only a **count** of impacts (`IMPACT_LMI` / `IMPACT_SMI` as Count/impacts). Missile type, missile
@@ -337,7 +388,7 @@ at all**: the protocol normally fixes the missile and velocity, so Airtable may 
 deviations, plus `Impact Locations`, whose relationship to the total-impacts count is itself unsettled.
 Decide with them before creating the fields.
 
-### G8 · Forced Entry, ANSI and failure notes — output shape reopened
+### DG8 · Forced Entry, ANSI and failure notes — output shape reopened
 
 Their message lists "forced-entry results", "ANSI Z97.1 results" and "failure notes" as things LabOS sends
 back. §7 decided sub-detail lives in JSON with `Test Result` carrying pass/fail, and to add a dedicated scalar
@@ -348,7 +399,7 @@ Three rows are in the register as `OPEN`/`PROPOSED`. **Ask which report needs th
 decide Forced Entry and ANSI together or not at all. `Failure Notes` is the easiest of the three and the most
 likely to be genuinely wanted: today one `Notes` field carries both meanings.
 
-### G9 · Loading sequences — ownership never agreed
+### DG9 · Loading sequences — ownership never agreed
 
 Their message lists loading sequences as flowing **from** Airtable into LabOS. Nothing in Airtable holds
 them; LabOS derives 14+ stages from the verified inward/outward pair, and that derivation is validated to
@@ -359,7 +410,21 @@ already proven, and it removes a thing that would otherwise have to stay in sync
 that is currently an assumption on our side and a different assumption on theirs — settle it in writing
 before M3, because it changes what a Protocol Section has to carry.
 
-### G10 · The simulation harness existed, was undocumented, and pointed at production — **closed**
+---
+
+## 5c. Closed — kept for the record, and because each one changed the plan
+
+### DG4 · The firmware leg had no milestone — a regression, now closed
+
+The July internal plan — retired into this file, recoverable from git history — tracked it as **gap H** and off-dashboard
+items **51** (capture actual & max pressure) and **53** (thread IDs through `start` + result POST), scheduled
+for **W2** — which is now. The September design's M0–M7 are entirely backend, Airtable and metrology. Item 51
+survived as **M7** under a new name; **item 53 and gap H were lost.** They are DG1 and DG2 above.
+
+**Item 53 is now delivered on the firmware side, in W2 as originally scheduled** — `bind_run()`, the echoed
+binding and the stage event ID. Gap H's remaining half is the backend. Item 51 stays M7, still hardware-bound.
+
+### DG10 · The simulation harness existed, was undocumented, and pointed at production — **closed**
 
 `grep -rniE 'simulat|fake_serial|device_node' docs/` returned **zero hits** before 2026-09-06, so the plan
 treated a rig as the only way to exercise the firmware legs, and §10 called the offline `test` node "the
@@ -381,7 +446,7 @@ ports on 11883/18000, rig identity `device901`, and a stub backend. Config schem
 `config{1,2}.json` is checked and differs only in identity, endpoints, the `sick` block and the deliberately
 omitted `turbo` block. Operating rule now in §11.
 
-### G11 · Two latent firmware crashes, found by running the harness — **fixed**
+### DG11 · Two latent firmware crashes, found by running the harness — **fixed**
 
 Neither is MF, and neither is theoretical:
 
@@ -394,31 +459,44 @@ Both are one-line fixes on `feature/labos-firmware-p3`. **Neither is deployed**,
 live-rig fault on system-2's turbo path, so it wants a deploy decision of its own rather than riding along
 with MF.
 
-### G6 · Register and entity drift — small, mechanical
-
-| Item | Problem |
-|---|---|
-| `completion_source` | Required by contract §2; absent from the register **and** from §4.1's run columns (now added above) |
-| `identity_assurance = declared` | Required by contract §4; same absence (now added above) |
-| Sync service deployment | Contract §7 says "one container, no public port" and stops — no compose service, env var names, credential source or health policy, in a design that specifies fencing semantics to the sentence |
-| Gauge selection | `GAUGE_COUNT` is a snapshotted programme parameter (contract §3.2); firmware takes `selectedSensors[]` live at MQTT start. Never reconciled; a mismatch at start has no defined behaviour |
-| `Test Name`, `Abort Reason` | JSON-only by contract §6 — correct, but they have no register row, so a register-vs-JSON diff reports them missing. Note it in the register header |
-
----
-
 ## 6. Milestones
+
+### 6.0 What happens next, in order — and why that order
+
+Sequenced by dependency, not by size. Steps 1 and 2 have no prerequisites and can run in parallel.
+
+| # | Do this | Why now | Closes |
+|---|---|---|---|
+| **1** | **Send `../correspondence/airtable-team-questions-2026-09-06.md`** | The only work on this whole plan that **cannot start on our side**, and it gates three gaps and MU. It is a planned-change notice, not a permission request, so nothing is waiting on us to decide first. Every day it sits is a day of calendar, not a day of work | unblocks **DG7 · DG8 · DG9** |
+| **2** | **M2 — disposable PostgreSQL harness, then P1 + the new revision as one ordered upgrade, then close the eight §8 deviations** | Nothing else can be proven without it: every §7 guarantee is invisible in SQLite, and the committed outbox is contract-non-compliant in eight named ways. It is also the schema MF's backend half mints its binding from | **M2**, and the §8 list |
+| **3** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record unbound callbacks as unmapped | Cheapest remaining win. The wire contract is fixed, the firmware side is done and provable locally, and `simulation/mf_harness/` already asserts what the backend must honour. Needs M2's run table to exist first | **DG1 · DG2** → **MF** |
+| **4** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | The largest piece of work left, and the only one of the five test types' workflows that has no model, no route and no table. M3 cannot be demonstrated without it | **DG3** → **M3** |
+| **5** | **M1's outstanding fixture**, and **DG6**'s mechanical drift | Small, and both feed M2/M3 exit evidence — the fixture is also contract legacy item 11 | **M1**, **DG6** |
+| **6** | **MU — the operator interface** | Last, because it needs M3 and the answers from step 1. Also the only thing that makes the release usable: §2 step 2 exists only if there is somewhere to type it | **DG5** → **MU** |
+
+**Out of band — do not queue these behind the six.**
+
+- **DG11 is a live-rig fault, not integration work.** `start_vfd.py` would kill the state loop on **system-2's
+  turbo path**. It is fixed and committed but **not deployed**, and it deserves its own deploy decision
+  rather than waiting for M5's window.
+- **Verify the running firmware matches this tree.** The harness builds from the repo; production runs a
+  baked image, and system-1 is known to carry an uncommitted `recovery_time` edit. A read-only
+  `sha256sum` of the `*.py` inside each running `state_machine` container settles it. Until then, "the
+  harness proves the firmware" has an unmeasured gap in it.
+- **M6 and M7 need bench/rig hardware.** One ask covers both, and the rig now being connected to the fleet
+  may be it — confirm which node and when.
 
 | M | Deliverable | Owner | Exit evidence | Depends on |
 |---|---|---|---|---|
 | ~~**M1**~~ | Testing Base additions — **14 fields applied 2026-09-06**; synthetic linked fixture still outstanding | LabOS | ✅ Schema diff, before/after, field IDs and per-field reasons captured. ⬜ Fixture: asymmetric pair, blank/N-A/unknown examples | — |
 | **M2** | **Disposable PostgreSQL harness first**, then local migration and the first vertical flow | LabOS | Two independent worker processes on separate connections; concurrent-enqueue, competing-worker, slow-send, stale-owner green; import → run → finish → worker restart → one Testing Base attempt | — |
-| **MF** | **Firmware run/stage association — G1 + G2.** Firmware half ✅ 2026-09-06; **backend half open** | LabOS + firmware | ✅ Firmware: 22 unit tests, plus both harness scenarios green — a start carries a run identity, the callback echoes it with a stable event ID, replay creates nothing, and a pre-MF response yields an UNMAPPED callback rather than a guessed run. ⬜ Backend: mint the binding on the two GETs, key the trials route on `event_id`, record unbound callbacks as unmapped. ⬜ Then re-run on a real rig | M2 identity (backend half only) |
-| **M3** | All five backend workflows, review, corrections, evidence — **including G3 capture for Impact / Forced Entry / ANSI** | LabOS | §7 acceptance cases | M2, MF |
-| **MU** | **Operator interface — the seven steps in §2.** Pickers, the verification form, run setup, the three manual-entry screens, review, and the sync-status chip | LabOS | An operator completes each of the five test types end to end without retyping anything Airtable already holds, and without a rig starting on unverified numbers | M3 · G7/G8 decided |
+| **MF** | **Firmware run/stage association — DG1 + DG2.** Firmware half ✅ 2026-09-06; **backend half open** | LabOS + firmware | ✅ Firmware: 22 unit tests, plus both harness scenarios green — a start carries a run identity, the callback echoes it with a stable event ID, replay creates nothing, and a pre-MF response yields an UNMAPPED callback rather than a guessed run. ⬜ Backend: mint the binding on the two GETs, key the trials route on `event_id`, record unbound callbacks as unmapped. ⬜ Then re-run on a real rig | M2 identity (backend half only) |
+| **M3** | All five backend workflows, review, corrections, evidence — **including DG3 capture for Impact / Forced Entry / ANSI** | LabOS | §7 acceptance cases | M2, MF |
+| **MU** | **Operator interface — the seven steps in §2.** Pickers, the verification form, run setup, the three manual-entry screens, review, and the sync-status chip | LabOS | An operator completes each of the five test types end to end without retyping anything Airtable already holds, and without a rig starting on unverified numbers | M3 · DG7/DG8 decided |
 | **M4** | Change document with actual implementation results | LabOS | Every planned change marked applied/verified or outstanding | M1–M3 |
 | **M5** | Production cutover, separately scheduled | LabOS + IFET | Schema/automation acceptance, migration rehearsal, preflight, agreed window | M4 · window |
 | **M6** | Deflection calibration (legacy item 27) | LabOS | Known displacement applied to a gauge, transform identified end to end; `Deflection Value`/`Unit` unquarantined **or** the omission reconfirmed with evidence | bench/rig hardware |
-| **M7** | Achieved-pressure acquisition (G4 legacy, off-board item 51) | LabOS | A validated measurement source for `Max Pressure Achieved`, **or** the omission reconfirmed with evidence | bench/rig hardware |
+| **M7** | Achieved-pressure acquisition (**legacy** gap G4 — the contract's vocabulary, not DG4; off-board item 51) | LabOS | A validated measurement source for `Max Pressure Achieved`, **or** the omission reconfirmed with evidence | bench/rig hardware |
 
 **M2 is one unit** — fixing sequence allocation alone leaves ordering unsafe. **MF is new and gates M3**;
 it is the July commitment being re-entered, not new scope. **MF's firmware half no longer waits on M2 or on
@@ -513,7 +591,7 @@ out of browser-served config.
 **Schema is no longer a permission question.** LabOS is authorized to define and add the required fields in
 the Testing Base with a documented change register. 73 register rows — **66 DECIDED** (44 BASELINE,
 **14 APPLIED**, 4 CONDITIONAL, 3 OMITTED, 1 PLANNED local-only) plus **7 OPEN/PROPOSED** raised by their
-2026-09-06 workflow message and held until §5 G7/G8 are settled with them.
+2026-09-06 workflow message and held until §5 DG7/DG8 are settled with them.
 
 **The 14 decided additions were applied to the Testing Base on 2026-09-06** — field IDs, before/after schema
 and the reason for each are in `../evidence/testing-base-changes-2026-09-06/`. Production is unchanged and
@@ -574,7 +652,7 @@ implementation. `correspondence/sent/` is append-only; never edit an artifact th
 | **A decision on already-reported results** | A shifted value reached a Passed record. Quality/business call, not an engineering one | On the blast-radius report |
 
 **Dates.** The original 2026-07-23 → 2026-08-27 window closed, and the 2026-10-09 pilot target has **not been
-revalidated** against MF, G3 or the hardware dependency. No new date is committed here until M1 and M2 land;
+revalidated** against MF, DG3 or the hardware dependency. No new date is committed here until M1 and M2 land;
 quoting the October target as live would be a fabrication.
 
 ---
@@ -596,7 +674,7 @@ quoting the October target as live would be a fabrication.
   `ifet-management-tunnel.service` active, `127.0.0.1:1883` and `127.0.0.1:8000` are the **production**
   broker and API; that compose uses `network_mode: "host"` with `config1-d.json`, whose `device_id` is
   `device1` — system-1's identity. Use `simulation/mf_harness/` instead: private bridge network, ports
-  11883/18000, identity `device901`. A simulated rig must never be able to reach a real broker. §5 G10.
+  11883/18000, identity `device901`. A simulated rig must never be able to reach a real broker. §5 DG10.
 - **Secrets never enter git**, and never `deployment/config/config.json` or `src/ifet_ui_react/config.json` —
   both are served to the browser.
 - **Docs:** this file is the delivery authority and is edited in place. New dated `.md` files belong in

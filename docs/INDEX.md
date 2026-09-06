@@ -28,7 +28,7 @@ evidence, correspondence or a runbook.
    live database before any schema work.
 4. **A simulated rig must never be able to reach a real broker.** With `ifet-management-tunnel.service`
    active, `127.0.0.1:1883` and `127.0.0.1:8000` are **production**. Use `../simulation/mf_harness/`, never
-   `../simulation/ifet_device_node/`, whose config carries system-1's own `device_id`. Plan §5 G10 · §11.
+   `../simulation/ifet_device_node/`, whose config carries system-1's own `device_id`. Plan §5 DG10 · §11.
 
 ---
 
@@ -47,14 +47,14 @@ evidence, correspondence or a runbook.
 | **The pre-change schema baseline of both bases** | `labos-airtable/schema/baseline-2026-09-05/` | diffed by `ifet-management` `app/airtable/baseline.py` |
 | **What LabOS really stores — types, derivations, units** | `labos-airtable/evidence/labos-real-data-types-2026-08-31.md` | contract §10.3 · §10.19 · §10.24 · §10.25 |
 | **How our envelope compares to their own sample row** | `labos-airtable/evidence/reference-row-reconciliation-2026-08-28.md` | contract §10.24–§10.26 |
-| **What the rigs actually receive, do and return** — the Management ↔ Firmware execution contract | `labos-airtable/evidence/firmware-production-runtime-contract-2026-08-31.md` | the plan's §5 gaps G1–G4 · contract §10.19 · §10.27 · `hardware/README.md` |
+| **What the rigs actually receive, do and return** — the Management ↔ Firmware execution contract | `labos-airtable/evidence/firmware-production-runtime-contract-2026-08-31.md` | the plan's §5 gaps DG1–DG4 · contract §10.19 · §10.27 · `hardware/README.md` |
 | **How a schema change reaches production** (alembic, bind mounts, autogenerate-at-boot) | `labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` | `ifet-management` `startup.sh` + `compose.yaml` are the mechanism it documents |
 | **How to deploy to `management`** | `labos-airtable/runbooks/p0-p1-deploy-2026-08-28.md` — **§2 is the decision point** | `ifet-management/deployment/SECRETS.md` §2 |
 | **What the Airtable team actually received** | `labos-airtable/correspondence/sent/` — **the artifacts they hold** | every draft in `correspondence/` |
 | **Secret handling** | `ifet-management/deployment/SECRETS.md` | this index |
 | **Repo ↔ production ground truth and node git guardrails** | `operations/branch-reconcile-plan-2026-07-24.md` | Notion *Execution Record* |
 | **What was run on a node, when, with what blast radius** | `operations/ssh-session-record-2026-08-23.md` | each session gets its own record |
-| **How to exercise the firmware legs without a rig**, and why a simulated rig must never reach a real broker | `../simulation/mf_harness/README.md` | the plan's §5 G10 · §11 |
+| **How to exercise the firmware legs without a rig**, and why a simulated rig must never reach a real broker | `../simulation/mf_harness/README.md` | the plan's §5 DG10 · §11 |
 | **Hardware config — Modbus, VFD, valve pins** | `hardware/README.md` | — |
 | **Live task status** | Notion *Delivery & Progress Tracker* (Epic IFET-32) | — |
 
@@ -101,7 +101,7 @@ docs/
 | **`labos-airtable/contract/field-register.csv`** | 73 mapping rows — 66 DECIDED (44 BASELINE, **14 APPLIED**, 4 CONDITIONAL, 3 OMITTED, 1 PLANNED local-only) plus 7 OPEN/PROPOSED raised by IFET's 2026-09-06 workflow message. **14 decided field additions**, 7 proposed pending agreement. BASELINE means the field exists, never that mapping code exists. One LOCAL_ONLY row is queue metadata and is never created in Airtable |
 | **`labos-airtable/contract/interface-schema.csv`** | **Generated.** 168 rows joining both live base schemas to the register: per-base field IDs, `in_testing`/`in_production`, and `labos_use` — including the 95 fields LabOS deliberately ignores, which is the machine-readable form of "no billing, pricing, invoices or scheduling". Regenerate rather than edit |
 | `labos-airtable/evidence/testing-base-changes-2026-09-06/` | **The change document IFET asked for.** 14 fields added 2026-09-06, 142 → 156, with before/after schema, field IDs and the reason for each. Also records the 7 fields deliberately not created, and the three things to settle before production |
-| **`labos-airtable/status/delivery-plan.md`** | **The plan.** Probed state, the ten-leg data path, A1–A8, entities/API/concurrency/envelope, open gaps G1–G11, milestones M1–M7 + MF + MU, acceptance, committed-groundwork deviations, Airtable and IFET asks, operating rules |
+| **`labos-airtable/status/delivery-plan.md`** | **The plan.** Probed state, the ten-leg data path, A1–A8, entities/API/concurrency/envelope, the ordered next-actions list (§6.0), gaps DG1–DG11 grouped by state (§5, with the legacy `G*` crosswalk), milestones M1–M7 + MF + MU, acceptance, committed-groundwork deviations, Airtable and IFET asks, operating rules |
 | `labos-airtable/evidence/design-closure-2026-09-06.md` | Register/contract consistency checks and verified Notion updates at design closure |
 | `labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md` | The pre-closure v0.3 spec. Old `labos-airtable/contract/write-contract-v0.3.md` links resolve here |
 | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` | First live read of both bases: schema held, six items closed and six opened, the extraction defect (§5.2), and §8 — the message wording, stamped *Sent* |
