@@ -22,8 +22,8 @@ design and roadmap are one document, this one. Superseded snapshots live in git 
 | Code in the running `report-api` image | `app/{data,domain,utils}` only — **no `app/airtable/`, no `app/sync/`** |
 | Live routes | 25; **none** for airtable, sync, runs or import |
 | `test_results` rows | 640 |
-| `ifet-management` | `feature/labos-airtable` @ `d61f6f5` — all integration code, unmerged, **unwired** (`main.py` imports nothing from `app.sync`) |
-| `ifet-firmware` | `feature/labos-firmware-p3` — **docs only**; `git diff --stat dev...HEAD` shows `CLAUDE.md` alone |
+| `ifet-management` | `feature/labos-airtable` @ `2e535e6` — all integration code, unmerged, **unwired** (`main.py` imports nothing from `app.sync`). `d61f6f5` plus the schema-apply and interface-schema tools |
+| `ifet-firmware` | `feature/labos-firmware-p3` — docs, **plus the MF firmware change and the isolated simulation harness** (`simulation/mf_harness/`, `src/fake_sick_service/`). Not deployed to any rig |
 | Committed envelope code | `app/airtable/contract.py` pins `CONTRACT_VERSION = "0.3"` — **stale, rewrite to v0.4, do not extend** |
 | **Testing Base schema** | **M1 applied 2026-09-06** — 14 fields added, 142 → 156. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
 | Production Base schema | Unchanged, 142 fields. The 14 above are exactly the production delta (M5) |
@@ -57,8 +57,8 @@ against production, and no code has ever carried a result end to end.**
 | 1 | Airtable → mirror, 60 s full paginated read, staged then atomically published | **Full** | LabOS | contract §7 |
 | 2 | mirror → import by permanent IDs → programme / specimen | **Full** | LabOS | contract §2 |
 | 3 | requirement → independently verified snapshot → run create | data ✔ · **no capture surface** | LabOS | contract §3.3 · gap **G5** |
-| 4 | run → work order the rig can execute | **ABSENT** | LabOS + firmware | gap **G1** |
-| 5 | rig → `/trials` → stage trial bound to a run | named, **not designed** | LabOS + firmware | gap **G2** |
+| 4 | run → work order the rig can execute | **decided + firmware landed**; backend half open | LabOS + firmware | gap **G1** |
+| 5 | rig → `/trials` → stage trial bound to a run | **decided + firmware landed**; backend half open | LabOS + firmware | gap **G2** |
 | 6 | manual capture — Impact, Forced Entry, ANSI Z97.1 | **one sentence for 3 of 5 types** | LabOS | gap **G3** |
 | 7 | terminal → first review → verdict, corrections | **Full** | LabOS | contract §4 |
 | 8 | run → outbox → worker → Airtable upsert | **Full — strongest part** | LabOS | contract §7.1 |
@@ -67,6 +67,10 @@ against production, and no code has ever carried a result end to end.**
 
 **Six legs solid, one partial, three holes — and all three holes are on the rig side of a run.** The design
 is a complete specification of the Airtable boundary and an incomplete specification of LabOS internals.
+
+**Legs 4 and 5 now have an agreed wire contract and a working firmware implementation** (§5 G1/G2), proven
+against an isolated simulated rig. What is left on both is the backend half: minting the binding on the two
+GETs, and keying the trials route on `event_id`. Leg 6 (G3) is untouched.
 
 ---
 
@@ -221,7 +225,7 @@ ask about when they see M3.
 
 ## 5. Open gaps — close before M3 can be demonstrated
 
-### G1 · The work order never reaches the rig — **critical**
+### G1 · The work order never reaches the rig — **DECIDED; firmware half landed**
 
 `grep -niE 'mqtt|state.?machine|test_index|device'` over contract v0.4 **and** the design returns zero hits.
 The real path (`ifet-firmware/src/state_machine/state_machine.py:337-372`):
@@ -235,10 +239,24 @@ The rig's pressure comes from a **`static_tests` row addressed by `project_id` +
 such address. So §3.3 stores the verified pair on the run and the rig still reads the old
 `static_tests.pressure` — the verified-values requirement is enforced on a path the rig never touches.
 
-**Decide:** does run creation materialise/refresh `static_tests`/`cyclic_tests` from the frozen snapshot; who
-allocates `test_index`; does the MQTT start payload carry a run ID, or is the binding resolved server-side.
+**Decided: the binding is resolved server-side and handed back on the GET the rig already makes.**
+`GET /projects/{pid}/static-tests/{idx}` and `GET /projects/{pid}/next-cyclic-test` gain an optional `run`
+object — `labos_attempt_id`, `programme_id`, `stage_id`, `stage_ordinal`. Consequences, and why this option:
 
-### G2 · Two incompatible callback shapes — **critical**
+- **The MQTT `start` payload does not change**, so MF needs no UI release and no operator retraining.
+- **`test_index` allocation and `static_tests` materialisation stay exactly where they are.** MF adds
+  identity to an existing exchange rather than replacing the addressing scheme, which is what kept the
+  change additive enough to be safe on production rigs.
+- **Cyclic works the same way for free.** G1/G2 were written around static's `(project_id, test_index)`, but
+  cyclic never had a `test_index` at start — it calls `GET /projects/{pid}/next-cyclic-test` and the server
+  already chooses. That made cyclic the *easier* binding, not a second problem.
+
+Landed in firmware on `feature/labos-firmware-p3`: `StateMachine.bind_run()` takes the identity off the test
+payload at every start and mints one stage event ID. **Still open — the backend half:** minting the object on
+those two GETs. Until then a real rig gets no binding and every callback is unmapped, which is the designed
+degradation, not a failure.
+
+### G2 · Two incompatible callback shapes — **DECIDED; firmware half landed**
 
 Firmware posts to `/projects/{pid}/static_tests/{idx}/trials` (`api/api.py:28-45`):
 
@@ -249,8 +267,29 @@ Firmware posts to `/projects/{pid}/static_tests/{idx}/trials` (`api/api.py:28-45
 No run ID, no stage ID, **no event ID** — so §4.2's "duplicates replay safely" is unachievable through it.
 That makes this a firmware change, not a backend adaptation.
 
-**Decide:** firmware calls the new route · backend resolves `(project_id, test_index)` → active run · or both
-coexist during transition. An unmapped callback is preserved locally and excluded, never guessed into a run.
+**Decided: the existing route keeps its shape and gains two optional keys.** No new route, no transition
+period, no dual-write. The rig echoes the `run` object back and adds an `event_id` it minted at start:
+
+```json
+{"deflections": [{"deflection_gauge": "1", "max_deflection": "12.34",
+                  "permanent_deflection": "1.20", "recovery": 60}],
+ "event_id": "…", "run": {"labos_attempt_id": "…", "stage_id": "stg-static-0", …}}
+```
+
+Both keys are **omitted entirely** when absent, so a pre-MF backend receives byte-for-byte the body it
+receives today. Three rules, all three now covered by tests:
+
+1. **`event_id` is minted per stage attempt and reused across POST retries** — that is what makes a retry a
+   replay the backend can dedupe rather than a second trial. A rerun of the same stage is a new attempt and
+   gets a new ID. The trial POST previously had **no retry at all**, so a network blip lost the trial
+   silently; it now retries three times with an unchanged body and re-raises if the attempts are spent,
+   because a lost trial has to stay loud.
+2. **An unbound callback still carries an `event_id`**, or a retry of an unmapped callback would duplicate it.
+3. **No binding means unmapped, never guessed.** `bind_run()` reassigns on every start, so a start whose
+   response carries no `run` clears the previous one and a stale attempt ID cannot ride along.
+
+**Still open — the backend half:** keying the trials route on `event_id`, and recording an unbound callback as
+unmapped rather than attaching it to a guessed run.
 
 ### G3 · Three of five test types have no backend at all — **critical**
 
@@ -271,6 +310,9 @@ The July internal plan — retired into this file, recoverable from git history 
 items **51** (capture actual & max pressure) and **53** (thread IDs through `start` + result POST), scheduled
 for **W2** — which is now. The September design's M0–M7 are entirely backend, Airtable and metrology. Item 51
 survived as **M7** under a new name; **item 53 and gap H were lost.** They are G1 and G2 above.
+
+**Item 53 is now delivered on the firmware side, in W2 as originally scheduled** — `bind_run()`, the echoed
+binding and the stage event ID. Gap H's remaining half is the backend. Item 51 stays M7, still hardware-bound.
 
 ### G5 · No operator surface — now scoped as MU, not closed
 
@@ -317,6 +359,41 @@ already proven, and it removes a thing that would otherwise have to stay in sync
 that is currently an assumption on our side and a different assumption on theirs — settle it in writing
 before M3, because it changes what a Protocol Section has to carry.
 
+### G10 · The simulation harness existed, was undocumented, and pointed at production — **closed**
+
+`grep -rniE 'simulat|fake_serial|device_node' docs/` returned **zero hits** before 2026-09-06, so the plan
+treated a rig as the only way to exercise the firmware legs, and §10 called the offline `test` node "the
+largest unmanaged risk". A simulated device node had been in the repo all along
+(`simulation/ifet_device_node/`, with `src/fake_serial_service` and `src/fake_valves_node`).
+
+It could not be used as it stood, for two independent reasons:
+
+1. **It had no deflection gauges.** The two fakes cover pressure sensor 1 and VFD feedback; nothing published
+   `sick/sensors/{n}`, so no simulated rig could complete a static or cyclic test. `src/fake_sick_service`
+   now does, mirroring the real gateway's payload field for field.
+2. **On a workstation running `ifet-management-tunnel.service`, `localhost:1883` and `localhost:8000` are the
+   production broker and API.** That compose uses `network_mode: "host"` with `config1-d.json`, whose
+   `device_id` is **`device1`** — production system-1's identity. Bringing it up would have attached a fake
+   rig impersonating system-1 to the production broker and let it POST trials into the production database.
+
+`simulation/mf_harness/` replaces it for this work: a private bridge network with no host networking, host
+ports on 11883/18000, rig identity `device901`, and a stub backend. Config schema parity against
+`config{1,2}.json` is checked and differs only in identity, endpoints, the `sick` block and the deliberately
+omitted `turbo` block. Operating rule now in §11.
+
+### G11 · Two latent firmware crashes, found by running the harness — **fixed**
+
+Neither is MF, and neither is theoretical:
+
+| Where | Fault |
+|---|---|
+| `state_machine.py` `__init__` | `turbo_id`/`turbo_valves` were only assigned when the config had a `turbo` block, but five states read `machine.turbo_id` on **every** test. Any config without `turbo` raises `AttributeError` inside the state-loop thread on the first start and the rig stops responding. Latent only because every production config happens to define `turbo` |
+| `states/start_vfd.py:29` | `self.turbo_id` where `self.machine.turbo_id` was meant — `State` has only `.machine`. Short-circuit evaluation hides it unless `vdf_feedback == 0` **and** `turbo_vdf_feedback != 0`, i.e. on the turbo rig (**system-2**) with the slave reporting a non-zero frequency at that moment. Then it kills the state loop in `StartVDFState.on_exit` |
+
+Both are one-line fixes on `feature/labos-firmware-p3`. **Neither is deployed**, and the second one is a
+live-rig fault on system-2's turbo path, so it wants a deploy decision of its own rather than riding along
+with MF.
+
 ### G6 · Register and entity drift — small, mechanical
 
 | Item | Problem |
@@ -335,7 +412,7 @@ before M3, because it changes what a Protocol Section has to carry.
 |---|---|---|---|---|
 | ~~**M1**~~ | Testing Base additions — **14 fields applied 2026-09-06**; synthetic linked fixture still outstanding | LabOS | ✅ Schema diff, before/after, field IDs and per-field reasons captured. ⬜ Fixture: asymmetric pair, blank/N-A/unknown examples | — |
 | **M2** | **Disposable PostgreSQL harness first**, then local migration and the first vertical flow | LabOS | Two independent worker processes on separate connections; concurrent-enqueue, competing-worker, slow-send, stale-owner green; import → run → finish → worker restart → one Testing Base attempt | — |
-| **MF** | **Firmware run/stage association — G1 + G2** | LabOS + firmware | A rig start carries a run identity; a `/trials` callback lands on a known run and stage with a stable event ID; replay is safe; an unmapped callback is excluded, not guessed | M2 identity |
+| **MF** | **Firmware run/stage association — G1 + G2.** Firmware half ✅ 2026-09-06; **backend half open** | LabOS + firmware | ✅ Firmware: 22 unit tests, plus both harness scenarios green — a start carries a run identity, the callback echoes it with a stable event ID, replay creates nothing, and a pre-MF response yields an UNMAPPED callback rather than a guessed run. ⬜ Backend: mint the binding on the two GETs, key the trials route on `event_id`, record unbound callbacks as unmapped. ⬜ Then re-run on a real rig | M2 identity (backend half only) |
 | **M3** | All five backend workflows, review, corrections, evidence — **including G3 capture for Impact / Forced Entry / ANSI** | LabOS | §7 acceptance cases | M2, MF |
 | **MU** | **Operator interface — the seven steps in §2.** Pickers, the verification form, run setup, the three manual-entry screens, review, and the sync-status chip | LabOS | An operator completes each of the five test types end to end without retyping anything Airtable already holds, and without a rig starting on unverified numbers | M3 · G7/G8 decided |
 | **M4** | Change document with actual implementation results | LabOS | Every planned change marked applied/verified or outstanding | M1–M3 |
@@ -344,7 +421,9 @@ before M3, because it changes what a Protocol Section has to carry.
 | **M7** | Achieved-pressure acquisition (G4 legacy, off-board item 51) | LabOS | A validated measurement source for `Max Pressure Achieved`, **or** the omission reconfirmed with evidence | bench/rig hardware |
 
 **M2 is one unit** — fixing sequence allocation alone leaves ordering unsafe. **MF is new and gates M3**;
-it is the July commitment being re-entered, not new scope. **M6 and M7 are tracked, not blocking**: omission
+it is the July commitment being re-entered, not new scope. **MF's firmware half no longer waits on M2 or on
+rig hardware** — it is done and testable locally via `simulation/mf_harness/`; only its backend half sits
+behind M2's identity work. **M6 and M7 are tracked, not blocking**: omission
 is the initial-release behaviour, so M1–M5 do not wait for them. Their dependency is bench/rig hardware —
 the same dependency the offline `test` node represents, so **one hardware ask covers both**.
 
@@ -489,7 +568,7 @@ implementation. `correspondence/sent/` is append-only; never edit an artifact th
 | Ask | Why | When |
 |---|---|---|
 | **Bench/rig hardware access** | The single dependency shared by M6 and M7. One ask covers both | Before M6/M7 scheduling |
-| **The `test` node back online** (offline since ~2026-07-24) | The only non-production rig. Without it, MF and the sync path are first exercised on production — **the largest unmanaged risk in the plan** | Before MF |
+| **The `test` node back online** (offline since ~2026-07-24) — **a real rig is being connected to the fleet; confirm which node and when** | The only non-production rig. **No longer the largest unmanaged risk**: `simulation/mf_harness/` exercises the firmware legs locally, so MF's firmware half was proven without it. Still needed to validate MF against real sensors, real gauges and the real backend before M5. Note its config points at the **production** broker and API (`10.1.10.185`), so a rig on the fleet is not an isolated environment — its trials land in the production database unless the new route is gated | Before MF's backend half is exercised end to end |
 | **A maintenance window** for the M5 cutover | Nothing is deployed; the change set grows with every milestone | M5 |
 | **Weight behind the extractor fix** | A safety item, not a schedule item, and the only true gate on running from Airtable requirements | Now |
 | **A decision on already-reported results** | A shifted value reached a Passed record. Quality/business call, not an engineering one | On the blast-radius report |
@@ -513,6 +592,11 @@ quoting the October target as live would be a fabrication.
   Never `checkout`, `reset --hard`, `stash pop`, `clean`, `pull` or `merge`: those rewrite the live
   bind-mounted config a running container is reading.
 - **Branch off `dev` in a clone; never edit on a device.** A dirty node worktree is an incident signal.
+- **Never bring up `simulation/ifet_device_node/` on a workstation running the management tunnel.** With
+  `ifet-management-tunnel.service` active, `127.0.0.1:1883` and `127.0.0.1:8000` are the **production**
+  broker and API; that compose uses `network_mode: "host"` with `config1-d.json`, whose `device_id` is
+  `device1` — system-1's identity. Use `simulation/mf_harness/` instead: private bridge network, ports
+  11883/18000, identity `device901`. A simulated rig must never be able to reach a real broker. §5 G10.
 - **Secrets never enter git**, and never `deployment/config/config.json` or `src/ifet_ui_react/config.json` —
   both are served to the browser.
 - **Docs:** this file is the delivery authority and is edited in place. New dated `.md` files belong in
