@@ -26,43 +26,37 @@ This bit us in review, and it is worth reading before any sentence in this file 
 So **"nothing is deployed"** is about the `management` node, and **"production is untouched at 142 fields"**
 is about the Airtable base. Both are true at once and they are unrelated claims.
 
-### 0.2 The share link is a strict subset of what the token already gives us
+### 0.2 The shared base link, and how it relates to the token
 
-`https://airtable.com/app0OCunbmuXl7Hc9/shr18UCpayz45a4D5` is a **`shr…` shared-view link**: a read-only
-browser view of **one view of one table** (`IFET Projects`), exposing only the fields that view chooses and
-only the records its filter admits. No API, no schema, no field IDs, no other table.
+`https://airtable.com/app0OCunbmuXl7Hc9/shr18UCpayz45a4D5` is a **shared *base* link**, not a single view.
+It exposes **all 8 tables**, each pinned to a specific view. View IDs:
+`../schema/shared-base-views-2026-09-06.csv`.
 
-The **PAT** is the grounding: it reads the whole base over the Meta and REST APIs — all 8 tables, 142 fields,
-field IDs, types and select options. That is what produced `../schema/baseline-2026-09-05/production/` and
-what let us verify on 2026-09-06 that production is unchanged: **+0 / −0 / ~0.**
+| Table | Table ID | Shared view | Fields | LabOS |
+|---|---|---|---|---|
+| IFET Projects | `tblLYcRC7q6Srjfk3` | `viw7cVqQeYicQZqI7` | 35 | reads 3 |
+| Mock-Ups/Specimens | `tblcrGv0WJn6FTTGO` | `viwypQ3WBVCqzD64c` | 13 | reads 3 |
+| Tests Protocols | `tblutO1Q8TNC4BLk0` | `viwoq2ZQlvNc281vF` | 8 | reads 3 |
+| Protocol Sections | `tblqpvuJlSdkeS9PS` | `viwXxVYSTEX5FYtQv` | 16 | reads 5 · **8 of the 14 additions** |
+| Walls & Positions | `tblVUvcSPAoneG26W` | `viwbOz5xPn61XZJuf` | 8 | — |
+| Wall Scheduling/Reservation | `tblYjF1AApzmRDMrY` | `viwPBD0nZlNgGqLHl` | 19 | — scheduling is out of scope |
+| Back Charges | `tbl0f2YxS3FHJ1dTD` | `viwWOk3vYATKLwJCb` | 13 | — billing never crosses the boundary |
+| LabOS Raw Data Table | `tblnc9SsbXU0C0FWh` | `viweFgfWU8viu0d32` | 30 | **the only writable table** · 6 of the 14 additions |
 
-**So the link adds nothing we did not already have**, and the CSV asked for is generated from the token, not
-scraped from the link: `../evidence/testing-base-changes-2026-09-06/production-change-spec.csv`. The one
-thing the link *is* good for is being openable by anyone without a token — useful for a human cross-check,
-not as a data source.
+**The cross-check that matters: the shared base and our token-derived baseline are the same 8 tables and the
+same 142 fields, with nothing extra on either side.** So the read model they shared is exactly what
+`../schema/baseline-2026-09-05/production/` already holds, and our field inventory is complete rather than
+merely plausible.
 
+**The token is still the grounding, for three reasons the browser cannot give:** it returns **field IDs**
+(which is what the change register diffs against, and which cannot be read off a page), it returns types and
+select options as metadata, and it returns **every field in a table regardless of whether a view hides it** —
+a view is a projection, so what a shared view displays can be a subset of what the table holds. That is why
+`production-change-spec.csv` is generated from the API and not transcribed from the link.
 
-
-| | |
-|---|---|
-| **Deployed** | **Nothing of this integration.** `management` runs branch `latest` @ `90f9595` |
-| Live alembic head | `3a65a83e0463` — **P1 (`b7c2e9a41d38`) not applied** |
-| Live tables | 13, all legacy. No `sync_outbox`, `sync_state`, `test_programmes`, `test_programme_runs`, `at_mirror_*` |
-| Live columns matching `airtable\|labos\|attempt` | **zero** |
-| Code in the running `report-api` image | `app/{data,domain,utils}` only — **no `app/airtable/`, no `app/sync/`** |
-| Live routes | 25; **none** for airtable, sync, runs or import |
-| `test_results` rows | 640 |
-| `ifet-management` | `feature/labos-airtable` @ `b20e1bb` — all integration code, unmerged, **still unwired** (`main.py` imports nothing from `app.sync`). Now carries the sync migration, the §7.1 mechanisms, the enforced single-worker service and the Postgres harness |
-| `ifet-firmware` | `feature/labos-firmware-p3` — docs, **plus the MF firmware change and the isolated simulation harness** (`simulation/mf_harness/`, `src/fake_sick_service/`). Not deployed to any rig |
-| Committed envelope code | `app/airtable/contract.py` pins `CONTRACT_VERSION = "0.3"` — **stale, rewrite to v0.4, do not extend** |
-| **Testing Base schema** | **M1 applied 2026-09-06** — 14 fields added, 142 → 156. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
-| Production Base schema | Unchanged, 142 fields. The 14 above are exactly the production delta (M5) |
-
-Nothing above is a blocker on its own. Together they mean: **every leg of this integration is greenfield
-against production, and no code has ever carried a result end to end.**
-
-**For what to do next, go straight to §6.0** — it is the ordered list of everything remaining, keyed to the
-milestone and `DG` identifiers, plus the four items that must not be queued behind it.
+What the link is genuinely good for: anyone can open it without a token, so it is the right thing to point a
+person at for a human cross-check — and it is how we know which view the Airtable team treats as canonical
+per table.
 
 ---
 

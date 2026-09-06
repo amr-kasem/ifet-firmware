@@ -1,0 +1,9 @@
+table_name,table_id,shared_view_id,fields_in_table,note
+IFET Projects,tblLYcRC7q6Srjfk3,viw7cVqQeYicQZqI7,35,"job number is the join key; also holds customer emails and invoice IDs"
+Mock-Ups/Specimens,tblcrGv0WJn6FTTGO,viwypQ3WBVCqzD64c,13,LabOS reads specimen identity only
+Tests Protocols,tblutO1Q8TNC4BLk0,viwoq2ZQlvNc281vF,8,LabOS reads protocol identity only
+Protocol Sections,tblqpvuJlSdkeS9PS,viwXxVYSTEX5FYtQv,16,"8 of the 14 added fields land here; LabOS reads Requirement Code + Applicability"
+Walls & Positions,tblVUvcSPAoneG26W,viwbOz5xPn61XZJuf,8,not used by LabOS
+Wall Scheduling/Reservation,tblYjF1AApzmRDMrY,viwPBD0nZlNgGqLHl,19,"not used by LabOS - scheduling is out of scope"
+Back Charges,tbl0f2YxS3FHJ1dTD,viwWOk3vYATKLwJCb,13,"not used by LabOS - billing never crosses the boundary"
+LabOS Raw Data Table,tblnc9SsbXU0C0FWh,viweFgfWU8viu0d32,30,"the only writable table; 6 of the 14 added fields land here"
