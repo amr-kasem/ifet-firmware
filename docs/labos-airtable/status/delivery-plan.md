@@ -635,9 +635,14 @@ reachable. 1 row (`attempt_seq`) is local queue metadata and is **never created 
 3. **Blast-radius report** — including jobs already marked tested, since a shifted value already reached a
    Passed/Completed record.
 
-**What we owe them:** `../correspondence/airtable-team-questions-2026-09-06.md` — a **planned-change notice,
-not a permission request. Still NOT SENT.** Report what is designed, then actual changes with evidence after
-implementation. `correspondence/sent/` is append-only; never edit an artifact they already hold.
+**What we owe them:** `../correspondence/airtable-team-questions-2026-09-06.md` — **rewritten 2026-09-06 and
+ready to send; still NOT SENT.** It is no longer a *planned*-change notice: the 14 fields are applied, so it
+is now an **applied-change report** carrying the change document, plus the three decisions that block
+DG7/DG8/DG9 and the three things we need them to do. The earlier draft still read "planned, not applied yet"
+and asked none of the three questions — sending it would have understated the work and asked for permission
+we already had. It also now states plainly that our verification step contradicts their "no double entry"
+requirement, and why, rather than letting them discover it. `correspondence/sent/` is append-only; copy the
+artifact there after an authorized send and never edit it afterwards.
 
 ---
 
