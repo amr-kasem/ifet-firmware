@@ -544,7 +544,7 @@ firmware half, and most of M2 — harness, the migration that did not exist, and
 |---|---|---|---|---|---|
 | **1** | **Validate the schema locally against all five test types** — the gate on sending anything | §3.0 · A10 | LabOS | nothing | For each of Static Load, Cycles, Impact, Forced Entry and ANSI Z97.1: the fields we read are enough to identify the work, and the fields we write carry the result. Anything missing or unnecessary is corrected **before** the document goes out |
 | **2** | **Send the change document** — `../evidence/testing-base-changes-2026-09-06/` (README, `production-change-spec.csv`, before/after schema) plus the cover letter's §7 | §3.0 commitment 3 | **IFET/you** | 1 | The send record is filled in and a copy is in `correspondence/sent/`. **This is what lets the Airtable team update production** — we never touch their production base ourselves |
-| **3** | **`app/airtable/contract.py` → v0.4** | §8 (9th deviation) | LabOS | nothing | `CONTRACT_VERSION = "0.4"`; retired Wall/`Test Name`/`Abort Reason` gone; `Test Type` no longer one-option-blocking; reconciled field-by-field against the 14 applied fields |
+| ~~**3**~~ | ~~`app/airtable/contract.py` → v0.4~~ **✅ 2026-09-07** | §8 (9th deviation) | LabOS | — | Done. 172 tests pass on Postgres, 163 + 9 skipped on SQLite. Closes the last §8 deviation |
 | **4** | **The worker's compose service and its env vars** | DG6 | LabOS | nothing | A service in `compose.yaml` with no public port, `.env.example` entries, and a second instance observably refusing to start |
 | **5** | **The vertical flow** | M2 | LabOS | 3, 4 | import → run → finish → worker restart → **one** attempt in the Testing Base. This is the last of M2 and the one that gates M3 |
 | **6** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 5 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed |
@@ -654,11 +654,24 @@ for "contract-compliant".
 | Lease (120 s) unrelated to the client's retry budget | §7.1 client deadline | ✅ one decision — derived from `request_budget_seconds()` (~168 s), with a test guarding the ordering |
 | `/sync/status` returns `green/amber/red`, no attachment backlog | §7 status vocabulary | ✅ four contractual words + backlog; `led` retained for the deployed bundle |
 | 23 tests are SQLite-only | §8 step 5 · acceptance 21–25 | ✅ one switch, both backends — 166 on PG, 157 + 9 skipped on SQLite |
-| `app/airtable/contract.py` pins `CONTRACT_VERSION = "0.3"`, still lists retired Wall/`Test Name`/`Abort Reason` fields and treats `Test Type` as one-option-blocking | v0.4 §§3–6 | ⬜ **still open** — the only M2 deviation not closed |
+| `app/airtable/contract.py` pins `CONTRACT_VERSION = "0.3"`, still lists retired Wall/`Test Name`/`Abort Reason` fields and treats `Test Type` as one-option-blocking | v0.4 §§3–6 | ✅ **2026-09-07** — corrected against the live schema, not a document. Wall fields retired, all five `Test Type` options confirmed live, `Test Date` = completion, the six new fields added, three type mismatches fixed (`Unit`, `Deflection Unit`, `Testing Continued` are text, not selects). **`BLOCKING_ABSENT` is now empty** |
 
-**Eight of nine closed 2026-09-06.** The ninth is `contract.py`, which is a
-field-by-field reconciliation against the 14 applied fields rather than a
-mechanism fix, so it is tracked as its own piece of work and not bundled in.
+**All nine closed** — eight on 2026-09-06, `contract.py` on 2026-09-07.
+
+**The ninth found a live defect rather than just stale text.** A2 and A3 decided
+`Max Pressure Achieved` and the deflection pair are never published, and nothing
+enforced it: `mapping.py` emitted all three straight from the ORM, so the first
+real sync would have published a target as an achievement and raw IO-Link counts
+as inches. The envelope now refuses them **ahead of the pairwise rules and before
+the column/JSON split**, because the contract rejects them in the JSON too —
+routing an unvalidated measurement into the overflow would satisfy the letter of
+"we do not publish it" while publishing it somewhere nobody looks.
+
+**And one correction to our own reasoning.** `Required Value`/`Required Unit`
+were briefly marked omitted on the grounds that A9 leaves nothing to echo back.
+Wrong: A9 stops LabOS *reading* requirement values from Airtable, not publishing
+the ones its own operator entered — and those are the trustworthy ones precisely
+because they never went through the extractor. Both restored to the JSON valve.
 
 **The lease number was wrong in a measurable way.** 120 s against a client whose
 worst case is 5 attempts × 30 s timeout plus capped backoff with jitter plus
