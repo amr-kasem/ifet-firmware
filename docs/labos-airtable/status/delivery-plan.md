@@ -22,7 +22,7 @@ design and roadmap are one document, this one. Superseded snapshots live in git 
 | Code in the running `report-api` image | `app/{data,domain,utils}` only — **no `app/airtable/`, no `app/sync/`** |
 | Live routes | 25; **none** for airtable, sync, runs or import |
 | `test_results` rows | 640 |
-| `ifet-management` | `feature/labos-airtable` @ `2e535e6` — all integration code, unmerged, **unwired** (`main.py` imports nothing from `app.sync`). `d61f6f5` plus the schema-apply and interface-schema tools |
+| `ifet-management` | `feature/labos-airtable` @ `b20e1bb` — all integration code, unmerged, **still unwired** (`main.py` imports nothing from `app.sync`). Now carries the sync migration, the §7.1 mechanisms, the enforced single-worker service and the Postgres harness |
 | `ifet-firmware` | `feature/labos-firmware-p3` — docs, **plus the MF firmware change and the isolated simulation harness** (`simulation/mf_harness/`, `src/fake_sick_service/`). Not deployed to any rig |
 | Committed envelope code | `app/airtable/contract.py` pins `CONTRACT_VERSION = "0.3"` — **stale, rewrite to v0.4, do not extend** |
 | **Testing Base schema** | **M1 applied 2026-09-06** — 14 fields added, 142 → 156. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
@@ -194,7 +194,17 @@ All repeated creates use **persisted** request/event IDs — never a freshly min
 
 ### 4.3 Concurrency — named mechanisms, not properties to assume
 
-Each fails silently without its mechanism, and **none is observable in a SQLite test**. Contract §7.1.
+**First, what is actually concurrent here — because it is narrower than §7.1's language suggests.**
+
+| | |
+|---|---|
+| **The rigs are not.** One rig runs one test at a time; that is a hardware limit | Two rigs run two *different* attempts, so they take different `attempt_id`s and **never contend for the same row.** There is no "two rigs at once" case, and nothing below is justified by one |
+| **One attempt, two actors — yes** | The rig POSTs its `/trials` callback for attempt A while the operator uploads a photo or presses finish for A from the UI. Both enqueue into A's queue. A human and a machine, with no hardware limit between them. **This is the case the sequence-allocation fix exists for** |
+| **Worker count — a deployment property, not a hardware one** | **Decided 2026-09-06: exactly one, enforced** (see DG6). The mechanisms below then cost nothing and mean the topology question stops mattering — a rolling restart, a stray `up -d`, or someone running the worker by hand cannot corrupt anything |
+
+Each mechanism fails silently without its implementation, and **none is observable in a SQLite test** —
+`SKIP LOCKED` is ignored, two connections cannot contend, and a savepoint retry has nothing to race.
+Contract §7.1.
 
 | Guarantee | Mechanism |
 |---|---|
@@ -364,7 +374,7 @@ the interface.
 |---|---|
 | `completion_source` | Required by contract §2; absent from the register **and** from §4.1's run columns (now added above) |
 | `identity_assurance = declared` | Required by contract §4; same absence (now added above) |
-| Sync service deployment | Contract §7 says "one container, no public port" and stops — no compose service, env var names, credential source or health policy, in a design that specifies fencing semantics to the sentence |
+| Sync service deployment | ✅ **Decided and built 2026-09-06: exactly one worker, enforced.** `app/sync/service.py` is the runnable process; `app/sync/singleton.py` holds a Postgres advisory lock so a second instance **refuses to start** rather than racing. Chosen for how it releases — the lock lives on one connection and vanishes when that connection does, so a SIGKILLed worker leaves nothing to clean up. Liveness stays the heartbeat row `report-api` already serves, because a worker answering its own health check would report healthy from inside a process whose database connection had gone. ⬜ **Still to do: the compose service and its env vars** |
 | Gauge selection | `GAUGE_COUNT` is a snapshotted programme parameter (contract §3.2); firmware takes `selectedSensors[]` live at MQTT start. Never reconciled; a mismatch at start has no defined behaviour |
 | `Test Name`, `Abort Reason` | JSON-only by contract §6 — correct, but they have no register row, so a register-vs-JSON diff reports them missing. Note it in the register header |
 
@@ -468,7 +478,7 @@ Sequenced by dependency, not by size. Steps 1 and 2 have no prerequisites and ca
 | # | Do this | Why now | Closes |
 |---|---|---|---|
 | **1** | **Send `../correspondence/airtable-team-questions-2026-09-06.md`** | The only work on this whole plan that **cannot start on our side**, and it gates three gaps and MU. It is a planned-change notice, not a permission request, so nothing is waiting on us to decide first. Every day it sits is a day of calendar, not a day of work | unblocks **DG7 · DG8 · DG9** |
-| **2** | **M2 — disposable PostgreSQL harness, then P1 + the new revision as one ordered upgrade, then close the eight §8 deviations** | Nothing else can be proven without it: every §7 guarantee is invisible in SQLite, and the committed outbox is contract-non-compliant in eight named ways. It is also the schema MF's backend half mints its binding from | **M2**, and the §8 list |
+| **2** | ~~M2 harness · migration · §8 deviations~~ **✅ 2026-09-06.** What remains of M2: `contract.py` → v0.4, the compose service, and the vertical flow | The harness, the migration (**which did not exist**) and 8 of 9 deviations are done and rehearsed on postgres:13. The remaining three are independent of each other, and only the vertical flow gates M3 | **M2** (part) |
 | **3** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record unbound callbacks as unmapped | Cheapest remaining win. The wire contract is fixed, the firmware side is done and provable locally, and `simulation/mf_harness/` already asserts what the backend must honour. Needs M2's run table to exist first | **DG1 · DG2** → **MF** |
 | **4** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | The largest piece of work left, and the only one of the five test types' workflows that has no model, no route and no table. M3 cannot be demonstrated without it | **DG3** → **M3** |
 | **5** | **M1's outstanding fixture**, and **DG6**'s mechanical drift | Small, and both feed M2/M3 exit evidence — the fixture is also contract legacy item 11 | **M1**, **DG6** |
@@ -489,7 +499,7 @@ Sequenced by dependency, not by size. Steps 1 and 2 have no prerequisites and ca
 | M | Deliverable | Owner | Exit evidence | Depends on |
 |---|---|---|---|---|
 | ~~**M1**~~ | Testing Base additions — **14 fields applied 2026-09-06**; synthetic linked fixture still outstanding | LabOS | ✅ Schema diff, before/after, field IDs and per-field reasons captured. ⬜ Fixture: asymmetric pair, blank/N-A/unknown examples | — |
-| **M2** | **Disposable PostgreSQL harness first**, then local migration and the first vertical flow | LabOS | Two independent worker processes on separate connections; concurrent-enqueue, competing-worker, slow-send, stale-owner green; import → run → finish → worker restart → one Testing Base attempt | — |
+| **M2** | **Disposable PostgreSQL harness first**, then local migration and the first vertical flow | LabOS | ✅ Harness on **postgres:13** (the version production runs), disposable by construction. ✅ The missing migration, rehearsed as **P1 → M2 in one ordered upgrade** on real Postgres and rolled back. ✅ 8 of 9 §8 deviations closed. ✅ 166 tests on PG / 157 + 9 skipped on SQLite; competing-claim, stale-owner, epoch and same-attempt-race green. ⬜ `contract.py` → v0.4. ⬜ The compose service. ⬜ The vertical flow: import → run → finish → worker restart → one Testing Base attempt | — |
 | **MF** | **Firmware run/stage association — DG1 + DG2.** Firmware half ✅ 2026-09-06; **backend half open** | LabOS + firmware | ✅ Firmware: 22 unit tests, plus both harness scenarios green — a start carries a run identity, the callback echoes it with a stable event ID, replay creates nothing, and a pre-MF response yields an UNMAPPED callback rather than a guessed run. ⬜ Backend: mint the binding on the two GETs, key the trials route on `event_id`, record unbound callbacks as unmapped. ⬜ Then re-run on a real rig | M2 identity (backend half only) |
 | **M3** | All five backend workflows, review, corrections, evidence — **including DG3 capture for Impact / Forced Entry / ANSI** | LabOS | §7 acceptance cases | M2, MF |
 | **MU** | **Operator interface — the seven steps in §2.** Pickers, the verification form, run setup, the three manual-entry screens, review, and the sync-status chip | LabOS | An operator completes each of the five test types end to end without retyping anything Airtable already holds, and without a rig starting on unverified numbers | M3 · DG7/DG8 decided |
@@ -564,18 +574,32 @@ requires it, not because `Impact Result` happens to exist.
 every item is latent — nothing has ever passed through it. Listed so nobody mistakes "committed and green"
 for "contract-compliant".
 
-| Deviation | Contract |
-|---|---|
-| `enqueue()` allocates `max(seq)+1` read-then-insert; a collision fails the caller's transaction | §7.1 sequence allocation |
-| `claim()` leases without row locking | §7.1 exclusive claim |
-| One `leased_until` stamped per batch, then sequential sends | §7.1 lease at send time |
-| No `owner_epoch` — a late lander's outcome is recorded | §7.1 fencing token |
-| Lease (120 s) unrelated to the client's retry budget | §7.1 client deadline |
-| `/sync/status` returns `green/amber/red`, no attachment backlog | §7 status vocabulary |
-| 23 tests are SQLite-only | §8 step 5 · acceptance 21–25 |
-| `app/airtable/contract.py` pins `CONTRACT_VERSION = "0.3"`, still lists retired Wall/`Test Name`/`Abort Reason` fields and treats `Test Type` as one-option-blocking | v0.4 §§3–6 |
+| Deviation | Contract | State |
+|---|---|---|
+| **The three sync tables had no migration at all** — `sync_outbox`, `sync_attempt_state`, `sync_state` existed only as models. **The outbox could never have been deployed**, and the one mechanism that would have created them is `startup.sh`'s autogenerate — the same mechanism that kept the chain off this repo | §7 | ✅ `c4e1f8a92b07` |
+| `enqueue()` allocates `max(seq)+1` read-then-insert; a collision fails the caller's transaction | §7.1 sequence allocation | ✅ savepoint + bounded retry |
+| `claim()` leases without row locking | §7.1 exclusive claim | ✅ `FOR UPDATE … SKIP LOCKED` |
+| One `leased_until` stamped per batch, then sequential sends | §7.1 lease at send time | ✅ re-asserted per send |
+| No `owner_epoch` — a late lander's outcome is recorded | §7.1 fencing token | ✅ epoch bumped per claim; stale outcomes discarded |
+| Lease (120 s) unrelated to the client's retry budget | §7.1 client deadline | ✅ one decision — derived from `request_budget_seconds()` (~168 s), with a test guarding the ordering |
+| `/sync/status` returns `green/amber/red`, no attachment backlog | §7 status vocabulary | ✅ four contractual words + backlog; `led` retained for the deployed bundle |
+| 23 tests are SQLite-only | §8 step 5 · acceptance 21–25 | ✅ one switch, both backends — 166 on PG, 157 + 9 skipped on SQLite |
+| `app/airtable/contract.py` pins `CONTRACT_VERSION = "0.3"`, still lists retired Wall/`Test Name`/`Abort Reason` fields and treats `Test Type` as one-option-blocking | v0.4 §§3–6 | ⬜ **still open** — the only M2 deviation not closed |
 
-**Closing these is the M2 package.**
+**Eight of nine closed 2026-09-06.** The ninth is `contract.py`, which is a
+field-by-field reconciliation against the 14 applied fields rather than a
+mechanism fix, so it is tracked as its own piece of work and not bundled in.
+
+**The lease number was wrong in a measurable way.** 120 s against a client whose
+worst case is 5 attempts × 30 s timeout plus capped backoff with jitter plus
+throttle — 168 s. A worker still legitimately sending could have its entry taken.
+
+**One deviation was found only by running it.** On SQLite, `begin_nested()` +
+`flush()` **commits** the insert, because pysqlite does not open the transaction
+SQLAlchemy's SAVEPOINT support needs — so the entry survived the caller rolling
+back, breaking the atomicity the module exists for. The savepoint is therefore
+Postgres-only; SQLite has a single writer and no race to protect against.
+Evidence: the row outlived a `session.rollback()`.
 
 ---
 
