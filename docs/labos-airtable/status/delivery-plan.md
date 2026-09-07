@@ -11,7 +11,7 @@ design and roadmap are one document, this one. Superseded snapshots live in git 
 
 ---
 
-## 0. State — probed 2026-09-06, not asserted
+## 0. State — probed 2026-09-07, not asserted
 
 ### 0.1 "Production" means two different things — always say which
 
@@ -71,11 +71,11 @@ per table.
 | Code in the running `report-api` image | `app/{data,domain,utils}` only — **no `app/airtable/`, no `app/sync/`** |
 | Live routes | 25; **none** for airtable, sync, runs or import |
 | `test_results` rows | 640 |
-| `ifet-management` | `feature/labos-airtable` @ `1ee4cda` — all integration code, unmerged, **still unwired** (`main.py` imports nothing from `app.sync`). Carries the sync migration, the §7.1 mechanisms, the enforced single-worker service and its compose entry, the v0.4 contract with its omission guard, and the Postgres harness. **All nine §8 deviations closed** |
+| `ifet-management` | `feature/labos-airtable` @ `1ee4cda` — all integration code, unmerged, **still unwired** (`main.py` imports nothing from `app.sync`). Carries the sync migration, the §7.1 mechanisms, the enforced single-worker service and its compose entry, the v0.4 contract view with its omission guard, and the Postgres harness. **Eight §8 deviations closed; the ninth is partial** because the envelope/lifecycle behind `contract.py` still implements v0.3 timing and review phases |
 | `ifet-firmware` | `feature/labos-firmware-p3` — docs, **plus the MF firmware change and the isolated simulation harness** (`simulation/mf_harness/`, `src/fake_sick_service/`). Not deployed to any rig |
-| Committed envelope code | `app/airtable/contract.py` at **`CONTRACT_VERSION = "0.4"`** since 2026-09-07, reconciled field-by-field against the live schema |
-| **Testing Base schema** | **M1 applied 2026-09-06** — 14 fields added, 142 → 156. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
-| Production Base schema | Unchanged at 142 fields, **re-verified live 2026-09-06** (+0/−0/~0). The 14 above are exactly the production delta |
+| Committed envelope code | `app/airtable/contract.py` is at **`CONTRACT_VERSION = "0.4"`** and matches live field names/types, but `envelope.py`, `attempts.py`, mapping and their tests still use v0.3 create/terminal/review semantics. Evidence: `../evidence/contract-implementation-audit-2026-09-07.md` §5 |
+| **Testing Base schema** | **M1 applied 2026-09-06** — 14 fields added, 142 → 156; schema and record-read access re-verified 2026-09-07. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
+| Production Base schema | Unchanged at 142 fields, **re-verified live 2026-09-07**. The generated 168-row interface remains an exact match and the 14 above are exactly the production delta |
 
 Nothing above is a blocker on its own. Together they mean: **every leg of this integration is greenfield
 against production, and no code has ever carried a result end to end.**
@@ -177,7 +177,7 @@ team**; all three are ours to finish.
 
 | Commitment | Artifact | State |
 |---|---|---|
-| **1. Prepare the structured schema for fetching and posting data between LabOS and Airtable** | `../contract/interface-schema.csv` — generated; every field in both bases with `labos_use` = read / write / ignore. Meaning: `../contract/write-contract-v0.4.md` §§2–6. Mapping: `../contract/field-register.csv` | ✅ **Drafted, A9-narrowed** — 10 fields read plus the record IDs, 35 written, 114 deliberately ignored. ⬜ **Not yet validated** against all five test types locally — that is the gate on commitment 3 |
+| **1. Prepare the structured schema for fetching and posting data between LabOS and Airtable** | `../contract/interface-schema.csv` — generated; every field in both bases with `labos_use` = read / write / ignore. Meaning: `../contract/write-contract-v0.4.md` §§2–6. Mapping: `../contract/field-register.csv` | ✅ **Drafted, A9-narrowed and live-reconciled** — 10 real fields read plus 4 record IDs, 38 mapped OUT (32 potentially published; 6 explicitly omitted), 1 Airtable-owned read-only field and 114 deliberately ignored. ⬜ **Not yet validated** against all five test types locally — that is the gate on commitment 3 |
 | **2. Make the required changes in the Testing Base only** | 14 fields applied 2026-09-06; production untouched and verified unchanged | ✅ **Done.** Evidence: `../evidence/testing-base-changes-2026-09-06/` |
 | **3. Prepare and share a document of all changes made, with the reason for each** | `../evidence/testing-base-changes-2026-09-06/README.md` (per-field reasons, before/after schema, field IDs) · `production-change-spec.csv` (**one row per field: KEEP or ADD, whether LabOS reads or writes it, and why**) · cover letter `../correspondence/airtable-team-questions-2026-09-06.md` | ✅ **Written.** ⬜ **Deliberately not sent** — it goes out after commitment 1 is validated locally. Asking them to change production on an unvalidated schema is how we would end up asking twice |
 
@@ -207,6 +207,7 @@ decision — but it is no longer absent from the plan.
 | **A7** | Keep `ProjectParent` / `Project` in the DB; expose projects/specimens at the API boundary |
 | **A8** | Water infiltration excluded from this release |
 | **A10** | **No extractor dependency, and the document is sent only after local validation (2026-09-06).** We do not wait for, or ask for, an extractor fix — A9 removed our need for it. The three meeting commitments are ours to complete: the structured fetch/post schema, the Testing-Base-only changes, and the change document. **The document goes to the Airtable team only once the schema is validated locally against all five test types** — we do not ask them to change production on the strength of an unvalidated design |
+| **A11** | **Linking is forward-only (2026-09-07).** Linking a local job to an Airtable record makes only *subsequent* attempts sync-eligible; an earlier attempt is published by an explicit operator action, never by the link. A link asserts identity, not that the work under it has been re-examined. Full reasoning and what it obliges MU to show: §6.1 |
 | **A9** | **LabOS is standalone; Airtable is management's mirror (2026-09-06).** LabOS stays fully functional without Airtable. The integration syncs **jobs and reports**, joined by `IFET job number` for humans and `rec…` IDs for machines. LabOS reads **14 inbound fields and no requirement values at all** — the operator sets a test up in LabOS exactly as today. Both bases keep all 14 applied fields; unread ones are `IGNORED` in the register, not deleted |
 
 Settled defaults: `Test Date` = completion; explicit UTC `Testing Start/End Date`; declared operator and
@@ -457,7 +458,7 @@ the interface.
 | `identity_assurance = declared` | Required by contract §4; same absence (now added above) |
 | Sync service deployment | ✅ **CLOSED 2026-09-07. Exactly one worker, enforced.** `app/sync/service.py` is the runnable process; `app/sync/singleton.py` holds a Postgres advisory lock so a second instance **refuses to start** rather than racing. Chosen for how it releases — the lock lives on one connection and vanishes when that connection does, so a SIGKILLed worker leaves nothing to clean up. Liveness stays the heartbeat row `report-api` already serves, because a worker answering its own health check would report healthy from inside a process whose database connection had gone. ✅ The `sync-worker` compose service and `SYNC_LOG_LEVEL` landed 2026-09-07 |
 | Gauge selection | `GAUGE_COUNT` is a snapshotted programme parameter (contract §3.2); firmware takes `selectedSensors[]` live at MQTT start. Never reconciled; a mismatch at start has no defined behaviour |
-| `Test Name`, `Abort Reason` | JSON-only by contract §6 — correct, but they have no register row, so a register-vs-JSON diff reports them missing. Note it in the register header |
+| **Nine JSON-only fields, not two** | `Test Name` and `Abort Reason` are JSON-only by contract §6 and have no register row, so a register-vs-base diff reports them missing. **Counted 2026-09-07: there are nine** — those two plus `Required Value`, `Required Unit`, `Cycles Required`, `Cycles Completed`, `Test Rig`, `LabOS Version` and `Result Rationale`. They are absent by decision (§10.15), not by oversight. Note the whole set in the register header; `tests/test_five_test_types.py::JsonOnlyFieldsSurvive` pins it so the list cannot drift silently |
 
 ---
 
@@ -567,21 +568,35 @@ firmware half, and most of M2 — harness, the migration that did not exist, and
 
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
-| **1** | **Validate the schema locally against all five test types** — the gate on sending anything | §3.0 · A10 | LabOS | nothing | For each of Static Load, Cycles, Impact, Forced Entry and ANSI Z97.1: the fields we read are enough to identify the work, and the fields we write carry the result. Anything missing or unnecessary is corrected **before** the document goes out |
-| **2** | **Send the change document** — `../evidence/testing-base-changes-2026-09-06/` (README, `production-change-spec.csv`, before/after schema) plus the cover letter's §7 | §3.0 commitment 3 | **IFET/you** | 1 | The send record is filled in and a copy is in `correspondence/sent/`. **This is what lets the Airtable team update production** — we never touch their production base ourselves |
-| ~~**3**~~ | ~~`app/airtable/contract.py` → v0.4~~ **✅ 2026-09-07** | §8 (9th deviation) | LabOS | — | Done. 172 tests pass on Postgres, 163 + 9 skipped on SQLite. Closes the last §8 deviation |
+| ~~**1**~~ | ~~**Validate the schema locally against all five test types**~~ **✅ 2026-09-07** | §3.0 · A10 | LabOS | — | Done, and **it failed first**: three defects, all five types — the mandated `Test Result = Pending` create payload refused by our own validator; `Test Date` stamped with the **start** instant while the two columns applied on 2026-09-06 were never written; and an attachment upload made a precondition for publishing a measured result. All three fixed, 192 tests + 63 subtests green on Postgres. Evidence: `../evidence/schema-validation-five-types-2026-09-07.md` |
+| **2** | **Send the change document** — `../evidence/testing-base-changes-2026-09-06/` (README, `production-change-spec.csv`, before/after schema) plus the cover letter's §7. **Unblocked 2026-09-07**: nothing step 1 found changes which fields exist or what they are called, so the document is still accurate. Add one sentence first — `Test Date` is the **completion** instant and `Testing Start/End Date` carry the pair, because their automation derives the Protocol Section date from it, and that dependency should be stated rather than inferred | §3.0 commitment 3 | **IFET/you** | ✅ 1 | The send record is filled in and a copy is in `correspondence/sent/`. **This is what lets the Airtable team update production** — we never touch their production base ourselves |
+| **3** | **Finish the v0.4 implementation view** — keep `contract.py`'s corrected live schema, and update envelope/lifecycle/mapping/tests to create → terminal → first-review semantics. **Half done 2026-09-07**: ✅ create sends `Pending`; ✅ `Test Date` is completion and the two applied columns are written; ✅ the five-type matrix and the PostgreSQL suite pass (`../evidence/schema-validation-five-types-2026-09-07.md`). ⬜ **Still open, and it is the phase model itself**: terminal still accepts a final verdict instead of staying `Pending`, and there is no verdict-phase builder, reviewer mapping or reviewer persistence at all (`../evidence/contract-implementation-audit-2026-09-07.md` §5) | §8 (9th deviation) | LabOS | — | Create sends Pending but no Test Date; terminal sends start/end plus completion Test Date and **remains Pending**; verdict sends reviewer/time/rationale/retest once. The five-type dry-run matrix and PostgreSQL suite pass |
 | ~~**4**~~ | ~~The worker's compose service and its env vars~~ **✅ 2026-09-07** | DG6 | LabOS | — | Done. `sync-worker` in `compose.yaml`: no public port, no replicas, starts disabled. Exit semantics verified against the harness. **DG6's deployment half is fully closed** |
 | **5** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | 3, 4 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally in LabOS with no Airtable origin at all. Neither path may block the other. Last of M2, and the one that gates M3 |
-| **6** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 5 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed |
+| **6** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 5 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed. **Two routes, not one**: firmware posts to `/projects/{id}/static_tests/{idx}/trials` and `/projects/{id}/cyclic-tests/{idx}/trials` (`api.py:94`, `api.py:109`), matching the two GETs it binds on |
 | **7** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | DG3 → M3 | LabOS | 5 | Model, route and table for each; the §7 acceptance cases pass with Forced Entry and ANSI as **capture** cases, not just as filters |
 | **8** | **M1's fixture, and DG6's remaining drift** | M1 · DG6 | LabOS | nothing | Fixture: asymmetric pair plus blank/N-A/unknown examples (also contract legacy item 11). Drift: register rows for `completion_source` and `identity_assurance`, a defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the `Test Name`/`Abort Reason` note in the register header |
 | **9** | **MU — the operator interface** | DG5 → MU | LabOS | 7 | An operator completes all five test types end to end and sees the sync status of each. **Smaller than it was**: A9 deleted the verification form, which was its most awkward screen, and no longer waits on anyone's answer |
 | **10** | **M4 — the change document with actual results** | M4 | LabOS | 1–9 | Every planned change marked applied/verified or outstanding, with evidence |
 | **11** | **M5 — production cutover** | M5 | LabOS + IFET | 10, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
 
-**Steps 3 and 4 are done.** Of what remains, **1 and 8 have no prerequisites**, step 2 waits only on step 1,
-and 5 → 6 → 7 → 9 → 10 → 11 is a chain. **Two things are startable immediately: step 1 (validate the
-schema) and step 5 (the vertical flow)** — step 5's blockers were 3 and 4, both now cleared.
+**Steps 1 and 4 are done; step 3 is half done.** Of what remains, **step 2 is now yours to send** and
+**step 8 has no prerequisites**; 3 → 5 → 6 → 7 → 9 → 10 → 11 is a chain. **Step 3's remaining half is the
+one to start** — the create → terminal → first-review phase model, which step 5 needs before a vertical
+write means anything.
+
+**Two independent passes on 2026-09-07 found the same defects, which is worth recording.** The five-type
+schema validation (step 1) and the implementation audit both landed on `Test Result = Pending` being
+refused at create and on `Test Date` carrying the **start** instant. The audit went further and found the
+phase model missing entirely; the validation went further and found an attachment upload gating a measured
+result. Neither pass alone was sufficient, and the 172-test suite was green through all of it — because
+every test in it exercised Static Load and the create phase. **A green suite is not coverage of a matrix
+nobody enumerated.**
+
+One of these defects published a plausible **wrong** timestamp rather than nothing, which is the same
+failure class as the extractor shift this whole design guards against — on our own side of the boundary.
+A10 put the gate between validation and the send precisely so the Airtable team would not be the ones to
+find it, in production, after applying a schema on our word.
 
 ### 6.1 What step 5 actually means — two origins that must merge
 
@@ -612,14 +627,25 @@ subsequent attempts eligible to sync.
 | **Unlinked local work is `Excluded` from sync, not queued** | It has no Airtable identity to upsert against. Excluded is a decision the operator reverses by linking, not a failure to retry |
 | **A stale or missing mirror never blocks a test** | The mirror is a convenience for picking work. If it is empty, origin B still works, and origin A degrades to "you cannot pick from the list yet" rather than "you cannot test" |
 
-**One question this opens, and it needs an answer before MU.** When a local job is
-linked to an Airtable record, do the attempts *already completed* against it
-become eligible to sync, or only new ones? §3 says historical attempts are
-excluded with no name-based backfill, which settles the 640 pre-integration rows
-— but it does not settle a run recorded locally yesterday and linked today. The
-safe default is **forward-only, with an explicit operator action to publish an
-earlier attempt**; that keeps the decision with a person rather than making a
-link retroactively publish work nobody re-examined.
+**A11 — linking is forward-only (decided with IFET, 2026-09-07).** When a local
+job is linked to an Airtable record, only attempts recorded *after* the link
+become eligible to sync. An earlier attempt is published by an explicit operator
+action, one at a time, never by the link itself.
+
+§3 already excluded historical attempts with no name-based backfill, which
+settled the 640 pre-integration rows — but not a run recorded locally yesterday
+and linked today. This settles it. The reasoning is that a link is a statement
+about *identity*, not a statement that everything recorded under that identity
+has been re-examined and is fit to publish; collapsing the two would let one
+operator action push untriaged attempts into Airtable, where there is no undo on
+our side of the boundary. Keeping the decision with a person costs a click and
+removes a whole class of accident.
+
+**What this obliges MU to show:** an attempt that is Excluded because it predates
+its link must say so, and offer the publish action. Silently excluded work looks
+identical to work that failed to sync, and the four contractual status words
+(§7) do not distinguish them — `Excluded` is a decision the operator reverses,
+not a failure to retry.
 
 ### Out of band — do not queue these behind the ten
 
@@ -633,7 +659,7 @@ link retroactively publish work nobody re-examined.
 | M | Deliverable | Owner | Exit evidence | Depends on |
 |---|---|---|---|---|
 | ~~**M1**~~ | Testing Base additions — **14 fields applied 2026-09-06**; synthetic linked fixture still outstanding | LabOS | ✅ Schema diff, before/after, field IDs and per-field reasons captured. ⬜ Fixture: asymmetric pair, blank/N-A/unknown examples | — |
-| **M2** | **Disposable PostgreSQL harness first**, then local migration and the first vertical flow | LabOS | ✅ Harness on **postgres:13** (the version production runs), disposable by construction. ✅ The missing migration, rehearsed as **P1 → M2 in one ordered upgrade** on real Postgres and rolled back. ✅ 8 of 9 §8 deviations closed. ✅ 166 tests on PG / 157 + 9 skipped on SQLite; competing-claim, stale-owner, epoch and same-attempt-race green. ⬜ `contract.py` → v0.4. ⬜ The compose service. ⬜ The vertical flow: import → run → finish → worker restart → one Testing Base attempt | — |
+| **M2** | **Disposable PostgreSQL harness first**, then local migration and the first vertical flow | LabOS | ✅ Harness on **postgres:13** (the version production runs), disposable by construction. ✅ The missing migration, rehearsed as **P1 → M2 in one ordered upgrade** on real Postgres and rolled back. ✅ 8 of 9 §8 deviations closed. ✅ Single-worker compose service. ✅ Prior concurrency suite: 172 PG / 163 + 9 skipped SQLite after the schema-view update. ⬜ Finish v0.4 envelope/lifecycle semantics and rerun PostgreSQL. ⬜ Vertical flow: both origins → run → finish → worker restart → one Testing Base attempt | — |
 | **MF** | **Firmware run/stage association — DG1 + DG2.** Firmware half ✅ 2026-09-06; **backend half open** | LabOS + firmware | ✅ Firmware: 22 unit tests, plus both harness scenarios green — a start carries a run identity, the callback echoes it with a stable event ID, replay creates nothing, and a pre-MF response yields an UNMAPPED callback rather than a guessed run. ⬜ Backend: mint the binding on the two GETs, key the trials route on `event_id`, record unbound callbacks as unmapped. ⬜ Then re-run on a real rig | M2 identity (backend half only) |
 | **M3** | All five backend workflows, review, corrections, evidence — **including DG3 capture for Impact / Forced Entry / ANSI** | LabOS | §7 acceptance cases | M2, MF |
 | **MU** | **Operator interface — the seven steps in §2.** Pickers, the verification form, run setup, the three manual-entry screens, review, and the sync-status chip | LabOS | An operator completes each of the five test types end to end without retyping anything Airtable already holds, and without a rig starting on unverified numbers | M3 · DG7/DG8 decided |
@@ -718,9 +744,10 @@ for "contract-compliant".
 | Lease (120 s) unrelated to the client's retry budget | §7.1 client deadline | ✅ one decision — derived from `request_budget_seconds()` (~168 s), with a test guarding the ordering |
 | `/sync/status` returns `green/amber/red`, no attachment backlog | §7 status vocabulary | ✅ four contractual words + backlog; `led` retained for the deployed bundle |
 | 23 tests are SQLite-only | §8 step 5 · acceptance 21–25 | ✅ one switch, both backends — 166 on PG, 157 + 9 skipped on SQLite |
-| `app/airtable/contract.py` pins `CONTRACT_VERSION = "0.3"`, still lists retired Wall/`Test Name`/`Abort Reason` fields and treats `Test Type` as one-option-blocking | v0.4 §§3–6 | ✅ **2026-09-07** — corrected against the live schema, not a document. Wall fields retired, all five `Test Type` options confirmed live, `Test Date` = completion, the six new fields added, three type mismatches fixed (`Unit`, `Deflection Unit`, `Testing Continued` are text, not selects). **`BLOCKING_ABSENT` is now empty** |
+| The Airtable implementation view was v0.3. `contract.py` now declares v0.4 and matches live names/types, but `envelope.py`, `attempts.py`, mapping and green tests still assert v0.3 lifecycle: result forbidden at create, final verdict required at terminal, Test Date set to start, new start/end columns skipped, no review mapping | v0.4 §§4–6 | 🟡 **PARTIAL 2026-09-07.** Schema view fixed: Wall fields retired, all five types live, six additions and three type mismatches corrected, `BLOCKING_ABSENT` empty. Lifecycle/envelope reopened by `../evidence/contract-implementation-audit-2026-09-07.md` §5 and is step 3 in §6.0 |
 
-**All nine closed** — eight on 2026-09-06, `contract.py` on 2026-09-07.
+**Eight closed; the ninth is partial.** The field/type half closed on 2026-09-07; the lifecycle/envelope half
+must close before the vertical flow.
 
 **The ninth found a live defect rather than just stale text.** A2 and A3 decided
 `Max Pressure Achieved` and the deflection pair are never published, and nothing
@@ -760,9 +787,9 @@ Schema-write credentials belong to setup, never to the runtime worker. Tokens st
 out of browser-served config.
 
 **Schema is no longer a permission question.** LabOS is authorized to define and add the required fields in
-the Testing Base with a documented change register. 73 register rows — **66 DECIDED** (44 BASELINE,
-**14 APPLIED**, 4 CONDITIONAL, 3 OMITTED, 1 PLANNED local-only) plus **7 OPEN/PROPOSED** raised by their
-2026-09-06 workflow message and held until §5 DG7/DG8 are settled with them.
+the Testing Base with a documented change register. All 73 register rows are now **DECIDED**: 44 BASELINE,
+**14 APPLIED**, 4 CONDITIONAL, 10 OMITTED and 1 PLANNED local-only. The seven former OPEN/PROPOSED rows were
+settled by A9 and are deliberately omitted, not pending agreement.
 
 **The 14 decided additions were applied to the Testing Base on 2026-09-06** — field IDs, before/after schema
 and the reason for each are in `../evidence/testing-base-changes-2026-09-06/`. Production is unchanged and

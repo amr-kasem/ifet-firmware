@@ -1,0 +1,27 @@
+# Step-1 validation — command log, 2026-09-07
+# Read-only against Airtable; all writes are local test fixtures.
+
+$ python3 -m app.airtable.probe   # testing base app4oXS3Kd5IKWgJ7
+  · would have to re-type the design pressures by hand. Read the types above and
+  · decide; that decision is the W3 gate.
+
+summary: 0 failure(s), 1 warning(s)
+
+answers to carry back into contract §10:
+  §10.1  Photos is 'url' — not an attachment — matches §7
+  §10.16  Test Result options = ['Pending', 'Passed', 'Failed', 'Not Applicable', 'Inconclusive']
+  §10.2  ID field types: {'Airtable Project ID': 'singleLineText', 'Airtable Mockup ID': 'singleLineText', 'Airtable Protocol ID': 'singleLineText', 'Airtable Section ID': 'singleLineText'}
+  §10.5  Impact Result is 'singleLineText', options=free text
+
+§10.3 (read-side parameter structure) is NOT answered here — see section 6.
+
+$ python3 -m unittest discover -s tests   # SQLite
+----------------------------------------------------------------------
+Ran 160 tests in 0.016s
+
+OK (skipped=2)
+
+$ docker compose -f tests/postgres_harness/docker-compose.yaml run --rm tests   # postgres:13
+192 passed, 63 subtests passed in 1.39s
+
+# harness torn down with 'down -v'; no volume, no durable state
