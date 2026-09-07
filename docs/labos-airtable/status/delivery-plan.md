@@ -80,6 +80,30 @@ per table.
 Nothing above is a blocker on its own. Together they mean: **every leg of this integration is greenfield
 against production, and no code has ever carried a result end to end.**
 
+### 0.4 Live verification, 2026-09-08 — read-only, both rigs and the node
+
+Run before committing to a migration, because a migration written against `models.py` would have been wrong.
+
+| | |
+|---|---|
+| `management` | 7 containers up 2 weeks; alembic head **`3a65a83e0463`** confirmed again; 13 legacy tables |
+| **Live `projects` columns** | **six** — `id`, `name`, `parent_id`, `device_id`, `inward_design_pressure`, `outward_design_pressure`. **No `airtable_*` columns exist.** `models.py` declares three that the database does not have, because P1 is unapplied. `project_parents` is `id` + `name` only |
+| Live row counts | 32 parents · 79 projects · 508 static · 634 cyclic · 640 results · **39 missile impact · 114 shots** · 37 water |
+| **Impact is already in production use** | `missile_impact_tests` and `shots` hold real data, so §4.5 is **additive against live rows, not greenfield**. `missile`, `missile_weight`, `shots.area`, `shots.velocity` are all `NOT NULL` today and are widened, never dropped |
+| system-1 | 3 containers up 7d · `config1-site-b.json` · `device1` · **VFD address 12** · 5 × `pressure2` + Flow |
+| system-2 | 4 containers up 13h (incl. the standalone turbo controller) · `config2.json` · `device2` · **VFD address 5** · 5 × `pressure2`, scale 144 → PSF |
+| **`CLAUDE.md` is wrong on the VFD address** | It says "12, not 5 on the production rigs". system-2 is genuinely on **5**. The address is **per-rig**, and that line has already cost time once |
+| **Airtable Testing Base** | 8 tables, 156 fields — **0 records in all five tables.** A structural clone of production plus our 14 additions, with no data in it at all |
+| **Airtable Production Base** | 1 project · 6 mock-ups · 24 protocols · **54 Protocol Sections** · 1 raw-data row |
+| **The eight typed fields do not exist in production** | The `Protocol Sections` delta is exactly those eight. In production `Requirement Code` and `Applicability` are absent, and the legacy `Value` text field is populated on **24 of 54** rows — blank on `# Dials`, `Impact` and `Forced Entry (*)` |
+| Source data that already exists and we do not read | `Product Type` (Projects) · `Height (Inches)`, `Width (Inches)`, `Service line` (Mock-Ups) — all populated. Four free fields that answer the product owner's "product information" |
+| An empty field they made for us | `Read Project Info For LabOS` on IFET Projects, **never populated**. Ask what they intended before designing around it |
+
+**The single most consequential line above:** pre-fill is not blocked by our code. It is blocked by data that
+does not exist yet — in production the typed fields are absent, and in Testing there are no records at all.
+That is why Track A's fixture (A3) comes before the document, and why the document's central ask is
+*populate these fields, never from the extractor*.
+
 **For what to do next, go straight to §6.0** — the ordered list of everything remaining, keyed to the
 milestone and `DG` identifiers, plus the four items that must not be queued behind it.
 
@@ -167,6 +191,105 @@ to know which job a result belongs to — so there is no pre-filled-requirement 
 inbound left to slip. If anything has to slip, it is not the outbound queue.
 
 ---
+
+
+## 2a. Requirements traceability — the product owner's message, line by line
+
+**This is the view the PM and the product owner read.** §6.0 is the engineering sequence and speaks in `DG`
+and `M` identifiers; this section speaks in *his* words, so a requirement can be looked up the way it was
+written rather than the way we filed it. Both describe the same work. When his requirements change, this
+table gets a row — not a new document.
+
+Source: the workflow message of 2026-09-06, restated 2026-09-08.
+
+**Status vocabulary.** `LIVE` = running in production today · `BUILT` = code written and tested, not deployed
+· `SPEC` = designed, not built · `GAP` = not yet designed · `DIVERGES` = we deliberately do something else,
+and he needs telling.
+
+### System responsibilities
+
+| His requirement | Our deliverable | Status |
+|---|---|---|
+| HubSpot is the starting point | Out of scope. Contract §1 records that HubSpot supplies approved commercial scope | ✅ n/a |
+| Airtable structure Project → Mock-Up → Protocol → Section | The read model is exactly this hierarchy | ✅ SPEC |
+| A project may have multiple mock-ups, each with different tests | `ProjectParent` → `Project` is job → mock-up. Verified live: the production base has 1 project and 6 mock-ups | ✅ LIVE |
+| All testing information stays connected to the correct mock-up | Every test table has a `project_id` FK to the mock-up | ✅ LIVE |
+| Airtable manages the operational side | Their automations own `Result`, `Status`, `Testing Date`; LabOS never writes them | ✅ SPEC |
+| LabOS controls VFDs, valves, sensors, gauges | Unchanged, and no Airtable code exists anywhere in firmware | ✅ LIVE |
+| LabOS is used to manually enter Impact / Forced Entry / ANSI results | §4.5 below | ❌ GAP → build |
+
+### Data flow into LabOS
+
+| His requirement | Our deliverable | Status |
+|---|---|---|
+| Operator selects Project / Mock-up / Protocol / Section | `at_mirror_*` + picker routes (§4.2) | ❌ SPEC |
+| Project number | `IFET job number` → `project_parents.name` | ❌ SPEC |
+| Mock-up / specimen name | `Mock-up/specimen name` → `projects.name` | ❌ SPEC |
+| Product information | `Product Type`, `Service line`, `Height/Width (Inches)` — **all four already exist and are populated in their base**; LabOS does not read them yet. Display-only, never executed from | ❌ SPEC |
+| Required test | `Requirement Code` — the singleSelect already carries all nine codes | ❌ SPEC |
+| Inward and outward design pressures | `Required Value Inward` / `Outward` → the `Project` DP pair | ❌ SPEC |
+| **Loading sequences** | **DIVERGES — LabOS derives them and Airtable holds none.** Proven from the running code: 6 static factors `[0.75,0.75,1,1,1.5,1.5]`, 8 cyclic high/low factors and fixed cycle counts, all from the DP pair alone. Supplying them from Airtable would create a second copy to keep in sync for no gain | ⚠️ DIVERGES |
+| Impact requirements | Count works via `Required Value` + `IMPACT_LMI/SMI`. **`Missile Type`, `Missile Weight`, `Impact Velocity` do not exist** — three fields to add | ⚠️ partial |
+| Number of gauges or deflection points | `GAUGE_COUNT` → `Required Value`. **No LabOS column exists** — §4.5 adds `projects.gauge_count` | ❌ GAP → build |
+| The operator should not manually recreate existing information | **Conditional, and this is the real blocker.** Our side is ready; the data is not. In the production base `Requirement Code` is empty on all 54 sections, and the eight typed fields do not exist there at all. Until someone populates them, the operator still types everything | ⚠️ blocked on data |
+| LabOS does not need billing, pricing, invoices, payments or scheduling | 114 fields marked `ignore` in `interface-schema.csv`; the runtime read allowlist enforces it | ✅ BUILT |
+
+### Testing inside LabOS
+
+| His requirement | Our deliverable | Status |
+|---|---|---|
+| Static Load and Cycles run as hardware-controlled tests | Unchanged | ✅ LIVE |
+| Impact / Forced Entry / ANSI entered manually via a button | §4.5 | ❌ GAP → build |
+| Every result carries project, mock-up, protocol, section and attempt identifiers | The envelope requires all five on every phase | ⚠️ BUILT wire / GAP in DB — the live `projects` table has six columns and no `airtable_*` at all, because P1 is unapplied |
+| The same test may be attempted more than once; keep every attempt | Static and cyclic already retain every trial. `attempt_number` per programme is specified in contract §2 | ⚠️ LIVE for rig tests · SPEC for the rest |
+
+### Data flow back to Airtable
+
+| His requirement | Our deliverable | Status |
+|---|---|---|
+| Test status | `Test Status` — In Progress / Completed / Abborted | ✅ BUILT |
+| Pass or fail | `Test Result`, written by the first-review phase | ✅ BUILT |
+| Test date | `Test Date` = execution completion | ✅ BUILT |
+| Operator | `Operator Name`; reviewer stored separately | ✅ BUILT |
+| **Actual pressure** | **GAP.** The value is published on `{device_id}/sensors/{addr}` and rendered live in the UI — nothing persists it. Not "no source"; not captured. Track C | ❌ GAP |
+| **Maximum pressure achieved** | **GAP.** Same source, same fix. Formerly M7 | ❌ GAP |
+| Impact results | `Impact Result` (free text) + per-shot detail in JSON | ✅ BUILT |
+| Forced-entry results | `Test Result` + JSON detail. No dedicated column — both `Test Type` and `Test Result` are singleSelect, so Airtable filters and groups natively | ⚠️ DIVERGES, decided |
+| ANSI Z97.1 results | As above, decided together with Forced Entry | ⚠️ DIVERGES, decided |
+| **Deflection readings** | **DIVERGES, and deliberately.** They are uncalibrated raw IO-Link counts mislabelled as inches. Publishing them would publish a number we cannot stand behind. Needs bench hardware (M6). **This one should not be "fixed" to satisfy the requirement** | ⚠️ DIVERGES |
+| Failure notes | Carried inside `Notes` and the JSON | ⚠️ DIVERGES, decided |
+| General notes | `Notes` | ✅ BUILT |
+| Photograph links | `Photos` (url) + `LabOS Photos` (attachment channel) | ✅ BUILT |
+| Retest required | `Retest Required`, first-review phase only — never inferred from an unreviewed checkbox | ✅ BUILT |
+| Testing continued or stopped | `Testing Continued` | ✅ BUILT |
+| LabOS report / detailed-data link | `LabOS Report Link`, `Excel File Link` — CONDITIONAL, published only once a reachable origin is validated | ⚠️ conditional |
+| Update existing records, never duplicate | Upsert on `LabOS Attempt ID` alone | ✅ BUILT |
+
+### Operating rules
+
+| His rule | How it is guaranteed | Status |
+|---|---|---|
+| Airtable must never control test equipment | Structural, not procedural: the runtime write allowlist is one table, and no Airtable code exists in firmware | ✅ BUILT |
+| An Airtable connection problem must not stop testing | Transactional outbox; the domain save and the queue row commit together, and the worker is a separate container | ✅ BUILT |
+| LabOS remains the detailed record | Airtable receives a summary; originals and full detail stay local | ✅ BUILT |
+| The same information should not be entered twice | See the data-flow row above — blocked on data, not on code | ⚠️ blocked |
+| Every record must use permanent identifiers | `rec…` IDs route everything; names and job numbers are display and reconciliation only | ✅ BUILT |
+| UI shows Synced / Pending / Sync Failed / Retry Required | `/sync/status` returns exactly those four words | ⚠️ BUILT backend · ❌ no UI |
+
+### The manual-entry form must already know the context
+
+| His requirement | Our deliverable | Status |
+|---|---|---|
+| Project · Mock-up · Test protocol · System · Operator · Attempt number | §4.5 routes take `project_id` and derive the rest; attempt number is allocated server-side | ❌ GAP → build |
+
+### Responsibilities and prerequisites
+
+| His statement | Where we actually are |
+|---|---|
+| "The Airtable team will be responsible for defining the Airtable tables, fields and record relationships" | **Inverted, with authorisation.** LabOS defined and applied 14 fields on 2026-09-06 and proposes 3 more. The change document is what makes that legitimate rather than unilateral |
+| "The LabOS team will be responsible for the interface, local storage, API communication, field mapping, sync queue and error handling" | All six are ours and all six are specified; the queue and error handling are built and tested | ✅ |
+| Scoped personal access tokens, restricted base and permissions | Two PATs, server-side only. Production is read-only and every write path refuses it unconditionally | ✅ BUILT |
+| **"Before development begins, both teams need to agree on the exact field mapping and permanent identifiers"** | **The one prerequisite in his message that is still unmet.** The mapping exists — 73 register rows, 168 interface rows, permanent IDs specified — and has never been sent. This is §6.0 step 2 | ❌ **OPEN** |
 
 ## 3. Scope and decisions
 
@@ -308,6 +431,113 @@ physically happened.** That is the decided initial behaviour, and it is the firs
 ask about when they see M3.
 
 ---
+
+
+### 4.5 Manual test capture — Impact, Forced Entry, ANSI Z97.1
+
+**None of the three touches the rig.** No VFD, no valves, no MQTT, no stage trials, no run binding. They are
+manual entry, which is why they can ship to production ahead of any Airtable work and independently of the
+firmware legs. They go in `report-api` beside static and cyclic; `sync-worker` is not involved.
+
+**What they are, because the names mislead.** ANSI Z97.1 is a *bag-drop* safety-glazing test — a weighted bag
+swung into the glazing, pass if it does not break or breaks safely. Missile Impact is *windborne debris*
+(ASTM E1886/E1996). Both are "impact" and they are different tests, which is why contract §3.2 already
+carries `ANSI_IMPACT` separately from `IMPACT_LMI`/`IMPACT_SMI`. Forced Entry is forced-entry resistance
+(ASTM F588 / F476, AAMA 1304): specified loads and manipulation against the lock and sash.
+
+**Business shape, from the product owner (2026-09-07).** Impact is *how many impacts, whether each passed,
+and a few photographs* — no heavy metadata. Forced Entry and ANSI are *pass or fail*. ANSI is normally the
+first test performed on a specimen; that is **informational ordering only** and is not enforced, because a
+hard block would eventually stop legitimate work and there is no override in this design.
+
+#### Entities
+
+**`ManualAttempt` — a mixin, not a table.** The columns every non-rig attempt needs, and precisely what the
+outbound envelope already consumes. A mixin because the repo already uses one for exactly this purpose
+(`AirtableProtocolRef` on `StaticTest`/`CyclicTest`), and because static and cyclic take the same columns
+later without a rewrite.
+
+| Column | Note |
+|---|---|
+| `labos_attempt_id` | UUID, unique. The upsert key |
+| `attempt_number` | allocated server-side, per (project, test type) |
+| `status` | `In Progress` → `Completed` / `Aborted` |
+| `test_result` | `Pending` until the first review, then Pass / Fail / Inconclusive |
+| `operator_name` · `testing_start_date` · `testing_end_date` | |
+| `verdict_by` · `verdict_at` · `retest_required` | **first review only.** All three nullable — an unreviewed attempt has not answered the retest question, and `bool(None)` is an answer nobody gave |
+| `testing_continued` · `note` · `abort_reason` | |
+
+**`manual_tests`** — Forced Entry and ANSI Z97.1 in **one** table with a `type` discriminator. Both are
+pass/fail with a note; the shape is identical, so two near-identical tables would be duplication rather than
+fidelity to the pattern. `StaticTest` already carries a `type` column, so this matches the repo.
+Columns: `id`, `project_id` FK, `type` (`Forced Entry` | `ANSI Z97.1`), `required_option` (the grade or
+class, e.g. `ASTM F588 Grade 40`, `Class A`), `result` boolean, plus the mixin.
+
+**`missile_impact_tests` / `shots`** — **already exist and are already in production use: 39 impact tests and
+114 shots.** This is not greenfield. `Shot.result` is already the per-impact boolean the product owner
+described. Changes are additive only: add the mixin to `missile_impact_tests`, and widen
+`missile`, `missile_weight`, `shots.area`, `shots.velocity` to nullable so the operator is not forced to type
+metadata the test does not need. Existing report generation keeps working.
+
+**`test_photos`** — `id`, `filename`, `path`, `note`, and two nullable FKs
+(`missile_impact_test_id`, `manual_test_id`). Explicit columns rather than a polymorphic key. Enabled for all
+three types and required by none: a *failed* Forced Entry or ANSI is exactly when someone wants a photograph,
+and evidence cannot be added after an attempt freezes.
+
+**`projects`** gains `gauge_count` and `impact_count`, both nullable — the two requirements the product owner
+asks Airtable to supply that today have nowhere to land.
+
+#### Routes
+
+Phases follow the contract: create → terminal → first review. All under `report-api`.
+
+| Route | Behaviour |
+|---|---|
+| `POST /projects/{id}/manual-tests/` | Create a Forced Entry or ANSI attempt. Allocates `attempt_number`, sets `Pending` |
+| `GET /projects/{id}/manual-tests/` | List, with attempts |
+| `PUT /manual-tests/{id}/finish` | Terminal: result, notes, end time. Explicit completion or an abort reason — never inferred |
+| `POST /projects/{id}/impact-tests/` | **Create an Impact attempt — no create route exists today**; Impact is currently write-by-report-generation only |
+| `POST /impact-tests/{id}/shots` | One impact: pass/fail, optional area/velocity/note |
+| `PUT /impact-tests/{id}/finish` | Terminal |
+| `POST /{manual-tests,impact-tests}/{id}/photos` | Upload; original retained locally |
+| `PUT /{manual-tests,impact-tests}/{id}/verdict` | First review, once: reviewer, time, rationale, `Retest Required` |
+
+FastAPI generates the OpenAPI document, so the UI developer is unblocked the moment these exist — before any
+deployment and before any Airtable work.
+
+#### Validation rules
+
+1. **A verdict is recorded once**, by a named reviewer, and never by the terminal write.
+2. **Operator and reviewer are stored separately**, even when they are the same person.
+3. **Impact requires photographic evidence at finish**, enforced on the run-finish path — *not* as a
+   precondition for publishing to Airtable, because attachments are their own delivery channel and may
+   settle later. Forced Entry and ANSI require none.
+4. **Missing telemetry never implies a pass.** Completion is explicit or it is an abort with a reason.
+5. **A new attempt never overwrites an earlier one.** Corrections are new rows referring to the original.
+
+### 4.6 Field ownership — standalone versus synced
+
+**The rule that keeps this from forking into two systems:** the sync service never writes LabOS domain
+tables; it fills the local mirror only. Creating a project always goes through the *same*
+`POST /devices/{id}/projects/` whether the values were typed or pre-filled. Standalone and synced are one
+form with the boxes empty or filled — not two flows, one create path, one set of tests.
+
+`report-api` reads a **local** mirror table. It never calls Airtable and never imports `app.airtable` or
+`app.sync`. An empty mirror means an empty picker, not a blocked operator.
+
+**Class 1 — LabOS owns it; Airtable never supplies it.** `device_id` (which rig — not an Airtable fact, and
+an explicit operator choice at import), all measured values, the verdict, reviewer and operator identity, and
+the fourteen derived stage definitions. Sync must be structurally incapable of writing these.
+
+**Class 2 — dual-source: the operator types it, or Airtable pre-fills it.** Job number, mock-up name, the
+inward/outward pair, water applicability, gauge count, impact count, missile type/weight, shot velocity.
+Requirements: every one stays manually enterable **forever**; pre-fill is a default, never a lock; the
+existing `NOT NULL` on the DP pair is unchanged because the operator always supplies it either way; and the
+import records *which* values came from Airtable so a wrong one stays traceable.
+
+**Class 3 — Airtable-only, display, never required.** The `rec…` join keys and the display metadata
+(`Product Type`, `Height`, `Width`, `Service line`). All nullable. Absent is normal, not degraded — a project
+with no `airtable_*` id is `Excluded` from sync under A11 until an operator explicitly links it.
 
 ## 5. Gaps — consolidated
 
@@ -566,24 +796,53 @@ IDs. Nothing here invents a new numbering scheme.
 firmware half, and most of M2 — harness, the migration that did not exist, and 8 of 9 §8 deviations.
 **Nothing is deployed.**
 
+**Three tracks, and they do not block each other.** This was one chain until 2026-09-08, which made the
+Airtable team appear to be waiting on our build. They are not: what they need from us is a *schema*
+document, and the schema is validated. Splitting the sequence is what lets them start.
+
+### Track A — unblock the Airtable team (days, not weeks)
+
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
-| ~~**1**~~ | ~~**Validate the schema locally against all five test types**~~ **✅ 2026-09-07** | §3.0 · A10 | LabOS | — | Done, and **it failed first**: three defects, all five types — the mandated `Test Result = Pending` create payload refused by our own validator; `Test Date` stamped with the **start** instant while the two columns applied on 2026-09-06 were never written; and an attachment upload made a precondition for publishing a measured result. All three fixed, 192 tests + 63 subtests green on Postgres. Evidence: `../evidence/schema-validation-five-types-2026-09-07.md` |
-| **2** | **Send the change document** — `../evidence/testing-base-changes-2026-09-06/` (README, `production-change-spec.csv`, before/after schema) plus the cover letter's §7. **Unblocked and ready 2026-09-07**: nothing step 1 found changes which fields exist or what they are called, so the document is still accurate. The cover letter now states that `Test Date` is the **completion** instant and `Testing Start/End Date` carry the pair, and honestly distinguishes removing our proposed verification step from eliminating the existing cross-platform requirement-entry duplication | §3.0 commitment 3 | **IFET/you** | ✅ 1 | The send record is filled in and a copy is in `correspondence/sent/`. **This is what lets the Airtable team update production** — we never touch their production base ourselves |
-| **3** | **Finish the v0.4 implementation view** — `contract.py`'s corrected live schema, plus envelope/mapping/tests at create → terminal → first-review semantics. **Envelope half done 2026-09-07**: ✅ create sends `Pending`; ✅ `Test Date` is completion and both applied columns are written; ✅ `build_verdict()` exists and terminal stays `Pending`; ✅ `Retest Required` moved to the review phase and is no longer inferred `False` from an unreviewed checkbox; ✅ 200 tests + 82 subtests on Postgres. ⬜ **Still open — persistence**: no reviewer columns, no migration, no verdict route, and the committed models still treat legacy `TestResult` as the attempt with no programme/run or mirror tables (`../evidence/contract-implementation-audit-2026-09-07.md` §5) | §8 (9th deviation) | LabOS | — | An attempt is created Pending, terminates Pending with its measurement and both dates, and is reviewed once by a **named reviewer** whose identity is persisted — not just accepted by the builder |
-| ~~**4**~~ | ~~The worker's compose service and its env vars~~ **✅ 2026-09-07** | DG6 | LabOS | — | Done. `sync-worker` in `compose.yaml`: no public port, no replicas, starts disabled. Exit semantics verified against the harness. **DG6's deployment half is fully closed** |
-| **5** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | 3, 4 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally in LabOS with no Airtable origin at all. Neither path may block the other. Last of M2, and the one that gates M3 |
-| **6** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 5 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed. **Two routes, not one**: firmware posts to `/projects/{id}/static_tests/{idx}/trials` and `/projects/{id}/cyclic-tests/{idx}/trials` (`api.py:94`, `api.py:109`), matching the two GETs it binds on |
-| **7** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | DG3 → M3 | LabOS | 5 | Model, route and table for each; the §7 acceptance cases pass with Forced Entry and ANSI as **capture** cases, not just as filters |
-| **8** | **M1's fixture, and DG6's remaining drift** | M1 · DG6 | LabOS | nothing | Fixture: asymmetric pair plus blank/N-A/unknown examples (also contract legacy item 11). Drift: register rows for `completion_source` and `identity_assurance`, a defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the `Test Name`/`Abort Reason` note in the register header |
-| **9** | **MU — the operator interface** | DG5 → MU | LabOS | 7 | An operator completes all five test types end to end and sees the sync status of each. **Smaller than it was**: A9 deleted the verification form, which was its most awkward screen, and no longer waits on anyone's answer |
-| **10** | **M4 — the change document with actual results** | M4 | LabOS | 1–9 | Every planned change marked applied/verified or outstanding, with evidence |
-| **11** | **M5 — production cutover** | M5 | LabOS + IFET | 10, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
+| ~~**A1**~~ | ~~Validate the write surface against all five test types~~ **✅ 2026-09-07** | §3.0 · A10 | LabOS | — | Done, and **it failed first** — three defects, all five types. Evidence: `../evidence/schema-validation-five-types-2026-09-07.md` |
+| **A2** | **Add three Impact requirement fields to the Testing Base** — `Missile Type`, `Missile Weight`, `Impact Velocity`. **Not** `Impact Locations`: location is a per-shot observation, not a requirement, and a speculative field now propagates into production | §9 | LabOS | — | Applied via `apply_schema.py` with before/after evidence, as the 14 were on 2026-09-06. Testing only |
+| **A3** | **Fixture round-trip — the read side has never been exercised** | M1 | LabOS | A2 | A synthetic proposal written into Testing (1 project → 1 mock-up → 1 protocol → 5 sections, one per test type), read back through `AirtableClient`, and asserted: every field we claim to read is readable and correctly typed, the DP pair drives the 14 stages, and each `Requirement Code` routes to the right test. **This is what proves pre-fill**, and it also gives the UI developer real data |
+| **A4** | **Regenerate `interface-schema.csv` and `production-change-spec.csv`** | §9 | LabOS | A2 | Both cover all 17 fields; the register's counts match the generated CSVs |
+| **A5** | **Assemble and send the document** | §3.0 commitment 3 | **IFET/you** | A3, A4 | Sections 1–7 already exist as artifacts. **Only §8 is new writing** — the three asks: populate the eight typed fields (never from the PDF extractor); keep the `Protocol Sections` automation's exclusive ownership of `Result`/`Status`/`Testing Date`; confirm no unfiltered "when record updated" trigger breaks on 17 new fields. Copy to `correspondence/sent/` |
 
-**Steps 1 and 4 are done; step 3's envelope half is done.** Of what remains, **step 2 is now yours to send** and
-**step 8 has no prerequisites**; 3 → 5 → 6 → 7 → 9 → 10 → 11 is a chain. **Step 3's remaining half is the
-one to start** — programme/run/mirror and reviewer persistence plus the API mutation, which step 5 needs
-before a vertical write means anything.
+**Behaviour is explicitly out of Track A.** Automation compatibility, roll-up behaviour and upsert-in-anger
+need the vertical flow *and* their base, so they are marked "verified at cutover" in the document rather than
+holding it. A10's gate was against sending an **unvalidated schema**; the schema is validated, so the gate is
+satisfied.
+
+### Track B — unblock the UI developer (parallel, no Airtable dependency)
+
+| # | Do this | Ref | Owner | Waits on | Done when |
+|---|---|---|---|---|---|
+| **B1** | **The migration** — §4.5/§4.6 entities. `ManualAttempt` mixin · `manual_tests` · `test_photos` · `projects.gauge_count`/`impact_count`/`airtable_meta` · the `airtable_*` join keys on `projects` and `project_parents` (this *is* P1) · Impact's four columns widened to nullable | DG3 · §8 | LabOS | — | Additive and nullable throughout, rehearsed P1 → M2 → this as one ordered upgrade on the disposable `postgres:13` harness and rolled back. **Safe against the 79 live projects and 39 live impact tests** |
+| **B2** | **The endpoints** — §4.5 routes, in `report-api`, importing neither `app.airtable` nor `app.sync` | DG3 → M3 | LabOS | B1 | All eight routes exist; a test asserts `report-api` imports no sync or Airtable module |
+| **B3** | **Hand over the OpenAPI document** | MU | LabOS | B2 | FastAPI emits it; the UI developer starts. **This is the actual unblock and it happens before any deploy** |
+| **B4** | **Deploy the three test types to `management`** | M3 | LabOS + IFET | B2, a window | Impact, Forced Entry and ANSI capture live alongside static and cyclic. No Airtable involvement. Runbook `../runbooks/p0-p1-deploy-2026-08-28.md`, **§2 is the go/no-go** |
+
+### Track C — the integration itself (after A and B)
+
+| # | Do this | Ref | Owner | Waits on | Done when |
+|---|---|---|---|---|---|
+| **C1** | **Reviewer persistence and the verdict route** — the remaining half of the v0.4 implementation view | §8 (9th deviation) | LabOS | B1 | An attempt is created Pending, terminates Pending with its measurement and both dates, and is reviewed once by a **named reviewer whose identity is persisted** — not merely accepted by the builder |
+| **C2** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | C1, A3 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally with no Airtable origin. Neither path may block the other |
+| **C3** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | C2 | `simulation/mf_harness/` passes against the real backend. **Two routes, not one**: `api.py:94` and `api.py:109` |
+| **C4** | **Capture actual and maximum pressure** — subscribe to `{device_id}/sensors/{addr}` during a run and persist max plus final | M7 | LabOS | C2 | Closes two product-owner requirements. **Not "no source"** — the value is on the bus and renders live in the UI; nothing stores it |
+| **C5** | **MU — the operator interface** | DG5 → MU | LabOS | B3, C2 | An operator completes all five test types end to end and sees the sync status of each |
+| **C6** | **DG6's remaining drift** | DG6 | LabOS | — | Register rows for `completion_source` and `identity_assurance`, defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the nine JSON-only fields noted in the register header |
+| **C7** | **M4 — the change document with actual results** | M4 | LabOS | A5, C2 | Every planned change marked applied/verified or outstanding, with evidence |
+| **C8** | **M5 — production cutover for the integration** | M5 | LabOS + IFET | C7, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
+
+**Deliberately still not delivered, and both are decisions rather than omissions.** Deflection values stay
+quarantined until calibration (M6) — publishing uncalibrated raw counts mislabelled as inches would publish a
+number we cannot stand behind. Loading sequences stay derived in LabOS rather than supplied by Airtable
+(§2a). Both need saying to the product owner rather than being discovered at demo.
+
+**What is startable right now: A2 and B1.** Everything else in both tracks follows from those two.
 
 **Two independent passes on 2026-09-07 found the same defects, which is worth recording.** The five-type
 schema validation (step 1) and the implementation audit both landed on `Test Result = Pending` being
