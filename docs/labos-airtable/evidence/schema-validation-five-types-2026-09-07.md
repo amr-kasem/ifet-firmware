@@ -10,7 +10,8 @@ been discovered by the Airtable team, in their production base, after we had ask
 
 Scope: the **write** surface, phase by phase, for Static Load, Cycles, Impact, Forced Entry and ANSI Z97.1.
 The read surface is unchanged and needed no correction: under A9 it is 10 fields plus the four `rec…` record
-IDs, and `Requirement Code` alone carries meaning.
+IDs. `Requirement Code` routes the test type and `Applicability` carries its assignment state; those are the
+only two non-identity/display fields.
 
 ---
 
@@ -111,9 +112,10 @@ tmpfs, torn down with `down -v`. SQLite results are not accepted as proof of any
 
 ## 3. Two things this did not find, and one it corrected
 
-**The read surface needed nothing.** A9 reduced it to identity plus `Requirement Code`, and the eight typed
-`Protocol Sections` fields are live and correctly typed. Ten read fields are enough to identify the work for
-all five types, because LabOS does not execute from any of them.
+**The read surface needed nothing.** A9 reduced it to identity/display plus `Requirement Code` and
+`Applicability`, and the eight typed `Protocol Sections` fields are live and correctly typed. Ten read fields
+are enough to identify and classify the work for all five types, because LabOS does not execute from any
+requirement value.
 
 **A completed Static Load or Cycles row still carries no number describing what physically happened.** A2
 omits `Measured Value` and `Max Pressure Achieved`, A3 quarantines the deflection pair, and the rig sends

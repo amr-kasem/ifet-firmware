@@ -165,9 +165,10 @@ Airtable outage cannot stop or affect a test.
 
 Concretely, that means **we read almost nothing from Airtable**: the record IDs, the IFET job number, the
 project/specimen/protocol/section names, plus `Requirement Code` and `Applicability` on a section. Fourteen
-fields, and only `Requirement Code` is more than identity — it tells us which of the five tests a section
-is. Everything hangs off the IFET job number for people, with the Airtable record IDs carried alongside as
-the key that actually routes a result.
+fields. `Requirement Code` tells us which of the five tests a section is, and `Applicability` says whether
+it is assigned, explicitly unneeded or still unconfirmed; those are the only two fields that are more than
+identity/display. Everything hangs off the IFET job number for people, with the Airtable record IDs carried
+alongside as the key that actually routes a result.
 
 **We do not read any requirement values at all** — not `Required Value`, not the inward/outward pair, not
 `Value`, units or options. Our operators set a test up in LabOS exactly as they do today. Those fields stay
@@ -182,9 +183,10 @@ Three things we had been about to ask you therefore withdraw, and none needs an 
   particular report of yours needs a dedicated field, tell us which and we'll add it.
 - **Loading sequences** — LabOS derives these itself and needs nothing from Airtable.
 
-This also settles the double-entry question. Earlier we were going to ask operators to re-key the verified
-pressures before a rig would start, which cut against your "no double entry" goal. Since we now read no
-requirement values, there is nothing to re-key and nothing to check — the operator's workflow is unchanged.
+This removes the **new** verification/re-key step in our earlier design: the operator's LabOS workflow stays
+as it is today. It does **not** yet remove the existing duplication between a requirement recorded in
+Airtable and the test parameters entered in LabOS. Eliminating that safely would require a future inbound
+release with a trustworthy source; the current extractor defect makes the values unsafe for rig control.
 
 **One thing we need from you.**
 

@@ -39,8 +39,9 @@ this document:
 
 1. **LabOS reads the minimum needed to identify work, and no requirement values at all.** The operator sets
    a test up in LabOS exactly as today. Fourteen inbound fields — record IDs, the job number, the display
-   names, `Requirement Code` and `Applicability` — are the whole read surface. `Requirement Code` is the
-   only non-identity field among them, and it exists to say *which of the five tests* a section is.
+   names, `Requirement Code` and `Applicability` — are the whole read surface. Those last two are the only
+   non-identity fields: `Requirement Code` says *which of the five tests* a section is, and `Applicability`
+   says whether it is assigned, explicitly unneeded or still unconfirmed.
 2. **The join is `IFET job number` for humans and the `rec…` record ID for machines.** The job number is
    hand-entered text, so a renumber or a typo would silently re-point a job's results if it were the only
    key. Names and numbers are for display and reconciliation; permanent record IDs route everything.
