@@ -60,6 +60,31 @@ per table.
 
 ---
 
+### 0.3 Probed state
+
+| | |
+|---|---|
+| **Deployed** | **Nothing of this integration.** `management` runs branch `latest` @ `90f9595` |
+| Live alembic head | `3a65a83e0463` — **P1 (`b7c2e9a41d38`) not applied**, and M2 (`c4e1f8a92b07`) queued behind it |
+| Live tables | 13, all legacy. No `sync_outbox`, `sync_state`, `test_programmes`, `test_programme_runs`, `at_mirror_*` |
+| Live columns matching `airtable\|labos\|attempt` | **zero** |
+| Code in the running `report-api` image | `app/{data,domain,utils}` only — **no `app/airtable/`, no `app/sync/`** |
+| Live routes | 25; **none** for airtable, sync, runs or import |
+| `test_results` rows | 640 |
+| `ifet-management` | `feature/labos-airtable` @ `1ee4cda` — all integration code, unmerged, **still unwired** (`main.py` imports nothing from `app.sync`). Carries the sync migration, the §7.1 mechanisms, the enforced single-worker service and its compose entry, the v0.4 contract with its omission guard, and the Postgres harness. **All nine §8 deviations closed** |
+| `ifet-firmware` | `feature/labos-firmware-p3` — docs, **plus the MF firmware change and the isolated simulation harness** (`simulation/mf_harness/`, `src/fake_sick_service/`). Not deployed to any rig |
+| Committed envelope code | `app/airtable/contract.py` at **`CONTRACT_VERSION = "0.4"`** since 2026-09-07, reconciled field-by-field against the live schema |
+| **Testing Base schema** | **M1 applied 2026-09-06** — 14 fields added, 142 → 156. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
+| Production Base schema | Unchanged at 142 fields, **re-verified live 2026-09-06** (+0/−0/~0). The 14 above are exactly the production delta |
+
+Nothing above is a blocker on its own. Together they mean: **every leg of this integration is greenfield
+against production, and no code has ever carried a result end to end.**
+
+**For what to do next, go straight to §6.0** — the ordered list of everything remaining, keyed to the
+milestone and `DG` identifiers, plus the four items that must not be queued behind it.
+
+---
+
 ## 1. The whole data path
 
 ```
@@ -430,7 +455,7 @@ the interface.
 |---|---|
 | `completion_source` | Required by contract §2; absent from the register **and** from §4.1's run columns (now added above) |
 | `identity_assurance = declared` | Required by contract §4; same absence (now added above) |
-| Sync service deployment | ✅ **Decided and built 2026-09-06: exactly one worker, enforced.** `app/sync/service.py` is the runnable process; `app/sync/singleton.py` holds a Postgres advisory lock so a second instance **refuses to start** rather than racing. Chosen for how it releases — the lock lives on one connection and vanishes when that connection does, so a SIGKILLed worker leaves nothing to clean up. Liveness stays the heartbeat row `report-api` already serves, because a worker answering its own health check would report healthy from inside a process whose database connection had gone. ⬜ **Still to do: the compose service and its env vars** |
+| Sync service deployment | ✅ **CLOSED 2026-09-07. Exactly one worker, enforced.** `app/sync/service.py` is the runnable process; `app/sync/singleton.py` holds a Postgres advisory lock so a second instance **refuses to start** rather than racing. Chosen for how it releases — the lock lives on one connection and vanishes when that connection does, so a SIGKILLed worker leaves nothing to clean up. Liveness stays the heartbeat row `report-api` already serves, because a worker answering its own health check would report healthy from inside a process whose database connection had gone. ✅ The `sync-worker` compose service and `SYNC_LOG_LEVEL` landed 2026-09-07 |
 | Gauge selection | `GAUGE_COUNT` is a snapshotted programme parameter (contract §3.2); firmware takes `selectedSensors[]` live at MQTT start. Never reconciled; a mismatch at start has no defined behaviour |
 | `Test Name`, `Abort Reason` | JSON-only by contract §6 — correct, but they have no register row, so a register-vs-JSON diff reports them missing. Note it in the register header |
 
@@ -545,7 +570,7 @@ firmware half, and most of M2 — harness, the migration that did not exist, and
 | **1** | **Validate the schema locally against all five test types** — the gate on sending anything | §3.0 · A10 | LabOS | nothing | For each of Static Load, Cycles, Impact, Forced Entry and ANSI Z97.1: the fields we read are enough to identify the work, and the fields we write carry the result. Anything missing or unnecessary is corrected **before** the document goes out |
 | **2** | **Send the change document** — `../evidence/testing-base-changes-2026-09-06/` (README, `production-change-spec.csv`, before/after schema) plus the cover letter's §7 | §3.0 commitment 3 | **IFET/you** | 1 | The send record is filled in and a copy is in `correspondence/sent/`. **This is what lets the Airtable team update production** — we never touch their production base ourselves |
 | ~~**3**~~ | ~~`app/airtable/contract.py` → v0.4~~ **✅ 2026-09-07** | §8 (9th deviation) | LabOS | — | Done. 172 tests pass on Postgres, 163 + 9 skipped on SQLite. Closes the last §8 deviation |
-| **4** | **The worker's compose service and its env vars** | DG6 | LabOS | nothing | A service in `compose.yaml` with no public port, `.env.example` entries, and a second instance observably refusing to start |
+| ~~**4**~~ | ~~The worker's compose service and its env vars~~ **✅ 2026-09-07** | DG6 | LabOS | — | Done. `sync-worker` in `compose.yaml`: no public port, no replicas, starts disabled. Exit semantics verified against the harness. **DG6's deployment half is fully closed** |
 | **5** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | 3, 4 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally in LabOS with no Airtable origin at all. Neither path may block the other. Last of M2, and the one that gates M3 |
 | **6** | **MF backend half** — mint `run` on the two GETs, key `/trials` on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | 5 (needs the run table) | `simulation/mf_harness/` passes against the **real** backend rather than the stub, and an unmapped callback is recorded rather than guessed |
 | **7** | **DG3 — capture for Impact, Forced Entry and ANSI Z97.1** | DG3 → M3 | LabOS | 5 | Model, route and table for each; the §7 acceptance cases pass with Forced Entry and ANSI as **capture** cases, not just as filters |
@@ -554,8 +579,9 @@ firmware half, and most of M2 — harness, the migration that did not exist, and
 | **10** | **M4 — the change document with actual results** | M4 | LabOS | 1–9 | Every planned change marked applied/verified or outstanding, with evidence |
 | **11** | **M5 — production cutover** | M5 | LabOS + IFET | 10, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
 
-**Steps 1, 3, 4 and 8 have no prerequisites and can run in any order or in parallel.** Step 2 waits only on
-step 1, and everything from 5 onwards is a chain.
+**Steps 3 and 4 are done.** Of what remains, **1 and 8 have no prerequisites**, step 2 waits only on step 1,
+and 5 → 6 → 7 → 9 → 10 → 11 is a chain. **Two things are startable immediately: step 1 (validate the
+schema) and step 5 (the vertical flow)** — step 5's blockers were 3 and 4, both now cleared.
 
 ### 6.1 What step 5 actually means — two origins that must merge
 
