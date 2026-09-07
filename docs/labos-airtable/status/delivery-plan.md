@@ -580,10 +580,10 @@ firmware half, and most of M2 — harness, the migration that did not exist, and
 | **10** | **M4 — the change document with actual results** | M4 | LabOS | 1–9 | Every planned change marked applied/verified or outstanding, with evidence |
 | **11** | **M5 — production cutover** | M5 | LabOS + IFET | 10, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
 
-**Steps 1 and 4 are done; step 3 is half done.** Of what remains, **step 2 is now yours to send** and
+**Steps 1 and 4 are done; step 3's envelope half is done.** Of what remains, **step 2 is now yours to send** and
 **step 8 has no prerequisites**; 3 → 5 → 6 → 7 → 9 → 10 → 11 is a chain. **Step 3's remaining half is the
-one to start** — the create → terminal → first-review phase model, which step 5 needs before a vertical
-write means anything.
+one to start** — programme/run/mirror and reviewer persistence plus the API mutation, which step 5 needs
+before a vertical write means anything.
 
 **Two independent passes on 2026-09-07 found the same defects, which is worth recording.** The five-type
 schema validation (step 1) and the implementation audit both landed on `Test Result = Pending` being
@@ -744,10 +744,10 @@ for "contract-compliant".
 | Lease (120 s) unrelated to the client's retry budget | §7.1 client deadline | ✅ one decision — derived from `request_budget_seconds()` (~168 s), with a test guarding the ordering |
 | `/sync/status` returns `green/amber/red`, no attachment backlog | §7 status vocabulary | ✅ four contractual words + backlog; `led` retained for the deployed bundle |
 | 23 tests are SQLite-only | §8 step 5 · acceptance 21–25 | ✅ one switch, both backends — 166 on PG, 157 + 9 skipped on SQLite |
-| The Airtable implementation view was v0.3. `contract.py` now declares v0.4 and matches live names/types, but `envelope.py`, `attempts.py`, mapping and green tests still assert v0.3 lifecycle: result forbidden at create, final verdict required at terminal, Test Date set to start, new start/end columns skipped, no review mapping | v0.4 §§4–6 | 🟡 **PARTIAL 2026-09-07.** Schema view fixed: Wall fields retired, all five types live, six additions and three type mismatches corrected, `BLOCKING_ABSENT` empty. Lifecycle/envelope reopened by `../evidence/contract-implementation-audit-2026-09-07.md` §5 and is step 3 in §6.0 |
+| The Airtable implementation view was v0.3. `contract.py` now declares v0.4 and matches live names/types; `envelope.py` now separates create, terminal and first review and mapping no longer invents a pre-review `Retest Required = false`. Reviewer persistence and the review mutation route still do not exist | v0.4 §§4–6 | 🟡 **PARTIAL 2026-09-07.** Schema and envelope halves fixed and 200 tests + 82 subtests pass on PostgreSQL. Programme/run/mirror and reviewer persistence/API remain step 3 in §6.0; evidence: `../evidence/contract-implementation-audit-2026-09-07.md` §5 |
 
-**Eight closed; the ninth is partial.** The field/type half closed on 2026-09-07; the lifecycle/envelope half
-must close before the vertical flow.
+**Eight closed; the ninth is partial.** The field/type and envelope halves closed on 2026-09-07; persistence
+and API integration must close before the vertical flow.
 
 **The ninth found a live defect rather than just stale text.** A2 and A3 decided
 `Max Pressure Achieved` and the deflection pair are never published, and nothing

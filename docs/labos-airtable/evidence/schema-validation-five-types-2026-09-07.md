@@ -135,7 +135,7 @@ Not defects in the interface, but they make the register and the plan disagree a
 
 | | |
 |---|---|
-| Register status | **73 rows, all `DECIDED`; 10 `OMITTED`.** A9 closed DG7/DG8's seven `OPEN`/`PROPOSED` rows into it — correctly. Plan §9 and `INDEX.md` still describe "66 DECIDED … 3 OMITTED … plus 7 OPEN/PROPOSED" |
+| Register status | **73 rows, all `DECIDED`; 10 `OMITTED`.** A9 closed DG7/DG8's seven `OPEN`/`PROPOSED` rows into it — correctly. This validation found the plan and index still using the earlier 66/7 split; both were reconciled later the same day |
 | JSON-only fields | DG6 notes two (`Test Name`, `Abort Reason`). There are **nine**: those plus `Required Value`, `Required Unit`, `Cycles Required`, `Cycles Completed`, `Test Rig`, `LabOS Version`, `Result Rationale`. A register-vs-base diff reports all nine as missing |
 | Trials routes | §6.0 step 6 says "key `/trials` on `event_id`", singular. There are **two** — `POST /projects/{id}/static_tests/{idx}/trials` and `POST /projects/{id}/cyclic-tests/{idx}/trials` — and firmware posts to both (`api.py:94`, `api.py:109`). Likewise two GETs to mint `run` on |
 

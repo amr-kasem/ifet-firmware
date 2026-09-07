@@ -70,27 +70,30 @@ contractual run or enqueues a phase.
 At first inspection, `app/airtable/contract.py` declared v0.4 and the live field types, but the code behind
 that declaration still implemented v0.3 lifecycle semantics. A separate five-type validation ran in the
 same working session and fixed the first two rows plus the misplaced attachment precondition; its evidence
-is `schema-validation-five-types-2026-09-07.md`. The phase-model and persistence rows remain open:
+is `schema-validation-five-types-2026-09-07.md`. The envelope phase model was then completed; persistence
+and API integration remain open:
 
 | v0.4 contract | State at the end of this audit |
 |---|---|
 | Create writes `Test Result = Pending` | ✅ Fixed and covered for all five types |
 | `Test Date` is absent at create and equals completion at terminal; send the real start/end columns | ✅ Fixed and covered for all five types |
 | Attachment delivery is independent of terminal result delivery | ✅ Fixed; Impact evidence remains a run-finish requirement but no upload gates the terminal payload |
-| Terminal keeps result Pending; first review alone writes Passed/Failed/Inconclusive | 🟡 Terminal now accepts Pending, but it also accepts a final verdict. There is no separate verdict builder or phase guard |
-| Review writes `LabOS Verdict By`, `LabOS Verdict At`, rationale and Retest Required together | ORM/migration/mapping have no reviewer columns or review mutation |
+| Terminal keeps result Pending; first review alone writes Passed/Failed/Inconclusive | ✅ `build_terminal()` refuses a verdict and `build_verdict()` is a separate guarded phase |
+| Review writes `LabOS Verdict By`, `LabOS Verdict At`, rationale and Retest Required together | 🟡 Envelope and mapping enforce the quartet; ORM/migration have no reviewer columns and there is no review mutation route |
 | Programme and run are separate; attempt ordinal is per programme | committed models still treat legacy `TestResult` as the attempt and have no programme/run or mirror tables |
 
 The existing green unit tests originally asserted the stale date behavior, so changing only the version
 constant had made the suite greener without making the envelope compliant. The new five-type suite corrected
-that coverage gap. The ninth §8 deviation remains partial because create → terminal → first-review is still
-not enforced as three distinct phases; that blocks a meaningful Testing Base vertical write.
+that coverage gap. The envelope phase work then reached **200 tests + 82 subtests on PostgreSQL**. The ninth
+§8 deviation remains partial because those phases have no programme/run/reviewer persistence or API route;
+that blocks a meaningful Testing Base vertical write.
 
 ## 6. Verification run
 
 - Initial management unit discovery before the concurrent five-type changes: **140 passed, 2 skipped** in
   this workstation environment. The two sync modules skipped because SQLAlchemy is not installed here. The
   separate validation then recorded **192 tests + 63 subtests on PostgreSQL 13**; see its evidence file.
+  The subsequent envelope phase split recorded **200 tests + 82 subtests on PostgreSQL 13**.
 - Testing schema probe: **0 failures, 1 warning**. The live base also offers `Not Applicable` for `Test
   Result`, while LabOS deliberately does not send that Airtable-owned value. Fields and types passed.
 - Firmware tests were not rerun because this workstation has no `pytest` executable/module. The existing
@@ -98,9 +101,8 @@ not enforced as three distinct phases; that blocks a meaningful Testing Base ver
 
 ## 7. Required closure before a vertical write
 
-1. Finish the management lifecycle tests and API as three distinct v0.4 create → terminal → verdict phases;
-   a terminal call must not be able to smuggle in the first review.
-2. Add the programme/run, mirror/import and review persistence required by the authoritative contract; do
+1. Add programme/run, mirror/import and review persistence required by the authoritative contract; do
    not extend the legacy attempt model further as a substitute.
+2. Add the first-review mutation route and atomically enqueue its verdict phase.
 3. Perform the controlled Testing Base vertical flow and separately verify Airtable automations before
    production replication.
