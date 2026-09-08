@@ -225,6 +225,14 @@ Not asserted — read back.
 - **`Forced Entry` and `ANSI Z97.1` carried a class in `Required Option` and no numeric value**, confirming
   the `Not Applicable` kind behaves as intended.
 - The fixture job is `IFET-FIXTURE-0001` and every value in it is synthetic. It can be deleted at any time.
+- **The before/after chain joins, and that is checked rather than asserted.** Two changes were made — 142 →
+  156 on 2026-09-06, then 156 → 159 on 2026-09-08 — and the first change's *after* snapshot is
+  byte-identical to the second's *before*. So the three snapshots are one history, not three unrelated
+  readings. The generator refuses to produce the CSV if that hash check fails, and refuses if any field
+  present before is absent after.
+- **Nothing was removed and nothing was retyped.** Every one of the 142 pre-existing fields has the same type
+  after as before. That is the property that makes this change additive in the sense that matters to your
+  automations.
 
 **Loading sequences are not in this schema and do not need to be.** LabOS derives all fourteen stages from
 the design-pressure pair using fixed factors. Sending them from Airtable would create a second copy to keep
@@ -271,6 +279,7 @@ it is not a claim that the integration is delivered.** Nothing is deployed.
 | File | What it is |
 |---|---|
 | `production-change-spec.csv` | **The working sheet.** One row per field for all 159: `ADD`/`KEEP`, reads, writes, why |
+| `testing-base-before-after-2026-09-08.csv` | **Before and after, as a spreadsheet.** All 159 fields: unchanged or added, the type either side, the field ID, and which of the two dates it was added on. **142 unchanged · 17 added · 0 removed · 0 retyped** |
 | `evidence/testing-base-changes-2026-09-06/` | The first 14 fields — before/after schema, field IDs, per-field reasons |
 | `evidence/testing-base-changes-2026-09-08/` | The three Impact fields — same, plus the fixture verification |
 | `contract/interface-schema.csv` | Every field in both bases joined to its LabOS use, including the 105 ignored |
