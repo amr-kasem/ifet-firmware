@@ -69,16 +69,26 @@ per table.
 | Live tables | 13, all legacy. No `sync_outbox`, `sync_state`, `test_programmes`, `test_programme_runs`, `at_mirror_*` |
 | Live columns matching `airtable\|labos\|attempt` | **zero** |
 | Code in the running `report-api` image | `app/{data,domain,utils}` only — **no `app/airtable/`, no `app/sync/`** |
-| Live routes | 25; **none** for airtable, sync, runs or import |
+| Live routes | 25 **on the node**; the branch now has 18 more for manual test capture. **None** for airtable, sync or import |
 | `test_results` rows | 640 |
-| `ifet-management` | `feature/labos-airtable` @ `1ee4cda` — all integration code, unmerged, **still unwired** (`main.py` imports nothing from `app.sync`). Carries the sync migration, the §7.1 mechanisms, the enforced single-worker service and its compose entry, the v0.4 contract view with its omission guard, and the Postgres harness. **Eight §8 deviations closed; the ninth is partial** because the envelope/lifecycle behind `contract.py` still implements v0.3 timing and review phases |
+| `ifet-management` | `feature/labos-airtable` @ `e99c77b` — all integration code, unmerged, **still unwired** (`main.py` imports nothing from `app.sync`). Carries the sync migration, the §7.1 mechanisms, the enforced single-worker service and its compose entry, the v0.4 contract view with its omission guard, and the Postgres harness. **Eight §8 deviations closed; the ninth is partial** because the envelope/lifecycle behind `contract.py` still implements v0.3 timing and review phases |
 | `ifet-firmware` | `feature/labos-firmware-p3` — docs, **plus the MF firmware change and the isolated simulation harness** (`simulation/mf_harness/`, `src/fake_sick_service/`). Not deployed to any rig |
-| Committed envelope code | `app/airtable/contract.py` is at **`CONTRACT_VERSION = "0.4"`** and matches live field names/types, but `envelope.py`, `attempts.py`, mapping and their tests still use v0.3 create/terminal/review semantics. Evidence: `../evidence/contract-implementation-audit-2026-09-07.md` §5 |
-| **Testing Base schema** | **M1 applied 2026-09-06** — 14 fields added, 142 → 156; schema and record-read access re-verified 2026-09-07. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
-| Production Base schema | Unchanged at 142 fields, **re-verified live 2026-09-07**. The generated 168-row interface remains an exact match and the 14 above are exactly the production delta |
+| Committed envelope code | **v0.4 throughout.** `contract.py`, `envelope.py` and `mapping.py` now implement create → terminal → **first review** as three phases: create sends `Pending`, terminal stays `Pending`, `build_verdict()` writes the verdict with a named reviewer. `Test Date` is the completion instant. 238 tests + 84 subtests on `postgres:13` |
+| **Testing Base schema** | **159 fields.** 14 applied 2026-09-06, 3 more 2026-09-08; the before/after chain is hash-verified and carries 0 removals and 0 retypes. **No longer empty** — the fixture `IFET-FIXTURE-0001` was seeded 2026-09-08. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
+| Production Base schema | Unchanged at 142 fields, **re-verified live 2026-09-08 by `app/airtable/preflight.py`**, which also confirms none of the 17 has leaked into it. The generated 168-row interface remains an exact match and the 14 above are exactly the production delta |
 
 Nothing above is a blocker on its own. Together they mean: **every leg of this integration is greenfield
 against production, and no code has ever carried a result end to end.**
+
+### 0.3a Where the work actually stands — 2026-09-08
+
+| | |
+|---|---|
+| **Track A** (Airtable) | TA1–TA4 ✅. **TA5 — send — is the only one left, and it is not ours.** Two documents are written and **NOT SENT**: the change document (which now also answers their three clarifications) and the product-owner update |
+| **Track B** (the three manual tests) | TB1–TB3 ✅. Migration `d1a6b93f2e57`, 18 routes, `MANUAL_TESTS_API.md` + `openapi.json`. **TB4 is the deploy and needs a window** |
+| **Track C** (the integration) | Untouched, except that TB1/TB2 closed most of TC1: reviewer columns and the verdict route exist now |
+| **Pre-send check** | `python -m app.airtable.preflight` — read-only, both bases, verifies every claim the change document makes. Run it the morning it is sent |
+| **Still true** | **Nothing is deployed.** The `management` node is unchanged |
 
 ### 0.4 Live verification, 2026-09-08 — read-only, both rigs and the node
 
