@@ -1,7 +1,7 @@
 # Testing Base — your three questions, and the changes made
 
 **From:** LabOS (Abdelrahman) · **To:** the Airtable team · **Date:** 2026-09-08
-**Base changed:** Testing `app4oXS3Kd5IKWgJ7` — **142 → 159 fields**
+**Base changed:** Testing `app4oXS3Kd5IKWgJ7` — **142 → 160 fields**
 **Base NOT changed:** Production `app0OCunbmuXl7Hc9` — **unchanged at 142, verified live**
 
 This is two things in one: **answers to the three clarifications you raised**, and the document requested at
@@ -70,11 +70,14 @@ precisely what `LabOS Test ID` is for.
 | `LabOS Test ID` | *which test are these attempts of?* | **every** attempt |
 | `Corrects Attempt ID` | *which attempt does this one supersede?* | **only** a correction |
 
-Two different events both produce a new attempt row sharing one `LabOS Test ID`:
+**Three** different events produce a new attempt row sharing one `LabOS Test ID`:
 
 - **A retest** — the specimen was physically tested again. It counts as a test.
 - **A correction** — a recorded result was wrong and is being superseded. **No physical test happened**, and
   it must not count as one.
+- **Another impact of the same impact test** — new since 2026-09-08, and the reason for the eighteenth
+  field. Our project owner respecified Impact as **one attempt per impact**, so a five-impact test now
+  publishes five rows where it previously published one. Those five are one test, not five.
 
 With only `LabOS Test ID`, those two are indistinguishable on your side. Any roll-up that counts attempts or
 computes a pass rate would then be wrong — **and would look right**, which is the part that makes it
@@ -82,6 +85,13 @@ expensive. A specimen corrected twice would read as three tests.
 
 `Corrects Attempt ID` is already in the Testing Base, it is **blank on every retest**, and it is populated
 only on the rarer correction case. It costs nothing to keep and cannot be reconstructed later.
+
+**`Impact Number` is the same argument applied to the third case.** `Attempt Number` already carries the
+ordinal, so this field is not for our benefit — it is so that a roll-up can count **tests** by grouping on
+`LabOS Test ID` and **impacts** by `Impact Number`, without needing to know a rule about which test type it
+is looking at. It is blank on the other four types. Without it, a five-impact test reads as five tests, and
+reads plausibly — which is the failure mode this section exists to prevent, and we would rather add one
+number than ask you to special-case Impact in every view.
 
 So: **keep both.** We are glad to drop any field you find unnecessary — this is the one we would ask you not
 to.
@@ -150,7 +160,7 @@ reordered. No table, view, relationship or automation was touched. Nothing in pr
 the tooling that made these changes **refuses the production base unconditionally** — there is no flag or
 environment variable that overrides it.
 
-The accompanying `production-change-spec.csv` is the sheet to work from: **one row per field for all 159**,
+The accompanying `production-change-spec.csv` is the sheet to work from: **one row per field for all 160**,
 saying `ADD` or `KEEP`, whether LabOS reads or writes it, and why. It is generated from both live bases, not
 transcribed.
 
@@ -205,10 +215,10 @@ were not touched at all**, and for three of those LabOS has no access of any kin
 | 5 | Walls & Positions | `tblVUvcSPAoneG26W` | 8 | 8 | — | **0** | **0** | 8 |
 | 6 | Wall Scheduling/Reservation | `tblYjF1AApzmRDMrY` | 19 | 19 | — | **0** | **0** | 19 |
 | 7 | Back Charges | `tbl0f2YxS3FHJ1dTD` | 13 | 13 | — | **0** | **0** | 13 |
-| 8 | **LabOS Raw Data Table** | `tblnc9SsbXU0C0FWh` | 30 | **36** | **+6** | 1 | **35** | 0 |
-| | **Total** | | **142** | **159** | **+17** | **20** | **35*** | **104** |
+| 8 | **LabOS Raw Data Table** | `tblnc9SsbXU0C0FWh` | 30 | **37** | **+7** | 1 | **36** | 0 |
+| | **Total** | | **142** | **160** | **+18** | **20** | **36*** | **104** |
 
-\* the 35 bound to the write path — 28 always, 4 conditional, 3 withheld, as §1 breaks down.
+\* the 36 bound to the write path — 29 always, 4 conditional, 3 withheld, as §1 breaks down.
 
 **Changed — 4 and 8, and only these.**
 
@@ -246,7 +256,7 @@ it.
 (`lastModifiedTime`) — Airtable-owned, used only for delivery reconciliation, never written.
 
 **No table, view, relationship or automation was created, renamed, deleted or reordered in any of the
-eight.** The seventeen changes are field additions to two tables, and every one of the 142 pre-existing
+eight.** The eighteen changes are field additions to two tables, and every one of the 142 pre-existing
 fields has the same type after as before.
 
 ---
@@ -290,7 +300,7 @@ simply moves into a new field.
 
 ---
 
-## 3. The six fields on `LabOS Raw Data Table`
+## 3. The seven fields on `LabOS Raw Data Table`
 
 These are things LabOS produces that had nowhere to go.
 
@@ -302,6 +312,7 @@ These are things LabOS produces that had nowhere to go.
 | `LabOS Verdict At` | dateTime | **When** they reviewed it |
 | `Corrects Attempt ID` | singleLineText | The attempt this one supersedes. **Without it a correction is indistinguishable from a genuine retest**, so any roll-up counting attempts or computing a pass rate would be wrong — and would look right |
 | `LabOS Photos` | multipleAttachments | Downscaled previews. Originals stay in LabOS; the existing `Photos` URL field is unchanged |
+| `Impact Number` | number (integer) | **Added 2026-09-08.** Which impact of the test this row records — 1, 2, 3. Populated only for `Test Type = Impact`, where one attempt is one impact; **blank on the other four types**. Count tests by grouping on `LabOS Test ID`, and impacts with this. See §0.3 |
 
 **A note on `Test Date`, because your automation depends on it.** LabOS writes `Test Date` as the
 **completion** instant and omits it while a test is running. `Testing Start Date` / `Testing End Date` carry
@@ -360,16 +371,16 @@ Not asserted — read back.
   the `Not Applicable` kind behaves as intended.
 - The fixture job is `IFET-FIXTURE-0001` and every value in it is synthetic. It can be deleted at any time.
 - **The before/after chain joins, and that is checked rather than asserted.** Two changes were made — 142 →
-  156 on 2026-09-06, then 156 → 159 on 2026-09-08 — and the first change's *after* snapshot is
-  byte-identical to the second's *before*. So the three snapshots are one history, not three unrelated
+  156 on 2026-09-06, then 156 → 159 and 159 → 160 on 2026-09-08 — and each change's *after* snapshot is
+  byte-identical to the next change's *before*. So the four snapshots are one history, not four unrelated
   readings. The generator refuses to produce the CSV if that hash check fails, and refuses if any field
   present before is absent after.
 - **Nothing was removed and nothing was retyped.** Every one of the 142 pre-existing fields has the same type
   after as before. That is the property that makes this change additive in the sense that matters to your
   automations.
 - **Re-checked against both live bases immediately before sending**, rather than relying on the snapshots
-  above: all 17 present in Testing and correctly typed · **none** of the 17 in production · production **142**,
-  testing **159**, delta **17** · all **159** rows of `production-change-spec.csv` agree with the live bases,
+  above: all 18 present in Testing and correctly typed · **none** of the 18 in production · production **142**,
+  testing **160**, delta **18** · all **160** rows of `production-change-spec.csv` agree with the live bases,
   0 disagreements · the fixture still reads back with its six sections and all six codes. So every number in
   this document is true of the bases as they stand today, not only as they stood when the snapshots were taken.
 
@@ -393,9 +404,23 @@ these fields makes the path useful to us and not yet visible to them.
 LabOS never writes them. We cannot see your automations — the Meta API returns `403` for them — so this
 needs your eyes, not ours.
 
-**3. Confirm no unfiltered "when record updated" trigger is disturbed by seventeen new fields.**
+**3. Confirm no unfiltered "when record updated" trigger is disturbed by eighteen new fields.**
 Every change was additive, which rules out the usual breakages, but an unfiltered trigger will now fire more
 often than before.
+
+**4. Tell us what six fields on `Protocol Sections` are for — they are named for LabOS and we have never
+written them.** `Latest LabOS Attempt Number`, `LabOS Attempt ID`, `LabOS Retest Required`,
+`LabOS Report Link`, `Excel File Link` and `Notes` are present and **writable** in both bases. They are not
+rollups or lookups, and nothing in our field register accounts for any of them, so the read/write boundary
+this document describes has a hole in it that neither side has looked at.
+
+We are not going to start writing them on a guess: a section-level summary beside the per-attempt rows is a
+different ownership model from the one §1 sets out. Three possibilities and we cannot tell which — legacy
+from an earlier design, maintained by hand today, or waiting on us.
+
+One of them changes meaning because of this release: with one attempt per impact, whatever writes
+`Latest LabOS Attempt Number` will read *5* for a five-impact test. If that field is live in a view or an
+automation, that is worth knowing before the first five-impact job lands.
 
 **And one that is yours, not ours:** the extractor defect is unresolved on your side. It no longer affects
 LabOS, because we read the typed fields instead — but it still affects **your** data, and a shifted value has
@@ -412,7 +437,7 @@ exactly one of them.
 
 ### ✅ Verified — read back from the live bases, today
 
-- **The schema.** 159 fields in Testing, 142 in production, 17 added, all correctly typed, all select
+- **The schema.** 160 fields in Testing, 142 in production, 18 added, all correctly typed, all select
   options as listed. Every one of the 142 pre-existing fields has the same type after as before; nothing was
   renamed, retyped, deleted or reordered, and no table, view, relationship or automation was touched.
 - **Production is untouched**, checked against the live base rather than assumed, with tooling that refuses
@@ -421,7 +446,7 @@ exactly one of them.
   *before*, so the three snapshots are one history.
 - **A requirement expressed in these fields is sufficient to drive a test programme** — an asymmetric 60/45
   pair derived all fourteen stages, and the pass/fail types carried a class with no numeric value.
-- **The attached CSVs agree with both live bases**, all 159 rows, 0 disagreements.
+- **The attached CSVs agree with both live bases**, all 160 rows, 0 disagreements.
 
 ### 🔧 Implemented in LabOS — and demonstrated end to end against the Testing base
 
@@ -477,10 +502,14 @@ them is the one piece of housekeeping we cannot do ourselves.
   retests would be wrong and would look right.
 - **`Max Pressure Achieved`** — actual pressure is on the rig's telemetry bus and
   renders live in our UI; nothing subscribes to it and stores the maximum. §4.
-- **`Impact Velocity` needs its own place in LabOS.** It is a *target* in your
-  base and our internal mapping currently points it at a *measured* per-impact
-  value. Nothing wrong has been published — we do not send an achieved velocity
-  — but we are fixing the mapping before pre-fill uses it.
+- **`Impact Velocity` is read but not yet shown to the operator.** An earlier
+  draft of this document told you our mapping pointed it at a *measured*
+  per-impact value. **That was wrong about our own code** and is corrected here:
+  nothing points it there. It is copied into our local mirror and frozen onto
+  the attempt, so it travels in the JSON — it simply does not appear on the
+  screen the operator is looking at. Nothing wrong has been published; we do not
+  send an achieved velocity. Whether the target should be on that screen is a
+  question for our project owner, not a schema change on your side.
 - **Deflection** remains uncalibrated; §4.
 
 **None of these change what this document asks of you**, which is a schema change
@@ -503,8 +532,8 @@ it is not a claim that the integration is delivered.** Nothing is deployed.
 
 | File | What it is |
 |---|---|
-| `evidence/testing-base-changes-2026-09-06/production-change-spec.csv` | **The working sheet.** One row per field for all 159: `ADD`/`KEEP`, reads, writes, why. Regenerated 2026-09-08 — it carries all 159, not the 156 of the folder it sits in |
-| `evidence/testing-base-before-after-2026-09-08.csv` | **Before and after, as a spreadsheet.** All 159 fields: unchanged or added, the type either side, the field ID, and which of the two dates it was added on. **142 unchanged · 17 added · 0 removed · 0 retyped** |
+| `evidence/testing-base-changes-2026-09-06/production-change-spec.csv` | **The working sheet.** One row per field for all 160: `ADD`/`KEEP`, reads, writes, why. Regenerated 2026-09-08 — it carries all 160, not the 156 of the folder it sits in |
+| `evidence/testing-base-before-after-2026-09-08.csv` | **Before and after, as a spreadsheet.** All 160 fields: unchanged or added, the type either side, the field ID, and which of the three dates it was added on. **142 unchanged · 18 added · 0 removed · 0 retyped.** Generated, and it refuses to run if the three changes do not chain |
 | `evidence/testing-base-changes-2026-09-06/` | The first 14 fields — before/after schema, field IDs, per-field reasons |
 | `evidence/testing-base-changes-2026-09-08/` | The three Impact fields — same, plus the fixture verification |
 | `contract/interface-schema.csv` | Every field in both bases joined to its LabOS use, including the 104 ignored |

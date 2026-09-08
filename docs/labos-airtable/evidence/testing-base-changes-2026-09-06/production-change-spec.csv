@@ -16,6 +16,7 @@ ADD,LabOS Raw Data Table,LabOS Verdict At,dateTime,,no,yes,,UTC first-review tim
 ADD,LabOS Raw Data Table,LabOS Verdict By,singleLineText,,no,yes,,Declared reviewer identity. Required with first review in scalars and detailed JSON; missing schema parks delivery.
 ADD,LabOS Raw Data Table,Testing End Date,dateTime,,no,yes,,UTC completion/abort time; absent while running; also Test Date.
 ADD,LabOS Raw Data Table,Testing Start Date,dateTime,,no,yes,,UTC physical execution start; corrections preserve original.
+ADD,LabOS Raw Data Table,Impact Number,number,,no,yes,,"Which impact of the test this row records. Populated only for Test Type = Impact, where one attempt is one impact (2026-09-08); blank on the other four types. Count tests by grouping on LabOS Test ID and impacts with this - a roll-up counting attempt rows reads a five-impact test as five tests."
 KEEP,Protocol Sections,Excel File Link,url,,no,no,fldj1vr7RnBRUJWEX,Not used by LabOS. Listed so the sheet is complete and so nobody has to guess whether an omission was deliberate.
 KEEP,Protocol Sections,IFET Job Number,multipleRecordLinks,,no,no,fldfX6gGWvOLRDKWl,Not used by LabOS. Listed so the sheet is complete and so nobody has to guess whether an omission was deliberate.
 KEEP,Protocol Sections,IFET job number (from IFET Job Number),multipleLookupValues,,no,no,fldinuC7cfvh0VQDA,Not used by LabOS. Listed so the sheet is complete and so nobody has to guess whether an omission was deliberate.

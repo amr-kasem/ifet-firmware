@@ -58,6 +58,7 @@ LabOS Raw Data Table,Corrects Attempt ID,ADDED,,singleLineText,fldV4ucQNEA0gYfMc
 LabOS Raw Data Table,Deflection Unit,UNCHANGED,singleLineText,singleLineText,fldvZMcxhm9R9Lzg7,,
 LabOS Raw Data Table,Deflection Value,UNCHANGED,number,number,fldg21XOFDAKWvUZx,,
 LabOS Raw Data Table,Excel File Link,UNCHANGED,url,url,fldQAF1pExVQ9Xe6O,,
+LabOS Raw Data Table,Impact Number,ADDED,,number,fldk52wf0SO9zYDjB,2026-09-08,
 LabOS Raw Data Table,Impact Result,UNCHANGED,singleLineText,singleLineText,flda24C2M2tWyXEdb,,
 LabOS Raw Data Table,LabOS Attempt ID,UNCHANGED,singleLineText,singleLineText,fldDu6er95KG2pOrG,,
 LabOS Raw Data Table,LabOS Created At,UNCHANGED,dateTime,dateTime,fldJYqMAdKP7v0zCU,,
