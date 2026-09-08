@@ -1,0 +1,188 @@
+# Testing Base — changes made, and why
+
+**From:** LabOS (Abdelrahman) · **To:** the Airtable team · **Date:** 2026-09-08
+**Base changed:** Testing `app4oXS3Kd5IKWgJ7` — **142 → 159 fields**
+**Base NOT changed:** Production `app0OCunbmuXl7Hc9` — **unchanged at 142, verified live**
+
+This is the document requested at the 2026-09-06 meeting: *"Prepare and share a document outlining all
+changes made & explanation/reason of that changes in the Testing Base."*
+
+**Seventeen fields were added, all to the Testing Base only.** No field was renamed, retyped, deleted or
+reordered. No table, view, relationship or automation was touched. Nothing in production was modified, and
+the tooling that made these changes **refuses the production base unconditionally** — there is no flag or
+environment variable that overrides it.
+
+The accompanying `production-change-spec.csv` is the sheet to work from: **one row per field for all 159**,
+saying `ADD` or `KEEP`, whether LabOS reads or writes it, and why. It is generated from both live bases, not
+transcribed.
+
+---
+
+## 1. What LabOS does and does not touch
+
+| | Count |
+|---|---|
+| Fields LabOS **reads** | **20** |
+| Fields LabOS **writes** | **35** — all in `LabOS Raw Data Table`, the only writable table |
+| Fields LabOS **deliberately ignores** | **105** |
+
+That third number is the important one. It is the machine-readable form of *no billing, pricing, invoices,
+payments or scheduling crosses the boundary*: customer emails, `Approved Proposal Amount`, `Balance Due`,
+QuickBooks IDs, `Wall Scheduling/Reservation` and `Back Charges` are all present in the base and all
+explicitly not read. The runtime credential is scoped and the write allowlist is a single table.
+
+**LabOS never writes** `Protocol Sections`. Your automation keeps exclusive ownership of `Result`, `Status`
+and `Testing Date`; LabOS writes its verdict to the raw-results row and your automation projects it.
+
+---
+
+## 2. The eleven fields on `Protocol Sections`
+
+These exist so LabOS can be told **which test is required and against what** — machine-readably, without
+parsing the `Value` text field.
+
+| Field | Type | Why |
+|---|---|---|
+| `Requirement Code` | singleSelect | The stable code that routes work: `STATIC_PRESSURE`, `CYCLIC_PRESSURE`, `IMPACT_LMI`, `IMPACT_SMI`, `FORCED_ENTRY`, `ANSI_IMPACT`, `GAUGE_COUNT`, `STATIC_PROGRAMME`, `WATER_PRESSURE`. **Names change; codes must not**, so nothing routes on a section name |
+| `Requirement Kind` | singleSelect | How to read the value: `Magnitude`, `Directional Pair`, `Count`, `Enum`, `Not Applicable`. LabOS refuses a kind it does not support rather than guessing |
+| `Applicability` | singleSelect | `Required` / `Not Required` / `Unconfirmed`. Distinguishes *not needed* from *nobody has said yet*. **Blank means Unconfirmed, never Not Required** |
+| `Required Value Inward` | number | Inward design pressure, PSF |
+| `Required Value Outward` | number | Outward design pressure, PSF. **Independent of inward and never copied from it** |
+| `Required Value` | number | The scalar for `Count`/`Magnitude` kinds — gauge count, impact count. **Blank is not zero** |
+| `Required Unit` | singleSelect | `PSF`, `in`, `s`, `cycles`, `impacts`. Validation only — LabOS refuses a value whose unit contradicts its kind |
+| `Required Option` | singleLineText | The named grade or class a pass/fail test is judged against — `ASTM F588 Grade 40`, `Class A`, `Full`. Free text, so an unrecognised option is shown but non-executable |
+| `Missile Type` | singleLineText | The missile the protocol specifies, e.g. `Large Missile D` |
+| `Missile Weight` | number | Missile mass, pounds |
+| `Impact Velocity` | number | **Target** velocity, ft/s. A requirement, never a measurement — LabOS does not write an achieved velocity back |
+
+### The single most important sentence in this document
+
+> **LabOS reads these typed fields and never parses `Value`.**
+
+`Value` is preserved verbatim and untouched. We do not read it, and no future release should be assumed to.
+
+The reason is concrete. `Value` is populated by the PDF extractor, which drops blank cells, so a requirement
+of `+60/60` can arrive as `9` — and every shifted value is individually plausible, so nothing downstream can
+detect it. **A shifted value has already reached a record marked Passed.** Reading the typed fields instead
+removes that failure path structurally rather than by care.
+
+**This is what makes "the same information should not be entered twice" achievable.** These eleven fields
+are how a requirement reaches LabOS without an operator retyping it. **They must be populated deliberately —
+by hand, or from the trusted signed proposal — and never auto-filled from the extractor**, or the defect
+simply moves into a new field.
+
+`Inches` vs `in`: `Required Unit` uses the short forms above. LabOS validates the token and does not convert.
+
+---
+
+## 3. The six fields on `LabOS Raw Data Table`
+
+These are things LabOS produces that had nowhere to go.
+
+| Field | Type | Why |
+|---|---|---|
+| `Testing Start Date` | dateTime | When execution began, UTC |
+| `Testing End Date` | dateTime | When it ended, UTC |
+| `LabOS Verdict By` | singleLineText | **Who** reviewed the result. Stored separately from the operator even when the same person, because the review is a distinct act |
+| `LabOS Verdict At` | dateTime | **When** they reviewed it |
+| `Corrects Attempt ID` | singleLineText | The attempt this one supersedes. **Without it a correction is indistinguishable from a genuine retest**, so any roll-up counting attempts or computing a pass rate would be wrong — and would look right |
+| `LabOS Photos` | multipleAttachments | Downscaled previews. Originals stay in LabOS; the existing `Photos` URL field is unchanged |
+
+**A note on `Test Date`, because your automation depends on it.** LabOS writes `Test Date` as the
+**completion** instant and omits it while a test is running. `Testing Start Date` / `Testing End Date` carry
+the full span. Your `Protocol Sections` automation derives its date from `Test Date`, so this dependency is
+stated rather than left to be inferred.
+
+---
+
+## 4. What we deliberately did **not** create
+
+An unwanted field is harder to remove than to add, and now that this schema becomes the basis for production,
+a speculative field propagates rather than sitting harmlessly in a sandbox.
+
+| Not created | Why |
+|---|---|
+| `Impact Locations` | Location is a per-impact observation LabOS records locally, not a requirement |
+| `Forced Entry Result` · `ANSI Result` | No dedicated scalar needed: `Test Type` and `Test Result` are both single-selects, so your views filter and group both workflows natively. Sub-detail travels in the JSON field. **We will add one only if you name the report that needs it** |
+| `Failure Notes` | Carried inside `Notes` and the JSON for this release |
+| Any new table, relationship, or delta-cursor field | Not needed |
+
+Three fields **exist and LabOS will not write them**: `Max Pressure Achieved`, `Deflection Value`,
+`Deflection Unit`. There is no validated measurement source for any of them today — the rigs return raw
+gauge counts that have not been calibrated to a physical unit. **We would rather send nothing than send a
+number we cannot stand behind.** They are tracked and will be revisited once bench calibration is done.
+
+If you want fewer fields still, `Requirement Kind` is the one to drop — it can be implied from
+`Requirement Code`.
+
+---
+
+## 5. How this was verified
+
+Not asserted — read back.
+
+- **Schema probe against the live base**: all table IDs confirmed, all 35 expected result fields present,
+  select option sets read from the API rather than assumed.
+- **A synthetic proposal was written into the Testing Base and read back** as LabOS will read it: one job,
+  one mock-up, one protocol, six Protocol Sections covering all five executable requirement codes plus
+  `GAUGE_COUNT`. Every field read back correctly typed.
+- **The design pressures drive the whole programme.** From an asymmetric `60 / 45` PSF pair LabOS derived
+  all fourteen stages — six static `[45.0, 33.75, 60, 45, 90.0, 67.5]` and eight cyclic
+  `[30, 36, 48, 60 | 45, 36, 27, 22.5]`. Asymmetric on purpose: a symmetric pair would pass even if inward
+  and outward were transposed.
+- **`Forced Entry` and `ANSI Z97.1` carried a class in `Required Option` and no numeric value**, confirming
+  the `Not Applicable` kind behaves as intended.
+- The fixture job is `IFET-FIXTURE-0001` and every value in it is synthetic. It can be deleted at any time.
+
+**Loading sequences are not in this schema and do not need to be.** LabOS derives all fourteen stages from
+the design-pressure pair using fixed factors. Sending them from Airtable would create a second copy to keep
+in sync for no gain.
+
+---
+
+## 6. What we need from you
+
+**1. Populate the eleven `Protocol Sections` fields — and never from the extractor.**
+By hand, or from the trusted signed proposal. This is the one thing that turns pre-filling from a design into
+a working feature, and it is the one thing we cannot do ourselves.
+
+**2. Confirm your `Protocol Sections` automation still owns `Result`, `Status` and `Testing Date`.**
+LabOS never writes them. We cannot see your automations — the Meta API returns `403` for them — so this
+needs your eyes, not ours.
+
+**3. Confirm no unfiltered "when record updated" trigger is disturbed by seventeen new fields.**
+Every change was additive, which rules out the usual breakages, but an unfiltered trigger will now fire more
+often than before.
+
+**And one that is yours, not ours:** the extractor defect is unresolved on your side. It no longer affects
+LabOS, because we read the typed fields instead — but it still affects **your** data, and a shifted value has
+already reached a record marked Passed. A blast-radius review of jobs already marked tested is a quality
+decision for IFET rather than an engineering one.
+
+---
+
+## 7. What is verified at cutover, not now
+
+Stated so nothing here is mistaken for more than it is:
+
+- that your existing automations behave correctly against the new fields **in production**;
+- that roll-ups exclude superseded results and do not count corrections as extra physical tests;
+- that upsert-on-`LabOS Attempt ID` behaves as expected against real records at volume.
+
+These need the production base and a scheduled window. **This document is a schema change and its reasoning;
+it is not a claim that the integration is delivered.** Nothing is deployed.
+
+---
+
+## Attachments
+
+| File | What it is |
+|---|---|
+| `production-change-spec.csv` | **The working sheet.** One row per field for all 159: `ADD`/`KEEP`, reads, writes, why |
+| `evidence/testing-base-changes-2026-09-06/` | The first 14 fields — before/after schema, field IDs, per-field reasons |
+| `evidence/testing-base-changes-2026-09-08/` | The three Impact fields — same, plus the fixture verification |
+| `contract/interface-schema.csv` | Every field in both bases joined to its LabOS use, including the 105 ignored |
+| `contract/write-contract-v0.4.md` | What each field means and when LabOS writes it |
+
+Questions to Abdelrahman. If any field above looks wrong for how you use the base, it is much cheaper to say
+so now than after production is changed.
