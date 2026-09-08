@@ -116,7 +116,7 @@ transcribed.
 |---|---|
 | Fields LabOS **reads** | **20** |
 | Fields LabOS **writes** | **35** — all in `LabOS Raw Data Table`, the only writable table |
-| Fields LabOS **deliberately ignores** | **105** |
+| Fields LabOS **deliberately ignores** | **104** |
 
 That third number is the important one. It is the machine-readable form of *no billing, pricing, invoices,
 payments or scheduling crosses the boundary*: customer emails, `Approved Proposal Amount`, `Balance Due`,
@@ -278,11 +278,11 @@ it is not a claim that the integration is delivered.** Nothing is deployed.
 
 | File | What it is |
 |---|---|
-| `production-change-spec.csv` | **The working sheet.** One row per field for all 159: `ADD`/`KEEP`, reads, writes, why |
-| `testing-base-before-after-2026-09-08.csv` | **Before and after, as a spreadsheet.** All 159 fields: unchanged or added, the type either side, the field ID, and which of the two dates it was added on. **142 unchanged · 17 added · 0 removed · 0 retyped** |
+| `evidence/testing-base-changes-2026-09-06/production-change-spec.csv` | **The working sheet.** One row per field for all 159: `ADD`/`KEEP`, reads, writes, why. Regenerated 2026-09-08 — it carries all 159, not the 156 of the folder it sits in |
+| `evidence/testing-base-before-after-2026-09-08.csv` | **Before and after, as a spreadsheet.** All 159 fields: unchanged or added, the type either side, the field ID, and which of the two dates it was added on. **142 unchanged · 17 added · 0 removed · 0 retyped** |
 | `evidence/testing-base-changes-2026-09-06/` | The first 14 fields — before/after schema, field IDs, per-field reasons |
 | `evidence/testing-base-changes-2026-09-08/` | The three Impact fields — same, plus the fixture verification |
-| `contract/interface-schema.csv` | Every field in both bases joined to its LabOS use, including the 105 ignored |
+| `contract/interface-schema.csv` | Every field in both bases joined to its LabOS use, including the 104 ignored |
 | `contract/write-contract-v0.4.md` | What each field means and when LabOS writes it |
 
 Questions to Abdelrahman. If any field above looks wrong for how you use the base, it is much cheaper to say
