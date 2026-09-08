@@ -2,7 +2,7 @@
 
 **What this is.** Every business-required input and output for the five workflows, traced
 `Airtable field → validated local storage → actual source or calculation → outbound field + delivery phase`.
-64 rows in `reconciliation.csv`.
+65 rows in `reconciliation.csv`.
 
 **Why it exists.** The change document and the delivery plan each described parts of this path, and an
 independent audit showed both claiming coverage the code does not have. This traces the whole path once, per
@@ -12,13 +12,13 @@ invisible.
 
 ## The states, and what each means
 
-**Updated 2026-09-08 after the inbound half landed.** 18 gaps → **4**.
+**Updated 2026-09-08 after the inbound half landed** (18 gaps → 4), **and again the same day when the product owner respecified Impact as one attempt per impact** — which opened two: the impact row itself and its outcome field. Delivery plan §4.5a, TC1h.
 
 | State | Rows | Meaning |
 |---|---|---|
-| `OK` | **53** | Path complete: stored, sourced, mapped to a phase — and demonstrated end to end against the live Testing base |
-| `OK-JSON-ONLY` / `OK-BY-DECISION` / `OK-BASELINE` | (in the 53) | No Airtable scalar by decision; the value reaches Airtable another way |
-| **`GAP-*`** | **4** | **Our unbuilt work** |
+| `OK` | **52** | Path complete: stored, sourced, mapped to a phase — and demonstrated end to end against the live Testing base |
+| `OK-JSON-ONLY` / `OK-BY-DECISION` / `OK-BASELINE` | (in the 52) | No Airtable scalar by decision; the value reaches Airtable another way |
+| **`GAP-*`** | **6** | **Our unbuilt work** |
 | **`UNMET-*`** | **6** | **A business requirement we cannot satisfy today, and why** |
 | `OUT-OF-SCOPE` | 1 | Water infiltration, deferred by contract §0 |
 

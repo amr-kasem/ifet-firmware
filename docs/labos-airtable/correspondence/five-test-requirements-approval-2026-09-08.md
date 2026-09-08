@@ -21,7 +21,7 @@ The five test types LabOS runs — the `Test Type` option set, verbatim: **Stati
 |---|---|---|
 | **Static Load** | one inward/outward design-pressure pair (PSF) | 6 stages, 30 s hold each, deflection readings per gauge |
 | **Cycles** | the same pair — nothing further | 8 stages, 9,000 cycles in total |
-| **Impact** | missile, missile weight, how many impacts, target velocity | one numbered record per impact, each with its own pass/fail and photographs |
+| **Impact** | missile, missile weight, how many impacts, target velocity | one attempt per impact — each with its own pass/fail, photographs and verdict |
 | **Forced Entry** | the grade to judge against — no numbers | one pass/fail verdict per attempt, with notes and photographs |
 | **ANSI Z97.1** | the class to judge against — no numbers | one pass/fail verdict per attempt, with notes and photographs |
 
@@ -31,8 +31,8 @@ send back — per test. Not the screens, not the schedule, and not the Airtable 
 **What you are not approving:** anything that changes a production rig. None of the three new
 tests touch rig hardware, there is no firmware change in this work, and nothing is deployed.
 
-**Five answers are needed rather than a general yes** — they are listed after the five pages, and
-each is a place where we made a call you may not want.
+**Six answers are needed rather than a general yes** — they are listed after the five
+pages, and each is a place where we made a call you may not want.
 
 Approved by: ______________________________   Date: ______________
 
@@ -171,14 +171,17 @@ the requirement is treated as a different test rather than a typo.
 
 **One test type, not two.** Large missile and small missile are the same procedure with a different missile, so the missile is a field on the test and not a separate kind of test.
 
-Each impact is its own numbered record — impact 1, 2, 3 — with its own pass/fail and its own photographs, attached to that impact rather than to the test as a whole. A retest is a new attempt, numbered from 1 again, and it never overwrites its predecessor.
+**One attempt per impact — as you specified on 2026-09-08.** An impact test contains one or more attempts and each attempt is exactly one impact, with its own pass/fail, its own photographs and its own verdict. Impact 1, 2, 3 are three attempts, not one attempt holding three impacts, and none of them ever overwrites another.
+
+There is no separate notion of re-doing impact 3: a specimen already struck cannot have that impact repeated, so a further firing is impact 6, which is simply the next attempt. A result recorded *wrongly* is a different thing and is superseded rather than overwritten — see the last page.
 
 ### What is recorded, and what reaches Airtable
 
 | What | Kept in LabOS as | Sent to Airtable as | When |
 |---|---|---|---|
-| Each numbered impact | `shots.shot_number/result/area/velocity/note` | *in the JSON response* | terminal |
-| Impact outcome | `derived from shots` | `Impact Result` | terminal |
+| Per-impact observations | `shots.area/velocity/note` | *in the JSON response* | terminal |
+| Each impact is its own attempt row | `test_results.trial_number` | **not built yet** — see below | — |
+| Outcome of that one impact | `test_results.test_result` | **not built yet** — see below | — |
 | Per-impact photographs | `test_photos.shot_id set` | `LabOS Photos` | attachment |
 
 This is what is specific to this test. Everything sent on *every* attempt — the verdict,
@@ -186,7 +189,9 @@ the times, the operator, the photographs, the full JSON — is on the last page.
 
 ### What we cannot do yet, and why
 
-**Airtable gets a roll-up, not one row per impact.** Their table is one row per attempt, so the per-impact breakdown travels in the JSON response.
+**The new shape is specified and not yet built.** Everything above is your 2026-09-08 instruction written down; the two rows marked *not built yet* are the work it creates. It is a change of grouping rather than of data — every field already exists — and it needs one field added on the Airtable side, `Impact Number`, so that a roll-up on their side counts *tests* and *impacts* separately. Without it a five-impact test would read as five tests, and read plausibly. That is question 6, and it is why the Airtable document has not gone out yet.
+
+**Five impacts become five rows in the Airtable base**, each with its own verdict and photographs, where today they are one row with a summary line. This follows directly from attempts being the unit we publish.
 
 **The target impact velocity is read but never shown.** It comes across from the proposal and is frozen onto the attempt, so it is in the record — but it does not appear on the test the operator is looking at. Whether it should is question 3.
 
@@ -339,7 +344,7 @@ correction cannot be recorded as one.
 
 ---
 
-## The five answers we need
+## The six answers we need
 
 **1. ANSI ordering is recorded but not enforced.** ANSI Z97.1 is normally first on a specimen. LabOS records that and does not block the others. Is informational-only correct, or do you want it enforced — knowing a hard block has no override and will eventually stop legitimate work?
 
@@ -350,6 +355,8 @@ correction cannot be recorded as one.
 **4. Impact location stays a LabOS-side observation.** LabOS records where each impact landed; Airtable has no field for it, because location is an observation and not a requirement — and an unwanted field in a shared base is much harder to remove than to add. Confirm that is right.
 
 **5. `Static / Type` is read and then changes nothing.** The proposal's static programme value — *Full* — is read and validated, but LabOS derives the same six-stage programme regardless. If a proposal ever specified a different programme, LabOS would run the full one without saying so. Is *Full* the only static programme in practice? If not, we should make LabOS refuse the others out loud rather than ignore them.
+
+**6. A five-impact test will appear as five records in the Airtable base.** This follows from one attempt per impact: attempts are what we publish, so five impacts are five rows, each with its own verdict and photographs, where today they are one row with a summary line. It changes what the Airtable team's views, groupings and automations see, and it needs one field added on their side — `Impact Number` — so a roll-up can count five impacts of one test rather than five tests. Confirm that is what you intend, because it is the half of the instruction that lands on somebody else's base.
 
 ---
 
