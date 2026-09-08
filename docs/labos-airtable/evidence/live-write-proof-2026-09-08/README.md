@@ -160,3 +160,57 @@ way this file deliberately does.**
 
 Rig observations are synthetic. That proves data handling only; calibration and
 hardware performance remain separate acceptance checks.
+
+---
+
+# Stage 5, second run — all five types, real hierarchy, photographs · **31/31**
+
+The first stage 5 was 18/18 and three things about it were wrong. Recorded
+because each was a way of passing without proving.
+
+| Was | Now |
+|---|---|
+| Invented record ids (`recPROBE5project1`) | The real `IFET-FIXTURE-0001` records — project `reclD9DwtosvMGSI3`, mock-up `recclCv9R9AP5q9Vp`, protocol `recPqpWwDunfuXuL5` — and **the Protocol Section for each requirement code**, so a Cycles result cannot publish against the Forced Entry requirement |
+| Three of five test types | **Five.** Static and Cycles through their real routes, posting `deflections` alone as production firmware does |
+| A sender with no database access, so attachments could not deliver | The real `service.make_sender` with a session — the same function `main()` builds |
+
+**Photographs now reach Airtable.** Preview generated, uploaded by value to
+`content.airtable.com`, the returned attachment id recorded, and the file
+verified present on the record.
+
+## Two defects only a live run could find
+
+Both invisible to a stubbed client, because a stub never builds a URL and never
+returns Airtable's own response shape:
+
+1. **`LabOS Photos` has a space in it.** A raw space in a request path is
+   rejected before the request is made — `URL can't contain control
+   characters`. Every upload failed on it.
+2. **The upload endpoint returns the record keyed by field ID, not field name.**
+   Looking the attachment up by name found nothing, so the upload *succeeded* —
+   the file was on the record — and the returned id was never recorded. That is
+   the quiet half of a working feature: without the id, a retry has nothing to
+   reconcile against and would attach the photograph a second time.
+
+The second is the more instructive. Nothing was visibly broken: entries went
+`done`, the headline read `Synced`, and the photographs were on the records. Only
+an assertion about the *recorded id* caught it.
+
+## What this run asserts, per test type
+
+identity round-trips (four record ids, Test ID, Attempt ID, Attempt Number) ·
+the section matches the requirement code · verdict and reviewer land in their
+spelling · timestamps present · **withheld measurements absent** · photographs
+delivered with their returned ids and present on the record.
+
+Then: **retry** re-delivers to the same row; **retest** is a separate row keeping
+the same Test ID with the original untouched.
+
+## Still not proven here
+
+- **The importer.** Linkage is assigned directly. This proves the outbound path
+  *given* a linked job and says nothing about how a job becomes linked — there
+  is no mirror and no import path. **Layer 3 may not take this shortcut.**
+- **Corrections**, `Max Pressure Achieved`, deflection calibration, rig
+  `event_id` correlation, the operator UI, and their automations. Unchanged.
+- Synthetic rig observations prove data handling only.

@@ -82,8 +82,8 @@ against production, and no code has ever carried a result end to end.**
 
 ### 0.3a Where the work actually stands — 2026-09-08, end of day
 
-**The outbound path is built and proven against the live Testing base. The
-inbound path does not exist.** That sentence is the whole state; everything
+**The outbound path is built and proven against the live Testing base, for all
+five test types including photographs. The inbound path does not exist.** That sentence is the whole state; everything
 below elaborates it.
 
 | | |
@@ -106,7 +106,11 @@ below elaborates it.
 | A transport-free boundary: `report-api` can queue without importing anything that opens a socket | `app/retry_budget.py`; `tests/test_report_api_isolation.py` |
 | `GET /sync/status` · `/sync/queue` · `POST /sync/queue/{id}/retry` | the worker's only liveness surface |
 | **270 tests** on PostgreSQL 13 · **21/21 routes** · **4 migration rehearsals** on populated tables, forward and back | `../evidence/business-io-reconciliation-2026-09-08/` |
-| **Live: 15/15 mechanism · 5/5 test types · 18/18 whole pipeline** through the real worker and real sender | `../evidence/live-write-proof-2026-09-08/` |
+| Photograph delivery: preview, direct upload, returned attachment id, ambiguous-response reconciliation | `sync/artifacts.py`; `service.make_sender` |
+| One active run per rig · idempotent Start · unique attempt numbers under a constraint | `attempts.py`; `e5f3a71c8d92` |
+| Operator declared at run start and inherited by the rig callback — **no firmware change** | `a3d8e5c71f04` |
+| Durable publication failures, counted in the headline, with a repair route that re-checks | `f7b2c04e19a5`; `/sync/failures` |
+| **Live: 15/15 mechanism · 5/5 payloads · 31/31 whole pipeline** — all five types on the real `IFET-FIXTURE-0001` hierarchy, photographs delivered | `../evidence/live-write-proof-2026-09-08/` |
 
 #### What is NOT implemented — the honest list
 
@@ -114,7 +118,6 @@ below elaborates it.
 |---|---|
 | **No mirror or programme tables** | `Requirement Code` and `Applicability` have no local column. **The largest gap; all pre-fill depends on it** |
 | **No import path** (`POST /projects/import`) | Nine columns that exist are never populated from Airtable |
-| **No attachment uploader** | Every photograph parks — deliberately and visibly, with a truthful reason |
 | **No kind/unit validator** | A contradictory section is not refused, which contract §3 and the change document both say it is |
 | **No correction route** | `Corrects Attempt ID` cannot be populated; every attempt is a retest |
 | **No operator UI** | MU / TC5 |
@@ -134,7 +137,7 @@ The three-layer scheme in §0.3b is that rule made concrete.
 | Layer | Scope | State |
 |---|---|---|
 | **1 — local reliability** | Isolated PostgreSQL, simulated Airtable. Real routes and queue code. Atomic saves, concurrent numbering, retries, restart recovery, photo handling, standalone operation, simulated failures | ✅ **270 tests · 4 rehearsals · 21/21 routes** |
-| **2 — live outbound round-trip** | Testing base only. Synthetic **linked** records, all five types, **the actual worker and Airtable client**. Read back and compare identity, values, timestamps, verdicts. Retry updates the same row; a retest is a new row keeping the Test ID; unavailable measurements stay absent | ✅ **18/18 live** (stage 5). Attachments park — no uploader exists |
+| **2 — live outbound round-trip** | Testing base only. Synthetic **linked** records, all five types, **the actual worker and Airtable client**. Read back and compare identity, values, timestamps, verdicts. Retry updates the same row; a retest is a new row keeping the Test ID; unavailable measurements stay absent | ✅ **31/31 live** (stage 5), five types on the real fixture hierarchy, photographs delivered with their returned ids |
 | **3 — full business round-trip** | Requirements entered in Airtable → imported through LabOS → correct specimen and pre-filled parameters → execution → the resulting Airtable summary. **No inserting local linkage to bypass the importer** | ⬜ **Blocked on the mirror and the importer.** Only this layer proves the target |
 
 Layer 2's honest limit: linkage is inserted directly, so it proves the outbound
