@@ -38,6 +38,53 @@ Approved by: ______________________________   Date: ______________
 
 ---
 
+## Nothing the proposal already says is retyped
+
+> *"The operator should not have to manually recreate information that already exists in HubSpot or
+> Airtable."*
+
+This is the principle these pages are built on, so it is worth stating what it amounts to in fields
+rather than in intent. **Every row marked *from the proposal* on the five pages that follow is a field
+the operator never types.**
+
+**17 fields are read from Airtable and pre-filled today**, out of 20 the
+integration reads in total — and that total is the whole of it. The read boundary is a list in the
+code, not a convention: a field not on the list is not copied, which is also how the commercial
+fields stay out.
+
+| Where it applies | Pre-filled from Airtable |
+|---|---|
+| Every test — the job, specimen, protocol and requirement identity | `IFET job number` · `Project name` · `Mock-up/specimen name` · `Protocol Name` · `Section Name` · `Requirement Code` · `Applicability` · `Requirement Kind` · `Required Unit` |
+| Static Load | `Required Value Inward` · `Required Value Outward` |
+| Cycles | `Required Value Inward/Outward` |
+| Impact | `Missile Type` · `Missile Weight` · `Impact Velocity` *(gap not surfaced)* · `Required Value` |
+| Forced Entry | `Required Option` |
+| ANSI Z97.1 | `Required Option` |
+| How many deflection gauges *(a parameter, not a test)* | `Required Value` *(gap unreconciled)* |
+| Water infiltration *(deferred — see the appendix)* | `Required Value` *(out of scope)* |
+
+The three carrying a note are read but not yet fully acted on: the target impact velocity does not
+reach the operator (question 3), the gauge count is not reconciled against what the rig takes at
+start, and water infiltration is out of scope for this release. **None of them is a field anybody
+retypes** — they are read; what is incomplete is what we do with them afterwards.
+
+The design-pressure pair is the one worth pointing at twice: **two numbers pre-filled become fourteen
+test stages**, none of which anybody types or checks.
+
+**What the operator does still enter is not information that already exists** — it is what the test
+produced: the outcomes, the measurements, the notes, the photographs, the verdict, and which rig ran
+it. None of that is in Airtable to be recreated.
+
+**On HubSpot specifically.** LabOS does not read HubSpot and does not need to. Contract §1 sets the
+boundary — *HubSpot supplies approved commercial scope; Airtable owns the assigned
+project/specimen/protocol hierarchy* — and HubSpot's own identity already arrives in Airtable on
+`IFET Projects` as `Hubspot Deal ID` and `Hubspot Deal Stage`. So anything from HubSpot that an
+operator would otherwise retype reaches us through Airtable, and what does not reach us is commercial
+data a rig has no use for. **If you expect LabOS to read HubSpot directly, that is a new scope item
+and not a gap in this document** — say so and it gets planned rather than assumed.
+
+---
+
 ## Static Load
 
 *Requirement code `STATIC_PRESSURE` · read as Directional Pair, unit PSF · becomes `static` work in LabOS*
