@@ -12,69 +12,36 @@ invisible.
 
 ## The states, and what each means
 
-**Updated 2026-09-08, after the implementation and the live proof.** Seven gaps
-closed and one narrowed; the tally below is what the CSV now says.
+**Updated 2026-09-08 after the inbound half landed.** 18 gaps → **4**.
 
 | State | Rows | Meaning |
 |---|---|---|
-| `OK` | **23** | Path complete: stored, sourced, mapped to a phase — **and 20 of these round-tripped against the live Testing base** |
-| `OK-STORAGE` | 9 | Local column exists and is correct; **nothing populates it yet** (no import path) |
-| `OK-JSON-ONLY` | 6 | No Airtable scalar by decision §10.15; travels in the JSON body, which is now built |
-| `OK-BY-DECISION` | 3 | Field deliberately not created; the value reaches Airtable another way |
-| `OK-BASELINE` | 1 | Pre-existing field, path complete |
-| **`GAP-*`** | **15** | **Our unbuilt work — was 18** |
+| `OK` | **53** | Path complete: stored, sourced, mapped to a phase — and demonstrated end to end against the live Testing base |
+| `OK-JSON-ONLY` / `OK-BY-DECISION` / `OK-BASELINE` | (in the 53) | No Airtable scalar by decision; the value reaches Airtable another way |
+| **`GAP-*`** | **4** | **Our unbuilt work** |
 | **`UNMET-*`** | **6** | **A business requirement we cannot satisfy today, and why** |
 | `OUT-OF-SCOPE` | 1 | Water infiltration, deferred by contract §0 |
 
-### Closed on 2026-09-08
+### Closed since the first tally
 
-| Was | Field(s) | What closed it |
+| Was | Rows | What closed it |
 |---|---|---|
-| `GAP-MAPPER` ×4 | the four Airtable record ids | `mapping._TEST_ATTRS` covers all five test types; identity round-tripped live for every workflow |
-| `GAP-FORMAT` | `LabOS Test ID` | one derived allocator, migration `e5f3a71c8d92` normalising existing rows, retest-sharing proven live |
-| `GAP-ATOMICITY` | `Attempt Number` | `UniqueConstraint(labos_test_id + trial_number)` plus a retrying allocator; rehearsed on populated tables |
-| phase defect | `LabOS Updated At` | `write_phase` was `every`, which no worker dispatches — the field would silently never have shipped |
-| marked OK before it existed | `Complete LabOS JSON Response` | `mapping.result_detail()` now builds the §6 body. **This row claimed OK while nothing built it** — the reconciliation was wrong here and the acceptance suite caught it |
-| marked OK-BASELINE | `Impact Result` | derived from the numbered impacts, required on every Impact terminal write and previously unpopulated |
+| `GAP-MAPPER` | 4 | the outbound mapper covers all five test types |
+| `GAP-FORMAT`, `GAP-ATOMICITY` | 2 | one derived `LabOS Test ID`; attempt numbers under a constraint |
+| `GAP-NO-TABLE` | 5 | the `at_mirror_*` tables — allowlisted, with **no column for `Value`** |
+| `OK-STORAGE` → `OK` | 9 | the importer populates them from the mirror |
+| `GAP-NO-IMPORT` | 2 | `POST /airtable/import`, through the same create path a typed project uses |
+| `GAP-NO-VALIDATOR` | 2 | `requirements.validate` refuses a kind/unit contradiction |
+| `GAP-UPLOADER` | 2 | preview, direct upload, returned attachment id, ambiguous-response reconciliation |
+| phase / builder defects | 3 | `LabOS Updated At`'s unknown phase; the JSON body; `Impact Result` |
 
-### Narrowed
+### The remaining 4
 
-`GAP-CHANNEL` → **`GAP-UPLOADER`** (2 rows, `LabOS Photos`). What is built: one queue
-entry per photograph, on its own channel, so a stuck file cannot block a verdict;
-and the production sender refuses an attachment with a truthful reason rather
-than PATCHing a `photo` object as record fields — which is what it did until
-today and which Airtable rejects, parking every photograph permanently. What is
-missing: preview generation and the upload itself.
-
-## The remaining 15 gaps, grouped by cause
-
-**No local mirror or programme tables — 5 rows + 1 JSON row.** `Requirement Code`
-and `Applicability` are the two fields that decide *which test is required* and
-*whether it is required at all*, and neither has a local column. **This is now
-the largest gap and everything about pre-fill depends on it.**
-
-**No import path — 2 rows.** `POST /projects/import` is specified in plan §4.2
-and unbuilt, so even the columns that exist are never populated from Airtable.
-This is why nine rows read `OK-STORAGE` rather than `OK`.
-
-**No validator — 2 rows.** The kind/unit contradiction check the contract
-specifies, and the change document claimed, does not exist.
-
-**No correction route — 2 rows.** `corrects_attempt_id` and `correction_reason`
-have columns, a property and an envelope mapping, and nothing that sets them.
-
-**No uploader — 2 rows.** Above.
-
-**One type confusion.** `Impact Velocity` is a **target** in Airtable and the
-register maps it to `shots.velocity`, the **achieved** value of one impact. A
-requirement needs its own column on `missile_impact_tests`. Left as-is, a
-pre-fill would overwrite an observation, or a target would be published as an
-achievement — the same class of defect the envelope already refuses for
-`Max Pressure Achieved`.
-
-**One unreconciled parameter.** `GAUGE_COUNT` is a snapshotted programme
-parameter; firmware takes `selectedSensors[]` live at MQTT start, and a mismatch
-at start has no defined behaviour (DG6).
+| | Why it is still open |
+|---|---|
+| `GAP-NO-ROUTE` ×2 | **Corrections.** `corrects_attempt_id` and `correction_reason` have columns, a property and an envelope mapping, and no route sets them. Every attempt is a retest today |
+| `GAP-TYPE-CONFUSION` | **`Impact Velocity`** is a *target* in Airtable and the register maps it to `shots.velocity`, an *achieved* per-impact observation. It needs its own column on `missile_impact_tests` — as it stands a pre-fill would overwrite a measurement, or a target would publish as an achievement |
+| `GAP-UNRECONCILED` | **`GAUGE_COUNT`** is a snapshotted programme parameter; firmware takes `selectedSensors[]` live at MQTT start, and a mismatch at start has no defined behaviour (DG6) |
 
 ## The six UNMET rows — business requirements we cannot meet today
 

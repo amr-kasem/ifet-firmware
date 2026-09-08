@@ -214,3 +214,60 @@ the same Test ID with the original untouched.
 - **Corrections**, `Max Pressure Achieved`, deflection calibration, rig
   `event_id` correlation, the operator UI, and their automations. Unchanged.
 - Synthetic rig observations prove data handling only.
+
+---
+
+# Stage 6 — the full business flow · **14/14**
+
+The target the epic was set, end to end, with **no shortcut on linkage**:
+
+```
+requirement in Airtable → mirrored (allowlisted) → hierarchy selected
+  → imported through the SAME create path a typed project uses
+  → parameters pre-filled → attempt run and reviewed, requirement frozen at start
+  → published back on the section that specified it, with its photograph
+```
+
+| Check | Result |
+|---|---|
+| Requirements mirrored from the live base | 1 project · 1 specimen · 1 protocol · 6 sections |
+| Every mirrored section reads unambiguously | 5 executable of 6 — `GAUGE_COUNT` is a parameter, not a test |
+| Imported through the shared create path | project 1 · **6 static + 8 cyclic derived** |
+| Parameters pre-filled | DP 60.0/45.0 · gauges 5 · impacts 2 |
+| **Refresh then re-import** | 1 project, 6 static tests — no duplicate |
+| **Airtable unreachable** | import serves the mirror; no call in the path |
+| **Requirement frozen at start** | section `recVwSIEMXtezYa90` · `'ASTM F588 Grade 40'` |
+| **Changed upstream requirement** | frozen value holds while the section now says `CHANGED-UPSTREAM` |
+| Result reached Airtable, one row | `rec8hn6pJMqbbp8to` |
+| **Published against the section that specified it** | `recVwSIEMXtezYa90` — the one the importer bound |
+| Verdict, reviewer, dates | `Passed` by `LABOS-PROBE-reviewer` |
+| Withheld measurements | **absent** |
+| Photograph on the record | 1/1 delivered |
+
+**Stage 5's shortcut is gone.** It assigned the Airtable record ids directly,
+which proved the outbound path *given* a linked job. Here the linkage is
+produced by the importer from requirements read out of the base.
+
+## One defect found by running it
+
+The field register's IN row for Mock-Ups/Specimens names **`Project Name`** as
+the link to `IFET Projects`. It is not — that is a lookup of the job number's
+*text*, and the real link field is **`IFET Job Number`**. The import simply
+found no specimens. A register row naming a plausible neighbouring field is
+exactly the kind of error that survives review, and only reading the live base
+settles it.
+
+## Still not proven, and the dependency for each
+
+- **Corrections** — `corrects_attempt_id` has columns, a property and an
+  envelope mapping, and no route sets them. Every attempt is a retest today.
+- **`Impact Velocity`** — a target mapped to `shots.velocity`, an achieved
+  observation. Needs its own column.
+- **`GAUGE_COUNT`** — snapshotted as a programme parameter while firmware takes
+  `selectedSensors[]` live at start; a mismatch has no defined behaviour.
+- **`Max Pressure Achieved`** — on the bus, not persisted.
+- **Deflection calibration** — bench time, hardware.
+- **Rig `event_id` correlation** — a genuine firmware dependency, unlike
+  operator identity.
+- **The operator UI**, and **their automations** — Meta API returns 403.
+- Synthetic rig observations prove data handling only.

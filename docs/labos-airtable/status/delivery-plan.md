@@ -82,8 +82,11 @@ against production, and no code has ever carried a result end to end.**
 
 ### 0.3a Where the work actually stands — 2026-09-08, end of day
 
-**The outbound path is built and proven against the live Testing base, for all
-five test types including photographs. The inbound path does not exist.** That sentence is the whole state; everything
+**The full business flow is built and demonstrated against the live Testing
+base: an Airtable requirement reaches a rig and the reviewed result comes back,
+for all five test types, with photographs.** What remains is corrections, two
+reconciliation items, and the measurements — each listed below with its
+dependency. That sentence is the whole state; everything
 below elaborates it.
 
 | | |
@@ -107,6 +110,8 @@ below elaborates it.
 | `GET /sync/status` · `/sync/queue` · `POST /sync/queue/{id}/retry` | the worker's only liveness surface |
 | **270 tests** on PostgreSQL 13 · **21/21 routes** · **4 migration rehearsals** on populated tables, forward and back | `../evidence/business-io-reconciliation-2026-09-08/` |
 | Photograph delivery: preview, direct upload, returned attachment id, ambiguous-response reconciliation | `sync/artifacts.py`; `service.make_sender` |
+| **The inbound half**: allowlisted mirror with no column for `Value`, hierarchy selection served locally, duplicate-safe import through the *same* create path a typed project uses, pre-fill, and the kind/unit validator contract §3.2 specifies | `airtable/{mirror,requirements,importer}.py`; `b9c1f60d4e27` |
+| **The requirement frozen at attempt start**, so an upstream edit cannot change what a finished test claims | `test_results.requirement_snapshot` |
 | One active run per rig · idempotent Start · unique attempt numbers under a constraint | `attempts.py`; `e5f3a71c8d92` |
 | Operator declared at run start and inherited by the rig callback — **no firmware change** | `a3d8e5c71f04` |
 | Durable publication failures, counted in the headline, with a repair route that re-checks | `f7b2c04e19a5`; `/sync/failures` |
@@ -116,9 +121,6 @@ below elaborates it.
 
 | | Consequence |
 |---|---|
-| **No mirror or programme tables** | `Requirement Code` and `Applicability` have no local column. **The largest gap; all pre-fill depends on it** |
-| **No import path** (`POST /projects/import`) | Nine columns that exist are never populated from Airtable |
-| **No kind/unit validator** | A contradictory section is not refused, which contract §3 and the change document both say it is |
 | **No correction route** | `Corrects Attempt ID` cannot be populated; every attempt is a retest |
 | **No operator UI** | MU / TC5 |
 | **6 UNMET measurements** | Two need bench calibration, one needs persisting a value already on the bus, one is a config constant that must never be published |
@@ -138,7 +140,7 @@ The three-layer scheme in §0.3b is that rule made concrete.
 |---|---|---|
 | **1 — local reliability** | Isolated PostgreSQL, simulated Airtable. Real routes and queue code. Atomic saves, concurrent numbering, retries, restart recovery, photo handling, standalone operation, simulated failures | ✅ **270 tests · 4 rehearsals · 21/21 routes** |
 | **2 — live outbound round-trip** | Testing base only. Synthetic **linked** records, all five types, **the actual worker and Airtable client**. Read back and compare identity, values, timestamps, verdicts. Retry updates the same row; a retest is a new row keeping the Test ID; unavailable measurements stay absent | ✅ **31/31 live** (stage 5), five types on the real fixture hierarchy, photographs delivered with their returned ids |
-| **3 — full business round-trip** | Requirements entered in Airtable → imported through LabOS → correct specimen and pre-filled parameters → execution → the resulting Airtable summary. **No inserting local linkage to bypass the importer** | ⬜ **Blocked on the mirror and the importer.** Only this layer proves the target |
+| **3 — full business round-trip** | Requirements entered in Airtable → imported through LabOS → correct specimen and pre-filled parameters → execution → the resulting Airtable summary. **No inserting local linkage to bypass the importer** | ✅ **14/14 live** (stage 6). Linkage produced by the importer, plus repeated import, Airtable unreachable, and a changed upstream requirement |
 
 Layer 2's honest limit: linkage is inserted directly, so it proves the outbound
 path *given a linked job* and says nothing about the importer. Synthetic rig
