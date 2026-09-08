@@ -95,3 +95,68 @@ present.
 Every row is tagged `Operator Name = LABOS-PROBE`, with `LabOS Test ID` values
 prefixed `probe-` or `probe4-`. **LabOS never deletes**, so purging them is an
 ask for the Airtable team. Six rows in total: one from stage 3, five from stage 4.
+
+---
+
+# Stage 5 — the whole pipeline, live · **18/18**
+
+Added after the three-layer verification framework was set out. Stages 3 and 4
+push payloads the envelope built, with the client: **they prove the last two
+links.** Stage 5 drives the chain end to end:
+
+```
+HTTP route → sync.publish → sync_outbox → worker.drain
+           → service.make_sender(AirtableClient) → Airtable
+```
+
+with the **actual worker** and the **actual production sender** — not
+imitations. That distinction is not pedantry: every unit suite injects a
+transport that accepts any payload, which is how a sender that would have
+rejected every photograph passed 270 tests.
+
+To make it testable, the sender was extracted from `main()` as
+`service.make_sender(client, settings)`. It had been a closure, so the only way
+to check it was to keep a copy in the test and assert by source scan that the
+copy still matched — a test of a resemblance. The copy is gone; the acceptance
+suite and this probe call the same function.
+
+## Per workflow, through the real routes
+
+| | Forced Entry | ANSI Z97.1 | Impact |
+|---|---|---|---|
+| Queued by the routes | create · terminal · verdict + 1 attachment | same | same + 3 attachments |
+| Airtable row | `reczx4aY8UTFxR4DX` | `recgIHlB…` | `recnbUx0…` |
+| Identity round-trips | ✅ four rec ids · Test ID · Attempt ID · Attempt Number | ✅ | ✅ |
+| Verdict and reviewer | ✅ `Passed` by `LABOS-PROBE-reviewer` | ✅ | ✅ |
+| Timestamps | ✅ start · end · Test Date | ✅ | ✅ |
+| **Withheld measurements** | ✅ **absent** | ✅ **absent** | ✅ **absent** |
+
+## The three things a happy path cannot show
+
+| Check | Result |
+|---|---|
+| **Retry** — re-delivering an attempt updates the same row | `reczx4aY8UTFxR4DX → reczx4aY8UTFxR4DX`, 1 row |
+| **Retest** — a new attempt is a separate row, same Test ID, original untouched | attempt 1 `reczx4aY8UTFxR4DX` = `Passed` · attempt 2 `recoS8yhDqvnScfwx` = number 2 |
+| **Attachments** park visibly without pinning the status | 3 parked · headline `Pending` · record-channel parked **0** |
+
+That last row is the point of the two-channel split: a capability we have not
+built cannot drag the headline to `Retry Required` and hide the next real
+failure, while the stuck evidence stays visible in `attachment_parked`.
+
+**One assertion of mine was wrong and is corrected rather than loosened.** I
+expected all five attachment entries to park in one drain. `worker.drain` stops
+when a cycle makes no progress and claims one head per attempt per channel, so
+it parks each channel's head and leaves the rest pending — which is right, since
+a channel whose head will never succeed should not be spun on every cycle. The
+probe asserts the property now, not the count.
+
+## This layer's honest limit
+
+**Linkage is inserted directly.** Stage 5 proves the outbound path *given a
+linked job*; it does not prove the importer, because the importer does not
+exist. Proving that a requirement entered in Airtable reaches a rig and comes
+back as a summary is layer 3 — and **layer 3 may not shortcut the linkage the
+way this file deliberately does.**
+
+Rig observations are synthetic. That proves data handling only; calibration and
+hardware performance remain separate acceptance checks.
