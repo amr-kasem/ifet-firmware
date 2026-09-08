@@ -551,6 +551,24 @@ with no `airtable_*` id is `Excluded` from sync under A11 until an operator expl
 
 ### 4.7 Sync wiring — the four call sites, and the six fields that prove it
 
+> **Built 2026-09-08 — and four claims in the original text below were wrong.**
+> An independent blind audit and then the acceptance suite each found things this
+> section asserted. They are corrected here rather than quietly edited, because
+> the pattern matters: every one was a claim about *runtime* made from reading
+> *schema*.
+>
+> | This section said | What was true |
+> |---|---|
+> | Narrowing the isolation test's source scan is enough | It also checks `sys.modules`, and `outbox.py` imported `airtable.client` for one function and three integers. `app/retry_budget.py` now holds them and `airtable/__init__` loads its client lazily |
+> | The photo set is complete and immutable at termination | `_save_photo` freezes on **verdict**. Photos added between finish and review are legal, and a terminal snapshot would have dropped them. One entry per photograph instead |
+> | An attachment parks "in its own channel" and cannot hold up a result | Heads were grouped by attempt alone, so a parked attachment made the whole attempt undeliverable — verdict included. Heads are now per attempt **per channel** |
+> | Dry-run means the worker with a blank token | `service.py` exits 0 when Airtable is unconfigured, so that starts nothing. `worker.run_cycle(session, send)` is transport-injected and is what the proof uses |
+>
+> The six-field acceptance matrix stood. So did the transaction rule, the phase
+> model and the no-backfill decision. Evidence:
+> `../evidence/business-io-reconciliation-2026-09-08/` and
+> `ifet-management` `tests/test_business_acceptance.py`.
+
 **Why this section exists.** DG6 was closed on 2026-09-07 as "exactly one worker, enforced", which is true
 of the *process* and misleading about the *pipeline*. Audited 2026-09-08:
 
@@ -837,7 +855,7 @@ the interface.
 
 ---
 
-### DG12 · `LabOS Test ID` is minted three different ways — **found 2026-09-08, blocks TC1a**
+### DG12 · `LabOS Test ID` was minted three different ways — **CLOSED 2026-09-08**
 
 The Airtable team proposed using `LabOS Test ID` as the *only* key grouping a test's attempts. Auditing
 that against the code found the grouping key has **two allocators producing two formats**:
@@ -872,10 +890,14 @@ So the divergence is narrower and the fix is cheaper than first written:
 carries a `labos_test_id` at all.** The earlier claim that "the UUID path has live rows behind it" was
 wrong: it has *rehearsed* rows behind it.
 
-That makes this a free choice rather than a migration decision, and it must be made before TC1a publishes
-the first `create` — after that, the value is on records the Airtable team holds. **Verify the head on the
-node, not the repo**, before acting on this: the plan's own standing caution, and the reason this correction
-was needed.
+**Closed the same day.** `attempts.test_id_for_test()` is the single allocator for all five types and
+derives the P1 form, so a historical test and a new attempt at it group together without a sibling lookup.
+Migration `e5f3a71c8d92` normalises existing rows, refuses to proceed over a genuine duplicate, and is
+idempotent — rehearsed on populated tables, a re-run rewrites 0 rows. The slug is gone, which also stops a
+database primary key leaking into a customer's system.
+
+**Still verify the head on the node, not the repo**, before deploying: that caution is what produced this
+entry's own correction.
 
 ### DG13 · `Corrects Attempt ID` has no route — **found 2026-09-08**
 
@@ -1026,8 +1048,8 @@ satisfied.
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
 | **TC1** | **The verdict route's remaining half** — the reviewer *columns* landed with TB1 and the verdict route with TB2, so what remains is programme/run and mirror persistence for the **rig** test types | §8 (9th deviation) | LabOS | ✅ TB1 | Static and cyclic attempts carry the same identity and review path the manual types now have |
-| **TC1a** | **Wire the four call sites** — `enqueue()` inside each domain save's transaction, `create`/`terminal`/`verdict`/`attachment`, all five test types. Narrow `test_report_api_isolation.py` to `app.airtable` and the sync *client*, so a local outbox `INSERT` is not mistaken for an inline Airtable call | §4.7 · DG6 | LabOS | TC1, **DG12** | The queue fills from a real save, per-attempt FIFO, and a rolled-back save leaves no entry |
-| **TC1b** | **Build the three `/sync` routes** — `GET /sync/status` (the four contractual words + attachment backlog + `worker_heartbeat_at`), `GET /sync/queue`, `POST /sync/queue/{id}/retry`. The functions behind all three already exist and are unrouted | §4.7 · §4.2 | LabOS | TC1a | `sync-worker` has a liveness surface, the UI has its status chip, and DG6's justification is true rather than aspirational |
+| ~~**TC1a**~~ | ~~**Wire the four call sites**~~ **✅ 2026-09-08** — `enqueue()` inside each domain save's transaction, `create`/`terminal`/`verdict`/`attachment`, all five test types. Narrow `test_report_api_isolation.py` to `app.airtable` and the sync *client*, so a local outbox `INSERT` is not mistaken for an inline Airtable call | §4.7 · DG6 | LabOS | TC1, **DG12** | The queue fills from a real save, per-attempt FIFO, and a rolled-back save leaves no entry |
+| ~~**TC1b**~~ | ~~**Build the three `/sync` routes**~~ **✅ 2026-09-08** — `GET /sync/status` (the four contractual words + attachment backlog + `worker_heartbeat_at`), `GET /sync/queue`, `POST /sync/queue/{id}/retry`. The functions behind all three already exist and are unrouted | §4.7 · §4.2 | LabOS | TC1a | `sync-worker` has a liveness surface, the UI has its status chip, and DG6's justification is true rather than aspirational |
 | **TC2** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | TC1a, TC1b, TA3 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally with no Airtable origin. Neither path may block the other. **Acceptance is the six applied write fields, one per phase** — `Testing Start Date`, `Corrects Attempt ID` (create) · `Testing End Date` (terminal) · `LabOS Verdict By`/`At` (verdict) · `LabOS Photos` (attachment): §4.7 |
 | **TC3** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | TC2 | `simulation/mf_harness/` passes against the real backend. **Two routes, not one**: `api.py:94` and `api.py:109` |
 | **TC4** | **Capture actual and maximum pressure** — subscribe to `{device_id}/sensors/{addr}` during a run and persist max plus final | M7 | LabOS | TC2 | Closes two product-owner requirements. **Not "no source"** — the value is on the bus and renders live in the UI; nothing stores it |
