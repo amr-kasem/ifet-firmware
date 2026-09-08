@@ -51,11 +51,11 @@ You do not need to decide this per section. The code fixes it:
 `Missile Weight` (pounds) and `Impact Velocity` (ft/s) carry their own units in their own fields and do not
 use `Required Unit`.
 
-**Where a unit and a kind disagree, LabOS is specified to refuse the section rather than assume** — a wrong
-unit is not a rounding error, it is a different test. Stated honestly: that validator is **specified and not
-yet built**. Today the codes above are a convention we both follow; the refusal that makes it safe is on our
-build list, ahead of any live read. We would rather you knew which of our rules are enforced and which are
-still promises.
+**Where a unit and a kind disagree, LabOS refuses the section rather than assuming** — a wrong unit is not a
+rounding error, it is a different test. An earlier draft of this document told you that check was specified
+and not yet built; it is built now, and a section it refuses is reported to the operator with the reason,
+because that is the one thing they can fix. Blank is never read as zero, and blank `Applicability` is never
+read as `Not Required`.
 
 ### 0.3 Retests — your model is right, but please keep `Corrects Attempt ID`
 
@@ -112,13 +112,13 @@ so every attempt in a group carries the identical value.
 |---|---|
 | The columns, and their placement on the parent rows | ✅ built, migrated, tested |
 | Attempt ID minted per attempt; Test ID shared across a group | ✅ built for all five test types |
-| The outbound mapper resolving the four Airtable IDs from an attempt | 🔧 **Static Load and Cycles only.** The traversal for Impact, Forced Entry and ANSI is in progress |
-| Attempt Number allocation safe against two simultaneous starts | 🔧 in progress — allocated server-side, but not yet under a uniqueness constraint |
+| The outbound mapper resolving the four Airtable IDs from an attempt | ✅ **all five types**, and every one published live against this base |
+| Attempt Number allocation safe against two simultaneous starts | ✅ unique within a test at the database level, so a duplicated Start returns the attempt already running rather than opening a second |
 
-**The identity *model* is what we are confirming to you, and it is not at risk.** The two items in progress
-are our own plumbing between the database and the outbound payload; neither changes what a record will
-contain, and both are finished before anything is published. We are telling you now rather than after,
-because "already implemented" would have been a more comfortable sentence than a true one.
+**So the identity model we are confirming to you is not only agreed, it is
+demonstrated.** Every phase of every one of the five types has been published
+against this base, one row per attempt, with retries merging onto the same row
+and a retest creating a separate one that keeps its `LabOS Test ID`.
 
 Two more things we owe you honestly:
 
@@ -348,10 +348,10 @@ Not asserted — read back.
 - **A synthetic proposal was written into the Testing Base and read back**: one job, one mock-up, one
   protocol, six Protocol Sections covering all five executable requirement codes plus `GAUGE_COUNT`. Every
   field read back correctly typed, with the right values.
-  **What this proves and what it does not.** It proves the schema is complete and readable, and that a
-  requirement expressed in these fields is sufficient to drive a test programme. It does **not** exercise
-  the production import path, the operator's pre-filled form, or the kind/unit validator — none of which
-  are built yet. It is a schema and sufficiency check, not a demonstration of the running feature.
+  **And since then, the running feature.** The same fixture has been read through the import path: mirrored,
+  selected, imported, its parameters pre-filled, a test run and reviewed against it, and the result published
+  back onto the Protocol Section that specified it. What that still does not exercise is the operator's
+  screens, which do not exist yet — the path runs, nobody can drive it by hand.
 - **The design pressures drive the whole programme.** From an asymmetric `60 / 45` PSF pair LabOS derived
   all fourteen stages — six static `[45.0, 33.75, 60, 45, 90.0, 67.5]` and eight cyclic
   `[30, 36, 48, 60 | 45, 36, 27, 22.5]`. Asymmetric on purpose: a symmetric pair would pass even if inward
@@ -384,11 +384,10 @@ in sync for no gain.
 **1. Populate the eleven `Protocol Sections` fields — and never from the extractor.**
 By hand, or from the trusted signed proposal. It is the one part of pre-filling we cannot do ourselves.
 
-To be straight with you about the rest of it: **populating these fields is necessary but not sufficient.**
-The import path that copies them into LabOS, and the operator screen that shows them pre-filled, are still
-being built on our side. What is verified today is that the fields exist, are correctly typed, and read back
-with the right values and the right derived programme (§5). Your populating them is what makes that work
-useful — it does not become a working feature the moment you do it.
+To be straight with you about the rest of it: **the import path is built and the operator screen is not.**
+Populated sections are now read into LabOS, validated, and used to pre-fill a job — verified against this
+base end to end. What is missing is the screen an operator drives it from, so until that lands, populating
+these fields makes the path useful to us and not yet visible to them.
 
 **2. Confirm your `Protocol Sections` automation still owns `Result`, `Status` and `Testing Date`.**
 LabOS never writes them. We cannot see your automations — the Meta API returns `403` for them — so this
@@ -424,29 +423,70 @@ exactly one of them.
   pair derived all fourteen stages, and the pass/fail types carried a class with no numeric value.
 - **The attached CSVs agree with both live bases**, all 159 rows, 0 disagreements.
 
-### 🔧 Implemented in LabOS — built and under test, not yet deployed anywhere
+### 🔧 Implemented in LabOS — and demonstrated end to end against the Testing base
 
-- The local storage for all five test types, including numbered impacts each with their own photographs.
-- The identity columns and their placement: attempt ID per attempt, test ID shared across a group, the four
-  Airtable IDs on the parent rows.
-- The outbound envelope: which field belongs to which phase, and the refusal of anything not permitted for
-  that phase.
-- The queue that carries results to Airtable, its ordering and its recovery behaviour.
+Written earlier on 2026-09-08 and **revised the same evening**, because most of
+what this section listed as remaining work now runs. It is revised rather than
+quietly reworded: a document that understates progress is safer than one that
+overstates it, but it is still inaccurate, and you are being asked to replicate
+this schema on the strength of what we say about it.
+
+- **All five test types** — local storage, numbered impacts each with their own
+  photographs, and the review step.
+- **Identity.** One attempt ID per attempt, one test ID shared across a group,
+  the four Airtable IDs resolved from the parent records for **every** type.
+  Attempt numbers are unique within a test at the database level, so two
+  simultaneous starts cannot produce two records for one physical test.
+- **The outbound envelope and queue** — which field belongs to which phase, the
+  refusal of anything not permitted for that phase, ordering, and recovery from
+  an outage or a restart.
+- **Reading your requirements.** The eleven `Protocol Sections` fields are
+  mirrored locally and drive a LabOS job: the design-pressure pair derives all
+  fourteen stages, the gauge and impact counts pre-fill, and each test is linked
+  to the Protocol Section that specifies it.
+- **The kind/unit validator.** A section whose `Required Unit` contradicts its
+  `Requirement Kind` is refused rather than assumed — the §0.2 promise, now a
+  check. Blank is never read as zero, and blank `Applicability` is never read as
+  Not Required.
+- **Photographs.** Downscaled previews uploaded directly, with the attachment ID
+  you return recorded so a retry after a lost response reconciles against your
+  record instead of attaching the same file twice.
+- **A requirement is frozen when a test starts**, so editing a section afterwards
+  cannot change what a finished test reports having been run against.
+
+**Verified against this base, not asserted:** every phase of every one of the
+five types published, one Airtable row per attempt, retries merging onto the same
+row, a retest creating a separate row that keeps its `LabOS Test ID`, and
+photographs arriving on the records. Also verified from your side of the
+boundary: an unknown select option is rejected rather than created, an empty
+string is refused where a number or a date belongs, and a genuine `0` stores as
+`0`.
+
+Probe rows from those runs are tagged `Operator Name = LABOS-PROBE`, with
+`LabOS Test ID` values beginning `probe`. **LabOS never deletes**, so clearing
+them is the one piece of housekeeping we cannot do ourselves.
 
 ### ⬜ Specified but not yet built — our remaining work, stated so you can hold us to it
 
-- **The import path and the pre-filled operator form.** Your populating the eleven fields is necessary and
-  not sufficient; §6.1.
-- **The kind/unit validator** that refuses a contradictory section rather than assuming; §0.2.
-- **The outbound mapper for Impact, Forced Entry and ANSI** — Static Load and Cycles resolve their Airtable
-  IDs today, the other three do not yet; §0.3.
-- **The correction route.** `Corrects Attempt ID` cannot be populated until it exists; §0.3.
-- **`Max Pressure Achieved`** — a source exists on the rig's telemetry, nothing persists it; §4.
-- **Attempt-number allocation under a uniqueness constraint**; §0.3.
+- **The operator interface.** Everything above is reachable through the API and
+  none of it has screens yet. This is now the largest remaining piece of our
+  work, and it is the one you would notice.
+- **The correction route.** `Corrects Attempt ID` still cannot be populated, so
+  today **every** new attempt is a retest. This is the strongest reason to keep
+  that field: the day corrections exist, a roll-up that cannot tell them from
+  retests would be wrong and would look right.
+- **`Max Pressure Achieved`** — actual pressure is on the rig's telemetry bus and
+  renders live in our UI; nothing subscribes to it and stores the maximum. §4.
+- **`Impact Velocity` needs its own place in LabOS.** It is a *target* in your
+  base and our internal mapping currently points it at a *measured* per-impact
+  value. Nothing wrong has been published — we do not send an achieved velocity
+  — but we are fixing the mapping before pre-fill uses it.
+- **Deflection** remains uncalibrated; §4.
 
-**None of these change what this document asks of you**, which is a schema change and its reasoning. They
-are listed because a schema you are asked to replicate into production should come with an honest account
-of what does and does not yet run against it.
+**None of these change what this document asks of you**, which is a schema change
+and its reasoning. They are listed because a schema you are asked to replicate
+into production should come with an honest account of what does and does not yet
+run against it.
 
 ### And three things that can only be verified at cutover, by both of us
 
