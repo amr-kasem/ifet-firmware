@@ -857,6 +857,12 @@ Three consequences, and only the first belongs to this redesign:
    row is invisible to it, which is how ten of them survived. The check needs its reverse direction, and that
    is what found this. Tracked separately — it is not impact work.
 
+#### Where to start
+
+**§6.0 carries the ordered path** — send the approval document, the correction route, apply `Impact Number`,
+fix `impact_count`, then this redesign, then the document deltas, then preflight and send. This section owns
+the *design*; §6.0 owns the *sequence*. Do not restate one in the other.
+
 #### Documents this invalidates
 
 Every one of these describes the superseded shape and must be corrected **before** TA5b goes out. The hold
@@ -1392,7 +1398,27 @@ MF's firmware half, all of M2, and **the whole integration path in both directio
 requirement reaches a rig and the reviewed result comes back, demonstrated live for all five test types
 with photographs (stage 6, 14/14). **Nothing is deployed.**
 
-#### What is actually next, in one place
+#### The impact redesign — the ordered path, 2026-09-08
+
+**Start here.** All three of TC1h's decisions are closed (§4.5a), so this is execution rather than design.
+Steps 1–3 are independent of each other and of everything below; step 4 is the redesign; steps 5–6 are what
+lets TA5b go out. Nothing here is blocked on the Airtable team.
+
+| # | Task | Ref | Who | Why in this position |
+|---|---|---|---|---|
+| **1** | **Send the five-test approval document** | TA5a | **you** | Generated, verified, six questions with Q6 already answered. Independent of every other row: it describes the new Impact shape as specified-not-yet-built, which is true and is what he approves. **The UI screens wait on the answers, so this is the one with a cost per day** |
+| **2** | **The correction route** — set `corrects_attempt_id` and `correction_reason` from an operator action | TC1g | LabOS | **Do this before step 4, not after.** There is no shot edit or delete route — `record_shot`, `list_shots`, `add_shot_photo` and nothing else — so a mis-recorded impact cannot be corrected at all today. Attempts are append-only by §4.5 rule 5, so once each impact *is* an attempt, the correction chain is the only path that exists even in principle. Build the redesign first and the invariant reads complete while a mis-typed impact still has nowhere to go |
+| **3** | **Apply `Impact Number` to the Testing Base** | TC1h · §9 | **you** | One `apply_schema --apply` run: idempotent, refuses production unconditionally, captures before/after. **A write to a base you own, so it is yours to run rather than mine.** 159 → 160. Needed before step 5 and by nothing before it |
+| **3b** | **Fix `impact_count`** — accumulate across impact sections, or refuse on disagreement | TC1h | LabOS | `importer.py:166` has no accumulation and no conflict check across `IMPACT_LMI`/`IMPACT_SMI`, unlike `design_pressures` directly above it. Small, and it is the five-required/five-rows cross-check the product owner's confirmation just made meaningful |
+| **4** | **TC1h — one attempt per impact** | TC1h · §4.5a | LabOS | The redesign. In this order inside the step: the ordinals (`record_shot` sets `shot_number = attempt.trial_number`, `_impact_result` reads `trial_number`), then `Impact Result`'s single-impact line and the dead `Incomplete` branch, then the routes, then the migration with its five traps, then the ~70 shot references across seven test files. **Rehearse the migration on a disposable Postgres from a dump before the node sees it** — 39 tests and 114 shots are real |
+| **5** | **The document deltas** | TC1h · TA5b | LabOS | Register row for `Impact Number`; regenerate `production-change-spec.csv` and `interface-schema.csv`; `preflight.ADDED` 17 → 18; the change document's five touch points (§4.5a). **Includes one correction owed regardless of any of this:** lines 480–483 tell the Airtable team our mapping points `Impact Velocity` at a measured per-impact value, which is not true |
+| **6** | **Preflight, then send the Airtable document** | TA5b | **you** | `preflight.py` green against both live bases, then send. Carries TC1i's question about their six writable `LabOS`-named fields on `Protocol Sections`, so it goes as one exchange rather than two |
+
+**Not on this path, and deliberately:** TC1f waits on question 3 coming back; TC5, the operator interface, is
+the epic's critical path and is independent of all of the above; TB4 needs a window. Pushing both branches is
+still outstanding and the UI developer is blocked on the first of them.
+
+#### What is actually next beyond the redesign
 
 Three things are ours and one is not, and they are genuinely independent:
 
