@@ -79,7 +79,7 @@ precisely what `LabOS Test ID` is for.
   field. Our project owner respecified Impact as **one attempt per impact**, so a five-impact test now
   publishes five rows where it previously published one. Those five are one test, not five.
 
-With only `LabOS Test ID`, those two are indistinguishable on your side. Any roll-up that counts attempts or
+With only `LabOS Test ID`, those three are indistinguishable on your side. Any roll-up that counts attempts or
 computes a pass rate would then be wrong — **and would look right**, which is the part that makes it
 expensive. A specimen corrected twice would read as three tests.
 
@@ -132,10 +132,11 @@ and a retest creating a separate one that keeps its `LabOS Test ID`.
 
 Two more things we owe you honestly:
 
-- **`Corrects Attempt ID` has no operator route yet.** The columns exist and the envelope maps them, but the
-  screen that records a correction is not built. So today every attempt is a retest, and the field is
-  correctly blank on all of them. That is a reason to keep the field, not to drop it: when the route lands we
-  need somewhere to put the answer, and adding a field to production later is the expensive direction.
+- **`Corrects Attempt ID` now has its operator route** — built 2026-09-08,
+  `POST /test-results/{id}/correct`. A correction is a new attempt naming the one it supersedes, with a
+  required reason; the original is never edited. An earlier draft of this document told you the route did not
+  exist and that every attempt was therefore a retest — true when it was written, and no longer. The field is
+  blank on every ordinary attempt and every retest, and populated only on the rarer correction.
 - **`LabOS Test ID` is opaque and you should treat it as such** — group and compare on equality, never parse
   it. Its internal format is ours and may change; its meaning, *"these attempts are of one test"*, will not.
 
@@ -155,7 +156,7 @@ Two details worth stating:
 
 ---
 
-**Seventeen fields were added, all to the Testing Base only.** No field was renamed, retyped, deleted or
+**Eighteen fields were added, all to the Testing Base only.** No field was renamed, retyped, deleted or
 reordered. No table, view, relationship or automation was touched. Nothing in production was modified, and
 the tooling that made these changes **refuses the production base unconditionally** — there is no flag or
 environment variable that overrides it.
@@ -171,12 +172,14 @@ transcribed.
 | | Count |
 |---|---|
 | Fields LabOS **reads** | **20** |
-| Fields **bound to the write path** | **35** — all in `LabOS Raw Data Table`, the only writable table |
+| Fields **bound to the write path** | **36** — all in `LabOS Raw Data Table`, the only writable table |
 | Fields LabOS **deliberately ignores** | **104** |
 
 **"Bound to the write path" is not "always populated", and the difference matters to you.** Airtable will
 show empty cells for legitimate reasons, so here is the rule: **LabOS omits a field rather than sending an
-empty string, a zero or a false** (contract §6). A blank cell therefore means *not applicable to this
+empty string in place of a value it does not have** (contract §6). A genuine `0` or `false` **is** data and
+is sent as such — a reviewer who considered a retest and decided against one sends `false`, because an
+unchecked box is not a decision. A blank cell therefore means *not applicable to this
 attempt* or *not yet known*, never *zero*.
 
 Presence depends on two things:
@@ -186,7 +189,7 @@ Presence depends on two things:
 | **Which phase** | A field belongs to one delivery phase — creation, termination, or first review. `LabOS Verdict By` is absent until someone reviews; that is correct, not missing |
 | **Whether it applies** | `Corrects Attempt ID` is populated only on a correction — blank on every ordinary attempt and every retest. `Impact Result` applies to Impact only. `LabOS Photos` requires photographs to exist |
 
-And **3** of the 35 will stay permanently empty for now — `Max Pressure Achieved`, `Deflection Value`,
+And **3** of the 36 will stay permanently empty for now — `Max Pressure Achieved`, `Deflection Value`,
 `Deflection Unit`. See §4 for what each is waiting on; they are different things.
 
 The per-field detail — phase, and whether presence is conditional — is the `write_phase` and
@@ -225,7 +228,7 @@ were not touched at all**, and for three of those LabOS has no access of any kin
 - **Protocol Sections `+11`.** The requirement had no machine-readable form; LabOS would have had to parse
   the `Value` text field, which is where the extractor defect lives. §2 covers each field. **LabOS reads this
   table and never writes it** — `Result`, `Status` and `Testing Date` stay yours.
-- **LabOS Raw Data Table `+6`.** Six things LabOS produces that had nowhere to go: the execution span, who
+- **LabOS Raw Data Table `+7`.** Seven things LabOS produces that had nowhere to go: the impact ordinal, the execution span, who
   reviewed and when, the correction link, and photo previews. §3 covers each. This is the **only** table
   LabOS writes, and the runtime credential's allowlist is this table alone.
 
@@ -339,7 +342,7 @@ things**, which an earlier draft ran together:
 | Field | Why it is empty | What unblocks it |
 |---|---|---|
 | `Deflection Value` · `Deflection Unit` | The rigs return **raw gauge counts** never calibrated to a physical unit. Publishing them would put an uncalibrated count in a field named for inches | Bench calibration — hardware work |
-| `Max Pressure Achieved` | **A source exists.** Actual pressure is on the rig's telemetry bus and renders live in our UI; nothing subscribes to it and stores the maximum | Software work on our side, already scheduled |
+| `Max Pressure Achieved` | **A source exists.** Actual pressure is on the rig's telemetry bus and renders live in our UI; nothing subscribes to it and stores the maximum | Software on our side to capture it, then **bench time to validate what it captures** — the same hardware dependency as the row above, which is why neither carries a date |
 
 **We would rather send nothing than send a number we cannot stand behind.** But we are not claiming the
 second one is impossible — it is a measurement we do not yet persist, and that is a different admission
@@ -357,11 +360,13 @@ Not asserted — read back.
 - **Schema probe against the live base**: all table IDs confirmed, all 35 expected result fields present,
   select option sets read from the API rather than assumed.
 - **A synthetic proposal was written into the Testing Base and read back**: one job, one mock-up, one
-  protocol, six Protocol Sections covering all five executable requirement codes plus `GAUGE_COUNT`. Every
+  protocol, six Protocol Sections covering five of the six executable requirement codes plus `GAUGE_COUNT`
+  — `IMPACT_SMI` is the uncovered one, and it shares its entire code path with `IMPACT_LMI`. Every
   field read back correctly typed, with the right values.
   **And since then, the running feature.** The same fixture has been read through the import path: mirrored,
   selected, imported, its parameters pre-filled, a test run and reviewed against it, and the result published
-  back onto the Protocol Section that specified it. What that still does not exercise is the operator's
+  against the Protocol Section that specified it — carried as `Airtable Section ID` on the raw-results row,
+  never as a write to `Protocol Sections`. What that still does not exercise is the operator's
   screens, which do not exist yet — the path runs, nobody can drive it by hand.
 - **The design pressures drive the whole programme.** From an asymmetric `60 / 45` PSF pair LabOS derived
   all fourteen stages — six static `[45.0, 33.75, 60, 45, 90.0, 67.5]` and eight cyclic
@@ -370,15 +375,15 @@ Not asserted — read back.
 - **`Forced Entry` and `ANSI Z97.1` carried a class in `Required Option` and no numeric value**, confirming
   the `Not Applicable` kind behaves as intended.
 - The fixture job is `IFET-FIXTURE-0001` and every value in it is synthetic. It can be deleted at any time.
-- **The before/after chain joins, and that is checked rather than asserted.** Two changes were made — 142 →
+- **The before/after chain joins, and that is checked rather than asserted.** Three changes were made — 142 →
   156 on 2026-09-06, then 156 → 159 and 159 → 160 on 2026-09-08 — and each change's *after* snapshot is
-  byte-identical to the next change's *before*. So the four snapshots are one history, not four unrelated
+  byte-identical to the next change's *before*. So the snapshots are one history, not four unrelated
   readings. The generator refuses to produce the CSV if that hash check fails, and refuses if any field
   present before is absent after.
 - **Nothing was removed and nothing was retyped.** Every one of the 142 pre-existing fields has the same type
   after as before. That is the property that makes this change additive in the sense that matters to your
   automations.
-- **Re-checked against both live bases immediately before sending**, rather than relying on the snapshots
+- **Re-checked against both live bases immediately before this was sent**, rather than relying on the snapshots
   above: all 18 present in Testing and correctly typed · **none** of the 18 in production · production **142**,
   testing **160**, delta **18** · all **160** rows of `production-change-spec.csv` agree with the live bases,
   0 disagreements · the fixture still reads back with its six sections and all six codes. So every number in
@@ -408,11 +413,12 @@ needs your eyes, not ours.
 Every change was additive, which rules out the usual breakages, but an unfiltered trigger will now fire more
 often than before.
 
-**4. Tell us what six fields on `Protocol Sections` are for — they are named for LabOS and we have never
-written them.** `Latest LabOS Attempt Number`, `LabOS Attempt ID`, `LabOS Retest Required`,
-`LabOS Report Link`, `Excel File Link` and `Notes` are present and **writable** in both bases. They are not
-rollups or lookups, and nothing in our field register accounts for any of them, so the read/write boundary
-this document describes has a hole in it that neither side has looked at.
+**4. Tell us what six fields on `Protocol Sections` are for — four are named for LabOS and we have never
+written any of the six.** `Latest LabOS Attempt Number`, `LabOS Attempt ID`, `LabOS Retest Required`,
+`LabOS Report Link`, plus `Excel File Link` and `Notes`. All six are present and **writable** in both bases —
+not rollups or lookups. Our generated interface schema classifies them `labos_use=ignore`, which is
+accurate about what we do and silent about what they are *for*, and our field register has no row for any of
+them.
 
 We are not going to start writing them on a guess: a section-level summary beside the per-attempt rows is a
 different ownership model from the one §1 sets out. Three possibilities and we cannot tell which — legacy
@@ -496,19 +502,25 @@ them is the one piece of housekeeping we cannot do ourselves.
 - **The operator interface.** Everything above is reachable through the API and
   none of it has screens yet. This is now the largest remaining piece of our
   work, and it is the one you would notice.
-- **The correction route.** `Corrects Attempt ID` still cannot be populated, so
-  today **every** new attempt is a retest. This is the strongest reason to keep
-  that field: the day corrections exist, a roll-up that cannot tell them from
-  retests would be wrong and would look right.
+- ~~**The correction route.**~~ **Built 2026-09-08** — moved out of this list.
+  `POST /test-results/{id}/correct` populates `Corrects Attempt ID` and
+  `Correction Reason`. It is still true that a roll-up unable to tell a
+  correction from a retest would be wrong and would look right; that is now a
+  live case rather than a future one.
 - **`Max Pressure Achieved`** — actual pressure is on the rig's telemetry bus and
   renders live in our UI; nothing subscribes to it and stores the maximum. §4.
 - **`Impact Velocity` is read but not yet shown to the operator.** An earlier
   draft of this document told you our mapping pointed it at a *measured*
   per-impact value. **That was wrong about our own code** and is corrected here:
   nothing points it there. It is copied into our local mirror and frozen onto
-  the attempt, so it travels in the JSON — it simply does not appear on the
-  screen the operator is looking at. Nothing wrong has been published; we do not
-  send an achieved velocity. Whether the target should be on that screen is a
+  the attempt locally — it simply does not appear on the screen the operator is
+  looking at, and it does **not** reach your base in any form today: the
+  requirement block we publish is read live from the parent rows rather than
+  from that frozen copy. Nothing wrong has been published: we never
+  send an achieved velocity **into `Impact Velocity`**. The achieved per-impact
+  velocity, where an operator recorded one, does travel inside
+  `Complete LabOS JSON Response` as an observation marked `source: operator` —
+  which is the honest version of that sentence. Whether the target should be on that screen is a
   question for our project owner, not a schema change on your side.
 - **Deflection** remains uncalibrated; §4.
 
@@ -533,9 +545,10 @@ it is not a claim that the integration is delivered.** Nothing is deployed.
 | File | What it is |
 |---|---|
 | `evidence/testing-base-changes-2026-09-06/production-change-spec.csv` | **The working sheet.** One row per field for all 160: `ADD`/`KEEP`, reads, writes, why. Regenerated 2026-09-08 — it carries all 160, not the 156 of the folder it sits in |
-| `evidence/testing-base-before-after-2026-09-08.csv` | **Before and after, as a spreadsheet.** All 160 fields: unchanged or added, the type either side, the field ID, and which of the three dates it was added on. **142 unchanged · 18 added · 0 removed · 0 retyped.** Generated, and it refuses to run if the three changes do not chain |
+| `evidence/testing-base-before-after-2026-09-08.csv` | **Before and after, as a spreadsheet.** All 160 fields: unchanged or added, the type either side, the field ID, and which of the two dates it was added on. **142 unchanged · 18 added · 0 removed · 0 retyped.** Generated, and it refuses to run if the three changes do not chain |
 | `evidence/testing-base-changes-2026-09-06/` | The first 14 fields — before/after schema, field IDs, per-field reasons |
-| `evidence/testing-base-changes-2026-09-08/` | The three Impact fields — same, plus the fixture verification |
+| `evidence/testing-base-changes-2026-09-08/` | The three Impact **requirement** fields — `Missile Type`, `Missile Weight`, `Impact Velocity` — before/after schema, field IDs, per-field reasons, plus the fixture verification |
+| `evidence/testing-base-changes-2026-09-08-impact-number/` | **The eighteenth field.** `Impact Number` — before/after schema either side of it and the applied diff |
 | `contract/interface-schema.csv` | Every field in both bases joined to its LabOS use, including the 104 ignored |
 | `contract/write-contract-v0.4.md` | What each field means and when LabOS writes it |
 
