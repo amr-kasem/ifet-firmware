@@ -76,8 +76,10 @@ precisely what `LabOS Test ID` is for.
 - **A correction** — a recorded result was wrong and is being superseded. **No physical test happened**, and
   it must not count as one.
 - **Another impact of the same impact test** — new since 2026-09-08, and the reason for the eighteenth
-  field. Our project owner respecified Impact as **one attempt per impact**, so a five-impact test now
-  publishes five rows where it previously published one. Those five are one test, not five.
+  field. Our project owner respecified Impact as **one attempt per impact**, so a five-impact test **will
+  publish five rows** where it publishes one today. Those five are one test, not five. The code is built and
+  the field is applied here; the database migration that splits the impacts already recorded has not been run,
+  and nothing in this integration is deployed — so today you would still see one row. Plan for five.
 
 With only `LabOS Test ID`, those three are indistinguishable on your side. Any roll-up that counts attempts or
 computes a pass rate would then be wrong — **and would look right**, which is the part that makes it
@@ -482,8 +484,13 @@ this schema on the strength of what we say about it.
 - **Photographs.** Downscaled previews uploaded directly, with the attachment ID
   you return recorded so a retry after a lost response reconciles against your
   record instead of attaching the same file twice.
-- **A requirement is frozen when a test starts**, so editing a section afterwards
-  cannot change what a finished test reports having been run against.
+- **A requirement is frozen locally when a test starts**, so editing a section
+  afterwards cannot change what LabOS holds a finished test as having been run
+  against. **What we publish to you is not that frozen copy** — the requirement
+  block inside `Complete LabOS JSON Response` is read at publish time and is
+  marked `"source": "live"` in the payload for exactly that reason. Publishing
+  the frozen copy instead is on our list and is not done, so do not read that
+  block as immutable evidence yet.
 
 **Verified against this base, not asserted:** every phase of every one of the
 five types published, one Airtable row per attempt, retries merging onto the same
