@@ -277,6 +277,11 @@ Not asserted — read back.
 - **Nothing was removed and nothing was retyped.** Every one of the 142 pre-existing fields has the same type
   after as before. That is the property that makes this change additive in the sense that matters to your
   automations.
+- **Re-checked against both live bases immediately before sending**, rather than relying on the snapshots
+  above: all 17 present in Testing and correctly typed · **none** of the 17 in production · production **142**,
+  testing **159**, delta **17** · all **159** rows of `production-change-spec.csv` agree with the live bases,
+  0 disagreements · the fixture still reads back with its six sections and all six codes. So every number in
+  this document is true of the bases as they stand today, not only as they stood when the snapshots were taken.
 
 **Loading sequences are not in this schema and do not need to be.** LabOS derives all fourteen stages from
 the design-pressure pair using fixed factors. Sending them from Airtable would create a second copy to keep
