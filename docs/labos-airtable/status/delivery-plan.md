@@ -608,29 +608,60 @@ firing is impact 6, which is simply the next attempt. Therefore:
 | `trial_number` **is** the impact ordinal | The contract's `Attempt Number` becomes the impact number for this one test type |
 | **No new column** | The retry axis was the only thing that needed one |
 | **No new field for LabOS's own needs** | `Attempt Number` already carries the ordinal. **But see the roll-up consequence below — the Airtable side does need one field, for a different reason** |
-| **Half the invariant is already enforced; the other half is not** | "One attempt per impact" is two statements. *No two attempts share an impact ordinal* is `uq_test_results_test_attempt` (`models.py:353`) — already there. *Each attempt holds exactly one impact* spans `test_results` and `shots` and **no constraint covers it**; it goes on the create path. Do not read the first as delivering the second. And `labos_test_id` is nullable (`models.py:380`), so on legacy rows Postgres treats the NULLs as distinct and the constraint does not bite at all |
+| **Both halves end up enforced, one of them for free** | "One attempt per impact" is two statements. *No two attempts share an impact ordinal* is `uq_test_results_test_attempt` (`models.py:353`). *Each attempt holds exactly one impact* is `uq_shots_attempt_number` on `(test_result_id, shot_number)` (`models.py:216`) **once `shot_number` mirrors `trial_number`** — see the ordinals decision. Neither needed adding. The one caveat: `labos_test_id` is nullable (`models.py:380`), so on legacy rows with no test id Postgres treats the NULLs as distinct and the first constraint does not bite — the migration renumbers those on `missile_impact_test_id` instead |
 | **A mis-recorded impact is expressible *by design*, not yet in the build** | The right mechanism is `Corrects Attempt ID` — superseding a record that was *wrong* — which keeps a new firing and a mis-typed outcome cleanly different, as §2's "never disguise a correction as a retest" requires. **But TC1g is open: the columns, the property and the envelope mapping exist and nothing sets them.** So until TC1g lands, a wrongly-recorded impact has no route at all, and this redesign does not change that — it inherits it. TC1h depends on TC1g for the invariant to be honest |
 
-#### The two ordinals — decide this before writing any code
+#### The two ordinals — DECIDED 2026-09-08
 
-This is the one thing in the redesign that blocks a clean implementation, and it is invisible until you read
-`record_shot`.
+`Shot.shot_number` is allocated as *"how many shots does this attempt already have, plus one"*
+(`main.py:2067`). Under one shot per attempt that makes **every impact `shot_number = 1`**, and the field is
+not only internal: `mapping.py:196` sorts the published JSON's `shots[]` by it and emits it, and
+`_impact_result` prints it as the failing impact's identity (`mapping.py:71`). So leaving it at 1 would put a
+meaningless ordinal in a payload the Airtable team reads.
 
-`Shot.shot_number` is allocated as *"how many shots does this attempt already have, plus one"* —
-`main.py:2064`. Under one shot per attempt that makes **every impact `shot_number = 1`**. And
-`mapping._impact_result` prints `sh.shot_number` as the impact's identity (`mapping.py:73`), so every impact
-would publish as *"impact 1 of 1"* while `trial_number` silently held the real ordinal.
+**Decision: `trial_number` is the single authoritative impact ordinal, and `shot_number` is retired to a
+mirror of it.**
 
-So `trial_number` becomes the impact ordinal and `shot_number` becomes meaningless — two ordinals where one
-is now a constant. Pick one and write it down:
-
-| Option | What it means |
+| | |
 |---|---|
-| **`_impact_result` reads `trial_number`; `shot_number` stays 1** ✅ | One ordinal has meaning, the other is vestigial and honest about it. `uq_shots_attempt_number` on `(test_result_id, shot_number)` still holds trivially. No renumbering of the 114 rows |
-| `record_shot` sets `shot_number = attempt.trial_number` | Two ordinals that must always agree — a redundancy that will drift the first time one path forgets. Also renumbers existing rows |
+| `record_shot` | sets `shot_number = attempt.trial_number` instead of counting within the attempt |
+| `_impact_result` | reads `attempt.trial_number` for the ordinal — the attempt's own field, no traversal into `shots` to learn which impact it is |
+| The published JSON | `shots[]` keeps `shot_number` and it now says which impact, correctly, for old rows and new |
+| The migration | also `UPDATE shots SET shot_number = <new trial_number>`, so the column means one thing across all 114 rows instead of two |
 
-Take the first. It also means `_impact_result` no longer needs `attempt.shots` at all, which removes the
-last place where the roll-up shape leaks into a per-impact world.
+**This closes the invariant for free, and it corrects what this section said earlier.** With
+`shot_number = trial_number`, two shots on one attempt both take `(test_result_id, attempt.trial_number)` —
+and `uq_shots_attempt_number` on `(test_result_id, shot_number)` already exists (`models.py:216`). So
+*"each attempt holds exactly one impact"* becomes **database-enforced at zero cost**, rather than a rule
+living on the create path as the first draft of this plan assumed. The redundancy of two ordinals is the
+price, and it is bounded: exactly one code path writes a shot, and it writes the attempt in the same call.
+
+The rejected alternative was leaving `shot_number` at 1 and reading `trial_number` everywhere. It costs no
+migration and it publishes `"shot_number": 1` for every impact — a wrong number in someone else's system to
+save an `UPDATE`.
+
+#### `Impact Result` — DECIDED 2026-09-08
+
+**Decision: keep it required and carry the single impact's line.** It stays in
+`contract.REQUIRED_BY_TEST_TYPE[IMPACT]`, so the envelope keeps refusing a terminal Impact write without it
+and nothing about the envelope contract moves.
+
+| Case | Today, for a sequence | After, for one impact |
+|---|---|---|
+| Passed | `Pass - 3 of 3 impacts resisted` | `Pass - impact 3 resisted` |
+| Failed | `Fail - impact 2 of 3 did not resist` | `Fail - impact 3 did not resist` |
+| No outcome recorded | `Incomplete - 1 of 3 impacts have no outcome` | **Branch deleted** — `Shot.result` is `NOT NULL` (`models.py:199`), so it was already unreachable |
+| No impact at all | `None`, which refuses the terminal payload | Unchanged, and still right: an impact attempt without its impact cannot terminate |
+
+**No total.** The old string carried "of 3" because an attempt held the whole sequence. Per row there is no
+honest total: impacts accrue one attempt at a time, and the only count available is
+`projects.impact_count`, which is the *required* number and is separately unreliable across `IMPACT_LMI` and
+`IMPACT_SMI` (see the API section). A number that says "of 5" when the fifth impact may never be fired is
+worse than no number.
+
+The rejected alternative was dropping it from `REQUIRED_BY_TEST_TYPE`. That is a four-file change touching
+the envelope contract, its test and a live-stage assertion, to remove a field their base already has and a
+person scanning it already reads.
 
 #### The roll-up consequence — and why one Airtable field is needed after all
 
@@ -683,8 +714,8 @@ So the change is a **cardinality change and a split migration**, not a table mer
 
 | Change | Where | Note |
 |---|---|---|
-| Attempt-per-impact invariant | `ImpactTestResult` | Exactly one `Shot`, enforced on the create path — no constraint spans the two tables, and none is proposed |
-| Impact ordinal | `TestResult.trial_number` | Becomes the impact number for this test type. See "the two ordinals" above: `shot_number` becomes vestigial and `_impact_result` must read `trial_number` instead |
+| Attempt-per-impact invariant | `ImpactTestResult` | Exactly one `Shot`, and **enforced by the constraint that already exists** once `shot_number` mirrors `trial_number` |
+| Impact ordinal | `TestResult.trial_number` | The single authoritative impact number. `Shot.shot_number` becomes a mirror of it so the published JSON stays meaningful; `_impact_result` reads `trial_number` |
 | `trial_number` semantics | `TestResult` docstring | Already `# = contract Attempt Number`; gains "and, for Impact, the impact ordinal" |
 | Nothing added | — | No column, no table, no index beyond what exists |
 
@@ -714,7 +745,12 @@ Four things the split has to get right, each of which is wrong under the obvious
    attempt; it must move to the new attempt that owns its `shot_id`. Rows with `shot_id IS NULL` are
    attempt-level evidence for a sequence that no longer exists — assign them to attempt 1 and say so in the
    note rather than dropping them.
-4. **Two legacy shapes will not fit the invariant.** An impact attempt with **zero** shots cannot become an
+4. **Set `shot_number` to the new `trial_number` in the same migration.** Without it the column means
+   "ordinal within the old attempt" on 114 rows and "the impact ordinal" on every new one, the published
+   JSON's `shots[].shot_number` disagrees with `Attempt Number` on historical rows, and
+   `uq_shots_attempt_number` stops enforcing one impact per attempt for them. One `UPDATE`, and it is the
+   step that makes the ordinals decision hold.
+5. **Two legacy shapes will not fit the invariant.** An impact attempt with **zero** shots cannot become an
    attempt-per-impact and must be left alone and reported, not deleted. And `labos_test_id` is nullable, so
    the 114 pre-integration rows may have none — with no grouping key there is nothing to renumber against;
    those tests migrate on `missile_impact_test_id` instead. Neither case is hypothetical on a five-year-old
@@ -751,7 +787,8 @@ place where the redesign's "no new column" claim may not survive contact.
   visible consequence of the instruction, and the one thing to put to the product owner in writing (§10).
 - **Each impact carries its own verdict** — `Test Result`, `LabOS Verdict By`, `LabOS Verdict At`. The
   product owner asked for pass/fail per impact, so this is intended rather than incidental.
-- **`Impact Result` loses its purpose but cannot simply be dropped.** It was a roll-up naming the failing
+- **`Impact Result` is kept and carries the single impact's line — decided above.** It cannot simply be
+  dropped anyway. It was a roll-up naming the failing
   impacts, derived in `mapping._impact_result` from `attempt.shots`; with one impact per row the outcome *is*
   `Test Result` and there is no test-level row to summarise onto. **It is contractually mandatory:**
   `contract.REQUIRED_BY_TEST_TYPE[IMPACT]` (`contract.py:338`) makes the envelope refuse any terminal Impact
@@ -831,7 +868,8 @@ surface, by reference count:
 | `tests/test_airtable_envelope.py` | `:259` asserts the envelope refuses a terminal Impact write without `Impact Result` |
 | `tests/stage4_five_types_live.py` | `:56` asserts the literal `"Pass - 3 of 3 impacts resisted"` |
 | `tests/route_coverage.py` · `tests/fake_schema.py` | Route inventory and the fake base's field list; `fake_schema.py:63` needs `Impact Number` |
-| `tests/rehearse_attempt_uniqueness_migration.py` | The existing rehearsal for this constraint — extend it to rehearse the split rather than writing a new one |
+| `tests/rehearse_attempt_uniqueness_migration.py` | The existing rehearsal for this constraint — extend it to rehearse the split rather than writing a new one, and assert the `shot_number = trial_number` update, since that is what makes `uq_shots_attempt_number` enforce the invariant |
+| `mapping.py:196` (not a test, but the same blast radius) | The published JSON sorts `shots[]` by `shot_number` and emits it. With one impact per attempt the array is one element, and after the decision its `shot_number` correctly names the impact |
 
 **Also noticed, pre-existing and not caused by this:** `_impact_result`'s `sh.result is None` branch
 (`mapping.py:74`) is already unreachable, because `Shot.result` is `NOT NULL`. Worth deleting while the
@@ -1402,7 +1440,7 @@ satisfied.
 | ~~**TC1e**~~ | ~~**The kind/unit validator**~~ ✅ 2026-09-08 — refuse a section whose `Required Unit` contradicts its `Requirement Kind`. Specified in contract §3 and asserted in the change document; **does not exist** | §3.2 · `GAP-NO-VALIDATOR` | LabOS | TC1c | A contradictory section is refused rather than assumed, before any live read |
 | **TC1f** | **Decide whether the target impact velocity must reach the operator.** *Restated 2026-09-08 — its original premise was wrong.* `Impact Velocity` is **not** mapped to `shots.velocity`; nothing writes a target there. It is mirrored on `at_mirror_sections.impact_velocity` and frozen into the attempt by `requirements.snapshot`, so it is in the record and in the JSON — it simply never reaches the screen the operator is looking at. So this is no longer a type confusion needing a column, it is a product question: **question 3 of the five-test approval document**. A column on `missile_impact_tests` is one answer; showing the snapshot value is another and costs no schema | reconciliation · `GAP-NOT-SURFACED` | LabOS | ✅ TA5a answer | The operator either sees the target velocity or we have recorded that they do not need to |
 | **TC1g** | **The correction route** — `corrects_attempt_id` and `correction_reason` have columns, a property and an envelope mapping, and nothing sets them, so **every attempt is a retest**. A correction is a new attempt naming the one it supersedes; without it a wrongly-recorded result can only be superseded by claiming a physical retest that did not happen | §4 · DG13 | LabOS | — | An operator supersedes a recorded result and Airtable can tell the correction from a retest |
-| **TC1h** | **Impact: one attempt per impact** (§4.5a) — **read §4.5a's "two ordinals" and "roll-up consequence" first; both change the shape of the work.** `Impact Number` is **decided**: the product owner confirmed the five-records consequence 2026-09-08. — the product owner's 2026-09-08 instruction. Cardinality change plus a split migration, **no new local column**: `trial_number` becomes the impact ordinal and `uq_test_results_test_attempt` already enforces one attempt per impact. **One Airtable field is needed** — `Impact Number`, 159 → 160, so their roll-ups can count tests by `LabOS Test ID` and impacts by it, instead of reading a five-impact test as five tests (§4.5a). `Shot` is kept 1:1 so `test.shots` and the 114 production rows survive. Carries four migration traps (§4.5a) and **invalidates six documents**, all of which must be corrected before TA5b | §4.5a · PO 2026-09-08 | LabOS | TC1g for the correction half | Five impacts produce five attempts and five Airtable records, each with its own pass/fail, photographs and verdict; the six documents agree with the build; `check_register.py` passes |
+| **TC1h** | **Impact: one attempt per impact** (§4.5a) — **all three decisions are closed** — `Impact Number` is added (product owner confirmed the five-records consequence 2026-09-08), `shot_number` mirrors `trial_number` so the existing `uq_shots_attempt_number` enforces one impact per attempt, and `Impact Result` stays required carrying that impact's line. §4.5a has the reasoning and the rejected alternatives. — the product owner's 2026-09-08 instruction. Cardinality change plus a split migration, **no new local column**: `trial_number` becomes the impact ordinal and `uq_test_results_test_attempt` already enforces one attempt per impact. **One Airtable field is needed** — `Impact Number`, 159 → 160, so their roll-ups can count tests by `LabOS Test ID` and impacts by it, instead of reading a five-impact test as five tests (§4.5a). `Shot` is kept 1:1 so `test.shots` and the 114 production rows survive. Carries four migration traps (§4.5a) and **invalidates six documents**, all of which must be corrected before TA5b | §4.5a · PO 2026-09-08 | LabOS | TC1g for the correction half | Five impacts produce five attempts and five Airtable records, each with its own pass/fail, photographs and verdict; the six documents agree with the build; `check_register.py` passes |
 | **TC1i** | **Ten live `Protocol Sections` fields have no register row, six of them plain writable fields named `LabOS`** — `Latest LabOS Attempt Number`, `LabOS Attempt ID`, `LabOS Retest Required`, `LabOS Report Link`, `Excel File Link`, `Notes` — in **both** bases. Not rollups; they look like a section-level summary somebody expects us to maintain, and we never have. Ask the Airtable team what they are for before confirming a read/write boundary that does not mention them. **Also add the reverse direction to `check_register.py` check 3** — register → base only is how ten fields stayed invisible | §4.5a · §4.6 | LabOS | — | Every live field in both bases has a register row or a recorded reason for not needing one, and the checker fails when one appears |
 | **TC3** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | TC2 | `simulation/mf_harness/` passes against the real backend. **Two routes, not one**: `api.py:94` and `api.py:109` |
 | **TC4** | **Capture actual and maximum pressure** — subscribe to `{device_id}/sensors/{addr}` during a run and persist max plus final | M7 | LabOS | TC2 | Closes two product-owner requirements. **Not "no source"** — the value is on the bus and renders live in the UI; nothing stores it |
