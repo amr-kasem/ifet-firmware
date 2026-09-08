@@ -100,7 +100,7 @@ below elaborates it.
 
 | | Evidence |
 |---|---|
-| Local storage for all five test types, numbered impacts with per-impact evidence | migration `d1a6b93f2e57` |
+| Local storage for all five test types, numbered impacts with per-impact evidence | migration `d1a6b93f2e57`. **The grouping changes**: §4.5a makes each impact its own attempt (TC1h) |
 | Identity: attempt id per attempt, one derived `LabOS Test ID` per test, the four Airtable ids reachable from **all five** types | `e5f3a71c8d92`; `mapping._TEST_ATTRS` |
 | `Attempt Number` unique within a test, allocated under a constraint with a retry | `e5f3a71c8d92`; `attempts.insert_attempt` |
 | The transactional outbox, wired at four call sites, committing with the domain save | `sync/publish.py` |
@@ -388,7 +388,7 @@ decision — but it is no longer absent from the plan.
 
 | | Decision |
 |---|---|
-| **A1** | One programme run = one Airtable attempt; stages and shots are children. Programme identity is stable across reruns, run identity is always new. `test_programmes` owns the unique tuple; **never put it on the run table** |
+| **A1** | One attempt = one Airtable row. Test identity is stable across reruns, attempt identity is always new. **Amended twice by implementation, and both amendments are deliberate:** the unique tuple *is* on the attempt table — `uq_test_results_test_attempt` on `(labos_test_id, trial_number)`, because `labos_test_id` already lives there and a per-subclass foreign key cannot be constrained against it (`models.py:347`); and for Impact, **shots are no longer children of an attempt** — each impact is its own attempt (§4.5a, product owner 2026-09-08). Stages remain children for Static and Cyclic |
 | **A2** | Rig `Measured Value` and `Max Pressure Achieved` omitted until sourced and validated. Genuine manual quantities allowed with unit + provenance. **A target is never an achieved value** |
 | **A3** | All uncalibrated deflection evidence stays local; outbound `data_quality` explains the omission |
 | **A4** | Evidence freezes on termination; first verdict recorded once; a correction is a new immutable row referring to the original |
@@ -418,6 +418,24 @@ applies in full the day any future release consumes requirement values.
 ## 4. The build
 
 ### 4.1 Local entities
+
+> **Superseded in shape, kept for the requirements it lists. Read this note first.**
+>
+> This table was written as a two-level design — `test_programmes` owning the test identity and
+> `test_programme_runs` the attempts. **Neither table was built.** `TestResult` already carried
+> `trial_number`, `labos_attempt_id`, `labos_test_id`, the correction chain, the lifecycle and the review
+> columns, so the implementation put the whole attempt surface on **`test_results`** with per-type joined
+> subclasses (`static_test_results`, `cyclic_test_results`, `manual_test_results`, `impact_test_results`),
+> and `models.py:347` records why the unique tuple lives there rather than on a parent.
+>
+> The register described the unbuilt tables until 2026-09-08, when 32 of its rows were corrected against the
+> code. **The rows below are still the right list of what each entity must hold** — read `test_programmes`
+> and `test_programme_runs` as `test_results`, and "stage trials" as the per-type result subclasses. The
+> DB-check list below is likewise correct in substance: `(programme_id, attempt_number)` is implemented as
+> `uq_test_results_test_attempt` on `(labos_test_id, trial_number)`.
+>
+> **For Impact, §4.5a supersedes the shot shape here** — "observations / shots" is no longer a sequence
+> under one attempt; each impact is its own attempt with exactly one `Shot`.
 
 | Entity | Holds |
 |---|---|
@@ -564,7 +582,7 @@ Phases follow the contract: create → terminal → first review. All under `rep
 | `GET /projects/{id}/manual-tests/` | List, with attempts |
 | `PUT /manual-tests/{id}/finish` | Terminal: result, notes, end time. Explicit completion or an abort reason — never inferred |
 | `POST /projects/{id}/impact-tests/` | **Create an Impact attempt — no create route exists today**; Impact is currently write-by-report-generation only |
-| `POST /impact-tests/{id}/shots` | One impact: pass/fail, optional area/velocity/note |
+| `POST /impact-tests/{id}/shots` | One impact: pass/fail, optional area/velocity/note. **Built as `POST /test-results/{id}/shots`, and §4.5a changes what it means** — recording an impact starts an attempt rather than appending to one |
 | `PUT /impact-tests/{id}/finish` | Terminal |
 | `POST /{manual-tests,impact-tests}/{id}/photos` | Upload; original retained locally |
 | `PUT /{manual-tests,impact-tests}/{id}/verdict` | First review, once: reviewer, time, rationale, `Retest Required` |
