@@ -1,0 +1,65 @@
+test_type,direction,requirement,airtable_field,airtable_table,local_storage,source_or_calculation,outbound_field,write_phase,state,note
+ALL,IN,Which job is this,IFET job number,IFET Projects,project_parents.name,Airtable read at import,-,n/a,GAP-NO-IMPORT,No import route exists; POST /projects/import is specified in plan 4.2 and unbuilt
+ALL,IN,Which job is this,Project name,IFET Projects,mirror.project_name,Airtable read at import,-,n/a,GAP-NO-TABLE,Register targets a mirror table that does not exist in models.py
+ALL,IN,Which specimen,Mock-up/specimen name,Mock-Ups/Specimens,projects.airtable_mockup_name,Airtable read at import,-,n/a,GAP-NO-IMPORT,Column exists; nothing populates it
+ALL,IN,Which protocol,Protocol Name,Tests Protocols,mirror.protocol_name,Airtable read at import,-,n/a,GAP-NO-TABLE,No mirror table
+ALL,IN,Which section,Section Name,Protocol Sections,AirtableProtocolRef.airtable_section_name,Airtable read at import,Test Name,create,OK-STORAGE,Column exists on all four test tables; also the envelope's Test Name
+ALL,IN,What test is required,Requirement Code,Protocol Sections,mirror.requirement_code,Airtable read at import,-,n/a,GAP-NO-TABLE,The field that routes work has no local column
+ALL,IN,Is it required at all,Applicability,Protocol Sections,mirror.applicability,Airtable read at import,-,n/a,GAP-NO-TABLE,Required/Not Required/Unconfirmed has no local column
+ALL,IN,How to read the value,Requirement Kind,Protocol Sections,(interpretation),Airtable read at import,-,n/a,GAP-NO-VALIDATOR,No kind/unit contradiction check exists
+ALL,IN,Unit of the requirement,Required Unit,Protocol Sections,(validation),Airtable read at import,-,n/a,GAP-NO-VALIDATOR,Same
+ALL,OUT,Airtable record linkage,Airtable Project ID,LabOS Raw Data Table,projects.airtable_project_id,parent row traversal,Airtable Project ID,create,GAP-MAPPER,mapping.owning_test resolves static_test/cyclic_test only
+ALL,OUT,Airtable record linkage,Airtable Mockup ID,LabOS Raw Data Table,projects.airtable_mockup_id,parent row traversal,Airtable Mockup ID,create,GAP-MAPPER,Same
+ALL,OUT,Airtable record linkage,Airtable Protocol ID,LabOS Raw Data Table,AirtableProtocolRef.airtable_protocol_id,parent row traversal,Airtable Protocol ID,create,GAP-MAPPER,Same
+ALL,OUT,Airtable record linkage,Airtable Section ID,LabOS Raw Data Table,AirtableProtocolRef.airtable_section_id,parent row traversal,Airtable Section ID,create,GAP-MAPPER,Same
+ALL,OUT,Group attempts of one test,LabOS Test ID,LabOS Raw Data Table,test_results.labos_test_id,three allocators - see DG12,LabOS Test ID,create,GAP-FORMAT,uuid5 backfill / uuid4 runtime / slug for manual+impact
+ALL,OUT,Merge key,LabOS Attempt ID,LabOS Raw Data Table,test_results.labos_attempt_id,uuid4 column default on any insert,LabOS Attempt ID,create,OK,Unique index; the Airtable upsert key
+ALL,OUT,Which attempt,Attempt Number,LabOS Raw Data Table,test_results.trial_number,count()+1 / len(trials)+1,Attempt Number,create,GAP-ATOMICITY,No UniqueConstraint on (test,trial_number); two simultaneous starts collide
+ALL,OUT,Which workflow,Test Type,LabOS Raw Data Table,test_results.test_type,set at attempt creation,Test Type,create,OK,Contract option set
+ALL,OUT,Execution state,Test Status,LabOS Raw Data Table,test_results.status,In Progress at create; Completed/Aborted at finish,Test Status,create+terminal,OK,Aborted goes on the wire as their spelling Abborted
+ALL,OUT,Verdict placeholder,Test Result,LabOS Raw Data Table,test_results.test_result,Pending until review,Test Result,create+terminal+verdict,OK,Pending -> Passed/Failed/Inconclusive
+ALL,OUT,Who ran it,Operator Name,LabOS Raw Data Table,test_results.operator_name,operator declared in the UI,Operator Name,create,OK,identity_assurance = declared; never authenticated
+ALL,OUT,When it started,Testing Start Date,LabOS Raw Data Table,test_results.testing_start_date,server clock at POST /trials,Testing Start Date,create,OK,APPLIED 2026-09-06
+ALL,OUT,When it ended,Testing End Date,LabOS Raw Data Table,test_results.testing_end_date,server clock at finish,Testing End Date,terminal,OK,APPLIED 2026-09-06
+ALL,OUT,Completion instant,Test Date,LabOS Raw Data Table,test_results.testing_end_date,same instant as Testing End Date,Test Date,terminal,OK,Omitted while running; their automation derives the section date from it
+ALL,OUT,Operator disposition,Testing Continued,LabOS Raw Data Table,test_results.testing_continued,explicit operator choice at finish,Testing Continued,terminal,OK,Never inferred from status
+ALL,OUT,Who reviewed,LabOS Verdict By,LabOS Raw Data Table,test_results.verdict_by,reviewer declared at PUT /verdict,LabOS Verdict By,verdict,OK,APPLIED 2026-09-06; stored separately from operator
+ALL,OUT,When reviewed,LabOS Verdict At,LabOS Raw Data Table,test_results.verdict_at,server clock at verdict,LabOS Verdict At,verdict,OK,APPLIED 2026-09-06
+ALL,OUT,Retest needed,Retest Required,LabOS Raw Data Table,test_results.retest_required,reviewer boolean; null until review,Retest Required,verdict,OK,Nullable by design - never inferred false
+ALL,OUT,Supersedes which attempt,Corrects Attempt ID,LabOS Raw Data Table,test_results.corrects_attempt_id,a correction route,Corrects Attempt ID,create,GAP-NO-ROUTE,DG13 - column and mapping exist; no route sets it
+ALL,OUT,Why superseded,Correction Reason,LabOS Raw Data Table,test_results.correction_reason,a correction route,Correction Reason,create,GAP-NO-ROUTE,Same
+ALL,OUT,Evidence,LabOS Photos,LabOS Raw Data Table,test_photos (attempt + per-shot),operator upload; downscaled preview,LabOS Photos,attachment,GAP-CHANNEL,Preview generation and independent dispatch both unbuilt
+ALL,OUT,Full detail,Complete LabOS JSON Response,LabOS Raw Data Table,derived at send time,envelope + mapping,Complete LabOS JSON Response,create+terminal+verdict,OK,schema 0.4; carries the nine JSON-only fields
+ALL,OUT,Revision time,LabOS Updated At,LabOS Raw Data Table,test_results.labos_updated_at,server clock per phase,LabOS Updated At,create+terminal+verdict,FIXED-2026-09-08,Was write_phase 'every' - not an outbox phase
+STATIC,IN,Design pressure pair,Required Value Inward,Protocol Sections,projects.inward_design_pressure,Airtable pre-fill or operator entry,-,n/a,OK-STORAGE,NOT NULL - operator always supplies it either way
+STATIC,IN,Design pressure pair,Required Value Outward,Protocol Sections,projects.outward_design_pressure,Airtable pre-fill or operator entry,-,n/a,OK-STORAGE,Independent of inward; never copied
+STATIC,CALC,Six loading stages,(not in Airtable),-,static_tests.pressure/pressure_factor/duration,StaticTestPressureCalculator from the DP pair,-,n/a,OK,Verified: 60/45 -> [45.0 33.75 60 45 90.0 67.5]
+STATIC,OUT,What was measured,Measured Value,LabOS Raw Data Table,-,NO SOURCE,Measured Value,terminal,UNMET-NO-SOURCE,A2 - firmware sends no measurement for static; omitted by decision
+STATIC,OUT,Peak pressure reached,Max Pressure Achieved,LabOS Raw Data Table,-,on the MQTT bus; not persisted,Max Pressure Achieved,terminal,UNMET-NOT-PERSISTED,TC4 - a source exists; nothing subscribes and stores it
+STATIC,OUT,Deflection,Deflection Value,LabOS Raw Data Table,deflections.max_deflection,raw SICK counts - uncalibrated,Deflection Value,terminal,UNMET-UNCALIBRATED,A3 quarantine; envelope refuses it in scalars and JSON
+STATIC,OUT,Deflection unit,Deflection Unit,LabOS Raw Data Table,-,uncalibrated,Deflection Unit,terminal,UNMET-UNCALIBRATED,Short form in/mm when unblocked; never Inches
+STATIC,LOCAL,Permanent set and recovery,(not in Airtable),-,deflections.permanent_deflection / .recovery,recovery is the recovery_time CONFIG CONSTANT (60s),-,n/a,UNMET-NOT-A-MEASUREMENT,Firmware audit 2026-08-31 - must never be published as an observation
+CYCLIC,IN,Design pressure pair,Required Value Inward/Outward,Protocol Sections,projects.inward/outward_design_pressure,as STATIC,-,n/a,OK-STORAGE,Same pair drives both programmes
+CYCLIC,CALC,Eight cyclic stages,(not in Airtable),-,cyclic_tests.low_pressure/high_pressure/cycles,CyclicTestPressureCalculator from the DP pair,-,n/a,OK,Verified: 60/45 -> [30 36 48 60 45 36 27 22.5]
+CYCLIC,OUT,Cycles required,Cycles Required,(not created),cyclic_tests.cycles,programme snapshot,JSON only,terminal,OK-JSON-ONLY,One of the nine JSON-only fields by decision 10.15
+CYCLIC,OUT,Cycles completed,Cycles Completed,(not created),cyclic_tests.current_cycle,rig callback,JSON only,terminal,OK-JSON-ONLY,Same
+CYCLIC,OUT,What was measured,Measured Value,LabOS Raw Data Table,-,NO SOURCE,Measured Value,terminal,UNMET-NO-SOURCE,A2 - same as static
+IMPACT,IN,Missile specified,Missile Type,Protocol Sections,missile_impact_tests.missile,Airtable pre-fill or operator entry; nullable,-,n/a,OK-STORAGE,APPLIED 2026-09-08 fld5Bs0aQXXeVso2y
+IMPACT,IN,Missile mass,Missile Weight,Protocol Sections,missile_impact_tests.missile_weight,Airtable pre-fill or operator entry; nullable,-,n/a,OK-STORAGE,APPLIED 2026-09-08 fldmhdhonyyLcx4Ex
+IMPACT,IN,Target velocity,Impact Velocity,Protocol Sections,shots.velocity,REQUIREMENT stored in an OBSERVATION column,-,n/a,GAP-TYPE-CONFUSION,shots.velocity is the achieved per-impact value; a target needs its own column on missile_impact_tests
+IMPACT,IN,How many impacts,Required Value,Protocol Sections,projects.impact_count,Airtable pre-fill or operator entry,-,n/a,OK-STORAGE,Requirement Kind = Count; unit impacts
+IMPACT,LOCAL,Each numbered impact,(not in Airtable),-,shots.shot_number/result/area/velocity/note,operator entry per impact; shot_number server-allocated,JSON only,terminal,OK,UniqueConstraint(test_result_id, shot_number) - the atomicity the attempt number lacks
+IMPACT,OUT,Impact outcome,Impact Result,LabOS Raw Data Table,derived from shots,aggregate of per-impact results,Impact Result,terminal,OK-BASELINE,singleLineText; per-impact detail travels in JSON
+IMPACT,OUT,Per-impact photographs,LabOS Photos,LabOS Raw Data Table,test_photos.shot_id set,operator upload per impact,LabOS Photos,attachment,GAP-CHANNEL,Finish requires >=1 impact and >=1 photo; delivery channel unbuilt
+FORCED_ENTRY,IN,Grade judged against,Required Option,Protocol Sections,manual_tests.required_option,Airtable pre-fill or operator entry; free text,-,n/a,OK-STORAGE,e.g. ASTM F588 Grade 40; unrecognised option shown but non-executable
+FORCED_ENTRY,OUT,Pass or fail,Forced Entry Result,(not created),test_results.result + .test_result,operator pass/fail then reviewer verdict,Test Result,terminal+verdict,OK-BY-DECISION,No dedicated scalar - Test Type and Test Result are both single-selects
+FORCED_ENTRY,OUT,Failure detail,Failure Notes,(not created),test_results.note,operator entry,Notes + JSON,terminal,OK-BY-DECISION,Carried in Notes and JSON for this release
+ANSI,IN,Class judged against,Required Option,Protocol Sections,manual_tests.required_option,Airtable pre-fill or operator entry; free text,-,n/a,OK-STORAGE,e.g. Class A
+ANSI,OUT,Pass or fail,ANSI Result,(not created),test_results.result + .test_result,operator pass/fail then reviewer verdict,Test Result,terminal+verdict,OK-BY-DECISION,Same as Forced Entry
+GAUGE_COUNT,IN,How many gauges,Required Value,Protocol Sections,projects.gauge_count,Airtable pre-fill or operator entry,-,n/a,GAP-UNRECONCILED,DG6 - firmware takes selectedSensors[] live at MQTT start; a mismatch at start has no defined behaviour
+WATER,IN,Water test pressure,Required Value,Protocol Sections,infiltration_tests (local only),operator entry,-,n/a,OUT-OF-SCOPE,Contract 0 defers water infiltration; no outbound mapping exists at all
+ALL,OUT,Which rig ran it,Test Rig,(not created),device / project.device_id,operator choice at import,JSON only,create,OK-JSON-ONLY,One of the nine JSON-only fields
+ALL,OUT,Software version,LabOS Version,(not created),build metadata,build metadata,JSON only,create,OK-JSON-ONLY,Same
+ALL,OUT,Requirement snapshot,Required Value / Required Unit,(not created),programme snapshot,snapshot at run creation,JSON only,create,GAP-NO-TABLE,Restored to the JSON valve; needs test_programmes which does not exist
+ALL,OUT,Why aborted,Abort Reason,(not created),test_results.abort_reason,operator entry at abort,JSON only,terminal,OK-JSON-ONLY,Required on aborted executions
+ALL,OUT,Review rationale,Result Rationale,(not created),test_results.rationale,reviewer entry,JSON only,verdict,OK-JSON-ONLY,Same
