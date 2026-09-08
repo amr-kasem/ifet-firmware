@@ -126,6 +126,50 @@ explicitly not read. The runtime credential is scoped and the write allowlist is
 **LabOS never writes** `Protocol Sections`. Your automation keeps exclusive ownership of `Result`, `Status`
 and `Testing Date`; LabOS writes its verdict to the raw-results row and your automation projects it.
 
+### 1a. All eight tables, one row each — what we touched and what we did not
+
+Table IDs are the same in both bases; only field IDs differ. **Two of the eight tables were changed. Six
+were not touched at all**, and for three of those LabOS has no access of any kind.
+
+| # | Table | ID | Prod | Testing | Added | LabOS reads | writes | ignores |
+|---|---|---|---|---|---|---|---|---|
+| 1 | IFET Projects | `tblLYcRC7q6Srjfk3` | 35 | 35 | — | 2 | 0 | 33 |
+| 2 | Mock-Ups/Specimens | `tblcrGv0WJn6FTTGO` | 13 | 13 | — | 2 | 0 | 11 |
+| 3 | Tests Protocols | `tblutO1Q8TNC4BLk0` | 8 | 8 | — | 2 | 0 | 6 |
+| 4 | **Protocol Sections** | `tblqpvuJlSdkeS9PS` | 16 | **27** | **+11** | 13 | 0 | 14 |
+| 5 | Walls & Positions | `tblVUvcSPAoneG26W` | 8 | 8 | — | **0** | **0** | 8 |
+| 6 | Wall Scheduling/Reservation | `tblYjF1AApzmRDMrY` | 19 | 19 | — | **0** | **0** | 19 |
+| 7 | Back Charges | `tbl0f2YxS3FHJ1dTD` | 13 | 13 | — | **0** | **0** | 13 |
+| 8 | **LabOS Raw Data Table** | `tblnc9SsbXU0C0FWh` | 30 | **36** | **+6** | 1 | **35** | 0 |
+| | **Total** | | **142** | **159** | **+17** | **20** | **35** | **104** |
+
+**Changed — 4 and 8, and only these.**
+
+- **Protocol Sections `+11`.** The requirement had no machine-readable form; LabOS would have had to parse
+  the `Value` text field, which is where the extractor defect lives. §2 covers each field. **LabOS reads this
+  table and never writes it** — `Result`, `Status` and `Testing Date` stay yours.
+- **LabOS Raw Data Table `+6`.** Six things LabOS produces that had nowhere to go: the execution span, who
+  reviewed and when, the correction link, and photo previews. §3 covers each. This is the **only** table
+  LabOS writes, and the runtime credential's allowlist is this table alone.
+
+**Not changed — and the reason differs by table.**
+
+- **1, 2, 3 — read-only joins.** Four fields in total: the job number and project name, the mock-up name and
+  its project link, the protocol name and its mock-up link. That is the whole hierarchy LabOS needs to know
+  which specimen a test belongs to. Every other field in these 56 is ignored, including `Approved Proposal
+  Amount`, `Balance Due`, customer emails and the QuickBooks IDs.
+- **5, 6, 7 — no access at all.** `0` read and `0` written, all 40 fields. This is the scheduling and
+  billing boundary stated as a fact about the credential rather than a promise: wall reservations, capacity
+  conflicts, `Billable Amount`, `Internal Cost`, `Approval Status`. LabOS is a test executor and has no
+  business reading any of it.
+
+**The one field LabOS reads from its own results table** is `Raw Modified Time`
+(`lastModifiedTime`) — Airtable-owned, used only for delivery reconciliation, never written.
+
+**No table, view, relationship or automation was created, renamed, deleted or reordered in any of the
+eight.** The seventeen changes are field additions to two tables, and every one of the 142 pre-existing
+fields has the same type after as before.
+
 ---
 
 ## 2. The eleven fields on `Protocol Sections`
