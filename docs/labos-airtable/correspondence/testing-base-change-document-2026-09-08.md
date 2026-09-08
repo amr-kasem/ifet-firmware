@@ -83,6 +83,35 @@ only on the rarer correction case. It costs nothing to keep and cannot be recons
 So: **keep both.** We are glad to drop any field you find unnecessary — this is the one we would ask you not
 to.
 
+#### The four IDs staying the same is a schema guarantee, not a convention
+
+Worth stating precisely, because it is stronger than "we will be careful":
+
+| Airtable ID | Lives on, in LabOS | So an attempt gets it by |
+|---|---|---|
+| `Airtable Project ID` | the **project** row | attempt → test → project |
+| `Airtable Mockup ID` | the **project** row | attempt → test → project |
+| `Airtable Protocol ID` | the **test** row | attempt → test |
+| `Airtable Section ID` | the **test** row | attempt → test |
+
+None of the four is stored on the attempt. They are read through the parent rows, so **two attempts at the
+same test cannot carry different ones** — there is no code path that would let them diverge, because there is
+no second copy to diverge from. Your statement is not something we have to agree to maintain; it is a
+property of where the columns live.
+
+What *is* per-attempt: `LabOS Attempt ID` (a fresh UUID on every insert), `Attempt Number` (allocated
+server-side, never accepted from a client), and `LabOS Test ID` — reused from the first attempt at that test,
+so every attempt in a group carries the identical value. **All of this is implemented and under test today.**
+
+Two things we owe you honestly:
+
+- **`Corrects Attempt ID` has no operator route yet.** The columns exist and the envelope maps them, but the
+  screen that records a correction is not built. So today every attempt is a retest, and the field is
+  correctly blank on all of them. That is a reason to keep the field, not to drop it: when the route lands we
+  need somewhere to put the answer, and adding a field to production later is the expensive direction.
+- **`LabOS Test ID` is opaque and you should treat it as such** — group and compare on equality, never parse
+  it. Its internal format is ours and may change; its meaning, *"these attempts are of one test"*, will not.
+
 ### 0.4 `Test Date` as date **and** time — agreed, and already in place
 
 `Test Date` is already a `dateTime` field in both bases; we verified it live again today. So there is nothing
@@ -115,10 +144,17 @@ transcribed.
 | | Count |
 |---|---|
 | Fields LabOS **reads** | **20** |
-| Fields LabOS **writes** | **35** — all in `LabOS Raw Data Table`, the only writable table |
+| Fields LabOS **writes on every attempt** | **28** — all in `LabOS Raw Data Table`, the only writable table |
+| Fields LabOS **writes when the value exists** | **4** — `Measured Value`, `Photos`, `LabOS Report Link`, `Excel File Link` |
+| Fields LabOS **maps but withholds** | **3** — `Max Pressure Achieved`, `Deflection Value`, `Deflection Unit`; see §4 |
 | Fields LabOS **deliberately ignores** | **104** |
 
-That third number is the important one. It is the machine-readable form of *no billing, pricing, invoices,
+**28 + 4 + 3 = the 35 fields bound to the write path**, which is why you may see 35 quoted elsewhere. The
+distinction matters to you: 28 always arrive, 4 arrive only when there is a validated value or reachable URL
+to send, and 3 will stay **permanently empty** until the gauges are calibrated. We would rather say which is
+which than let you discover it from empty cells.
+
+**The 104 is the important number.** It is the machine-readable form of *no billing, pricing, invoices,
 payments or scheduling crosses the boundary*: customer emails, `Approved Proposal Amount`, `Balance Due`,
 QuickBooks IDs, `Wall Scheduling/Reservation` and `Back Charges` are all present in the base and all
 explicitly not read. The runtime credential is scoped and the write allowlist is a single table.
@@ -141,7 +177,9 @@ were not touched at all**, and for three of those LabOS has no access of any kin
 | 6 | Wall Scheduling/Reservation | `tblYjF1AApzmRDMrY` | 19 | 19 | — | **0** | **0** | 19 |
 | 7 | Back Charges | `tbl0f2YxS3FHJ1dTD` | 13 | 13 | — | **0** | **0** | 13 |
 | 8 | **LabOS Raw Data Table** | `tblnc9SsbXU0C0FWh` | 30 | **36** | **+6** | 1 | **35** | 0 |
-| | **Total** | | **142** | **159** | **+17** | **20** | **35** | **104** |
+| | **Total** | | **142** | **159** | **+17** | **20** | **35*** | **104** |
+
+\* the 35 bound to the write path — 28 always, 4 conditional, 3 withheld, as §1 breaks down.
 
 **Changed — 4 and 8, and only these.**
 

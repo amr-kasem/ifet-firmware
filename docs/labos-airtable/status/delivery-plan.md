@@ -837,6 +837,40 @@ the interface.
 
 ---
 
+### DG12 · `LabOS Test ID` is minted two different ways — **found 2026-09-08, blocks TC1a**
+
+The Airtable team proposed using `LabOS Test ID` as the *only* key grouping a test's attempts. Auditing
+that against the code found the grouping key has **two allocators producing two formats**:
+
+| Path | Test types | Allocator | Format |
+|---|---|---|---|
+| `main.py:403`, `main.py:582` | Static Load, Cycles | `data/attempts.py:test_id_for()` — reuse a sibling's, else mint | **UUID** |
+| `main.py:1278` | Impact, Forced Entry, ANSI | `main.py:_labos_test_id()` — derive from the row | **slug**, `impact-7` |
+
+Both are individually defensible and neither is wrong in isolation. Together they mean one Airtable column
+carries two vocabularies, and a consumer that ever pattern-matches it — which is exactly what a grouping
+key invites — behaves differently for rig and manual tests. It also means §0.3's promise to the Airtable
+team ("group on equality, never parse") is a convention we ask *them* to keep while our own two writers
+disagree about the format.
+
+**Unify before TC1a wires `create`,** because that is the phase that first publishes the value; changing it
+afterwards means rewriting `LabOS Test ID` on records they already hold. The derived slug is the better
+survivor — stable across a restart with no second column, and it is what the newer code already does — but
+the UUID path has live rows behind it via the P1 backfill, so this needs a migration decision, not just a
+function deleted.
+
+### DG13 · `Corrects Attempt ID` has no route — **found 2026-09-08**
+
+`corrects_attempt_id` and `correction_reason` are columns (`models.py:362-363`), `is_correction` reads them
+(`models.py:457`), the envelope maps them, and contract §4 specifies the whole correction semantics. There
+is **no route that sets them**: `openapi.json` has no path containing `correction`, and §4.2's
+`POST /runs/{id}/corrections` was never built.
+
+So today every attempt is a retest and the field is correctly blank on all of them. That is *why* the
+change document argues to keep the field rather than presenting it as in use — stated plainly in §0.3
+rather than left for them to discover. Not a blocker for TC1a; it is the operator surface (TC5) that needs
+it, and adding the Airtable field later is the expensive direction.
+
 ## 5c. Closed — kept for the record, and because each one changed the plan
 
 ### DG7 · Impact requirements are not in the register — **CLOSED by A9**
@@ -974,7 +1008,7 @@ satisfied.
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
 | **TC1** | **The verdict route's remaining half** — the reviewer *columns* landed with TB1 and the verdict route with TB2, so what remains is programme/run and mirror persistence for the **rig** test types | §8 (9th deviation) | LabOS | ✅ TB1 | Static and cyclic attempts carry the same identity and review path the manual types now have |
-| **TC1a** | **Wire the four call sites** — `enqueue()` inside each domain save's transaction, `create`/`terminal`/`verdict`/`attachment`, all five test types. Narrow `test_report_api_isolation.py` to `app.airtable` and the sync *client*, so a local outbox `INSERT` is not mistaken for an inline Airtable call | §4.7 · DG6 | LabOS | TC1 | The queue fills from a real save, per-attempt FIFO, and a rolled-back save leaves no entry |
+| **TC1a** | **Wire the four call sites** — `enqueue()` inside each domain save's transaction, `create`/`terminal`/`verdict`/`attachment`, all five test types. Narrow `test_report_api_isolation.py` to `app.airtable` and the sync *client*, so a local outbox `INSERT` is not mistaken for an inline Airtable call | §4.7 · DG6 | LabOS | TC1, **DG12** | The queue fills from a real save, per-attempt FIFO, and a rolled-back save leaves no entry |
 | **TC1b** | **Build the three `/sync` routes** — `GET /sync/status` (the four contractual words + attachment backlog + `worker_heartbeat_at`), `GET /sync/queue`, `POST /sync/queue/{id}/retry`. The functions behind all three already exist and are unrouted | §4.7 · §4.2 | LabOS | TC1a | `sync-worker` has a liveness surface, the UI has its status chip, and DG6's justification is true rather than aspirational |
 | **TC2** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | TC1a, TC1b, TA3 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally with no Airtable origin. Neither path may block the other. **Acceptance is the six applied write fields, one per phase** — `Testing Start Date`, `Corrects Attempt ID` (create) · `Testing End Date` (terminal) · `LabOS Verdict By`/`At` (verdict) · `LabOS Photos` (attachment): §4.7 |
 | **TC3** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | TC2 | `simulation/mf_harness/` passes against the real backend. **Two routes, not one**: `api.py:94` and `api.py:109` |
