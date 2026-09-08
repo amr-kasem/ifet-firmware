@@ -127,6 +127,7 @@ docs/
 | `labos-airtable/correspondence/po-update-and-test-node-request-2026-09-08.md` | The product owner update: WhatsApp message plus the confirmation sheet for the three new tests, and the test-node ask. **NOT SENT** |
 | **`labos-airtable/correspondence/airtable-team-questions-2026-09-06.md`** | Planned-change notice: the Testing Base additions, ownership, validation and the later actual-change document. **NOT SENT** |
 | `labos-airtable/correspondence/airtable-team-questions-2026-08-31.md` | Historical answers and the original typed-field analysis. Superseded by the September 6 notice |
+| **`labos-airtable/correspondence/sent/2026-09-08-po-five-test-approval-request.md`** | 📨 **What the project owner holds.** The five-test summary and three of the six questions — do not edit. Records which questions were *not* asked (1 and 5) and the one statement needing correction: it says Airtable receives deflection data |
 | `labos-airtable/correspondence/sent/2026-08-28-…-verification-report.docx` | 📨 **The artifact the Airtable team holds.** Five asks with a P0/P1/P2 table — do not edit |
 | `labos-airtable/correspondence/v2-guide-reconciliation-2026-08-22.md` | Delta against their *API Integration Guide v2*, plus §5, the correspondence record |
 | `labos-airtable/correspondence/team-doc-review-2026-07-29.md` | Review of their **v1** schema doc, and §7, the message sent 2026-07-29 |
