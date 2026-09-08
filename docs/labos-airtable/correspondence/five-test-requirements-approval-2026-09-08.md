@@ -227,8 +227,8 @@ There is no separate notion of re-doing impact 3: a specimen already struck cann
 | What | Kept in LabOS as | Sent to Airtable as | When |
 |---|---|---|---|
 | Per-impact observations | `shots.area/velocity/note` | *in the JSON response* | terminal |
-| Each impact is its own attempt row | `test_results.trial_number` | **not built yet** — see below | — |
-| Outcome of that one impact | `test_results.test_result` | **not built yet** — see below | — |
+| Each impact is its own attempt row | `test_results.trial_number` | `Impact Number` | create |
+| Outcome of that one impact | `test_results.test_result` | `Impact Result` | terminal |
 | Per-impact photographs | `test_photos.shot_id set` | `LabOS Photos` | attachment |
 
 This is what is specific to this test. Everything sent on *every* attempt — the verdict,
@@ -236,7 +236,9 @@ the times, the operator, the photographs, the full JSON — is on the last page.
 
 ### What we cannot do yet, and why
 
-**The new shape is specified and not yet built.** Everything above is your 2026-09-08 instruction written down; the two rows marked *not built yet* are the work it creates. It is a change of grouping rather than of data — every field already exists — and it needs one field added on the Airtable side, `Impact Number`, so that a roll-up on their side counts *tests* and *impacts* separately. Without it a five-impact test would read as five tests, and read plausibly. That is question 6, and it is why the Airtable document has not gone out yet.
+**The new shape is built, and not yet deployed.** Everything above is your 2026-09-08 instruction, implemented the same day: an attempt refuses a second impact, a completed attempt must have exactly one, and the attempt's own outcome is taken from its impact. `Impact Number` was added to the Airtable schema and is published for Impact only, so a roll-up on their side can count *tests* and *impacts* separately — without it a five-impact test would read as five tests, and read plausibly.
+
+**What is not done is the deployment.** The database migration that splits the impacts already recorded — 39 tests and 114 impacts on the live system — is written and rehearsed forward and back against a copy, and has not been run on the real database. Nothing in this integration is deployed yet.
 
 **Five impacts become five rows in the Airtable base**, each with its own verdict and photographs, where today they are one row with a summary line. This follows directly from attempts being the unit we publish.
 
@@ -368,8 +370,8 @@ work, and a job number typed twice cannot silently re-point one job's results at
 | Who reviewed | `LabOS Verdict By` | verdict |
 | When reviewed | `LabOS Verdict At` | verdict |
 | Retest needed | `Retest Required` | verdict |
-| Supersedes which attempt | **not built yet** — see below | — |
-| Why superseded | **not built yet** — see below | — |
+| Supersedes which attempt | `Corrects Attempt ID` | create |
+| Why superseded | `Correction Reason` | create |
 | Evidence | `LabOS Photos` | attachment |
 | Full detail | `Complete LabOS JSON Response` | create+terminal+verdict |
 | Revision time | `LabOS Updated At` | create+terminal+verdict |

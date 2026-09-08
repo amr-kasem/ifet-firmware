@@ -12,13 +12,13 @@ invisible.
 
 ## The states, and what each means
 
-**Updated 2026-09-08 after the inbound half landed** (18 gaps → 4), **and again the same day when the product owner respecified Impact as one attempt per impact** — which opened two: the impact row itself and its outcome field. Delivery plan §4.5a, TC1h.
+**Updated three times on 2026-09-08.** The inbound half landing took 18 gaps → 4. The product owner respecifying Impact as one attempt per impact opened two more. Then the correction route (TC1g) and the impact redesign (TC1h) were built, closing four: **18 → 2**. What is left is the target impact velocity not reaching the operator, and the gauge count not reconciled against what the rig takes at MQTT start. **Built is not deployed** — nothing in this epic is on a node.
 
 | State | Rows | Meaning |
 |---|---|---|
-| `OK` | **52** | Path complete: stored, sourced, mapped to a phase — and demonstrated end to end against the live Testing base |
-| `OK-JSON-ONLY` / `OK-BY-DECISION` / `OK-BASELINE` | (in the 52) | No Airtable scalar by decision; the value reaches Airtable another way |
-| **`GAP-*`** | **6** | **Our unbuilt work** |
+| `OK` | **56** | Path complete: stored, sourced, mapped to a phase — and demonstrated end to end against the live Testing base |
+| `OK-JSON-ONLY` / `OK-BY-DECISION` / `OK-BASELINE` | (in the 56) | No Airtable scalar by decision; the value reaches Airtable another way |
+| **`GAP-*`** | **2** | **Our unbuilt work** |
 | **`UNMET-*`** | **6** | **A business requirement we cannot satisfy today, and why** |
 | `OUT-OF-SCOPE` | 1 | Water infiltration, deferred by contract §0 |
 
