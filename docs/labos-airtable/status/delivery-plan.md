@@ -549,6 +549,127 @@ import records *which* values came from Airtable so a wrong one stays traceable.
 (`Product Type`, `Height`, `Width`, `Service line`). All nullable. Absent is normal, not degraded — a project
 with no `airtable_*` id is `Excluded` from sync under A11 until an operator explicitly links it.
 
+### 4.7 Sync wiring — the four call sites, and the six fields that prove it
+
+**Why this section exists.** DG6 was closed on 2026-09-07 as "exactly one worker, enforced", which is true
+of the *process* and misleading about the *pipeline*. Audited 2026-09-08:
+
+| | State |
+|---|---|
+| `sync_outbox` / `sync_attempt_state` / `sync_state` tables | ✅ migration `c4e1f8a92b07` |
+| `outbox.enqueue()` · `claim()` · fencing · lease · retry | ✅ built, 4 phases declared at `outbox.py:48-52` |
+| `app/sync/service.py` runnable process + advisory-lock singleton | ✅ built |
+| `sync-worker` compose service, starts disabled | ✅ built |
+| `envelope.build_start` / `build_terminal` / first review | ✅ built, v0.4 |
+| **Any caller of `enqueue()`** | ❌ **none.** `grep` finds the definition and zero call sites outside `app/sync/` |
+| **`GET /sync/status` · `GET /sync/queue` · `POST /sync/queue/{id}/retry`** | ❌ **not built.** `state.status_payload()` is documented as "the payload behind `GET /sync/status`" and `outbox.py:408` as "the manual half of `POST /sync/queue/{id}/retry`" — both functions exist, neither is routed. `openapi.json` has no path containing `sync` |
+
+So the queue is permanently empty and the worker has no liveness surface. **DG6's own justification for the
+worker having no health check — "liveness stays the heartbeat row `report-api` already serves" — depends on
+a route that does not exist.** That wording is corrected below rather than left standing.
+
+#### The transaction rule
+
+`enqueue()` runs **inside the domain save's transaction**. Contract §4: *"Each mutation and outbox entry
+commits atomically."* The test row and the queue row commit together or neither does.
+
+This is what delivers the product owner's rule that an Airtable problem must not stop testing (§2a): the
+save touches only local Postgres, which is provably up because it just wrote the result. No HTTP request to
+Airtable is ever on the operator's path.
+
+**It does not violate TB2's isolation test.** `tests/test_report_api_isolation.py` forbids `report-api`
+importing `app.airtable` or calling Airtable inline. A local `INSERT` into `sync_outbox` is neither — it is
+the seam the isolation exists to create. The test's source scan must be narrowed to `app.airtable` and the
+`app.sync` *client* path, not `app.sync.outbox`, and the narrowing recorded in the test itself.
+
+#### The four call sites
+
+Phases are `create → terminal → verdict`, plus a separately tracked `attachment` channel — contract §4 and
+§6, and already the constants at `outbox.py:48-52`. One attempt is **one Airtable row**, upserted on
+`LabOS Attempt ID` on every phase and retry (§6).
+
+| # | Route as built (TB2) | Phase | Payload builder |
+|---|---|---|---|
+| 1 | `POST /projects/{pid}/{manual,impact}-tests/{id}/trials` and the rig `/trials` callbacks | `create` | `envelope.build_start` — identity, type, `Test Status = In Progress`, `Testing Start Date`, operator, explicit `Test Result = Pending` |
+| 2 | `PUT /test-results/{id}/finish` | `terminal` | `envelope.build_terminal` — `Completed`\|`Abborted`, `Testing End Date`, `Test Date`, JSON detail. **`Test Result` stays `Pending`** |
+| 3 | `PUT /test-results/{id}/verdict` | `verdict` | first-review builder — `Passed`\|`Failed`\|`Inconclusive`, `LabOS Verdict By`/`At`, `Retest Required`, rationale |
+| 4 | `PUT /test-results/{id}/finish` (same call as 2) | `attachment` | one entry per attempt carrying the photo set as it stands at termination |
+
+**Route names diverge from §4.2 and the built ones win.** §4.2 specifies a logical `/runs/{id}/finish` and
+`/runs/{id}/verdict`; TB2 built `/test-results/{id}/finish` and `/test-results/{id}/verdict`, one route each
+for all five test types. §4.2 is the older logical sketch; these four are the real call sites.
+
+**Attachments enqueue at terminal, deliver asynchronously.** Decided 2026-09-08. Contract §6 permits
+attachments to settle after terminal state without changing measured evidence, and the local rule that a
+photo after the verdict is a `409` already guarantees the set cannot grow after review — so the set is
+complete and immutable at termination, which is the earliest moment it can be sent as one entry. A slow or
+failing upload therefore parks in its own channel and can never hold up a measured result.
+
+**No backfill.** The 623 live `test_results` rows predate P1 and carry no `labos_attempt_id`,
+`labos_test_id` or requirement snapshot; every one would fail envelope validation and park, burying real
+traffic behind 623 permanent failures. New attempts only, from deploy forward. A dated opt-in range tool is
+a separate decision, not part of this.
+
+#### The status surface — three routes, four words
+
+| Route | Behaviour |
+|---|---|
+| `GET /sync/status` | `state.status_payload()` verbatim: the four contractual values **Synced · Pending · Sync Failed · Retry Required**, plus attachment backlog and `worker_heartbeat_at`. Computed at read time; **never** an Airtable call |
+| `GET /sync/queue` | queue entries with phase, state, attempt count, next-eligible time, last error |
+| `POST /sync/queue/{id}/retry` | `outbox.py:408` un-park — re-enables eligibility only, on the same FIFO worker. Never sends inline |
+
+These three are also the UI's status chip (§2 row 7) and the **only** liveness surface for `sync-worker`,
+which by design serves nothing itself.
+
+#### The six fields that prove the wiring — the ground base
+
+The Testing Base changes we applied in TA2/M1 split exactly along the read/write line, and the six write
+fields land one per phase. **This is the acceptance matrix, not an illustration:**
+
+| Field (`LabOS Raw Data Table`) | Type | Phase | Proves |
+|---|---|---|---|
+| `Testing Start Date` | dateTime | `create` | the create phase fires at Start, not at the end |
+| `Corrects Attempt ID` | singleLineText | `create` | a correction is a new attempt, linked, original intact (§4) |
+| `Testing End Date` | dateTime | `terminal` | terminal is a **merge** onto the create row, not a second row |
+| `LabOS Verdict By` | singleLineText | `verdict` | operator and reviewer stored separately, `identity_assurance = declared` |
+| `LabOS Verdict At` | dateTime | `verdict` | review is a third phase; `Retest Required` never inferred before it |
+| `LabOS Photos` | multipleAttachments | `attachment` | evidence delivers on its own channel and may settle late |
+
+The other eleven applied fields are **read** side, on `Protocol Sections` — `Missile Type`
+`fld5Bs0aQXXeVso2y`, `Missile Weight` `fldmhdhonyyLcx4Ex`, `Impact Velocity` `fldJNfUVyqQEFOVWx` and the
+eight requirement fields. TA3 already round-tripped these against fixture `IFET-FIXTURE-0001`; they are
+pre-fill inputs and no sync phase writes them. Per-field phase assignment for all 38 `OUT` fields is the
+`write_phase` column of `../contract/interface-schema.csv`, which is generated — it governs, not this table.
+
+#### Prerequisite: all five test types means TC1 first
+
+Manual and Impact could enqueue today. Static and cyclic **cannot** — no `run` UUID is minted, no
+requirement snapshot is persisted, and the reviewer columns are unpopulated, so there is nothing to put in a
+`create` payload. Wiring them without TC1 would enqueue entries that fail validation on every attempt.
+TC1 lands first; the wiring is one change covering all five.
+
+#### Test plan — dry-run, then one live round-trip
+
+Both, in that order (decided 2026-09-08). All on **postgres:13** via the disposable harness, never SQLite:
+§4.3's mechanisms are invisible there — `SKIP LOCKED` is ignored and a savepoint retry has nothing to race.
+
+1. **Mechanism, no network.** Worker enabled, `AIRTABLE_TOKEN` blank. Proves: the queue fills from real
+   saves; per-attempt FIFO with `create` before `terminal` before `verdict`; `SKIP LOCKED` gives one owner;
+   the lease re-asserts per send; a bumped `owner_epoch` discards a stale outcome; a second worker instance
+   exits rather than racing; and a rolled-back save leaves **no** queue row.
+2. **Envelope refusal.** Each of the six fields sent in the wrong phase must be refused by `envelope.py`
+   ahead of the column/JSON split — the failure mode that caught `Max Pressure Achieved`.
+3. **Live Testing Base only.** `AIRTABLE_ALLOW_PRODUCTION_WRITE` stays `false`. One attempt of each of the
+   five types, driven through all four phases, against fixture `IFET-FIXTURE-0001` — asserting **one** row
+   per attempt with all six fields correct after the merge, via the existing `tests/stage3_live_write.py`
+   path. This is TC2's acceptance.
+4. **Both origins.** The same five, once from an imported Airtable job and once created locally with no
+   `airtable_*` id — which must stay `Excluded` under A11 and enqueue nothing. Neither path may block the
+   other (§6.1).
+
+**Production is untouched throughout.** It has none of these tables — live alembic head is `3a65a83e0463`,
+before P1.
+
 ## 5. Gaps — consolidated
 
 **`DG*` are delivery gaps and this file owns them.** They were plain `G*` until 2026-09-06, which collided
@@ -696,7 +817,7 @@ the interface.
 |---|---|
 | `completion_source` | Required by contract §2; absent from the register **and** from §4.1's run columns (now added above) |
 | `identity_assurance = declared` | Required by contract §4; same absence (now added above) |
-| Sync service deployment | ✅ **CLOSED 2026-09-07. Exactly one worker, enforced.** `app/sync/service.py` is the runnable process; `app/sync/singleton.py` holds a Postgres advisory lock so a second instance **refuses to start** rather than racing. Chosen for how it releases — the lock lives on one connection and vanishes when that connection does, so a SIGKILLed worker leaves nothing to clean up. Liveness stays the heartbeat row `report-api` already serves, because a worker answering its own health check would report healthy from inside a process whose database connection had gone. ✅ The `sync-worker` compose service and `SYNC_LOG_LEVEL` landed 2026-09-07 |
+| Sync service deployment | ✅ **CLOSED 2026-09-07. Exactly one worker, enforced.** `app/sync/service.py` is the runnable process; `app/sync/singleton.py` holds a Postgres advisory lock so a second instance **refuses to start** rather than racing. Chosen for how it releases — the lock lives on one connection and vanishes when that connection does, so a SIGKILLed worker leaves nothing to clean up. Liveness is **intended** to be the heartbeat row `report-api` serves, because a worker answering its own health check would report healthy from inside a process whose database connection had gone — but ⚠️ **that route does not exist** (see §4.7), so the worker currently has no liveness surface at all. ✅ The `sync-worker` compose service and `SYNC_LOG_LEVEL` landed 2026-09-07 | ⚠️ **Corrected 2026-09-08: the process is closed, the pipeline is not.** Nothing calls `outbox.enqueue()`, so the queue is permanently empty, and the three `/sync` routes are unbuilt. §4.7 owns the wiring.
 | Gauge selection | `GAUGE_COUNT` is a snapshotted programme parameter (contract §3.2); firmware takes `selectedSensors[]` live at MQTT start. Never reconciled; a mismatch at start has no defined behaviour |
 | **Nine JSON-only fields, not two** | `Test Name` and `Abort Reason` are JSON-only by contract §6 and have no register row, so a register-vs-base diff reports them missing. **Counted 2026-09-07: there are nine** — those two plus `Required Value`, `Required Unit`, `Cycles Required`, `Cycles Completed`, `Test Rig`, `LabOS Version` and `Result Rationale`. They are absent by decision (§10.15), not by oversight. Note the whole set in the register header; `tests/test_five_test_types.py::JsonOnlyFieldsSurvive` pins it so the list cannot drift silently |
 
@@ -839,7 +960,9 @@ satisfied.
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
 | **TC1** | **The verdict route's remaining half** — the reviewer *columns* landed with TB1 and the verdict route with TB2, so what remains is programme/run and mirror persistence for the **rig** test types | §8 (9th deviation) | LabOS | ✅ TB1 | Static and cyclic attempts carry the same identity and review path the manual types now have |
-| **TC2** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | TC1, TA3 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally with no Airtable origin. Neither path may block the other |
+| **TC1a** | **Wire the four call sites** — `enqueue()` inside each domain save's transaction, `create`/`terminal`/`verdict`/`attachment`, all five test types. Narrow `test_report_api_isolation.py` to `app.airtable` and the sync *client*, so a local outbox `INSERT` is not mistaken for an inline Airtable call | §4.7 · DG6 | LabOS | TC1 | The queue fills from a real save, per-attempt FIFO, and a rolled-back save leaves no entry |
+| **TC1b** | **Build the three `/sync` routes** — `GET /sync/status` (the four contractual words + attachment backlog + `worker_heartbeat_at`), `GET /sync/queue`, `POST /sync/queue/{id}/retry`. The functions behind all three already exist and are unrouted | §4.7 · §4.2 | LabOS | TC1a | `sync-worker` has a liveness surface, the UI has its status chip, and DG6's justification is true rather than aspirational |
+| **TC2** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | TC1a, TC1b, TA3 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally with no Airtable origin. Neither path may block the other. **Acceptance is the six applied write fields, one per phase** — `Testing Start Date`, `Corrects Attempt ID` (create) · `Testing End Date` (terminal) · `LabOS Verdict By`/`At` (verdict) · `LabOS Photos` (attachment): §4.7 |
 | **TC3** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | TC2 | `simulation/mf_harness/` passes against the real backend. **Two routes, not one**: `api.py:94` and `api.py:109` |
 | **TC4** | **Capture actual and maximum pressure** — subscribe to `{device_id}/sensors/{addr}` during a run and persist max plus final | M7 | LabOS | TC2 | Closes two product-owner requirements. **Not "no source"** — the value is on the bus and renders live in the UI; nothing stores it |
 | **TC5** | **MU — the operator interface** | DG5 → MU | LabOS | TB3, TC2 | An operator completes all five test types end to end and sees the sync status of each |
