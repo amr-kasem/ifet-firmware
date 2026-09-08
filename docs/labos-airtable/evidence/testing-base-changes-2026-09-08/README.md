@@ -15,11 +15,16 @@ and before/after schema captured to this directory.
 |---|---|---|---|
 | `Missile Type` | singleLineText | `fld5Bs0aQXXeVso2y` | The missile the protocol specifies, e.g. *Large Missile D*. Free text because the standard's set is open and LabOS does not invent an option set the requirement side does not have. Pre-fills `missile_impact_tests.missile` |
 | `Missile Weight` | number (2dp) | `fldmhdhonyyLcx4Ex` | Missile mass in pounds. Pre-fills `missile_impact_tests.missile_weight`. **A requirement, never a measurement** — LabOS never writes an achieved value back here |
-| `Impact Velocity` | number (2dp) | `fldJNfUVyqQEFOVWx` | Target impact velocity, ft/s. The *achieved* velocity stays local on `shots.velocity` and is not published: a target is never an achieved value (decision A2) |
+| `Impact Velocity` | number (2dp) | `fldJNfUVyqQEFOVWx` | Target impact velocity, ft/s. Mirrored and frozen into the requirement snapshot; pre-fills no test column. The *achieved* velocity stays local on `shots.velocity` and is not published: a target is never an achieved value (decision A2) |
 
-All three land on **Protocol Sections**, and all three map 1:1 onto columns that
+All three land on **Protocol Sections**, and all three read into columns that
 already exist in the LabOS database — so nothing new had to be modelled to
-consume them.
+consume them. Two of them pre-fill a test: `importer.bind` sets
+`missile_impact_tests.missile` and `.missile_weight` when it creates the impact
+test. `Impact Velocity` does **not** pre-fill a test column — it is mirrored on
+`at_mirror_sections.impact_velocity` and frozen into the attempt's requirement
+snapshot (`airtable/requirements.snapshot`), where it rides in the JSON response.
+It is never written to `shots.velocity`, which is the operator's achieved value.
 
 ## Why these three and not four
 
@@ -83,7 +88,9 @@ requirements are never eligible for production execution.
 
 `../../contract/field-register.csv`: 73 rows, all DECIDED —
 44 BASELINE, **17 APPLIED**, 4 CONDITIONAL, 7 OMITTED, 1 PLANNED local-only.
-Read surface is now 17 `IN` rows.
+Read surface is 23 `IN` rows, of which 4 are Airtable record-id metadata rather
+than schema fields: **19 named fields**, which is exactly what `mirror.py`
+allowlists (2 project + 2 specimen + 2 protocol + 13 section).
 
 ## Evidence in this directory
 

@@ -1,11 +1,11 @@
 test_type,direction,requirement,airtable_field,airtable_table,local_storage,source_or_calculation,outbound_field,write_phase,state,note
 ALL,IN,Which job is this,IFET job number,IFET Projects,project_parents.name,Airtable read at import,-,n/a,OK,CLOSED 2026-09-08: POST /airtable/import via the shared create path; duplicate-safe on the mock-up
-ALL,IN,Which job is this,Project name,IFET Projects,mirror.project_name,Airtable read at import,-,n/a,OK,"CLOSED 2026-09-08: at_mirror_* tables exist, allowlisted; b9c1f60d4e27"
+ALL,IN,Which job is this,Project name,IFET Projects,at_mirror_projects.project_name,Airtable read at import,-,n/a,OK,"CLOSED 2026-09-08: at_mirror_* tables exist, allowlisted; b9c1f60d4e27"
 ALL,IN,Which specimen,Mock-up/specimen name,Mock-Ups/Specimens,projects.airtable_mockup_name,Airtable read at import,-,n/a,OK,CLOSED 2026-09-08: POST /airtable/import via the shared create path; duplicate-safe on the mock-up
-ALL,IN,Which protocol,Protocol Name,Tests Protocols,mirror.protocol_name,Airtable read at import,-,n/a,OK,"CLOSED 2026-09-08: at_mirror_* tables exist, allowlisted; b9c1f60d4e27"
+ALL,IN,Which protocol,Protocol Name,Tests Protocols,at_mirror_protocols.protocol_name,Airtable read at import,-,n/a,OK,"CLOSED 2026-09-08: at_mirror_* tables exist, allowlisted; b9c1f60d4e27"
 ALL,IN,Which section,Section Name,Protocol Sections,AirtableProtocolRef.airtable_section_name,Airtable read at import,Test Name,create,OK,CLOSED 2026-09-08: the importer populates it from the mirror
-ALL,IN,What test is required,Requirement Code,Protocol Sections,mirror.requirement_code,Airtable read at import,-,n/a,OK,"CLOSED 2026-09-08: at_mirror_* tables exist, allowlisted; b9c1f60d4e27"
-ALL,IN,Is it required at all,Applicability,Protocol Sections,mirror.applicability,Airtable read at import,-,n/a,OK,"CLOSED 2026-09-08: at_mirror_* tables exist, allowlisted; b9c1f60d4e27"
+ALL,IN,What test is required,Requirement Code,Protocol Sections,at_mirror_sections.requirement_code,Airtable read at import,-,n/a,OK,"CLOSED 2026-09-08: at_mirror_* tables exist, allowlisted; b9c1f60d4e27"
+ALL,IN,Is it required at all,Applicability,Protocol Sections,at_mirror_sections.applicability,Airtable read at import,-,n/a,OK,"CLOSED 2026-09-08: at_mirror_* tables exist, allowlisted; b9c1f60d4e27"
 ALL,IN,How to read the value,Requirement Kind,Protocol Sections,(interpretation),Airtable read at import,-,n/a,OK,CLOSED 2026-09-08: airtable/requirements.validate refuses a kind/unit contradiction
 ALL,IN,Unit of the requirement,Required Unit,Protocol Sections,(validation),Airtable read at import,-,n/a,OK,CLOSED 2026-09-08: airtable/requirements.validate refuses a kind/unit contradiction
 ALL,OUT,Airtable record linkage,Airtable Project ID,LabOS Raw Data Table,projects.airtable_project_id,parent row traversal,Airtable Project ID,create,OK,CLOSED 2026-09-08: mapper covers all five types (mapping._TEST_ATTRS); round-tripped live in stage 5
@@ -39,7 +39,7 @@ STATIC,OUT,Peak pressure reached,Max Pressure Achieved,LabOS Raw Data Table,-,on
 STATIC,OUT,Deflection,Deflection Value,LabOS Raw Data Table,deflections.max_deflection,raw SICK counts - uncalibrated,Deflection Value,terminal,UNMET-UNCALIBRATED,A3 quarantine; envelope refuses it in scalars and JSON
 STATIC,OUT,Deflection unit,Deflection Unit,LabOS Raw Data Table,-,uncalibrated,Deflection Unit,terminal,UNMET-UNCALIBRATED,Short form in/mm when unblocked; never Inches
 STATIC,LOCAL,Permanent set and recovery,(not in Airtable),-,deflections.permanent_deflection / .recovery,recovery is the recovery_time CONFIG CONSTANT (60s),-,n/a,UNMET-NOT-A-MEASUREMENT,Firmware audit 2026-08-31 - must never be published as an observation
-CYCLIC,IN,Design pressure pair,Required Value Inward/Outward,Protocol Sections,projects.inward/outward_design_pressure,as STATIC,-,n/a,OK,CLOSED 2026-09-08: the importer populates it from the mirror
+CYCLIC,IN,Design pressure pair,Required Value Inward/Outward,Protocol Sections,projects.inward_design_pressure + projects.outward_design_pressure,as STATIC,-,n/a,OK,CLOSED 2026-09-08: the importer populates it from the mirror
 CYCLIC,CALC,Eight cyclic stages,(not in Airtable),-,cyclic_tests.low_pressure/high_pressure/cycles,CyclicTestPressureCalculator from the DP pair,-,n/a,OK,Verified: 60/45 -> [30 36 48 60 45 36 27 22.5]
 CYCLIC,OUT,Cycles required,Cycles Required,(not created),cyclic_tests.cycles,programme snapshot,JSON only,terminal,OK-JSON-ONLY,One of the nine JSON-only fields by decision 10.15
 CYCLIC,OUT,Cycles completed,Cycles Completed,(not created),cyclic_tests.current_cycle,rig callback,JSON only,terminal,OK-JSON-ONLY,Same
@@ -58,8 +58,8 @@ ANSI,IN,Class judged against,Required Option,Protocol Sections,manual_tests.requ
 ANSI,OUT,Pass or fail,ANSI Result,(not created),test_results.result + .test_result,operator pass/fail then reviewer verdict,Test Result,terminal+verdict,OK-BY-DECISION,Same as Forced Entry
 GAUGE_COUNT,IN,How many gauges,Required Value,Protocol Sections,projects.gauge_count,Airtable pre-fill or operator entry,-,n/a,GAP-UNRECONCILED,DG6 - firmware takes selectedSensors[] live at MQTT start; a mismatch at start has no defined behaviour
 WATER,IN,Water test pressure,Required Value,Protocol Sections,infiltration_tests (local only),operator entry,-,n/a,OUT-OF-SCOPE,Contract 0 defers water infiltration; no outbound mapping exists at all
-ALL,OUT,Which rig ran it,Test Rig,(not created),device / project.device_id,operator choice at import,JSON only,create,OK-JSON-ONLY,One of the nine JSON-only fields
+ALL,OUT,Which rig ran it,Test Rig,(not created),test_results.test_rig,operator choice at import (projects.device_id),JSON only,create,OK-JSON-ONLY,One of the nine JSON-only fields
 ALL,OUT,Software version,LabOS Version,(not created),build metadata,build metadata,JSON only,create,OK-JSON-ONLY,Same
 ALL,OUT,Requirement snapshot,Required Value / Required Unit,(not created),programme snapshot,snapshot at run creation,JSON only,create,OK,"CLOSED 2026-09-08: at_mirror_* tables exist, allowlisted; b9c1f60d4e27"
 ALL,OUT,Why aborted,Abort Reason,(not created),test_results.abort_reason,operator entry at abort,JSON only,terminal,OK-JSON-ONLY,Required on aborted executions
-ALL,OUT,Review rationale,Result Rationale,(not created),test_results.rationale,reviewer entry,JSON only,verdict,OK-JSON-ONLY,Same
+ALL,OUT,Review rationale,Result Rationale,(not created),test_results.result_rationale,reviewer entry,JSON only,verdict,OK-JSON-ONLY,Same

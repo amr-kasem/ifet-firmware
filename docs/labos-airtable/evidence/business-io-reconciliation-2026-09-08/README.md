@@ -69,6 +69,23 @@ five types**, and must record the `UNMET` rows as expected absences rather than 
 real Airtable record** — see `../live-write-proof-2026-09-08/`. The absences are
 now asserted in three places: the envelope refuses the values, the local suite
 asserts the refusal, and the live probe reads the row back and checks the cells
-are empty. What remains unproven end to end is the **inbound** half, because the
-mirror and the importer do not exist — and no amount of outbound testing
-substitutes for it.
+are empty.
+
+The inbound half was unbuilt when that was written and is not any more: the
+mirror tables (`at_mirror_*`, migration `b9c1f60d4e27`), the allowlisted reader
+and the importer all exist, and the `IN` rows above are closed against them.
+What is still unproven is the inbound half **end to end against a live base** —
+the fixture proves the read, not an operator's import.
+
+## Kept honest by
+
+`check_register.py` in the management repo re-runs this reconciliation and the
+field register against the code, offline:
+
+    python3 app/airtable/check_register.py
+
+Every `table.column` in `local_storage` must resolve to a real column parsed out
+of the models, so a rename breaks the check rather than the document. It exists
+because a hand-authored trace naming a column that does not exist reads as
+authoritative — on 2026-09-08 seven rows did, including
+`test_results.rationale` for what is actually `result_rationale`.
