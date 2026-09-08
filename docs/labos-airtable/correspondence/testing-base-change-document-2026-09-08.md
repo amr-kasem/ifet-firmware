@@ -176,7 +176,7 @@ Presence depends on two things:
 | **Which phase** | A field belongs to one delivery phase — creation, termination, or first review. `LabOS Verdict By` is absent until someone reviews; that is correct, not missing |
 | **Whether it applies** | `Corrects Attempt ID` is populated only on a correction — blank on every ordinary attempt and every retest. `Impact Result` applies to Impact only. `LabOS Photos` requires photographs to exist |
 
-And **three of the 35 will stay permanently empty for now** — `Max Pressure Achieved`, `Deflection Value`,
+And **3** of the 35 will stay permanently empty for now — `Max Pressure Achieved`, `Deflection Value`,
 `Deflection Unit`. See §4 for what each is waiting on; they are different things.
 
 The per-field detail — phase, and whether presence is conditional — is the `write_phase` and
