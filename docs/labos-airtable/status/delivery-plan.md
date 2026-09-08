@@ -605,6 +605,14 @@ photo after the verdict is a `409` already guarantees the set cannot grow after 
 complete and immutable at termination, which is the earliest moment it can be sent as one entry. A slow or
 failing upload therefore parks in its own channel and can never hold up a measured result.
 
+**But only when the set is non-empty**, which the first draft of this section missed. Only *impact* attempts
+must have a photograph to finish; Forced Entry and ANSI may complete with none, and static and cyclic
+normally do. Enqueueing unconditionally would put an entry carrying nothing into the attachment channel for
+most attempts — visible as permanent attachment backlog in `GET /sync/status`, i.e. the status surface
+reporting missing evidence for attempts that were never required to have any. So the `attachment` entry is
+enqueued only if at least one photo exists at termination, and an attempt with no photographs has **three**
+phases, not four.
+
 **No backfill.** The 623 live `test_results` rows predate P1 and carry no `labos_attempt_id`,
 `labos_test_id` or requirement snapshot; every one would fail envelope validation and park, burying real
 traffic behind 623 permanent failures. New attempts only, from deploy forward. A dated opt-in range tool is
@@ -638,7 +646,13 @@ fields land one per phase. **This is the acceptance matrix, not an illustration:
 The other eleven applied fields are **read** side, on `Protocol Sections` — `Missile Type`
 `fld5Bs0aQXXeVso2y`, `Missile Weight` `fldmhdhonyyLcx4Ex`, `Impact Velocity` `fldJNfUVyqQEFOVWx` and the
 eight requirement fields. TA3 already round-tripped these against fixture `IFET-FIXTURE-0001`; they are
-pre-fill inputs and no sync phase writes them. Per-field phase assignment for all 38 `OUT` fields is the
+pre-fill inputs and no sync phase writes them.
+
+**All three missile fields are optional at every layer, confirmed 2026-09-08** — `missile_impact_tests.missile`
+and `.missile_weight` and `shots.velocity` are `nullable` (widened from `NOT NULL` by `d1a6b93f2e57`), their
+schemas are `Optional[... ] = None`, `POST /impact-tests/` accepts `{}`, and neither creating nor finishing an
+impact test requires any of them. This is §4.6 Class 2 — *pre-fill is a default, never a lock* — and it means
+the sync wiring can be built and accepted **without** these three carrying a value. Per-field phase assignment for all 38 `OUT` fields is the
 `write_phase` column of `../contract/interface-schema.csv`, which is generated — it governs, not this table.
 
 #### Prerequisite: all five test types means TC1 first
