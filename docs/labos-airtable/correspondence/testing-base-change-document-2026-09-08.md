@@ -1,11 +1,103 @@
-# Testing Base — changes made, and why
+# Testing Base — your three questions, and the changes made
 
 **From:** LabOS (Abdelrahman) · **To:** the Airtable team · **Date:** 2026-09-08
 **Base changed:** Testing `app4oXS3Kd5IKWgJ7` — **142 → 159 fields**
 **Base NOT changed:** Production `app0OCunbmuXl7Hc9` — **unchanged at 142, verified live**
 
-This is the document requested at the 2026-09-06 meeting: *"Prepare and share a document outlining all
-changes made & explanation/reason of that changes in the Testing Base."*
+This is two things in one: **answers to the three clarifications you raised**, and the document requested at
+the 2026-09-06 meeting — *"Prepare and share a document outlining all changes made & explanation/reason of
+that changes in the Testing Base."* Your questions are answered first, because they are what you are waiting
+on; §2 onward is the reference behind the answers.
+
+---
+
+## 0. Your three questions
+
+### 0.1 `Required Value` — it never holds a range, a sign or a symbol
+
+The short answer: **a value like `+110/110` is not encoded into `Required Value`. It is split across the
+fields beside it.** `Required Value` is a plain `number` and stays empty whenever the requirement is not a
+single scalar.
+
+| The proposal says | How it is represented |
+|---|---|
+| `+110/110` | `Requirement Kind = Directional Pair` · `Required Value Inward = 110` · `Required Value Outward = 110` · `Required Unit = PSF` · **`Required Value` empty** |
+| `11.25` | `Kind = Magnitude` · `Required Value = 11.25` · `Unit = PSF` |
+| `2` impacts | `Kind = Count` · `Required Value = 2` · `Unit = impacts` |
+| `Full` | `Kind = Enum` · `Required Option = Full` · **no number at all** |
+| blank, `N/A`, `—` | `Kind = Not Applicable` · every numeric field empty. **Blank is never zero** |
+
+**No negative numbers, ever.** Magnitudes are positive and direction comes from the *field name*
+(`…Inward` / `…Outward`), not from a sign. This is deliberate: it removes the "is `-60` outward or an error?"
+question completely.
+
+**This matters more than it looks.** If ranges or signs go into `Required Value`, LabOS is back to parsing
+strings — and string parsing is exactly where the extractor defect lives. The typed fields exist so that
+never has to happen again.
+
+### 0.2 Unit per protocol section — already determined by `Requirement Code`
+
+You do not need to decide this per section. The code fixes it:
+
+| `Requirement Code` | `Requirement Kind` | `Required Unit` |
+|---|---|---|
+| `STATIC_PRESSURE` · `CYCLIC_PRESSURE` | Directional Pair | `PSF` |
+| `WATER_PRESSURE` | Magnitude | `PSF` |
+| `IMPACT_LMI` · `IMPACT_SMI` | Count | `impacts` |
+| `GAUGE_COUNT` | Count | *blank* |
+| `STATIC_PROGRAMME` | Enum | *blank* |
+| `FORCED_ENTRY` · `ANSI_IMPACT` | Not Applicable | *blank* |
+
+`Missile Weight` (pounds) and `Impact Velocity` (ft/s) carry their own units in their own fields and do not
+use `Required Unit`.
+
+If a unit and a kind ever disagree, LabOS refuses the section rather than assuming. That is intentional: a
+wrong unit is not a rounding error, it is a different test.
+
+### 0.3 Retests — your model is right, but please keep `Corrects Attempt ID`
+
+**Your description of a retest is exactly ours, and we confirm it:** a new record, new `LabOS Attempt ID`,
+incremented `Attempt Number`, the four Airtable IDs unchanged, and **the same `LabOS Test ID`**. That is
+precisely what `LabOS Test ID` is for.
+
+**But it is not a replacement for `Corrects Attempt ID`, because they answer different questions.**
+
+| Field | Answers | Present on |
+|---|---|---|
+| `LabOS Test ID` | *which test are these attempts of?* | **every** attempt |
+| `Corrects Attempt ID` | *which attempt does this one supersede?* | **only** a correction |
+
+Two different events both produce a new attempt row sharing one `LabOS Test ID`:
+
+- **A retest** — the specimen was physically tested again. It counts as a test.
+- **A correction** — a recorded result was wrong and is being superseded. **No physical test happened**, and
+  it must not count as one.
+
+With only `LabOS Test ID`, those two are indistinguishable on your side. Any roll-up that counts attempts or
+computes a pass rate would then be wrong — **and would look right**, which is the part that makes it
+expensive. A specimen corrected twice would read as three tests.
+
+`Corrects Attempt ID` is already in the Testing Base, it is **blank on every retest**, and it is populated
+only on the rarer correction case. It costs nothing to keep and cannot be reconstructed later.
+
+So: **keep both.** We are glad to drop any field you find unnecessary — this is the one we would ask you not
+to.
+
+### 0.4 `Test Date` as date **and** time — agreed, and already in place
+
+`Test Date` is already a `dateTime` field in both bases; we verified it live again today. So there is nothing
+to change unless you are adjusting how it *displays*, which is entirely yours.
+
+Two details worth stating:
+
+- **LabOS sends `2026-08-04T19:00:00Z`** — ISO-8601, UTC, without milliseconds. Your `…T19:00:00.000Z` is the
+  same instant and Airtable accepts either. No measurement in this lab is precise to the millisecond, so we
+  do not send them.
+- **`Test Date` is the *completion* instant, and is omitted entirely while a test is running.** Your
+  `Protocol Sections` automation derives its date from this field, so that dependency is worth having in
+  writing. The full span is in `Testing Start Date` and `Testing End Date`.
+
+---
 
 **Seventeen fields were added, all to the Testing Base only.** No field was renamed, retyped, deleted or
 reordered. No table, view, relationship or automation was touched. Nothing in production was modified, and
