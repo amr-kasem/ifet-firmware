@@ -7,7 +7,7 @@ scannable on a phone. Copy the block below.
 
 Hi — quick update on LabOS ↔ Airtable.
 
-The three manual test screens you asked for are built: Impact, Forced Entry and ANSI Z97.1. The APIs are done and tested, and our UI developer already has what they need to start the screens.
+The backend for the three manual tests you asked for is built and tested: Impact, Forced Entry and ANSI Z97.1. The API documentation our UI developer needs to start the screens is written and in the repository — the screens themselves are their next piece of work, not done yet.
 
 Impact records each impact separately — impact 1, 2, 3 — each with its own pass/fail and its own photos. Forced Entry and ANSI are pass/fail with notes and photos. None of them touch the rig hardware, so there's no firmware change and no risk to the two production systems.
 
@@ -18,7 +18,7 @@ Two things worth flagging early rather than at demo:
 1. Loading sequences don't need to come from Airtable — LabOS already calculates all 14 stages from the design pressures. That's less work for everyone, but it's different from the flow you described.
 2. We're not sending deflection readings or max pressure yet. The gauges aren't calibrated to a real unit, so we'd be sending numbers we can't stand behind. Fixable, but it needs bench time.
 
-One ask: can we get the test rig back online? It's been down since late July. It isn't blocking us — we've built and tested everything locally — but before any of this goes to the production systems we need to prove it against real sensors and real gauges. Getting it back now means the go-live is a scheduled window rather than a first attempt.
+One ask: can we get the test rig back online? It's been down since late July. It isn't blocking us right now — the manual test backend is built and tested against a local database, and the Airtable schema work is verified against the live Testing base — but the piece that actually sends results to Airtable is still being built, and before any of it goes to the production systems we need to prove it against real sensors and real gauges. Getting the rig back now means the go-live is a scheduled window rather than a first attempt.
 
 Nothing is deployed yet. Happy to walk through any of it whenever suits.
 

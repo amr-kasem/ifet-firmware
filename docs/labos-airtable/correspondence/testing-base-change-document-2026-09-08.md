@@ -51,8 +51,11 @@ You do not need to decide this per section. The code fixes it:
 `Missile Weight` (pounds) and `Impact Velocity` (ft/s) carry their own units in their own fields and do not
 use `Required Unit`.
 
-If a unit and a kind ever disagree, LabOS refuses the section rather than assuming. That is intentional: a
-wrong unit is not a rounding error, it is a different test.
+**Where a unit and a kind disagree, LabOS is specified to refuse the section rather than assume** — a wrong
+unit is not a rounding error, it is a different test. Stated honestly: that validator is **specified and not
+yet built**. Today the codes above are a convention we both follow; the refusal that makes it safe is on our
+build list, ahead of any live read. We would rather you knew which of our rules are enforced and which are
+still promises.
 
 ### 0.3 Retests — your model is right, but please keep `Corrects Attempt ID`
 
@@ -101,9 +104,23 @@ property of where the columns live.
 
 What *is* per-attempt: `LabOS Attempt ID` (a fresh UUID on every insert), `Attempt Number` (allocated
 server-side, never accepted from a client), and `LabOS Test ID` — reused from the first attempt at that test,
-so every attempt in a group carries the identical value. **All of this is implemented and under test today.**
+so every attempt in a group carries the identical value.
 
-Two things we owe you honestly:
+**What is implemented, precisely — because "implemented" was doing too much work in an earlier draft:**
+
+| | State |
+|---|---|
+| The columns, and their placement on the parent rows | ✅ built, migrated, tested |
+| Attempt ID minted per attempt; Test ID shared across a group | ✅ built for all five test types |
+| The outbound mapper resolving the four Airtable IDs from an attempt | 🔧 **Static Load and Cycles only.** The traversal for Impact, Forced Entry and ANSI is in progress |
+| Attempt Number allocation safe against two simultaneous starts | 🔧 in progress — allocated server-side, but not yet under a uniqueness constraint |
+
+**The identity *model* is what we are confirming to you, and it is not at risk.** The two items in progress
+are our own plumbing between the database and the outbound payload; neither changes what a record will
+contain, and both are finished before anything is published. We are telling you now rather than after,
+because "already implemented" would have been a more comfortable sentence than a true one.
+
+Two more things we owe you honestly:
 
 - **`Corrects Attempt ID` has no operator route yet.** The columns exist and the envelope maps them, but the
   screen that records a correction is not built. So today every attempt is a retest, and the field is
@@ -144,15 +161,27 @@ transcribed.
 | | Count |
 |---|---|
 | Fields LabOS **reads** | **20** |
-| Fields LabOS **writes on every attempt** | **28** — all in `LabOS Raw Data Table`, the only writable table |
-| Fields LabOS **writes when the value exists** | **4** — `Measured Value`, `Photos`, `LabOS Report Link`, `Excel File Link` |
-| Fields LabOS **maps but withholds** | **3** — `Max Pressure Achieved`, `Deflection Value`, `Deflection Unit`; see §4 |
+| Fields **bound to the write path** | **35** — all in `LabOS Raw Data Table`, the only writable table |
 | Fields LabOS **deliberately ignores** | **104** |
 
-**28 + 4 + 3 = the 35 fields bound to the write path**, which is why you may see 35 quoted elsewhere. The
-distinction matters to you: 28 always arrive, 4 arrive only when there is a validated value or reachable URL
-to send, and 3 will stay **permanently empty** until the gauges are calibrated. We would rather say which is
-which than let you discover it from empty cells.
+**"Bound to the write path" is not "always populated", and the difference matters to you.** Airtable will
+show empty cells for legitimate reasons, so here is the rule: **LabOS omits a field rather than sending an
+empty string, a zero or a false** (contract §6). A blank cell therefore means *not applicable to this
+attempt* or *not yet known*, never *zero*.
+
+Presence depends on two things:
+
+| | |
+|---|---|
+| **Which phase** | A field belongs to one delivery phase — creation, termination, or first review. `LabOS Verdict By` is absent until someone reviews; that is correct, not missing |
+| **Whether it applies** | `Corrects Attempt ID` is populated only on a correction — blank on every ordinary attempt and every retest. `Impact Result` applies to Impact only. `LabOS Photos` requires photographs to exist |
+
+And **three of the 35 will stay permanently empty for now** — `Max Pressure Achieved`, `Deflection Value`,
+`Deflection Unit`. See §4 for what each is waiting on; they are different things.
+
+The per-field detail — phase, and whether presence is conditional — is the `write_phase` and
+`delivery_state` columns of the attached `interface-schema.csv`, which is generated rather than
+hand-maintained.
 
 **The 104 is the important number.** It is the machine-readable form of *no billing, pricing, invoices,
 payments or scheduling crosses the boundary*: customer emails, `Approved Proposal Amount`, `Balance Due`,
@@ -192,14 +221,26 @@ were not touched at all**, and for three of those LabOS has no access of any kin
 
 **Not changed — and the reason differs by table.**
 
-- **1, 2, 3 — read-only joins.** Four fields in total: the job number and project name, the mock-up name and
-  its project link, the protocol name and its mock-up link. That is the whole hierarchy LabOS needs to know
-  which specimen a test belongs to. Every other field in these 56 is ignored, including `Approved Proposal
-  Amount`, `Balance Due`, customer emails and the QuickBooks IDs.
-- **5, 6, 7 — no access at all.** `0` read and `0` written, all 40 fields. This is the scheduling and
-  billing boundary stated as a fact about the credential rather than a promise: wall reservations, capacity
+- **1, 2, 3 — read-only joins.** **Six fields** in total: the job number and project name, the mock-up name
+  and its project link, the protocol name and its mock-up link. That is the whole hierarchy LabOS needs to
+  know which specimen a test belongs to. Every other field in these 56 is ignored, including `Approved
+  Proposal Amount`, `Balance Due`, customer emails and the QuickBooks IDs.
+- **5, 6, 7 — nothing is read or written.** `0` and `0`, all 40 fields: wall reservations, capacity
   conflicts, `Billable Amount`, `Internal Cost`, `Approval Status`. LabOS is a test executor and has no
   business reading any of it.
+
+**Be precise about what enforces that, because we would rather you knew than assumed.** An Airtable PAT is
+scoped **per base, not per table**, so our token *could* read all eight tables and write any of them.
+Two things stand in the way, and both are ours:
+
+| Layer | What it enforces | Strength |
+|---|---|---|
+| **Writes** | The client refuses any write to a table outside a single-table allowlist, before the request is made | Enforced in code, and tested |
+| **Reads** | Nothing calls the read path for tables 5, 6 and 7 — there is no importer, mirror or query that names them | An application decision, not a credential restriction |
+
+So the write boundary is a mechanism; the read boundary is a design decision plus this document. If you want
+the read side enforced at the credential, that needs a table-scoped grant on your side, and we would welcome
+it.
 
 **The one field LabOS reads from its own results table** is `Raw Modified Time`
 (`lastModifiedTime`) — Airtable-owned, used only for delivery reconciliation, never written.
@@ -281,10 +322,17 @@ a speculative field propagates rather than sitting harmlessly in a sandbox.
 | `Failure Notes` | Carried inside `Notes` and the JSON for this release |
 | Any new table, relationship, or delta-cursor field | Not needed |
 
-Three fields **exist and LabOS will not write them**: `Max Pressure Achieved`, `Deflection Value`,
-`Deflection Unit`. There is no validated measurement source for any of them today — the rigs return raw
-gauge counts that have not been calibrated to a physical unit. **We would rather send nothing than send a
-number we cannot stand behind.** They are tracked and will be revisited once bench calibration is done.
+Three fields **exist and LabOS will not write them yet** — and they are waiting on **two different
+things**, which an earlier draft ran together:
+
+| Field | Why it is empty | What unblocks it |
+|---|---|---|
+| `Deflection Value` · `Deflection Unit` | The rigs return **raw gauge counts** never calibrated to a physical unit. Publishing them would put an uncalibrated count in a field named for inches | Bench calibration — hardware work |
+| `Max Pressure Achieved` | **A source exists.** Actual pressure is on the rig's telemetry bus and renders live in our UI; nothing subscribes to it and stores the maximum | Software work on our side, already scheduled |
+
+**We would rather send nothing than send a number we cannot stand behind.** But we are not claiming the
+second one is impossible — it is a measurement we do not yet persist, and that is a different admission
+from one we cannot make.
 
 If you want fewer fields still, `Requirement Kind` is the one to drop — it can be implied from
 `Requirement Code`.
@@ -297,9 +345,13 @@ Not asserted — read back.
 
 - **Schema probe against the live base**: all table IDs confirmed, all 35 expected result fields present,
   select option sets read from the API rather than assumed.
-- **A synthetic proposal was written into the Testing Base and read back** as LabOS will read it: one job,
-  one mock-up, one protocol, six Protocol Sections covering all five executable requirement codes plus
-  `GAUGE_COUNT`. Every field read back correctly typed.
+- **A synthetic proposal was written into the Testing Base and read back**: one job, one mock-up, one
+  protocol, six Protocol Sections covering all five executable requirement codes plus `GAUGE_COUNT`. Every
+  field read back correctly typed, with the right values.
+  **What this proves and what it does not.** It proves the schema is complete and readable, and that a
+  requirement expressed in these fields is sufficient to drive a test programme. It does **not** exercise
+  the production import path, the operator's pre-filled form, or the kind/unit validator — none of which
+  are built yet. It is a schema and sufficiency check, not a demonstration of the running feature.
 - **The design pressures drive the whole programme.** From an asymmetric `60 / 45` PSF pair LabOS derived
   all fourteen stages — six static `[45.0, 33.75, 60, 45, 90.0, 67.5]` and eight cyclic
   `[30, 36, 48, 60 | 45, 36, 27, 22.5]`. Asymmetric on purpose: a symmetric pair would pass even if inward
@@ -330,8 +382,13 @@ in sync for no gain.
 ## 6. What we need from you
 
 **1. Populate the eleven `Protocol Sections` fields — and never from the extractor.**
-By hand, or from the trusted signed proposal. This is the one thing that turns pre-filling from a design into
-a working feature, and it is the one thing we cannot do ourselves.
+By hand, or from the trusted signed proposal. It is the one part of pre-filling we cannot do ourselves.
+
+To be straight with you about the rest of it: **populating these fields is necessary but not sufficient.**
+The import path that copies them into LabOS, and the operator screen that shows them pre-filled, are still
+being built on our side. What is verified today is that the fields exist, are correctly typed, and read back
+with the right values and the right derived programme (§5). Your populating them is what makes that work
+useful — it does not become a working feature the moment you do it.
 
 **2. Confirm your `Protocol Sections` automation still owns `Result`, `Status` and `Testing Date`.**
 LabOS never writes them. We cannot see your automations — the Meta API returns `403` for them — so this
@@ -348,9 +405,50 @@ decision for IFET rather than an engineering one.
 
 ---
 
-## 7. What is verified at cutover, not now
+## 7. Three different kinds of statement in this document — which is which
 
-Stated so nothing here is mistaken for more than it is:
+An earlier draft of this document mixed these together, and one sentence claimed as *implemented* something
+that was only *specified*. So the three are separated here explicitly, and every claim above belongs to
+exactly one of them.
+
+### ✅ Verified — read back from the live bases, today
+
+- **The schema.** 159 fields in Testing, 142 in production, 17 added, all correctly typed, all select
+  options as listed. Every one of the 142 pre-existing fields has the same type after as before; nothing was
+  renamed, retyped, deleted or reordered, and no table, view, relationship or automation was touched.
+- **Production is untouched**, checked against the live base rather than assumed, with tooling that refuses
+  the production base unconditionally.
+- **The before/after chain joins** — the first change's *after* snapshot is byte-identical to the second's
+  *before*, so the three snapshots are one history.
+- **A requirement expressed in these fields is sufficient to drive a test programme** — an asymmetric 60/45
+  pair derived all fourteen stages, and the pass/fail types carried a class with no numeric value.
+- **The attached CSVs agree with both live bases**, all 159 rows, 0 disagreements.
+
+### 🔧 Implemented in LabOS — built and under test, not yet deployed anywhere
+
+- The local storage for all five test types, including numbered impacts each with their own photographs.
+- The identity columns and their placement: attempt ID per attempt, test ID shared across a group, the four
+  Airtable IDs on the parent rows.
+- The outbound envelope: which field belongs to which phase, and the refusal of anything not permitted for
+  that phase.
+- The queue that carries results to Airtable, its ordering and its recovery behaviour.
+
+### ⬜ Specified but not yet built — our remaining work, stated so you can hold us to it
+
+- **The import path and the pre-filled operator form.** Your populating the eleven fields is necessary and
+  not sufficient; §6.1.
+- **The kind/unit validator** that refuses a contradictory section rather than assuming; §0.2.
+- **The outbound mapper for Impact, Forced Entry and ANSI** — Static Load and Cycles resolve their Airtable
+  IDs today, the other three do not yet; §0.3.
+- **The correction route.** `Corrects Attempt ID` cannot be populated until it exists; §0.3.
+- **`Max Pressure Achieved`** — a source exists on the rig's telemetry, nothing persists it; §4.
+- **Attempt-number allocation under a uniqueness constraint**; §0.3.
+
+**None of these change what this document asks of you**, which is a schema change and its reasoning. They
+are listed because a schema you are asked to replicate into production should come with an honest account
+of what does and does not yet run against it.
+
+### And three things that can only be verified at cutover, by both of us
 
 - that your existing automations behave correctly against the new fields **in production**;
 - that roll-ups exclude superseded results and do not count corrections as extra physical tests;
