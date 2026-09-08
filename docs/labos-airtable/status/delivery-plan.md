@@ -80,15 +80,67 @@ per table.
 Nothing above is a blocker on its own. Together they mean: **every leg of this integration is greenfield
 against production, and no code has ever carried a result end to end.**
 
-### 0.3a Where the work actually stands — 2026-09-08
+### 0.3a Where the work actually stands — 2026-09-08, end of day
+
+**The outbound path is built and proven against the live Testing base. The
+inbound path does not exist.** That sentence is the whole state; everything
+below elaborates it.
 
 | | |
 |---|---|
-| **Track A** (Airtable) | TA1–TA4 ✅. **TA5 — send — is the only one left, and it is not ours.** Two documents are written and **NOT SENT**: the change document (which now also answers their three clarifications) and the product-owner update |
-| **Track B** (the three manual tests) | TB1–TB3 ✅. Migration `d1a6b93f2e57`, 18 routes, `MANUAL_TESTS_API.md` + `openapi.json`. **TB4 is the deploy and needs a window** |
-| **Track C** (the integration) | Untouched, except that TB1/TB2 closed most of TC1: reviewer columns and the verdict route exist now |
-| **Pre-send check** | `python -m app.airtable.preflight` — read-only, both bases, verifies every claim the change document makes. Run it the morning it is sent |
-| **Still true** | **Nothing is deployed.** The `management` node is unchanged |
+| **Track A** (Airtable) | TA1–TA4 ✅. **TA5 — send — is the only one left, and it is not ours.** Two documents are written and **NOT SENT**. They now carry a live-verified schema *and* a live-verified write path |
+| **Track B** (the three manual tests) | TB1–TB3 ✅. **TB4 is the deploy and needs a window** |
+| **Track C** (the integration) | TC1a ✅ TC1b ✅ **TC2 ✅ for the outbound half.** TC1's remaining piece is programme/run and mirror persistence — which is now the critical path, because it is what TC5 and the whole inbound half wait on |
+| **Still true** | **Nothing is deployed.** The `management` node is unchanged; live alembic head is `3a65a83e0463`, before P1 — **confirm that on the node, not from this repo** |
+
+#### What is implemented and verified
+
+| | Evidence |
+|---|---|
+| Local storage for all five test types, numbered impacts with per-impact evidence | migration `d1a6b93f2e57` |
+| Identity: attempt id per attempt, one derived `LabOS Test ID` per test, the four Airtable ids reachable from **all five** types | `e5f3a71c8d92`; `mapping._TEST_ATTRS` |
+| `Attempt Number` unique within a test, allocated under a constraint with a retry | `e5f3a71c8d92`; `attempts.insert_attempt` |
+| The transactional outbox, wired at four call sites, committing with the domain save | `sync/publish.py` |
+| Attachments on their own FIFO channel, so a stuck file cannot block a verdict | `outbox._channel` |
+| The §6 detailed JSON body, including the nine JSON-only fields and `data_quality` | `mapping.result_detail` |
+| A transport-free boundary: `report-api` can queue without importing anything that opens a socket | `app/retry_budget.py`; `tests/test_report_api_isolation.py` |
+| `GET /sync/status` · `/sync/queue` · `POST /sync/queue/{id}/retry` | the worker's only liveness surface |
+| **270 tests** on PostgreSQL 13 · **21/21 routes** · **4 migration rehearsals** on populated tables, forward and back | `../evidence/business-io-reconciliation-2026-09-08/` |
+| **Live: 15/15 mechanism · 5/5 test types · 18/18 whole pipeline** through the real worker and real sender | `../evidence/live-write-proof-2026-09-08/` |
+
+#### What is NOT implemented — the honest list
+
+| | Consequence |
+|---|---|
+| **No mirror or programme tables** | `Requirement Code` and `Applicability` have no local column. **The largest gap; all pre-fill depends on it** |
+| **No import path** (`POST /projects/import`) | Nine columns that exist are never populated from Airtable |
+| **No attachment uploader** | Every photograph parks — deliberately and visibly, with a truthful reason |
+| **No kind/unit validator** | A contradictory section is not refused, which contract §3 and the change document both say it is |
+| **No correction route** | `Corrects Attempt ID` cannot be populated; every attempt is a retest |
+| **No operator UI** | MU / TC5 |
+| **6 UNMET measurements** | Two need bench calibration, one needs persisting a value already on the bus, one is a config constant that must never be published |
+
+#### The rule that changed how we test
+
+**A test with an injected transport is never evidence about the wire.** Every
+suite here injects a sender that accepts any payload — correct for testing the
+queue, and exactly how a sender that would have rejected *every photograph*
+passed 270 tests. Any code path that reaches Airtable needs either a live probe
+or a test that stubs the client at its boundary rather than replacing the sender.
+The three-layer scheme in §0.3b is that rule made concrete.
+
+### 0.3b The three verification layers, and what each can prove
+
+| Layer | Scope | State |
+|---|---|---|
+| **1 — local reliability** | Isolated PostgreSQL, simulated Airtable. Real routes and queue code. Atomic saves, concurrent numbering, retries, restart recovery, photo handling, standalone operation, simulated failures | ✅ **270 tests · 4 rehearsals · 21/21 routes** |
+| **2 — live outbound round-trip** | Testing base only. Synthetic **linked** records, all five types, **the actual worker and Airtable client**. Read back and compare identity, values, timestamps, verdicts. Retry updates the same row; a retest is a new row keeping the Test ID; unavailable measurements stay absent | ✅ **18/18 live** (stage 5). Attachments park — no uploader exists |
+| **3 — full business round-trip** | Requirements entered in Airtable → imported through LabOS → correct specimen and pre-filled parameters → execution → the resulting Airtable summary. **No inserting local linkage to bypass the importer** | ⬜ **Blocked on the mirror and the importer.** Only this layer proves the target |
+
+Layer 2's honest limit: linkage is inserted directly, so it proves the outbound
+path *given a linked job* and says nothing about the importer. Synthetic rig
+observations prove data handling only — calibration and real hardware
+performance remain separate acceptance checks.
 
 ### 0.4 Live verification, 2026-09-08 — read-only, both rigs and the node
 
@@ -1050,10 +1102,14 @@ satisfied.
 | **TC1** | **The verdict route's remaining half** — the reviewer *columns* landed with TB1 and the verdict route with TB2, so what remains is programme/run and mirror persistence for the **rig** test types | §8 (9th deviation) | LabOS | ✅ TB1 | Static and cyclic attempts carry the same identity and review path the manual types now have |
 | ~~**TC1a**~~ | ~~**Wire the four call sites**~~ **✅ 2026-09-08** — `enqueue()` inside each domain save's transaction, `create`/`terminal`/`verdict`/`attachment`, all five test types. Narrow `test_report_api_isolation.py` to `app.airtable` and the sync *client*, so a local outbox `INSERT` is not mistaken for an inline Airtable call | §4.7 · DG6 | LabOS | TC1, **DG12** | The queue fills from a real save, per-attempt FIFO, and a rolled-back save leaves no entry |
 | ~~**TC1b**~~ | ~~**Build the three `/sync` routes**~~ **✅ 2026-09-08** — `GET /sync/status` (the four contractual words + attachment backlog + `worker_heartbeat_at`), `GET /sync/queue`, `POST /sync/queue/{id}/retry`. The functions behind all three already exist and are unrouted | §4.7 · §4.2 | LabOS | TC1a | `sync-worker` has a liveness surface, the UI has its status chip, and DG6's justification is true rather than aspirational |
-| **TC2** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | TC1a, TC1b, TA3 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally with no Airtable origin. Neither path may block the other. **Acceptance is the six applied write fields, one per phase** — `Testing Start Date`, `Corrects Attempt ID` (create) · `Testing End Date` (terminal) · `LabOS Verdict By`/`At` (verdict) · `LabOS Photos` (attachment): §4.7 |
+| ~~**TC2**~~ | ~~**The vertical flow — two origins, one merge**~~ **✅ OUTBOUND HALF 2026-09-08** (§6.1) | M2 | LabOS | ✅ TC1a, TC1b, TA3 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally with no Airtable origin. Neither path may block the other. **Acceptance is the six applied write fields, one per phase** — `Testing Start Date`, `Corrects Attempt ID` (create) · `Testing End Date` (terminal) · `LabOS Verdict By`/`At` (verdict) · `LabOS Photos` (attachment): §4.7 |
+| **TC1c** | **The mirror and the import path — now the critical path.** `at_mirror_*` tables so `Requirement Code` and `Applicability` have somewhere to live, then `POST /projects/import`. Nine columns that already exist are never populated without it, and **layer 3 cannot start** | §4.2 · reconciliation | LabOS | ✅ TC1a/b | A requirement entered in Airtable reaches a LabOS project with its parameters pre-filled, through the importer and not by inserting linkage |
+| **TC1d** | **The attachment uploader** — preview generation under the direct-upload limit, the upload itself, and recording the returned attachment ids. Photographs park today, deliberately | §6 · `GAP-UPLOADER` | LabOS | ✅ TC1a | A photograph reaches `LabOS Photos` on a real record and its returned id is stored |
+| **TC1e** | **The kind/unit validator** — refuse a section whose `Required Unit` contradicts its `Requirement Kind`. Specified in contract §3 and asserted in the change document; **does not exist** | §3.2 · `GAP-NO-VALIDATOR` | LabOS | TC1c | A contradictory section is refused rather than assumed, before any live read |
+| **TC1f** | **`Impact Velocity` needs its own column** on `missile_impact_tests`. It is a requirement mapped to `shots.velocity`, an achieved per-impact observation — pre-fill would overwrite a measurement, or a target would publish as an achievement | reconciliation · `GAP-TYPE-CONFUSION` | LabOS | — | Target and achieved velocity are separate columns and the envelope cannot confuse them |
 | **TC3** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | TC2 | `simulation/mf_harness/` passes against the real backend. **Two routes, not one**: `api.py:94` and `api.py:109` |
 | **TC4** | **Capture actual and maximum pressure** — subscribe to `{device_id}/sensors/{addr}` during a run and persist max plus final | M7 | LabOS | TC2 | Closes two product-owner requirements. **Not "no source"** — the value is on the bus and renders live in the UI; nothing stores it |
-| **TC5** | **MU — the operator interface** | DG5 → MU | LabOS | TB3, TC2 | An operator completes all five test types end to end and sees the sync status of each |
+| **TC5** | **MU — the operator interface** | DG5 → MU | LabOS | TB3, **TC1c** | An operator completes all five test types end to end and sees the sync status of each |
 | **TC6** | **DG6's remaining drift** | DG6 | LabOS | — | Register rows for `completion_source` and `identity_assurance`, defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the nine JSON-only fields noted in the register header |
 | **TC7** | **M4 — the change document with actual results** | M4 | LabOS | TA5, TC2 | Every planned change marked applied/verified or outstanding, with evidence |
 | **TC8** | **M5 — production cutover for the integration** | M5 | LabOS + IFET | TC7, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |

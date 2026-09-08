@@ -18,10 +18,12 @@ nothing else. Status lives in the delivery plan.
 Start with the plan's §0 (probed state) and §1 (the whole data path). Everything else in this tree is
 evidence, correspondence or a runbook.
 
-**Four things that outlive any session:**
+**Five things that outlive any session:**
 
 1. **Nothing is deployed.** Production `management` runs `latest`; live alembic head is `3a65a83e0463`, so
-   even P1 is unapplied. Both integration branches are unmerged, and `app/sync` is unwired.
+   even P1 is unapplied — **confirm that on the node, not from this repo.** Both integration branches are
+   unmerged. `app/sync` **is** wired now (as of 2026-09-08) and proven against the live Testing base; what
+   does not exist is the **inbound** half — no mirror, no importer.
 2. **Do not drive a rig from Airtable requirement values.** Their PDF extractor shifts columns, so a 60 PSF
    requirement reads as 9, and every shifted value is individually plausible. Contract §10.19.
 3. **The node is ground truth for migrations, not the repo.** Check `SELECT * FROM alembic_version;` on the
@@ -29,6 +31,10 @@ evidence, correspondence or a runbook.
 4. **A simulated rig must never be able to reach a real broker.** With `ifet-management-tunnel.service`
    active, `127.0.0.1:1883` and `127.0.0.1:8000` are **production**. Use `../simulation/mf_harness/`, never
    `../simulation/ifet_device_node/`, whose config carries system-1's own `device_id`. Plan §5 DG10 · §11.
+5. **A test with an injected transport is never evidence about the wire.** Every local suite injects a
+   sender that accepts any payload — right for testing the queue, and exactly how a sender that would have
+   rejected *every photograph* passed 270 tests. Any path reaching Airtable needs a live probe, or a test
+   that stubs the client at its boundary rather than replacing the sender. Plan §0.3a · §0.3b.
 
 ---
 
@@ -45,6 +51,8 @@ evidence, correspondence or a runbook.
 | **Where the project stands · gaps · dates · asks** | `labos-airtable/status/delivery-plan.md` | Notion *Project Status & Revised Timeline* (**the page management holds**) · *Delivery Status* · *Internal Engineering Plan* · *5-Week Plan* |
 | **What to do next, and what remains** | `labos-airtable/status/delivery-plan.md` **§6.0** — the ordered remaining work, keyed to milestone and `DG` IDs. It owns sequence; state stays in §5 and §8 | the milestone table (§6) · §10 asks |
 | **What we verified against the live bases** | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` | Notion *Verification Report* |
+| **Every business input and output, per test type** — Airtable field → local storage → source or calculation → outbound field and phase, **including the requirements the 17 additions do not cover** | `labos-airtable/evidence/business-io-reconciliation-2026-09-08/` — 64 rows, the gap and unmet tallies | the plan's §0.3a · §5 |
+| **That the wire actually works** — upsert merge semantics, all five types, the whole pipeline through the real worker | `labos-airtable/evidence/live-write-proof-2026-09-08/` — stages 3, 4 and 5 | the plan's §0.3b verification layers |
 | **The pre-change schema baseline of both bases** | `labos-airtable/schema/baseline-2026-09-05/` | diffed by `ifet-management` `app/airtable/baseline.py` |
 | **What LabOS really stores — types, derivations, units** | `labos-airtable/evidence/labos-real-data-types-2026-08-31.md` | contract §10.3 · §10.19 · §10.24 · §10.25 |
 | **How our envelope compares to their own sample row** | `labos-airtable/evidence/reference-row-reconciliation-2026-08-28.md` | contract §10.24–§10.26 |
@@ -106,6 +114,8 @@ docs/
 | `labos-airtable/evidence/design-closure-2026-09-06.md` | Register/contract consistency checks and verified Notion updates at design closure |
 | `labos-airtable/evidence/contract-implementation-audit-2026-09-07.md` | Read-only reconciliation of both PATs/bases, the public link, live management migration state and both codebases. Reopens the v0.4 lifecycle/envelope deviation with exact code evidence |
 | `labos-airtable/evidence/write-contract-v0.3-superseded-2026-09-06.md` | The pre-closure v0.3 spec. Old `labos-airtable/contract/write-contract-v0.3.md` links resolve here |
+| `labos-airtable/evidence/business-io-reconciliation-2026-09-08/` | **64 rows**: every business input and output for all five test types, traced Airtable field → local storage → source or calculation → outbound field and phase. Includes the requirements the 17 additions do not cover. Tallies the gaps and the six unmet measurements, and says what each needs |
+| `labos-airtable/evidence/live-write-proof-2026-09-08/` | **The wire.** Stage 3 (15/15) — upsert merges on `LabOS Attempt ID`, blanks refused, no options invented. Stage 4 (5/5) — all five test types, three phases, one row each. Stage 5 (18/18) — the whole pipeline through the **real** worker and sender, plus retry, retest and the withheld measurements read back absent |
 | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` | First live read of both bases: schema held, six items closed and six opened, the extraction defect (§5.2), and §8 — the message wording, stamped *Sent* |
 | `labos-airtable/evidence/reference-row-reconciliation-2026-08-28.md` | Our envelope vs. their own sample row `recxZWiVa5Wuy0ZV6` — the `Inches`/`in` and JSON-shape divergences |
 | `labos-airtable/evidence/labos-real-data-types-2026-08-31.md` | The real types behind the read-side spec: 14+ stages derived from the design-pressure pair, `60 × 0.15 = 9` proving the shift arithmetically, deflection as three numbers per gauge |
