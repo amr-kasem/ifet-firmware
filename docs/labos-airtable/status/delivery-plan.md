@@ -804,11 +804,11 @@ document, and the schema is validated. Splitting the sequence is what lets them 
 
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
-| ~~**A1**~~ | ~~Validate the write surface against all five test types~~ **✅ 2026-09-07** | §3.0 · A10 | LabOS | — | Done, and **it failed first** — three defects, all five types. Evidence: `../evidence/schema-validation-five-types-2026-09-07.md` |
-| **A2** | **Add three Impact requirement fields to the Testing Base** — `Missile Type`, `Missile Weight`, `Impact Velocity`. **Not** `Impact Locations`: location is a per-shot observation, not a requirement, and a speculative field now propagates into production | §9 | LabOS | — | Applied via `apply_schema.py` with before/after evidence, as the 14 were on 2026-09-06. Testing only |
-| **A3** | **Fixture round-trip — the read side has never been exercised** | M1 | LabOS | A2 | A synthetic proposal written into Testing (1 project → 1 mock-up → 1 protocol → 5 sections, one per test type), read back through `AirtableClient`, and asserted: every field we claim to read is readable and correctly typed, the DP pair drives the 14 stages, and each `Requirement Code` routes to the right test. **This is what proves pre-fill**, and it also gives the UI developer real data |
-| **A4** | **Regenerate `interface-schema.csv` and `production-change-spec.csv`** | §9 | LabOS | A2 | Both cover all 17 fields; the register's counts match the generated CSVs |
-| **A5** | **Assemble and send the document** | §3.0 commitment 3 | **IFET/you** | A3, A4 | Sections 1–7 already exist as artifacts. **Only §8 is new writing** — the three asks: populate the eight typed fields (never from the PDF extractor); keep the `Protocol Sections` automation's exclusive ownership of `Result`/`Status`/`Testing Date`; confirm no unfiltered "when record updated" trigger breaks on 17 new fields. Copy to `correspondence/sent/` |
+| ~~**TA1**~~ | ~~Validate the write surface against all five test types~~ **✅ 2026-09-07** | §3.0 · A10 | LabOS | — | Done, and **it failed first** — three defects, all five types. Evidence: `../evidence/schema-validation-five-types-2026-09-07.md` |
+| ~~**TA2**~~ | ~~Add three Impact requirement fields to the Testing Base~~ **✅ 2026-09-08** | §9 | LabOS | — | Applied. **156 → 159.** `Missile Type` `fld5Bs0aQXXeVso2y`, `Missile Weight` `fldmhdhonyyLcx4Ex`, `Impact Velocity` `fldJNfUVyqQEFOVWx`. `Impact Locations` deliberately not created — location is a per-impact observation, not a requirement. Production untouched at 142 |
+| ~~**TA3**~~ | ~~Fixture round-trip — the read side had never been exercised~~ **✅ 2026-09-08** | M1 | LabOS | ✅ TA2 | Done. `app/airtable/fixture.py` seeded `IFET-FIXTURE-0001` into the previously empty Testing Base and read it back: every field readable and correctly typed, an **asymmetric** 60/45 pair derived all 14 stages, `FORCED_ENTRY`/`ANSI_IMPACT` carried a class and no numeric value, and no section carries a legacy `Value`. **This is also M1's fixture**, and the UI developer's data |
+| ~~**TA4**~~ | ~~Regenerate `interface-schema.csv` and `production-change-spec.csv`~~ **✅ 2026-09-08** | §9 | LabOS | ✅ TA2 | Done, and it needed a register correction first: the six typed requirement fields were still `IGNORED` from the A9 era. **Pre-fill reads the typed fields and never parses `Value`**, so they are `IN` and `Value` stays `IGNORED`. Now **159 fields — 17 ADD, 142 KEEP; LabOS reads 20, writes 35, ignores 105** |
+| **TA5** | **Send the document** — `../correspondence/testing-base-change-document-2026-09-08.md`, **written 2026-09-08 and NOT SENT**. Self-contained for readers outside this repo: 17 fields with a reason each, what we deliberately did not create, how it was verified, the three asks, and what is explicitly deferred to cutover. Every count in it is checked against the generated CSVs, not typed | §3.0 commitment 3 | **IFET/you** | ✅ TA3, TA4 | The send record is filled in and a copy is in `correspondence/sent/`, which is append-only. **This is what lets the Airtable team update production** — we never touch their production base ourselves |
 
 **Behaviour is explicitly out of Track A.** Automation compatibility, roll-up behaviour and upsert-in-anger
 need the vertical flow *and* their base, so they are marked "verified at cutover" in the document rather than
@@ -819,30 +819,32 @@ satisfied.
 
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
-| **B1** | **The migration** — §4.5/§4.6 entities. `ManualAttempt` mixin · `manual_tests` · `test_photos` · `projects.gauge_count`/`impact_count`/`airtable_meta` · the `airtable_*` join keys on `projects` and `project_parents` (this *is* P1) · Impact's four columns widened to nullable | DG3 · §8 | LabOS | — | Additive and nullable throughout, rehearsed P1 → M2 → this as one ordered upgrade on the disposable `postgres:13` harness and rolled back. **Safe against the 79 live projects and 39 live impact tests** |
-| **B2** | **The endpoints** — §4.5 routes, in `report-api`, importing neither `app.airtable` nor `app.sync` | DG3 → M3 | LabOS | B1 | All eight routes exist; a test asserts `report-api` imports no sync or Airtable module |
-| **B3** | **Hand over the OpenAPI document** | MU | LabOS | B2 | FastAPI emits it; the UI developer starts. **This is the actual unblock and it happens before any deploy** |
-| **B4** | **Deploy the three test types to `management`** | M3 | LabOS + IFET | B2, a window | Impact, Forced Entry and ANSI capture live alongside static and cyclic. No Airtable involvement. Runbook `../runbooks/p0-p1-deploy-2026-08-28.md`, **§2 is the go/no-go** |
+| ~~**TB1**~~ | ~~The migration~~ **✅ 2026-09-08** | DG3 · §8 | LabOS | — | `d1a6b93f2e57`: `manual_tests` + `manual_test_results`/`impact_test_results` as **joined-table subclasses of `TestResult`**, following `static_tests`→`static_test_results`. `test_photos` owned by the attempt. Numbered `shots` with the 114-row backfill. Rehearsed P1 → M2 → this against **populated** tables and rolled back. Also widened `retest_required` to nullable and added the missing `verdict_by`/`verdict_at` |
+| ~~**TB2**~~ | ~~The endpoints~~ **✅ 2026-09-08** | DG3 → M3 | LabOS | ✅ TB1 | 18 routes. Terminate, review and evidence are **one route each on `/test-results/{id}`** for all five test types, not a copy per type — so static and cyclic inherit review the day they need it. `tests/test_report_api_isolation.py` enforces that `report-api` imports no `app.airtable`/`app.sync`, by import **and** source scan. 238 tests + 84 subtests on Postgres |
+| ~~**TB3**~~ | ~~Hand over the OpenAPI document~~ **✅ 2026-09-08** | MU | LabOS | ✅ TB2 | `MANUAL_TESTS_API.md` + `openapi.json`, both in `ifet-management`. Every documented route cross-checked against the generated spec. **The UI developer is unblocked, before any deploy** |
+| **TB4** | **Deploy the three test types to `management`** | M3 | LabOS + IFET | TB2, a window | Impact, Forced Entry and ANSI capture live alongside static and cyclic. No Airtable involvement. Runbook `../runbooks/p0-p1-deploy-2026-08-28.md`, **§2 is the go/no-go** |
 
 ### Track C — the integration itself (after A and B)
 
 | # | Do this | Ref | Owner | Waits on | Done when |
 |---|---|---|---|---|---|
-| **C1** | **Reviewer persistence and the verdict route** — the remaining half of the v0.4 implementation view | §8 (9th deviation) | LabOS | B1 | An attempt is created Pending, terminates Pending with its measurement and both dates, and is reviewed once by a **named reviewer whose identity is persisted** — not merely accepted by the builder |
-| **C2** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | C1, A3 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally with no Airtable origin. Neither path may block the other |
-| **C3** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | C2 | `simulation/mf_harness/` passes against the real backend. **Two routes, not one**: `api.py:94` and `api.py:109` |
-| **C4** | **Capture actual and maximum pressure** — subscribe to `{device_id}/sensors/{addr}` during a run and persist max plus final | M7 | LabOS | C2 | Closes two product-owner requirements. **Not "no source"** — the value is on the bus and renders live in the UI; nothing stores it |
-| **C5** | **MU — the operator interface** | DG5 → MU | LabOS | B3, C2 | An operator completes all five test types end to end and sees the sync status of each |
-| **C6** | **DG6's remaining drift** | DG6 | LabOS | — | Register rows for `completion_source` and `identity_assurance`, defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the nine JSON-only fields noted in the register header |
-| **C7** | **M4 — the change document with actual results** | M4 | LabOS | A5, C2 | Every planned change marked applied/verified or outstanding, with evidence |
-| **C8** | **M5 — production cutover for the integration** | M5 | LabOS + IFET | C7, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
+| **TC1** | **The verdict route's remaining half** — the reviewer *columns* landed with TB1 and the verdict route with TB2, so what remains is programme/run and mirror persistence for the **rig** test types | §8 (9th deviation) | LabOS | ✅ TB1 | Static and cyclic attempts carry the same identity and review path the manual types now have |
+| **TC2** | **The vertical flow — two origins, one merge** (§6.1) | M2 | LabOS | TC1, TA3 | import → run → finish → worker restart → **one** attempt in the Testing Base, **and** the same for a job created locally with no Airtable origin. Neither path may block the other |
+| **TC3** | **MF backend half** — mint `run` on the two GETs, key **both** `/trials` routes on `event_id`, record an unbound callback as unmapped | DG1 · DG2 → MF | LabOS | TC2 | `simulation/mf_harness/` passes against the real backend. **Two routes, not one**: `api.py:94` and `api.py:109` |
+| **TC4** | **Capture actual and maximum pressure** — subscribe to `{device_id}/sensors/{addr}` during a run and persist max plus final | M7 | LabOS | TC2 | Closes two product-owner requirements. **Not "no source"** — the value is on the bus and renders live in the UI; nothing stores it |
+| **TC5** | **MU — the operator interface** | DG5 → MU | LabOS | TB3, TC2 | An operator completes all five test types end to end and sees the sync status of each |
+| **TC6** | **DG6's remaining drift** | DG6 | LabOS | — | Register rows for `completion_source` and `identity_assurance`, defined behaviour for a `GAUGE_COUNT` vs `selectedSensors[]` mismatch at start, and the nine JSON-only fields noted in the register header |
+| **TC7** | **M4 — the change document with actual results** | M4 | LabOS | TA5, TC2 | Every planned change marked applied/verified or outstanding, with evidence |
+| **TC8** | **M5 — production cutover for the integration** | M5 | LabOS + IFET | TC7, and a window | Schema and automation acceptance, migration rehearsal, preflight, agreed window |
 
 **Deliberately still not delivered, and both are decisions rather than omissions.** Deflection values stay
 quarantined until calibration (M6) — publishing uncalibrated raw counts mislabelled as inches would publish a
 number we cannot stand behind. Loading sequences stay derived in LabOS rather than supplied by Airtable
 (§2a). Both need saying to the product owner rather than being discovered at demo.
 
-**What is startable right now: A2 and B1.** Everything else in both tracks follows from those two.
+**Step IDs are prefixed `TA`/`TB`/`TC`** so they cannot be confused with decisions A1–A11 in §3 — the same collision that made a bare `G1` unresolvable before the `DG` prefix.
+
+**Track B is done through TB3 and Track A through TA4.** What remains: **TA5 is yours to send**, TB4 needs a window, and Track C is the integration itself. Nothing is deployed.
 
 **Two independent passes on 2026-09-07 found the same defects, which is worth recording.** The five-type
 schema validation (step 1) and the implementation audit both landed on `Test Result = Pending` being
