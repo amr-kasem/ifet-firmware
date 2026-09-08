@@ -837,7 +837,7 @@ the interface.
 
 ---
 
-### DG12 · `LabOS Test ID` is minted two different ways — **found 2026-09-08, blocks TC1a**
+### DG12 · `LabOS Test ID` is minted three different ways — **found 2026-09-08, blocks TC1a**
 
 The Airtable team proposed using `LabOS Test ID` as the *only* key grouping a test's attempts. Auditing
 that against the code found the grouping key has **two allocators producing two formats**:
@@ -853,11 +853,29 @@ key invites — behaves differently for rig and manual tests. It also means §0.
 team ("group on equality, never parse") is a convention we ask *them* to keep while our own two writers
 disagree about the format.
 
-**Unify before TC1a wires `create`,** because that is the phase that first publishes the value; changing it
-afterwards means rewriting `LabOS Test ID` on records they already hold. The derived slug is the better
-survivor — stable across a restart with no second column, and it is what the newer code already does — but
-the UUID path has live rows behind it via the P1 backfill, so this needs a migration decision, not just a
-function deleted.
+**Corrected 2026-09-08 — there are three formats, and no live data constrains the choice.** The P1 backfill
+is a third writer: `b7c2e9a41d38:186` sets `labos_test_id = uuid5(_NS, f"{kind}:{parent_id}")`, a
+*deterministic* UUID, so historical attempts at one test share an id and a re-run is idempotent. Runtime
+static/cyclic then inherit that value through `test_id_for()`'s sibling lookup and mint a random `uuid4`
+only for a genuinely new test. Those two are coherent by design.
+
+So the divergence is narrower and the fix is cheaper than first written:
+
+| Writer | Value | Coherent with? |
+|---|---|---|
+| P1 backfill, historical static/cyclic | `uuid5(NS, "static:7")` | — |
+| `attempts.py:test_id_for()`, new static/cyclic | sibling's value, else `uuid4` | ✅ inherits the backfill's |
+| `main.py:_labos_test_id()`, manual + impact | slug `impact-7` | ❌ a different kind of value entirely |
+
+**And nothing has to be migrated, because production has no values to migrate.** The live alembic head is
+`3a65a83e0463` — P1's own `down_revision` — so P1 has never run outside a rehearsal and **no production row
+carries a `labos_test_id` at all.** The earlier claim that "the UUID path has live rows behind it" was
+wrong: it has *rehearsed* rows behind it.
+
+That makes this a free choice rather than a migration decision, and it must be made before TC1a publishes
+the first `create` — after that, the value is on records the Airtable team holds. **Verify the head on the
+node, not the repo**, before acting on this: the plan's own standing caution, and the reason this correction
+was needed.
 
 ### DG13 · `Corrects Attempt ID` has no route — **found 2026-09-08**
 
