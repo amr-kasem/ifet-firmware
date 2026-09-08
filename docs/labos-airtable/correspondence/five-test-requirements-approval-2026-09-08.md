@@ -31,7 +31,7 @@ send back — per test. Not the screens, not the schedule, and not the Airtable 
 **What you are not approving:** anything that changes a production rig. None of the three new
 tests touch rig hardware, there is no firmware change in this work, and nothing is deployed.
 
-**Six answers are needed rather than a general yes** — they are listed after the five
+**Six answers are needed rather than a general yes** — **five still open** — listed after the five
 pages, and each is a place where we made a call you may not want.
 
 Approved by: ______________________________   Date: ______________
@@ -357,6 +357,8 @@ correction cannot be recorded as one.
 **5. `Static / Type` is read and then changes nothing.** The proposal's static programme value — *Full* — is read and validated, but LabOS derives the same six-stage programme regardless. If a proposal ever specified a different programme, LabOS would run the full one without saying so. Is *Full* the only static programme in practice? If not, we should make LabOS refuse the others out loud rather than ignore them.
 
 **6. A five-impact test will appear as five records in the Airtable base.** This follows from one attempt per impact: attempts are what we publish, so five impacts are five rows, each with its own verdict and photographs, where today they are one row with a summary line. It changes what the Airtable team's views, groupings and automations see, and it needs one field added on their side — `Impact Number` — so a roll-up can count five impacts of one test rather than five tests. Confirm that is what you intend, because it is the half of the instruction that lands on somebody else's base.
+
+> **Confirmed 2026-09-08.** So `Impact Number` is being added to the Airtable schema, and the Airtable team is told before the change goes to their production base.
 
 ---
 
