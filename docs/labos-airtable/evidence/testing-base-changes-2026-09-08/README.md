@@ -96,3 +96,41 @@ allowlists (2 project + 2 specimen + 2 protocol + 13 section).
 
 `before-*.json` · `after-*.json` · `changes-*.json` — the schema either side of
 the write, and the applied diff.
+
+---
+
+## Postscript — 2026-09-10: the product owner has superseded two of these three
+
+**This record stands as written.** It says what was applied on 2026-09-08 and why, and that is still what
+happened. What follows is what happened next, so that a later reader does not build on the mapping above.
+
+On 2026-09-10 the product owner replied to the five-test approval request and, without being asked,
+answered the design question behind these three fields:
+
+> "Not sure what weight is there for. once we now the type, LMI or SMI, we know the rest. Target velocity
+> is either SMI, which is just one option, or LMI Level D or E. I think it would be easier if i tell
+> LabOS which one it is, D or E, and that info goes to AirTable."
+
+If the impact classification determines the mass and the target velocity, then:
+
+| Field | Applied here as | Becomes |
+|---|---|---|
+| `Missile Type` `fld5Bs0aQXXeVso2y` | an inbound requirement on Protocol Sections | **outbound** — entered in LabOS, published with the result, on the results table instead |
+| `Missile Weight` `fldmhdhonyyLcx4Ex` | an inbound requirement | **unread** — a parameter of the impact classification |
+| `Impact Velocity` `fldJNfUVyqQEFOVWx` | mirrored, frozen into the requirement snapshot | **unread** — a parameter of the impact classification. Also closes TC1f: question 3 came back *"We will be entering it"* |
+
+The reasoning above is not wrong so much as overtaken. **`Requirement Code` already carries `IMPACT_LMI`
+versus `IMPACT_SMI`**, so the one fact Airtable never held is Level D versus Level E — and that is exactly
+the fact he is offering to enter. The Impact read surface therefore goes from four fields to the one it
+already had, and the read boundary shrinks from 19 named fields to 16.
+
+**Nothing needs undoing in a live base.** All three are Testing Base only; production `app0OCunbmuXl7Hc9`
+is still at 142 and never received them. The cost is register rows and the change document, not a
+migration.
+
+**The section above headed "Why these three and not four" is now confirmed rather than argued.** The
+product owner answered question 4 on the same day: *"That will not be shown on LabOS or Airtable.
+that is in the test plans."* `Impact Locations` stays uncreated by his decision as well as by ours.
+
+Full decode, the corrected mapping, the register consequences and the reply:
+`../../correspondence/po-answers-and-impact-remap-2026-09-10.md`.
