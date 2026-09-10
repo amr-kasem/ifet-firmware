@@ -16,3 +16,8 @@ deployment/split-serial-temp/
 .venv/
 venv/
 venve/
+
+# LibreOffice/OpenOffice lock files. These appear beside a .csv or .ods the
+# moment somebody opens it and vanish when they close it; one was tracked by
+# accident and lived in the tree for weeks.
+.~lock.*#
