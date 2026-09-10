@@ -1,6 +1,27 @@
 #!/usr/bin/env python3
 """Generate the production change specification CSV for the Airtable team.
 
+    ###################################################################
+    #  SUPERSEDED 2026-09-10 - DO NOT RUN THIS AND SEND THE RESULT.   #
+    ###################################################################
+
+    Running this today reproduces the hazard it is marked for. Lines 70-77
+    below derive `ADD` purely from base membership - in Testing, not in
+    production - so `Missile Type`, `Missile Weight` and `Impact Velocity`
+    come out as `ADD` against production every single time. The product owner
+    withdrew all three from the Airtable -> LabOS input contract on
+    2026-09-10; the Impact requirement is now the LabOS-owned **Impact
+    Classification**, published outbound.
+
+    This script needs a **third action** before it is correct: a field the
+    register marks deprecated must be omitted from the spec rather than
+    proposed for production. That change is part of TA7 and lands together
+    with the register flip and the code, because `check_register.py` binds
+    the three to each other.
+
+    Production is untouched and stays at 142 fields.
+    See ../../correspondence/po-answers-and-impact-remap-2026-09-10.md.
+
     python3 production-change-spec.csv.py            # writes production-change-spec.csv
 
 One row per field, covering **both** the 142 fields production already has and

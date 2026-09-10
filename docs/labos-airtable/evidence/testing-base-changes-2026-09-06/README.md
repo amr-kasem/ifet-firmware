@@ -1,3 +1,19 @@
+> # ⛔ SUPERSEDED 2026-09-10 — `production-change-spec.csv` MUST NOT BE APPLIED TO PRODUCTION
+>
+> That file still lists **`Missile Type`, `Missile Weight` and `Impact Velocity` as `ADD` against
+> production.** On 2026-09-10 the product owner withdrew all three from the Airtable → LabOS input
+> contract: the Impact requirement is now the **LabOS-owned Impact Classification**, published
+> outbound. Applying the spec as it stands would create two permanently unread fields in the live
+> base — the exact "harder to remove than to add" failure this document argues against elsewhere.
+>
+> **Production is untouched and stays at 142 fields.** The spec is regenerated as part of **TA7**,
+> when the register, the generator and the code move together — regenerating it on its own would
+> leave `check_register.py` red and hide the next real drift.
+>
+> Everything else in this record stands: it is what was applied to the **Testing** Base on
+> 2026-09-06 and why. Decision record:
+> `../../correspondence/po-answers-and-impact-remap-2026-09-10.md`.
+
 # Testing Base schema changes — applied 2026-09-06
 
 **Base:** Testing `app4oXS3Kd5IKWgJ7` · **Production `app0OCunbmuXl7Hc9` was not touched.**
