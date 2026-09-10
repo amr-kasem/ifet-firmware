@@ -1,0 +1,2333 @@
+{
+ "tables": [
+  {
+   "fields": [
+    {
+     "description": "Unique IFET job number used to identify and track the project across all systems.",
+     "id": "fldZa91p5KebdT6q2",
+     "name": "IFET job number",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Name of the customer project.",
+     "id": "fldXOI9t0N8oP4FLy",
+     "name": "Project name",
+     "type": "singleLineText"
+    },
+    {
+     "description": "The Project Status will automatically change, do not adjust it manually.",
+     "id": "fldYpIwi0DcgVAjSB",
+     "name": "Project Status",
+     "options": {
+      "choices": [
+       {
+        "color": "greenLight1",
+        "id": "sellFLIBjx0WQSsHm",
+        "name": "Completed"
+       },
+       {
+        "color": "orangeBright",
+        "id": "selG4sWUPv6aTEm0q",
+        "name": "Cancelled"
+       },
+       {
+        "color": "yellowLight1",
+        "id": "sel817T8mopJSrr4j",
+        "name": "In Progress"
+       },
+       {
+        "color": "grayLight1",
+        "id": "sel1dAXY8cyNyP5k3",
+        "name": "Pending"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "You have to change the report status to \"Ready\", \"In Progress\" or \"Pending\"",
+     "id": "fld1sTdXmRO5ZNTik",
+     "name": "Report Status",
+     "options": {
+      "choices": [
+       {
+        "color": "blueLight2",
+        "id": "seljWTqR8jTUtsFuQ",
+        "name": "Ready"
+       },
+       {
+        "color": "cyanLight2",
+        "id": "selKN74Kx2hfkxPAO",
+        "name": "In Progress"
+       },
+       {
+        "color": "greenLight2",
+        "id": "seluV1DS3APOlSqiT",
+        "name": "Pending"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Indicates whether the project is ready for final invoicing. Approval requires all Back Charges to be Approved, Project Status to be Completed, Report Status to be Ready, Final Invoice Status to be Not Created, and all required billing details to be available. Check \u201cReason For Not Approval For Invoice\u201d for missing requirements.",
+     "id": "fldf8Yk3YsLdO9FZc",
+     "name": "Approve To Create Invoice",
+     "options": {
+      "choices": [
+       {
+        "color": "blueLight2",
+        "id": "selKJyt3jcxeMCQOZ",
+        "name": "Not Approved"
+       },
+       {
+        "color": "cyanLight2",
+        "id": "selwx7nc3VbrkUa2h",
+        "name": "Approved"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Displays the specific reasons preventing invoice approval. When all requirements are satisfied, confirms that the project is ready for invoice approval.",
+     "id": "fldyWaBcjIm9bBVeH",
+     "name": "Reason For Not Approval For Invoice",
+     "options": {
+      "formula": "IF(\r\n    AND(\r\n        OR(\r\n            LEN(ARRAYJOIN({fldfgNcT03v4TZrNE}, \",\")) = 0,\r\n            SUBSTITUTE(\r\n                SUBSTITUTE(\r\n                    SUBSTITUTE(\r\n                        ARRAYJOIN({fldfgNcT03v4TZrNE}, \",\"),\r\n                        \"Approved\",\r\n                        \"\"\r\n                    ),\r\n                    \",\",\r\n                    \"\"\r\n                ),\r\n                \" \",\r\n                \"\"\r\n            ) = \"\"\r\n        ),\r\n\r\n        {fldYpIwi0DcgVAjSB} = \"Completed\",\r\n\r\n        {fld1sTdXmRO5ZNTik} = \"Ready\",\r\n\r\n        {fldGu1onl7NMJ4Ay2} = \"Not Created\",\r\n\r\n        {fldBXKfp45g990C6n} != BLANK(),\r\n\r\n        LEN(TRIM({fld5T069KEywPp5F4} & \"\")) > 0,\r\n\r\n        LEN(TRIM({fldJKbExQdoLlV13V} & \"\")) > 0,\r\n\r\n        LEN(TRIM({fldR3PaaTo9BIjmSO} & \"\")) > 0\r\n    ),\r\n\r\n    \"All good, you can Approved the invoice.\",\r\n\r\n    TRIM(\r\n        IF(\r\n            AND(\r\n                {fldfgNcT03v4TZrNE},\r\n                SUBSTITUTE(\r\n                    SUBSTITUTE(\r\n                        SUBSTITUTE(\r\n                            ARRAYJOIN({fldfgNcT03v4TZrNE}, \",\"),\r\n                            \"Approved\",\r\n                            \"\"\r\n                        ),\r\n                        \",\",\r\n                        \"\"\r\n                    ),\r\n                    \" \",\r\n                    \"\"\r\n                ) != \"\"\r\n            ),\r\n            \"Please make sure to approve all the back charges of this project.\" & \"\\n\",\r\n            \"\"\r\n        ) &\r\n\r\n        IF(\r\n            {fldYpIwi0DcgVAjSB} != \"Completed\",\r\n            \"Please wait for the project to complete.\" & \"\\n\",\r\n            \"\"\r\n        ) &\r\n\r\n        IF(\r\n            {fld1sTdXmRO5ZNTik} != \"Ready\",\r\n            \"Please make sure that your report status is Ready.\" & \"\\n\",\r\n            \"\"\r\n        ) &\r\n\r\n        IF(\r\n            {fldGu1onl7NMJ4Ay2} != \"Not Created\",\r\n            \"The final invoice has already been created or is not in Not Created status.\" & \"\\n\",\r\n            \"\"\r\n        ) &\r\n\r\n        IF(\r\n            {fldBXKfp45g990C6n} = BLANK(),\r\n            \"Please make sure the Approved Proposal Amount is available.\" & \"\\n\",\r\n            \"\"\r\n        ) &\r\n\r\n        IF(\r\n            LEN(TRIM({fld5T069KEywPp5F4} & \"\")) = 0,\r\n            \"Please make sure the Customer Name is available.\" & \"\\n\",\r\n            \"\"\r\n        ) &\r\n\r\n        IF(\r\n            LEN(TRIM({fldJKbExQdoLlV13V} & \"\")) = 0,\r\n            \"Please make sure the Contact email is available.\" & \"\\n\",\r\n            \"\"\r\n        ) &\r\n\r\n        IF(\r\n            LEN(TRIM({fldR3PaaTo9BIjmSO} & \"\")) = 0,\r\n            \"Please make sure the Product Type is available.\" & \"\\n\",\r\n            \"\"\r\n        )\r\n    )\r\n)",
+      "isValid": true,
+      "referencedFieldIds": [
+       "fldfgNcT03v4TZrNE",
+       "fldYpIwi0DcgVAjSB",
+       "fld1sTdXmRO5ZNTik",
+       "fldGu1onl7NMJ4Ay2",
+       "fldBXKfp45g990C6n",
+       "fld5T069KEywPp5F4",
+       "fldJKbExQdoLlV13V",
+       "fldR3PaaTo9BIjmSO"
+      ],
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "formula"
+    },
+    {
+     "description": "Tracks the lifecycle of the final QuickBooks invoice, such as Not Created, Draft, Sent, Partially Paid, or Paid.",
+     "id": "fldGu1onl7NMJ4Ay2",
+     "name": "Final Invoice Status",
+     "options": {
+      "choices": [
+       {
+        "color": "blueLight2",
+        "id": "selIoxiOEnprtc7Z5",
+        "name": "Not Created"
+       },
+       {
+        "color": "tealLight2",
+        "id": "selCO6SPtMerZQuC7",
+        "name": "Draft"
+       },
+       {
+        "color": "greenLight2",
+        "id": "sel7Uzpmyjdk9yHAr",
+        "name": "Sent"
+       },
+       {
+        "color": "cyanLight2",
+        "id": "selnEb8bEeuqgqHdD",
+        "name": "Partially Paid"
+       },
+       {
+        "color": "yellowLight2",
+        "id": "selwbni454HsCAmTW",
+        "name": "Paid"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Displays the approval status of all linked back charges and is used to determine invoice eligibility.",
+     "id": "fldfgNcT03v4TZrNE",
+     "name": "Back Charges Status",
+     "options": {
+      "fieldIdInLinkedTable": "fldfndhdC4ofYXQPz",
+      "isValid": true,
+      "recordLinkFieldId": "fldHVvyKTR1AZA36C",
+      "result": {
+       "options": {
+        "choices": [
+         {
+          "color": "blueLight2",
+          "id": "seleD0ZIxkMXHQTHi",
+          "name": "Pending"
+         },
+         {
+          "color": "cyanLight2",
+          "id": "sel43hBqoB2KVw6j3",
+          "name": "Approved"
+         },
+         {
+          "color": "tealLight2",
+          "id": "selKTQQ53TR7fnZpX",
+          "name": "Rejected"
+         },
+         {
+          "color": "greenLight2",
+          "id": "selIRP2ItvPUEz12w",
+          "name": "Needs Info"
+         }
+        ]
+       },
+       "type": "singleSelect"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "id": "fldXifux2uAphjFTO",
+     "name": "Hubspot Deal ID",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldNLM91Jg2fIST6C",
+     "name": "Hubspot Deal Stage",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Customer/contact name associated with the project and used for invoicing.",
+     "id": "fld5T069KEywPp5F4",
+     "name": "Customer Name",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Customer company associated with the project.",
+     "id": "fldHv1MxlLTBsYIE1",
+     "name": "Company",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Primary customer email address used for project communication and invoicing.",
+     "id": "fldJKbExQdoLlV13V",
+     "name": "Contact email",
+     "type": "email"
+    },
+    {
+     "id": "fldYipGKCSMD6jiCR",
+     "name": "Service line",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Link to the approved or signed proposal document associated with the HubSpot deal.",
+     "id": "fldSxZvcL0q2dsUZs",
+     "name": "Proposal/Signed Approval Link",
+     "type": "url"
+    },
+    {
+     "description": "Indicates the priority level of the project from HubSpot, such as low, medium, or high.",
+     "id": "fldowoytqlZdhuChX",
+     "name": "Project Priority",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Planned or expected date when testing for the project should begin.",
+     "id": "fldBnWcEQKLAJGxdC",
+     "name": "Target Testing Date",
+     "options": {
+      "fieldIdInLinkedTable": "fldH3ACJSgq3k3YCE",
+      "isValid": true,
+      "recordLinkFieldId": "fldaYynjl8ptNVzXS",
+      "result": {
+       "options": {
+        "dateFormat": {
+         "format": "l",
+         "name": "local"
+        }
+       },
+       "type": "date"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "description": "Planned date by which the project and testing activities are expected to be completed.",
+     "id": "flduHyuVRhtMfJTTM",
+     "name": "Target Completion Date",
+     "options": {
+      "fieldIdInLinkedTable": "fldbXwmiUyA8PUAgG",
+      "isValid": true,
+      "recordLinkFieldId": "fldaYynjl8ptNVzXS",
+      "result": {
+       "options": {
+        "dateFormat": {
+         "format": "l",
+         "name": "local"
+        }
+       },
+       "type": "date"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "description": "IFET team member responsible for managing or leading the project.",
+     "id": "fldba1J8C6ev5wmU8",
+     "name": "Project Lead",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Final approved proposal amount received from HubSpot before additional back charges.",
+     "id": "fldBXKfp45g990C6n",
+     "name": "Approved Proposal Amount",
+     "options": {
+      "precision": 2,
+      "symbol": "$"
+     },
+     "type": "currency"
+    },
+    {
+     "description": "Remaining proposal balance to be invoiced after the initial payment/deposit, excluding additional back charges.",
+     "id": "fld1YUsbCOwYAl3b7",
+     "name": "Remaining Amount",
+     "options": {
+      "formula": "{fldBXKfp45g990C6n}/2",
+      "isValid": true,
+      "referencedFieldIds": [
+       "fldBXKfp45g990C6n"
+      ],
+      "result": {
+       "options": {
+        "precision": 0
+       },
+       "type": "number"
+      }
+     },
+     "type": "formula"
+    },
+    {
+     "description": "Total billable value of the project's linked back charges after markup calculations.",
+     "id": "fldpiD7QoloFt3ziT",
+     "name": "Back Charges Billable Amount",
+     "options": {
+      "fieldIdInLinkedTable": "fldilEtoCaxRkonpE",
+      "isValid": true,
+      "recordLinkFieldId": "fldHVvyKTR1AZA36C",
+      "referencedFieldIds": [],
+      "result": {
+       "options": {
+        "precision": 2,
+        "symbol": "$"
+       },
+       "type": "currency"
+      }
+     },
+     "type": "rollup"
+    },
+    {
+     "description": "Balance will be calculated from QuickBooks Invoice",
+     "id": "fld1Chl7INLTGs6Cj",
+     "name": "Balance Due",
+     "options": {
+      "precision": 2,
+      "symbol": "$"
+     },
+     "type": "currency"
+    },
+    {
+     "description": "QuickBooks generated Invoice ID will appear here.",
+     "id": "fldLCY5LrgaE48XZR",
+     "name": "QuickBooks Invoice ID",
+     "type": "singleLineText"
+    },
+    {
+     "description": "QuickBooks generated Invoice Number will appear here.",
+     "id": "fldCY1r37TzUNlqxd",
+     "name": "QuickBooks Invoice Number",
+     "type": "singleLineText"
+    },
+    {
+     "description": "QuickBooks generated date will appear here.",
+     "id": "fldwxvUo1sfjbilui",
+     "name": "QuickBooks Invoice Date",
+     "options": {
+      "dateFormat": {
+       "format": "l",
+       "name": "local"
+      },
+      "timeFormat": {
+       "format": "HH:mm",
+       "name": "24hour"
+      },
+      "timeZone": "client"
+     },
+     "type": "dateTime"
+    },
+    {
+     "description": "Product or service item associated with the project and used when preparing invoice line items.",
+     "id": "fldR3PaaTo9BIjmSO",
+     "name": "Product Type",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fld2bJ2UQUoWrlQSu",
+     "name": "Project Status Modified Time",
+     "options": {
+      "isValid": true,
+      "referencedFieldIds": [
+       "fldYpIwi0DcgVAjSB"
+      ],
+      "result": {
+       "options": {
+        "dateFormat": {
+         "format": "l",
+         "name": "local"
+        },
+        "timeFormat": {
+         "format": "h:mma",
+         "name": "12hour"
+        },
+        "timeZone": "client"
+       },
+       "type": "dateTime"
+      }
+     },
+     "type": "lastModifiedTime"
+    },
+    {
+     "id": "fldL4kUzCrbtJeU56",
+     "name": "Tests Protocols",
+     "options": {
+      "inverseLinkFieldId": "fldPJdoEbIJeHbOu8",
+      "isReversed": false,
+      "linkedTableId": "tblutO1Q8TNC4BLk0",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldrrcKHQYOuKVPXc",
+     "name": "Protocol Sections",
+     "options": {
+      "inverseLinkFieldId": "fldfX6gGWvOLRDKWl",
+      "isReversed": false,
+      "linkedTableId": "tblqpvuJlSdkeS9PS",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldaYynjl8ptNVzXS",
+     "name": "Wall Scheduling/Reservation",
+     "options": {
+      "inverseLinkFieldId": "fldoNc8tXaa6KekoJ",
+      "isReversed": false,
+      "linkedTableId": "tblYjF1AApzmRDMrY",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldnV9a0Z5AKKHYaa",
+     "name": "Mock-Ups/Specimens 2",
+     "options": {
+      "inverseLinkFieldId": "fldyj3e89pH6QH2Pp",
+      "isReversed": false,
+      "linkedTableId": "tblcrGv0WJn6FTTGO",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "flde9nEuoGsWTHm0G",
+     "name": "Mock-Ups/Specimens 3",
+     "options": {
+      "inverseLinkFieldId": "fldmqg3pC6l8osgph",
+      "isReversed": false,
+      "linkedTableId": "tblcrGv0WJn6FTTGO",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldHVvyKTR1AZA36C",
+     "name": "Back Charges",
+     "options": {
+      "inverseLinkFieldId": "fldcTkX1jo4kOyU0P",
+      "isReversed": false,
+      "linkedTableId": "tbl0f2YxS3FHJ1dTD",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldY2C1Q0Yk4VDtUg",
+     "name": "Read Project Info For LabOS",
+     "type": "singleLineText"
+    }
+   ],
+   "id": "tblLYcRC7q6Srjfk3",
+   "name": "IFET Projects",
+   "primaryFieldId": "fldZa91p5KebdT6q2",
+   "views": [
+    {
+     "id": "viw7cVqQeYicQZqI7",
+     "name": "Grid view",
+     "type": "grid"
+    }
+   ]
+  },
+  {
+   "fields": [
+    {
+     "id": "fldyprpxI76d6CIxo",
+     "name": "Mock-up/specimen name",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldyj3e89pH6QH2Pp",
+     "name": "IFET Job Number",
+     "options": {
+      "inverseLinkFieldId": "fldnV9a0Z5AKKHYaa",
+      "isReversed": false,
+      "linkedTableId": "tblLYcRC7q6Srjfk3",
+      "prefersSingleRecordLink": true
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "description": "IFET service category associated with the specimen.",
+     "id": "fldS9y6Bc5p5i088A",
+     "name": "Service line",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Specimen height in inches as defined in the approved proposal.",
+     "id": "fldw4wNgbNM4NP9dr",
+     "name": "Height (Inches)",
+     "options": {
+      "precision": 2
+     },
+     "type": "number"
+    },
+    {
+     "description": "Specimen width in inches as defined in the approved proposal.",
+     "id": "fldvm1NAoIGLrFbd0",
+     "name": "Width (Inches)",
+     "options": {
+      "precision": 1
+     },
+     "type": "number"
+    },
+    {
+     "description": "Current lifecycle status of the specimen, from Pending through testing and completion.",
+     "id": "fldKhsUYTaQPKGtJL",
+     "name": "Specimen status",
+     "options": {
+      "choices": [
+       {
+        "color": "grayLight1",
+        "id": "selRGzvxBXlR1xL3J",
+        "name": "Pending"
+       },
+       {
+        "color": "cyanLight1",
+        "id": "seliJRulb0lU8VFsM",
+        "name": "Received"
+       },
+       {
+        "color": "yellowLight1",
+        "id": "self2FfCIegPEyEoW",
+        "name": "In Testing"
+       },
+       {
+        "color": "yellowLight2",
+        "id": "selKBR52VCquov9Q7",
+        "name": "On Hold"
+       },
+       {
+        "color": "greenLight1",
+        "id": "selr256GvFKvOzH48",
+        "name": "Completed"
+       },
+       {
+        "color": "orangeBright",
+        "id": "selQz8Mht2FpC98Do",
+        "name": "Failed"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Scheduled testing date obtained from the specimen's reservation.",
+     "id": "fld4k1G1OqQER1VMI",
+     "name": "Scheduled Test Date",
+     "options": {
+      "fieldIdInLinkedTable": "fldH3ACJSgq3k3YCE",
+      "isValid": true,
+      "recordLinkFieldId": "fld0QsYC3mAFS3JQ6",
+      "result": {
+       "options": {
+        "dateFormat": {
+         "format": "l",
+         "name": "local"
+        }
+       },
+       "type": "date"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "description": "Test protocols required for this specimen.",
+     "id": "fld1mVERdRpQ3XZch",
+     "name": "Tests Protocols",
+     "options": {
+      "inverseLinkFieldId": "fldSzN0fPvbWyOgPu",
+      "isReversed": false,
+      "linkedTableId": "tblutO1Q8TNC4BLk0",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "description": "Wall reservation associated with this specimen.",
+     "id": "fld0QsYC3mAFS3JQ6",
+     "name": "Reservations",
+     "options": {
+      "inverseLinkFieldId": "fldNvwpbflPlembbT",
+      "isReversed": false,
+      "linkedTableId": "tblYjF1AApzmRDMrY",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "description": "Links the specimen to its parent project.",
+     "id": "fldmqg3pC6l8osgph",
+     "name": "Project Name",
+     "options": {
+      "inverseLinkFieldId": "flde9nEuoGsWTHm0G",
+      "isReversed": false,
+      "linkedTableId": "tblLYcRC7q6Srjfk3",
+      "prefersSingleRecordLink": true
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldXBEMsULBqNIkRZ",
+     "name": "Project name (from IFET Projects)",
+     "options": {
+      "fieldIdInLinkedTable": "fldXOI9t0N8oP4FLy",
+      "isValid": true,
+      "recordLinkFieldId": "fldmqg3pC6l8osgph",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "id": "fldZqkvfxKwpJbwMl",
+     "name": "IFET job number (from IFET Job Number) 2",
+     "options": {
+      "fieldIdInLinkedTable": "fldZa91p5KebdT6q2",
+      "isValid": true,
+      "recordLinkFieldId": "fldyj3e89pH6QH2Pp",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "id": "fldIirOarIpvHw92Y",
+     "name": "IFET job number (from IFET Job Number)",
+     "options": {
+      "fieldIdInLinkedTable": "fldZa91p5KebdT6q2",
+      "isValid": true,
+      "recordLinkFieldId": "fldyj3e89pH6QH2Pp",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    }
+   ],
+   "id": "tblcrGv0WJn6FTTGO",
+   "name": "Mock-Ups/Specimens",
+   "primaryFieldId": "fldyprpxI76d6CIxo",
+   "views": [
+    {
+     "id": "viwypQ3WBVCqzD64c",
+     "name": "Grid view",
+     "type": "grid"
+    }
+   ]
+  },
+  {
+   "fields": [
+    {
+     "description": "Testing standard or protocol that must be performed.",
+     "id": "fldvf05KHbDSMjLrw",
+     "name": "Protocol Name",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Project associated with this test protocol.",
+     "id": "fldPJdoEbIJeHbOu8",
+     "name": "IFET Job Number",
+     "options": {
+      "inverseLinkFieldId": "fldL4kUzCrbtJeU56",
+      "isReversed": false,
+      "linkedTableId": "tblLYcRC7q6Srjfk3",
+      "prefersSingleRecordLink": true
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "description": "Mock-up/specimen on which this protocol is performed.",
+     "id": "fldSzN0fPvbWyOgPu",
+     "name": "Mock-Up",
+     "options": {
+      "inverseLinkFieldId": "fld1mVERdRpQ3XZch",
+      "isReversed": false,
+      "linkedTableId": "tblcrGv0WJn6FTTGO",
+      "prefersSingleRecordLink": true
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "description": "Current execution status of the protocol.",
+     "id": "fldp0RHXHpPY8IOhv",
+     "name": "Protocol Status",
+     "options": {
+      "choices": [
+       {
+        "color": "grayLight1",
+        "id": "selGn78JSHzqbx3vY",
+        "name": "Not Started"
+       },
+       {
+        "color": "yellowLight1",
+        "id": "sel20AfvlRKZcZDFx",
+        "name": "In Progress"
+       },
+       {
+        "color": "greenLight1",
+        "id": "seli0yNDsDGBV2k7R",
+        "name": "Completed"
+       },
+       {
+        "color": "orangeBright",
+        "id": "sel0PI2QO489NawH5",
+        "name": "Aborted"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Overall result of the protocol, such as Passed, Failed, Pending, or Inconclusive.",
+     "id": "fld8rkYR4giE8bPAF",
+     "name": "Protocol Result",
+     "options": {
+      "choices": [
+       {
+        "color": "yellowLight1",
+        "id": "selNuTAfuifeUot1Q",
+        "name": "Pending"
+       },
+       {
+        "color": "greenLight1",
+        "id": "seljNXp2WSOfQWhF1",
+        "name": "Passed"
+       },
+       {
+        "color": "orangeBright",
+        "id": "selEOSiFhS0W5n1wv",
+        "name": "Failed"
+       },
+       {
+        "color": "tealLight1",
+        "id": "selVuk9E1cv4ESWNw",
+        "name": "Inconclusive"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Individual test sections that make up this protocol.",
+     "id": "fldw0brNFYcSxEs1l",
+     "name": "Protocol Sections",
+     "options": {
+      "inverseLinkFieldId": "fld3EtgBWkjqAXHGp",
+      "isReversed": false,
+      "linkedTableId": "tblqpvuJlSdkeS9PS",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldrc9ywdmheoiCqK",
+     "name": "IFET job number (from IFET Job Number)",
+     "options": {
+      "fieldIdInLinkedTable": "fldZa91p5KebdT6q2",
+      "isValid": true,
+      "recordLinkFieldId": "fldPJdoEbIJeHbOu8",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "id": "fldAP0DzS2zmweb3j",
+     "name": "Mock-up/specimen name (from Mock-Up)",
+     "options": {
+      "fieldIdInLinkedTable": "fldyprpxI76d6CIxo",
+      "isValid": true,
+      "recordLinkFieldId": "fldSzN0fPvbWyOgPu",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    }
+   ],
+   "id": "tblutO1Q8TNC4BLk0",
+   "name": "Tests Protocols",
+   "primaryFieldId": "fldvf05KHbDSMjLrw",
+   "views": [
+    {
+     "id": "viwoq2ZQlvNc281vF",
+     "name": "Grid view",
+     "type": "grid"
+    }
+   ]
+  },
+  {
+   "fields": [
+    {
+     "description": "Individual testing requirement or section within the protocol.",
+     "id": "fldN0th87JyevlzgU",
+     "name": "Section Name",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Required test value extracted from the approved proposal.",
+     "id": "fld1YDj3d2UilU7m6",
+     "name": "Value",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Current execution status of this protocol section.",
+     "id": "fldeprjn5dCWBhT0G",
+     "name": "Status",
+     "options": {
+      "choices": [
+       {
+        "color": "blueLight2",
+        "id": "selFb8QDg903BiDRR",
+        "name": "Not Started"
+       },
+       {
+        "color": "yellowLight1",
+        "id": "selGdFh5nuO47f37R",
+        "name": "In Progress"
+       },
+       {
+        "color": "greenLight1",
+        "id": "selwtfkq06bHMB6sy",
+        "name": "Completed"
+       },
+       {
+        "color": "orangeBright",
+        "id": "selvcGPeo7HXcelDk",
+        "name": "Aborted"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Result of the individual protocol section.",
+     "id": "fld9AO8n6OosZ80mW",
+     "name": "Result",
+     "options": {
+      "choices": [
+       {
+        "color": "greenLight1",
+        "id": "selS43MhVIdi0Yy11",
+        "name": "Passed"
+       },
+       {
+        "color": "orangeBright",
+        "id": "selpRbNPyTQ3t2GY0",
+        "name": "Failed"
+       },
+       {
+        "color": "yellowLight1",
+        "id": "selEqVCvWxGUrrwU4",
+        "name": "Pending"
+       },
+       {
+        "color": "orangeLight1",
+        "id": "selWI0oUhsdQIxLPe",
+        "name": "Not Applicable"
+       },
+       {
+        "color": "tealLight1",
+        "id": "selFsAxitMIwyZNGz",
+        "name": "Inconclusive"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "id": "fldfX6gGWvOLRDKWl",
+     "name": "IFET Job Number",
+     "options": {
+      "inverseLinkFieldId": "fldrrcKHQYOuKVPXc",
+      "isReversed": false,
+      "linkedTableId": "tblLYcRC7q6Srjfk3",
+      "prefersSingleRecordLink": true
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldinuC7cfvh0VQDA",
+     "name": "IFET job number (from IFET Job Number)",
+     "options": {
+      "fieldIdInLinkedTable": "fldZa91p5KebdT6q2",
+      "isValid": true,
+      "recordLinkFieldId": "fldfX6gGWvOLRDKWl",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "id": "fldPcxq0oUsXOO7oB",
+     "name": "Mock-Up",
+     "options": {
+      "fieldIdInLinkedTable": "fldSzN0fPvbWyOgPu",
+      "isValid": true,
+      "recordLinkFieldId": "fld3EtgBWkjqAXHGp",
+      "result": {
+       "options": {
+        "isReversed": false,
+        "prefersSingleRecordLink": false
+       },
+       "type": "multipleRecordLinks"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "description": "Parent testing protocol associated with this section.",
+     "id": "fld3EtgBWkjqAXHGp",
+     "name": "Test Protocol",
+     "options": {
+      "inverseLinkFieldId": "fldw0brNFYcSxEs1l",
+      "isReversed": false,
+      "linkedTableId": "tblutO1Q8TNC4BLk0",
+      "prefersSingleRecordLink": true
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldCrJvBmIWh4W7TR",
+     "name": "Protocol Name (from Test Protocol)",
+     "options": {
+      "fieldIdInLinkedTable": "fldvf05KHbDSMjLrw",
+      "isValid": true,
+      "recordLinkFieldId": "fld3EtgBWkjqAXHGp",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "description": "Latest test-attempt number received from LabOS for this section.",
+     "id": "flduSq3FOqFDRCHhw",
+     "name": "Latest LabOS Attempt Number",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Unique LabOS identifier for the latest testing attempt.",
+     "id": "fldngWweJSr09a7Kv",
+     "name": "LabOS Attempt ID",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Indicates whether LabOS has determined that this section requires another test.",
+     "id": "fldhLLbcY0R6yquQd",
+     "name": "LabOS Retest Required",
+     "options": {
+      "color": "greenBright",
+      "icon": "check"
+     },
+     "type": "checkbox"
+    },
+    {
+     "description": "Link to the testing Excel file received from LabOS.",
+     "id": "fldj1vr7RnBRUJWEX",
+     "name": "Excel File Link",
+     "type": "url"
+    },
+    {
+     "description": "Testing notes or comments received from LabOS.",
+     "id": "fldLANILDFNozGRrq",
+     "name": "Notes",
+     "type": "multilineText"
+    },
+    {
+     "description": "Date on which this section was tested.",
+     "id": "fldj3JimASOrUTrCu",
+     "name": "Testing Date",
+     "options": {
+      "dateFormat": {
+       "format": "l",
+       "name": "local"
+      }
+     },
+     "type": "date"
+    },
+    {
+     "description": "Link to the LabOS testing/report document.",
+     "id": "fld8Hn9rHfJzJ2icU",
+     "name": "LabOS Report Link",
+     "type": "url"
+    },
+    {
+     "description": "Stable code that tells LabOS which procedure a section means. LabOS routes work by this code, never by Section Name, so renaming a section can never silently change what gets executed. An unknown code stays visible but cannot start a test. WATER_PRESSURE is visible but unsupported in this release.",
+     "id": "fld9Fzjj25ngrVIOB",
+     "name": "Requirement Code",
+     "options": {
+      "choices": [
+       {
+        "color": "grayLight2",
+        "id": "selWWAtrnVr8Lt15F",
+        "name": "STATIC_PRESSURE"
+       },
+       {
+        "color": "grayLight2",
+        "id": "seljFHCv53MRqUdfM",
+        "name": "CYCLIC_PRESSURE"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selaxjl7wEqSleNOn",
+        "name": "IMPACT_LMI"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selxVCw136FTUmOf1",
+        "name": "IMPACT_SMI"
+       },
+       {
+        "color": "grayLight2",
+        "id": "sel4ixIBCOGQ2MOdV",
+        "name": "FORCED_ENTRY"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selExbN2JNTFGsBHk",
+        "name": "ANSI_IMPACT"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selBKp5swuh5593nc",
+        "name": "GAUGE_COUNT"
+       },
+       {
+        "color": "grayLight2",
+        "id": "sel6thfgFHKhhQHzr",
+        "name": "STATIC_PROGRAMME"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selNtc2qKs9AmjX7u",
+        "name": "WATER_PRESSURE"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "The shape of the requirement, so LabOS knows how to read it without parsing the free-text Value. 'Not Applicable' means there is no numeric requirement (Forced Entry, ANSI) - it does NOT mean the test is unneeded; Applicability decides that.",
+     "id": "fldWGpL9gJh89wSK8",
+     "name": "Requirement Kind",
+     "options": {
+      "choices": [
+       {
+        "color": "grayLight2",
+        "id": "selOK2otXlJmpSOHk",
+        "name": "Magnitude"
+       },
+       {
+        "color": "grayLight2",
+        "id": "sel5qJg4yiFWOqGkg",
+        "name": "Directional Pair"
+       },
+       {
+        "color": "grayLight2",
+        "id": "sel4xL7irxOZZ0EH4",
+        "name": "Count"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selc3kbRgabK4J9yy",
+        "name": "Enum"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selkAULTc66eu2tWD",
+        "name": "Not Applicable"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Whether this section is actually required for this specimen. Only 'Required' is executable. Blank is treated as Unconfirmed, never as Not Required - LabOS will not infer that a test is unneeded from an empty cell, a blank Value or a historical Result.",
+     "id": "fldh3VS09fonTLHsS",
+     "name": "Applicability",
+     "options": {
+      "choices": [
+       {
+        "color": "grayLight2",
+        "id": "selkiVLjue3waJgOV",
+        "name": "Required"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selCbTaWZkYP418sd",
+        "name": "Not Required"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selRhIR8QHxZOGpl7",
+        "name": "Unconfirmed"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "The numeric requirement for Magnitude and Count kinds. Blank is not zero: a blank means unknown and blocks execution, while a real 0 is data. Leave Value untouched - it stays as the human-readable original.",
+     "id": "fldpL2dyGzKj9xowY",
+     "name": "Required Value",
+     "options": {
+      "precision": 2
+     },
+     "type": "number"
+    },
+    {
+     "description": "Inward design pressure as an independent positive magnitude in PSF. Required for pressure execution. Never derived by parsing a legacy string such as '+110/110', and never copied from the outward value - 46% of jobs are asymmetric.",
+     "id": "fld1wR9ojdmESax0m",
+     "name": "Required Value Inward",
+     "options": {
+      "precision": 2
+     },
+     "type": "number"
+    },
+    {
+     "description": "Outward design pressure as an independent positive magnitude in PSF. Held separately from inward on purpose: the two are independent numbers, not a sign convention.",
+     "id": "fld7GLStvnPnYJPpd",
+     "name": "Required Value Outward",
+     "options": {
+      "precision": 2
+     },
+     "type": "number"
+    },
+    {
+     "description": "Unit for Required Value. Blank for a unitless count, an Enum or Not Applicable. Short forms only - LabOS rejects 'Inches' as an outbound token, so 'in' is canonical here too. Unit and Requirement Kind must agree.",
+     "id": "fldTjNKeQe7oxxl33",
+     "name": "Required Unit",
+     "options": {
+      "choices": [
+       {
+        "color": "grayLight2",
+        "id": "selqVSaooLXA72OJ2",
+        "name": "PSF"
+       },
+       {
+        "color": "grayLight2",
+        "id": "seliDWLw5zNdEElFB",
+        "name": "in"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selXdMOSK7pR5amss",
+        "name": "s"
+       },
+       {
+        "color": "grayLight2",
+        "id": "selc5YtvXKj8zIRrN",
+        "name": "cycles"
+       },
+       {
+        "color": "grayLight2",
+        "id": "sel1YyMABoyKN9P9D",
+        "name": "impacts"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "The explicit enum value for Enum-kind requirements, so LabOS never has to parse it out of Value. 'Full' is the initial supported static programme; an unrecognised option stays visible but cannot start a test.",
+     "id": "fldflOxCkAK1BkU9l",
+     "name": "Required Option",
+     "type": "singleLineText"
+    },
+    {
+     "description": "The missile the protocol specifies, e.g. 'Large Missile D'. Free text because the standard's set is open and LabOS does not invent an option set the requirement side does not have. Pre-fills missile_impact_tests.missile so an operator does not retype what the protocol already fixes.",
+     "id": "fld5Bs0aQXXeVso2y",
+     "name": "Missile Type",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Missile mass in pounds, as the protocol specifies it. Pre-fills missile_impact_tests.missile_weight. A requirement, never a measurement \u2014 LabOS never writes an achieved value back here.",
+     "id": "fldmhdhonyyLcx4Ex",
+     "name": "Missile Weight",
+     "options": {
+      "precision": 2
+     },
+     "type": "number"
+    },
+    {
+     "description": "Target impact velocity in ft/s that the protocol requires. Pre-fills the per-shot target; the achieved velocity stays in LabOS on shots.velocity and is not published back. A target is never an achieved value (decision A2).",
+     "id": "fldJNfUVyqQEFOVWx",
+     "name": "Impact Velocity",
+     "options": {
+      "precision": 2
+     },
+     "type": "number"
+    }
+   ],
+   "id": "tblqpvuJlSdkeS9PS",
+   "name": "Protocol Sections",
+   "primaryFieldId": "fldN0th87JyevlzgU",
+   "views": [
+    {
+     "id": "viwXxVYSTEX5FYtQv",
+     "name": "Grid view",
+     "type": "grid"
+    }
+   ]
+  },
+  {
+   "fields": [
+    {
+     "description": "Combined wall and position name used throughout reservations and scheduling.",
+     "id": "fld4pZcBC8Ig1T5zu",
+     "name": "Wall Position Name",
+     "options": {
+      "formula": "{fldNUjjfUnfQlsAqp} & \" - \" & {fldOaxd9jFxjU3w3i} &\r\nIF({fldwZeJJ7B9sQOtSH} = \"Future\", \" - Future \", \"\")",
+      "isValid": true,
+      "referencedFieldIds": [
+       "fldNUjjfUnfQlsAqp",
+       "fldOaxd9jFxjU3w3i",
+       "fldwZeJJ7B9sQOtSH"
+      ],
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "formula"
+    },
+    {
+     "description": "Name or number of the physical testing wall.",
+     "id": "fldNUjjfUnfQlsAqp",
+     "name": "Wall Name",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Position or location available on the testing wall.",
+     "id": "fldOaxd9jFxjU3w3i",
+     "name": "Position Name",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Current availability of the wall position, such as Available, Reserved, Occupied, or Future.",
+     "id": "fldwZeJJ7B9sQOtSH",
+     "name": "Current Status",
+     "options": {
+      "choices": [
+       {
+        "color": "blueLight2",
+        "id": "seligQi2P7PrwLCLR",
+        "name": "Available"
+       },
+       {
+        "color": "cyanLight2",
+        "id": "seljKAye4YVv80exO",
+        "name": "Reserved"
+       },
+       {
+        "color": "tealLight2",
+        "id": "selGTS3ZGco3PcHrO",
+        "name": "Occupied"
+       },
+       {
+        "color": "greenLight2",
+        "id": "selZYd15TZlXTflgP",
+        "name": "Future"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "id": "fldaAoya2sxOCJIee",
+     "name": "Wall Scheduling/Reservation",
+     "options": {
+      "inverseLinkFieldId": "fld5E3ivwMXqNpArs",
+      "isReversed": false,
+      "linkedTableId": "tblYjF1AApzmRDMrY",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "description": "Project currently associated with this wall position.",
+     "id": "fldCrTrHgrmhPdNdQ",
+     "name": "Current Project",
+     "options": {
+      "fieldIdInLinkedTable": "fldbO694B3yA4RIhy",
+      "isValid": true,
+      "recordLinkFieldId": "fldaAoya2sxOCJIee",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "description": "Expected date when the linked reservation begins using this position.",
+     "id": "fldC6jpCTaezAhwY8",
+     "name": "Expected Start Date",
+     "options": {
+      "fieldIdInLinkedTable": "fldH3ACJSgq3k3YCE",
+      "isValid": true,
+      "recordLinkFieldId": "fldaAoya2sxOCJIee",
+      "result": {
+       "options": {
+        "dateFormat": {
+         "format": "l",
+         "name": "local"
+        }
+       },
+       "type": "date"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "description": "Expected date when the position becomes available again.",
+     "id": "fldjZogVGQS0UKPmo",
+     "name": "Expected Release Date",
+     "options": {
+      "fieldIdInLinkedTable": "fldbXwmiUyA8PUAgG",
+      "isValid": true,
+      "recordLinkFieldId": "fldaAoya2sxOCJIee",
+      "result": {
+       "options": {
+        "dateFormat": {
+         "format": "l",
+         "name": "local"
+        }
+       },
+       "type": "date"
+      }
+     },
+     "type": "multipleLookupValues"
+    }
+   ],
+   "id": "tblVUvcSPAoneG26W",
+   "name": "Walls & Positions",
+   "primaryFieldId": "fld4pZcBC8Ig1T5zu",
+   "views": [
+    {
+     "id": "viwbOz5xPn61XZJuf",
+     "name": "Grid view",
+     "type": "grid"
+    }
+   ]
+  },
+  {
+   "fields": [
+    {
+     "description": "Unique name identifying the wall reservation.",
+     "id": "fldL38il8qUTtoMkL",
+     "name": "Reservation Name",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Wall position or positions requested for the reservation.",
+     "id": "fld5E3ivwMXqNpArs",
+     "name": "Wall Positions",
+     "options": {
+      "inverseLinkFieldId": "fldaAoya2sxOCJIee",
+      "isReversed": false,
+      "linkedTableId": "tblVUvcSPAoneG26W",
+      "prefersSingleRecordLink": false
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "description": "Project associated with the reservation.",
+     "id": "fldbO694B3yA4RIhy",
+     "name": "Project",
+     "options": {
+      "fieldIdInLinkedTable": "fldXOI9t0N8oP4FLy",
+      "isValid": true,
+      "recordLinkFieldId": "fldoNc8tXaa6KekoJ",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "description": "Planned reservation start date.",
+     "id": "fldH3ACJSgq3k3YCE",
+     "name": "Start Date",
+     "options": {
+      "dateFormat": {
+       "format": "l",
+       "name": "local"
+      }
+     },
+     "type": "date"
+    },
+    {
+     "description": "Planned reservation end/release date.",
+     "id": "fldbXwmiUyA8PUAgG",
+     "name": "End Date",
+     "options": {
+      "dateFormat": {
+       "format": "l",
+       "name": "local"
+      }
+     },
+     "type": "date"
+    },
+    {
+     "description": "Shows whether reservation validation is Not Checked, currently being checked, or completed.",
+     "id": "fldhscZboTjDswUGL",
+     "name": "Reservation Checking",
+     "options": {
+      "formula": "IF(\r\n  OR(\r\n    {fldIjN3nxF8B4bLJx} = 0,\r\n    NOT({fldH3ACJSgq3k3YCE}),\r\n    NOT({fldbXwmiUyA8PUAgG})\r\n  ),\r\n  \"\u26aa Not Checked\",\r\n  IF(\r\n    OR(\r\n      NOT({fldQaYQuVpI6yMeBf}),\r\n      IS_AFTER(\r\n        {fldVjLmsq5cj6N34x},\r\n        {fldQaYQuVpI6yMeBf}\r\n      )\r\n    ),\r\n    \"\ud83d\udfe1 Checking Reservation . . .\",\r\n    \"\ud83d\udfe2 Check Completed\"\r\n  )\r\n)",
+      "isValid": true,
+      "referencedFieldIds": [
+       "fldIjN3nxF8B4bLJx",
+       "fldH3ACJSgq3k3YCE",
+       "fldbXwmiUyA8PUAgG",
+       "fldQaYQuVpI6yMeBf",
+       "fldVjLmsq5cj6N34x"
+      ],
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "formula"
+    },
+    {
+     "description": "Current reservation lifecycle status. This is managed automatically according to reservation validation results.",
+     "id": "fldm0l6xAKb5wUYWJ",
+     "name": "Reservation Status",
+     "options": {
+      "choices": [
+       {
+        "color": "grayLight1",
+        "id": "selQisTVAUxpPMwSV",
+        "name": "Needs Scheduling"
+       },
+       {
+        "color": "yellowLight1",
+        "id": "selZYvBnY7fyrkWNk",
+        "name": "Waiting"
+       },
+       {
+        "color": "blueLight1",
+        "id": "selvEZ0ofjEBmc5Pe",
+        "name": "Reserved"
+       },
+       {
+        "color": "cyanLight1",
+        "id": "selpPKMluIH7cd8z2",
+        "name": "Occupied"
+       },
+       {
+        "color": "greenLight1",
+        "id": "selKg0Zo99DaUPqwQ",
+        "name": "Completed"
+       },
+       {
+        "color": "redBright",
+        "id": "selnzy3GAl6BE2Cf7",
+        "name": "Cancelled"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Displays any scheduling, position, capacity, or date conflict found during reservation validation.",
+     "id": "fldNB1OS7Wuha8NLf",
+     "name": "Conflict Warning",
+     "options": {
+      "choices": [
+       {
+        "color": "greenLight1",
+        "id": "selb0kUMr380R0tJS",
+        "name": "Clear"
+       },
+       {
+        "color": "orangeBright",
+        "id": "selSktMCSlH6Td0TU",
+        "name": "Conflict"
+       },
+       {
+        "color": "orangeLight1",
+        "id": "selH0IbPFgwXhhQAN",
+        "name": "Capacity Exceeded"
+       },
+       {
+        "color": "blueLight2",
+        "id": "selwuL41vRbVlbZXn",
+        "name": "Future Position"
+       },
+       {
+        "color": "orangeLight1",
+        "id": "selTyoRy874bGVMsu",
+        "name": "Invalid Date"
+       },
+       {
+        "color": "tealLight1",
+        "id": "selzBaYe3EBw9R3uR",
+        "name": "Missing Wall Position"
+       },
+       {
+        "color": "redLight2",
+        "id": "sel9Wa4fWUL1BAEwQ",
+        "name": "Position Count Mismatch"
+       },
+       {
+        "color": "grayLight1",
+        "id": "selHCKljaPQaZHKLG",
+        "name": "Not Checked"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Result of the wall-capacity validation.",
+     "id": "fldraitHCrWTKBGr5",
+     "name": "Capacity Check Result",
+     "options": {
+      "choices": [
+       {
+        "color": "yellowLight1",
+        "id": "sel6pSZQTqcDrn1Ah",
+        "name": "Pending Check"
+       },
+       {
+        "color": "greenLight1",
+        "id": "seldA39GTqPS1RFDW",
+        "name": "Capacity Available"
+       },
+       {
+        "color": "orangeLight1",
+        "id": "seleJsrozr0RDk4US",
+        "name": "Capacity Exceeded"
+       },
+       {
+        "color": "orangeBright",
+        "id": "seliBpNNTssZhE7YE",
+        "name": "Position Conflict"
+       },
+       {
+        "color": "tealLight1",
+        "id": "sel2cxtVkRHYoeThR",
+        "name": "Future Position"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Number of wall positions assigned to this reservation.",
+     "id": "fldIjN3nxF8B4bLJx",
+     "name": "Positions Assigned",
+     "options": {
+      "isValid": true,
+      "recordLinkFieldId": "fld5E3ivwMXqNpArs"
+     },
+     "type": "count"
+    },
+    {
+     "description": "Number of positions already occupied by other overlapping reservations",
+     "id": "fld7yYZz4JwCsmxY4",
+     "name": "Current Occupied Positions",
+     "options": {
+      "isValid": true,
+      "recordLinkFieldId": "fld5E3ivwMXqNpArs"
+     },
+     "type": "count"
+    },
+    {
+     "description": "Remaining available wall capacity if this reservation is accepted.",
+     "id": "fldwk4GHVc1E1zPIb",
+     "name": "Available Capacity After This Reservation",
+     "options": {
+      "precision": 0
+     },
+     "type": "number"
+    },
+    {
+     "id": "fldNvwpbflPlembbT",
+     "name": "Mock-Up",
+     "options": {
+      "inverseLinkFieldId": "fld0QsYC3mAFS3JQ6",
+      "isReversed": false,
+      "linkedTableId": "tblcrGv0WJn6FTTGO",
+      "prefersSingleRecordLink": true
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "id": "fldVjLmsq5cj6N34x",
+     "name": "Scheduling Input Modified Time",
+     "options": {
+      "isValid": true,
+      "referencedFieldIds": [
+       "fld5E3ivwMXqNpArs",
+       "fldH3ACJSgq3k3YCE",
+       "fldbXwmiUyA8PUAgG"
+      ],
+      "result": {
+       "options": {
+        "dateFormat": {
+         "format": "l",
+         "name": "local"
+        },
+        "timeFormat": {
+         "format": "h:mma",
+         "name": "12hour"
+        },
+        "timeZone": "client"
+       },
+       "type": "dateTime"
+      }
+     },
+     "type": "lastModifiedTime"
+    },
+    {
+     "id": "fldQaYQuVpI6yMeBf",
+     "name": "Reservation Checked At",
+     "options": {
+      "dateFormat": {
+       "format": "l",
+       "name": "local"
+      },
+      "timeFormat": {
+       "format": "HH:mm",
+       "name": "24hour"
+      },
+      "timeZone": "client"
+     },
+     "type": "dateTime"
+    },
+    {
+     "id": "fld0YyFODhnF5gmtY",
+     "name": "IFET Job Number",
+     "options": {
+      "fieldIdInLinkedTable": "fldZa91p5KebdT6q2",
+      "isValid": true,
+      "recordLinkFieldId": "fldoNc8tXaa6KekoJ",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "id": "fld5mIZ3QBilKLt1c",
+     "name": "Wall Position Name (from Wall Positions)",
+     "options": {
+      "fieldIdInLinkedTable": "fld4pZcBC8Ig1T5zu",
+      "isValid": true,
+      "recordLinkFieldId": "fld5E3ivwMXqNpArs",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "id": "fldCPWi4kYd7NzYWJ",
+     "name": "Mock-up/specimen name (from Mock-Up)",
+     "options": {
+      "fieldIdInLinkedTable": "fldyprpxI76d6CIxo",
+      "isValid": true,
+      "recordLinkFieldId": "fldNvwpbflPlembbT",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    },
+    {
+     "id": "fldoNc8tXaa6KekoJ",
+     "name": "Project Name",
+     "options": {
+      "inverseLinkFieldId": "fldaYynjl8ptNVzXS",
+      "isReversed": false,
+      "linkedTableId": "tblLYcRC7q6Srjfk3",
+      "prefersSingleRecordLink": true
+     },
+     "type": "multipleRecordLinks"
+    }
+   ],
+   "id": "tblYjF1AApzmRDMrY",
+   "name": "Wall Scheduling/Reservation",
+   "primaryFieldId": "fldL38il8qUTtoMkL",
+   "views": [
+    {
+     "id": "viwPBD0nZlNgGqLHl",
+     "name": "Reservation View",
+     "type": "grid"
+    },
+    {
+     "id": "viwW1AIkNz6n9EE9M",
+     "name": "Wall Positions Calendar",
+     "type": "calendar"
+    },
+    {
+     "id": "viwtmuuKgrGYLeMbZ",
+     "name": "Current Wall Occupancy",
+     "type": "grid"
+    },
+    {
+     "id": "viwrb9bMDrLN8MT1b",
+     "name": "Future Wall Reservations",
+     "type": "grid"
+    }
+   ]
+  },
+  {
+   "fields": [
+    {
+     "description": "Concatenates the IFET job number lookup (as string) and Charge Type, separated by a pipe.",
+     "id": "fldE3z03ghSFNjXzO",
+     "name": "Back Charge Name",
+     "options": {
+      "formula": "{fldcTkX1jo4kOyU0P} & \" - \" & {fldjXiyArEKsYJBju}",
+      "isValid": true,
+      "referencedFieldIds": [
+       "fldcTkX1jo4kOyU0P",
+       "fldjXiyArEKsYJBju"
+      ],
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "formula"
+    },
+    {
+     "description": "Project to which the back charge belongs.",
+     "id": "fldcTkX1jo4kOyU0P",
+     "name": "IFET Job Number",
+     "options": {
+      "inverseLinkFieldId": "fldHVvyKTR1AZA36C",
+      "isReversed": false,
+      "linkedTableId": "tblLYcRC7q6Srjfk3",
+      "prefersSingleRecordLink": true
+     },
+     "type": "multipleRecordLinks"
+    },
+    {
+     "description": "Category of additional charge, such as Materials, Equipment Rental, Delivery, Labor, Retest, Storage, or Other.",
+     "id": "fldjXiyArEKsYJBju",
+     "name": "Charge Type",
+     "options": {
+      "choices": [
+       {
+        "color": "blueLight2",
+        "id": "selHMXtaxddEmHa36",
+        "name": "Materials"
+       },
+       {
+        "color": "cyanLight2",
+        "id": "selw8pP0KaYxZCbXf",
+        "name": "Equipment Rental"
+       },
+       {
+        "color": "tealLight2",
+        "id": "selBGJkZe7AgG4iRZ",
+        "name": "Delivery"
+       },
+       {
+        "color": "greenLight2",
+        "id": "selDDaEQMl47ebf7D",
+        "name": "Labor"
+       },
+       {
+        "color": "yellowLight2",
+        "id": "sel7TkV0usMWFRI6d",
+        "name": "Retest"
+       },
+       {
+        "color": "orangeLight2",
+        "id": "selXosUJ3QMajFtoJ",
+        "name": "Storage"
+       },
+       {
+        "color": "redLight2",
+        "id": "selylPyNQzk5i80OK",
+        "name": "Other"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Approval status of the back charge. Only approved charges can be included in the final invoice.",
+     "id": "fldfndhdC4ofYXQPz",
+     "name": "Approval Status",
+     "options": {
+      "choices": [
+       {
+        "color": "blueLight2",
+        "id": "seleD0ZIxkMXHQTHi",
+        "name": "Pending"
+       },
+       {
+        "color": "cyanLight2",
+        "id": "sel43hBqoB2KVw6j3",
+        "name": "Approved"
+       },
+       {
+        "color": "tealLight2",
+        "id": "selKTQQ53TR7fnZpX",
+        "name": "Rejected"
+       },
+       {
+        "color": "greenLight2",
+        "id": "selIRP2ItvPUEz12w",
+        "name": "Needs Info"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "description": "Details explaining the additional charge.",
+     "id": "fldlI36CjI7knVABZ",
+     "name": "Description",
+     "type": "multilineText"
+    },
+    {
+     "description": "Vendor or supplier associated with the expense.",
+     "id": "fld62eDADnlh3evUX",
+     "name": "Vendor",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Date when the additional cost was incurred.",
+     "id": "fldLa3GEhUqHeQJJH",
+     "name": "Date Incurred",
+     "options": {
+      "dateFormat": {
+       "format": "l",
+       "name": "local"
+      }
+     },
+     "type": "date"
+    },
+    {
+     "description": "Actual internal cost paid or incurred by IFET.",
+     "id": "fldvFuWbhl4oJazCk",
+     "name": "Internal Cost",
+     "options": {
+      "precision": 2,
+      "symbol": "$"
+     },
+     "type": "currency"
+    },
+    {
+     "description": "Markup percentage applied to the internal cost.",
+     "id": "fldHVsz04mW0tRnWP",
+     "name": "Markup %",
+     "options": {
+      "precision": 0
+     },
+     "type": "percent"
+    },
+    {
+     "description": "Final customer-billable amount calculated from internal cost and markup.",
+     "id": "fldilEtoCaxRkonpE",
+     "name": "Billable Amount",
+     "options": {
+      "formula": "{fldvFuWbhl4oJazCk} * (1 + ({fldHVsz04mW0tRnWP}))",
+      "isValid": true,
+      "referencedFieldIds": [
+       "fldvFuWbhl4oJazCk",
+       "fldHVsz04mW0tRnWP"
+      ],
+      "result": {
+       "options": {
+        "precision": 0
+       },
+       "type": "number"
+      }
+     },
+     "type": "formula"
+    },
+    {
+     "description": "Link to the supporting vendor receipt or invoice.",
+     "id": "fldODHRjWytwEQXv3",
+     "name": "Receipt / Vendor Invoice",
+     "type": "url"
+    },
+    {
+     "description": "Name of the person who approved the back charge.",
+     "id": "fldz8k7GsgoakBlnh",
+     "name": "Approved By",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Final QuickBooks invoice containing this back charge.",
+     "id": "fldiLBGNgNhIMxrSh",
+     "name": "QuickBooks Invoice Number",
+     "options": {
+      "fieldIdInLinkedTable": "fldCY1r37TzUNlqxd",
+      "isValid": true,
+      "recordLinkFieldId": "fldcTkX1jo4kOyU0P",
+      "result": {
+       "type": "singleLineText"
+      }
+     },
+     "type": "multipleLookupValues"
+    }
+   ],
+   "id": "tbl0f2YxS3FHJ1dTD",
+   "name": "Back Charges",
+   "primaryFieldId": "fldE3z03ghSFNjXzO",
+   "views": [
+    {
+     "id": "viwWOk3vYATKLwJCb",
+     "name": "Grid view",
+     "type": "grid"
+    }
+   ]
+  },
+  {
+   "fields": [
+    {
+     "id": "fldDu6er95KG2pOrG",
+     "name": "LabOS Attempt ID",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldQWGjD0gQ4WwPbh",
+     "name": "LabOS Test ID",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldyQpMOaSdWzO7xR",
+     "name": "Attempt Number",
+     "options": {
+      "precision": 0
+     },
+     "type": "number"
+    },
+    {
+     "id": "fldB8gHb2a5guxm7g",
+     "name": "Schema Version",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldgIIL715TrhyvKE",
+     "name": "Airtable Project ID",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldV0IzvUSnmlVKC3",
+     "name": "Airtable Mockup ID",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldVPHPXqlPGnBUSB",
+     "name": "Airtable Protocol ID",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fld0dex9BWVQzgRLS",
+     "name": "Airtable Section ID",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldu6lraAAKIAXIRQ",
+     "name": "Test Type",
+     "options": {
+      "choices": [
+       {
+        "color": "blueLight2",
+        "id": "selmQnxPWVh8MErT4",
+        "name": "Static Load"
+       },
+       {
+        "color": "cyanLight2",
+        "id": "selhsJWeg6ZVsUEyr",
+        "name": "Cycles"
+       },
+       {
+        "color": "tealLight2",
+        "id": "selfVjyDmRW24Piea",
+        "name": "Impact"
+       },
+       {
+        "color": "greenLight2",
+        "id": "seljzXI9ZePShUCrk",
+        "name": "Forced Entry"
+       },
+       {
+        "color": "yellowLight2",
+        "id": "selavRp9PrpzUG3WR",
+        "name": "ANSI Z97.1"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "id": "fldQ7u9PGz7S8Ngdb",
+     "name": "Test Status",
+     "options": {
+      "choices": [
+       {
+        "color": "cyanLight2",
+        "id": "selkeJwim3weriF1B",
+        "name": "Not Started"
+       },
+       {
+        "color": "tealLight2",
+        "id": "sel7NTD89eghJsp4r",
+        "name": "In Progress"
+       },
+       {
+        "color": "blueLight2",
+        "id": "selo6wJSVeav00GFJ",
+        "name": "Completed"
+       },
+       {
+        "color": "greenLight2",
+        "id": "selUhoRJwAThsdC8w",
+        "name": "Abborted"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "id": "fldAYKt62KMn9q7E6",
+     "name": "Test Result",
+     "options": {
+      "choices": [
+       {
+        "color": "tealLight2",
+        "id": "selDDbti4PjVMGvEX",
+        "name": "Pending"
+       },
+       {
+        "color": "blueLight2",
+        "id": "sel2Ho0nEz8MnQZQe",
+        "name": "Passed"
+       },
+       {
+        "color": "cyanLight2",
+        "id": "selvAnEJlU0GrgKu8",
+        "name": "Failed"
+       },
+       {
+        "color": "greenLight2",
+        "id": "sel3jnSZwGc2PC7AY",
+        "name": "Not Applicable"
+       },
+       {
+        "color": "yellowLight2",
+        "id": "selNbhiIjBxlbhopX",
+        "name": "Inconclusive"
+       }
+      ]
+     },
+     "type": "singleSelect"
+    },
+    {
+     "id": "fld4hqC9SIQ9ll8mp",
+     "name": "Test Date",
+     "options": {
+      "dateFormat": {
+       "format": "l",
+       "name": "local"
+      },
+      "timeFormat": {
+       "format": "HH:mm",
+       "name": "24hour"
+      },
+      "timeZone": "client"
+     },
+     "type": "dateTime"
+    },
+    {
+     "id": "fldNHIHKq4xPvYhzX",
+     "name": "Operator Name",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldBDTojy4Qk3LssD",
+     "name": "Retest Required",
+     "options": {
+      "color": "greenBright",
+      "icon": "check"
+     },
+     "type": "checkbox"
+    },
+    {
+     "id": "fldCjb00kloRr9pGj",
+     "name": "Testing Continued",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fld0kER3p3ogmmP2L",
+     "name": "Measured Value",
+     "options": {
+      "precision": 1
+     },
+     "type": "number"
+    },
+    {
+     "id": "fld05iOwDiDtXA7b5",
+     "name": "Unit",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldDZkfaE2T4bFZ8C",
+     "name": "Max Pressure Achieved",
+     "options": {
+      "precision": 1
+     },
+     "type": "number"
+    },
+    {
+     "id": "fldg21XOFDAKWvUZx",
+     "name": "Deflection Value",
+     "options": {
+      "precision": 1
+     },
+     "type": "number"
+    },
+    {
+     "id": "fldvZMcxhm9R9Lzg7",
+     "name": "Deflection Unit",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldCh0DXyvROqZBaJ",
+     "name": "Correction Reason",
+     "type": "multilineText"
+    },
+    {
+     "id": "flda24C2M2tWyXEdb",
+     "name": "Impact Result",
+     "type": "singleLineText"
+    },
+    {
+     "id": "fldeG1iA6TVWOSi0T",
+     "name": "Complete LabOS JSON Response",
+     "type": "multilineText"
+    },
+    {
+     "id": "fldH5IvnQ0rL1xQRm",
+     "name": "Notes",
+     "type": "multilineText"
+    },
+    {
+     "id": "fld01SK9bnkTd9s29",
+     "name": "Photos",
+     "type": "url"
+    },
+    {
+     "id": "fldQAF1pExVQ9Xe6O",
+     "name": "Excel File Link",
+     "type": "url"
+    },
+    {
+     "id": "fldfewhrzgMnmAmU3",
+     "name": "LabOS Report Link",
+     "type": "url"
+    },
+    {
+     "id": "fldJYqMAdKP7v0zCU",
+     "name": "LabOS Created At",
+     "options": {
+      "dateFormat": {
+       "format": "l",
+       "name": "local"
+      },
+      "timeFormat": {
+       "format": "HH:mm",
+       "name": "24hour"
+      },
+      "timeZone": "client"
+     },
+     "type": "dateTime"
+    },
+    {
+     "id": "fldmqwik5SKFHRVqd",
+     "name": "LabOS Updated At",
+     "options": {
+      "dateFormat": {
+       "format": "l",
+       "name": "local"
+      },
+      "timeFormat": {
+       "format": "HH:mm",
+       "name": "24hour"
+      },
+      "timeZone": "client"
+     },
+     "type": "dateTime"
+    },
+    {
+     "id": "fldKxp708fktN57aH",
+     "name": "Raw Modified Time",
+     "options": {
+      "isValid": true,
+      "referencedFieldIds": [
+       "fldQ7u9PGz7S8Ngdb"
+      ],
+      "result": {
+       "options": {
+        "dateFormat": {
+         "format": "l",
+         "name": "local"
+        },
+        "timeFormat": {
+         "format": "h:mma",
+         "name": "12hour"
+        },
+        "timeZone": "client"
+       },
+       "type": "dateTime"
+      }
+     },
+     "type": "lastModifiedTime"
+    },
+    {
+     "description": "On a correction row, the LabOS Attempt ID of the attempt it supersedes. The original row is never edited or deleted. Roll-ups must exclude superseded attempts and must not count a correction as an extra physical test.",
+     "id": "fldV4ucQNEA0gYfMc",
+     "name": "Corrects Attempt ID",
+     "type": "singleLineText"
+    },
+    {
+     "description": "Declared identity of the reviewer who set Test Result. Stored separately from Operator Name even when it is the same person, because running a test and judging it are different acts. Identity is declared, not authenticated.",
+     "id": "fldVedw9cOgne8UeX",
+     "name": "LabOS Verdict By",
+     "type": "singleLineText"
+    },
+    {
+     "description": "UTC instant of the first review. Written once, with the verdict. A later correction records its own time on its own row and leaves this one alone.",
+     "id": "fldqCkqAh7aTckxSR",
+     "name": "LabOS Verdict At",
+     "options": {
+      "dateFormat": {
+       "format": "YYYY-MM-DD",
+       "name": "iso"
+      },
+      "timeFormat": {
+       "format": "HH:mm",
+       "name": "24hour"
+      },
+      "timeZone": "utc"
+     },
+     "type": "dateTime"
+    },
+    {
+     "description": "UTC instant physical execution started. Sent when the attempt is created. Test Date remains the completion instant - one field could not carry both, which is why start and end are explicit.",
+     "id": "fldYU1BtWVuWv5DBV",
+     "name": "Testing Start Date",
+     "options": {
+      "dateFormat": {
+       "format": "YYYY-MM-DD",
+       "name": "iso"
+      },
+      "timeFormat": {
+       "format": "HH:mm",
+       "name": "24hour"
+      },
+      "timeZone": "utc"
+     },
+     "type": "dateTime"
+    },
+    {
+     "description": "UTC instant execution completed or was aborted. Absent while a test is running. A correction preserves the ORIGINAL execution times rather than stamping the moment the correction was written.",
+     "id": "fldTsjf78Y5fA85fz",
+     "name": "Testing End Date",
+     "options": {
+      "dateFormat": {
+       "format": "YYYY-MM-DD",
+       "name": "iso"
+      },
+      "timeFormat": {
+       "format": "HH:mm",
+       "name": "24hour"
+      },
+      "timeZone": "utc"
+     },
+     "type": "dateTime"
+    },
+    {
+     "description": "Downscaled JPEG previews of test photographs. Full-resolution originals stay in LabOS and are immutable. Each preview has a stable artifact ID, content hash and deterministic filename so an uncertain upload can be reconciled rather than blindly re-appended.",
+     "id": "fldsEfhtH9wXPAl1Y",
+     "name": "LabOS Photos",
+     "options": {
+      "isReversed": false
+     },
+     "type": "multipleAttachments"
+    },
+    {
+     "description": "Which impact of the test this row records \u2014 1, 2, 3. Populated only for Test Type = Impact, where one attempt is one impact, and blank on every other type. Count tests by grouping on LabOS Test ID; count impacts with this. A roll-up that counts attempt rows instead will read a five-impact test as five tests.",
+     "id": "fldk52wf0SO9zYDjB",
+     "name": "Impact Number",
+     "options": {
+      "precision": 0
+     },
+     "type": "number"
+    }
+   ],
+   "id": "tblnc9SsbXU0C0FWh",
+   "name": "LabOS Raw Data Table",
+   "primaryFieldId": "fldDu6er95KG2pOrG",
+   "views": [
+    {
+     "id": "viweFgfWU8viu0d32",
+     "name": "Grid view",
+     "type": "grid"
+    }
+   ]
+  }
+ ]
+}
