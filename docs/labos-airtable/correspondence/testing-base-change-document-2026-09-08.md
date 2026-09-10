@@ -220,10 +220,15 @@ were not touched at all**, and for three of those LabOS has no access of any kin
 | 5 | Walls & Positions | `tblVUvcSPAoneG26W` | 8 | 8 | — | **0** | **0** | 8 |
 | 6 | Wall Scheduling/Reservation | `tblYjF1AApzmRDMrY` | 19 | 19 | — | **0** | **0** | 19 |
 | 7 | Back Charges | `tbl0f2YxS3FHJ1dTD` | 13 | 13 | — | **0** | **0** | 13 |
-| 8 | **LabOS Raw Data Table** | `tblnc9SsbXU0C0FWh` | 30 | **37** | **+7** | 1 | **36** | 0 |
-| | **Total** | | **142** | **160** | **+18** | **20** | **36*** | **104** |
+| 8 | **LabOS Raw Data Table** | `tblnc9SsbXU0C0FWh` | 30 | **39** | **+9** | 1 | **38** | 0 |
+| | **Total** | | **142** | **162** | **+20** | **17** | **38*** | **107** |
 
-\* the 36 bound to the write path — 29 always, 4 conditional, 3 withheld, as §1 breaks down.
+\* the 38 bound to the write path — 31 always, 4 conditional, 3 withheld, as §1 breaks down.
+
+**Read 17, not 20 — we read three fewer of your fields than a week ago.** `Missile Type`,
+`Missile Weight` and `Impact Velocity` left the read boundary on 2026-09-10; the two new Raw Data
+fields we populate replace them. That is the shape of this revision in one line: **+2 written by us,
+−3 read from you.**
 
 **Changed — 4 and 8, and only these.**
 
@@ -413,8 +418,13 @@ Not asserted — read back.
   after as before. That is the property that makes this change additive in the sense that matters to your
   automations.
 - **Re-checked against both live bases immediately before this was sent**, rather than relying on the snapshots
-  above: all 18 present in Testing and correctly typed · **none** of the 18 in production · production **142**,
-  testing **160**, delta **18** · all **160** rows of `production-change-spec.csv` agree with the live bases,
+  above: all 17 added fields present in Testing and correctly typed — including the two applied on
+  2026-09-11, `Impact Classification` `fldMY7DiiuP9kbQbL` and `Target Impact Velocity`
+  `fldhywP9YpsmoWWT1`, checked for exact select options and numeric precision, not merely for type ·
+  **none** of the 20 guarded fields in production, which covers the three withdrawn ones as well as the
+  17 added · the three withdrawn fields confirmed still present in Testing **and** confirmed absent from
+  the LabOS read boundary itself · production **142**,
+  testing **162**, delta **20** · all **159** rows of `production-change-spec.csv` agree with the live bases,
   0 disagreements · the fixture still reads back with its six sections and all six codes. So every number in
   this document is true of the bases as they stand today, not only as they stood when the snapshots were taken.
 
