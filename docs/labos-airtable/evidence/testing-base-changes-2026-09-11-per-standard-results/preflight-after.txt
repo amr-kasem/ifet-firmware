@@ -1,0 +1,32 @@
+PRE-SEND CHECK — read-only, both bases
+
+1. The 19 added fields, in Testing
+   19 of 19 present and correctly typed
+
+1a. The withdrawn three: present in Testing, absent from the read boundary
+   3 withdrawn, 10 fields on the read allowlist
+
+1b. Fields decided but not yet created
+   none owed - every decided field has been applied to Testing
+
+2. Production still has none of them
+   none of the 22 guarded fields are in production (19 added, 3 withdrawn, 0 pending)
+   production 142 fields · testing 164 fields · delta 22
+
+3. production-change-spec.csv against both bases
+   161 rows checked, 0 disagree with the live bases
+   including the type of every pre-existing field, not just its presence
+
+4. The fixture the document cites
+   present · 20 protocol sections · codes ['ANSI_IMPACT', 'CYCLIC_PRESSURE', 'FORCED_ENTRY', 'GAUGE_COUNT', 'IMPACT_LMI', 'IMPACT_SMI', 'STATIC_PRESSURE']
+
+5. The document's counts, and every phase the outbox must know
+   164 fields = 17 read + 40 write-bound + 107 ignored
+   every write-bound field names one of ['attachment', 'create', 'terminal', 'verdict']
+   33 always · 4 conditional · 3 withheld (Deflection Unit, Deflection Value, Max Pressure Achieved)
+
+============================================================
+WARN  the document does not state write-bound = 40
+
+All claims in the change document hold against both live bases.
+Safe to send.  (see warnings above)

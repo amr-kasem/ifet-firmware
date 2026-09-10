@@ -1,7 +1,7 @@
 # Testing Base — your three questions, and the changes made
 
 **From:** LabOS (Abdelrahman) · **To:** the Airtable team · **Date:** 2026-09-08
-**Base changed:** Testing `app4oXS3Kd5IKWgJ7` — **142 → 160 fields**
+**Base changed:** Testing `app4oXS3Kd5IKWgJ7` — **142 → 164 fields**
 **Base NOT changed:** Production `app0OCunbmuXl7Hc9` — **unchanged at 142, verified live**
 
 This is two things in one: **answers to the three clarifications you raised**, and the document requested at
@@ -158,12 +158,12 @@ Two details worth stating:
 
 ---
 
-**Eighteen fields were added, all to the Testing Base only.** No field was renamed, retyped, deleted or
+**Twenty-two fields were added, all to the Testing Base only.** No field was renamed, retyped, deleted or
 reordered. No table, view, relationship or automation was touched. Nothing in production was modified, and
 the tooling that made these changes **refuses the production base unconditionally** — there is no flag or
 environment variable that overrides it.
 
-The accompanying `production-change-spec.csv` is the sheet to work from: **one row per field for all 160**,
+The accompanying `production-change-spec.csv` is the sheet to work from: **one row per field for all 161**,
 saying `ADD` or `KEEP`, whether LabOS reads or writes it, and why. It is generated from both live bases, not
 transcribed.
 
@@ -220,14 +220,14 @@ were not touched at all**, and for three of those LabOS has no access of any kin
 | 5 | Walls & Positions | `tblVUvcSPAoneG26W` | 8 | 8 | — | **0** | **0** | 8 |
 | 6 | Wall Scheduling/Reservation | `tblYjF1AApzmRDMrY` | 19 | 19 | — | **0** | **0** | 19 |
 | 7 | Back Charges | `tbl0f2YxS3FHJ1dTD` | 13 | 13 | — | **0** | **0** | 13 |
-| 8 | **LabOS Raw Data Table** | `tblnc9SsbXU0C0FWh` | 30 | **39** | **+9** | 1 | **38** | 0 |
-| | **Total** | | **142** | **162** | **+20** | **17** | **38*** | **107** |
+| 8 | **LabOS Raw Data Table** | `tblnc9SsbXU0C0FWh` | 30 | **41** | **+11** | 1 | **40** | 0 |
+| | **Total** | | **142** | **164** | **+22** | **17** | **40*** | **107** |
 
-\* the 38 bound to the write path — 31 always, 4 conditional, 3 withheld, as §1 breaks down.
+\* the 40 bound to the write path — 33 always, 4 conditional, 3 withheld, as §1 breaks down.
 
-**Read 17, not 20 — we read three fewer of your fields than a week ago.** `Missile Type`,
-`Missile Weight` and `Impact Velocity` left the read boundary on 2026-09-10; the two new Raw Data
-fields we populate replace them. That is the shape of this revision in one line: **+2 written by us,
+**Read 17, not 22 — we read three fewer of your fields than a week ago.** `Missile Type`,
+`Missile Weight` and `Impact Velocity` left the read boundary on 2026-09-10; the Raw Data fields we
+populate replace them. That is the shape of this revision in one line: **+4 written by us,
 −3 read from you.**
 
 **Changed — 4 and 8, and only these.**
@@ -235,8 +235,10 @@ fields we populate replace them. That is the shape of this revision in one line:
 - **Protocol Sections `+11`.** The requirement had no machine-readable form; LabOS would have had to parse
   the `Value` text field, which is where the extractor defect lives. §2 covers each field. **LabOS reads this
   table and never writes it** — `Result`, `Status` and `Testing Date` stay yours.
-- **LabOS Raw Data Table `+7`.** Seven things LabOS produces that had nowhere to go: the impact ordinal, the execution span, who
-  reviewed and when, the correction link, and photo previews. §3 covers each. This is the **only** table
+- **LabOS Raw Data Table `+11`.** Eleven things LabOS produces that had nowhere to go: the impact ordinal,
+  the impact classification and the target velocity it ran against, the Forced Entry and ANSI verdicts on
+  their own axes, the execution span, who reviewed and when, the correction link, and photo previews. §3
+  covers each. This is the **only** table
   LabOS writes, and the runtime credential's allowlist is this table alone.
 
 **Not changed — and the reason differs by table.**
@@ -418,7 +420,8 @@ Not asserted — read back.
   the `Not Applicable` kind behaves as intended.
 - The fixture job is `IFET-FIXTURE-0001` and every value in it is synthetic. It can be deleted at any time.
 - **The before/after chain joins, and that is checked rather than asserted.** Three changes were made — 142 →
-  156 on 2026-09-06, then 156 → 159 and 159 → 160 on 2026-09-08 — and each change's *after* snapshot is
+  156 on 2026-09-06, then 156 → 159 and 159 → 160 on 2026-09-08, 160 → 162 and 162 → 164 on 2026-09-11 —
+  and each change's *after* snapshot is
   byte-identical to the next change's *before*. So the snapshots are one history, not four unrelated
   readings. The generator refuses to produce the CSV if that hash check fails, and refuses if any field
   present before is absent after.
@@ -426,13 +429,13 @@ Not asserted — read back.
   after as before. That is the property that makes this change additive in the sense that matters to your
   automations.
 - **Re-checked against both live bases immediately before this was sent**, rather than relying on the snapshots
-  above: all 17 added fields present in Testing and correctly typed — including the two applied on
+  above: all 19 added fields present in Testing and correctly typed — including the four applied on
   2026-09-11, `Impact Classification` `fldMY7DiiuP9kbQbL` and `Target Impact Velocity`
   `fldhywP9YpsmoWWT1`, checked for exact select options and numeric precision, not merely for type ·
   **none** of the 20 guarded fields in production, which covers the three withdrawn ones as well as the
-  17 added · the three withdrawn fields confirmed still present in Testing **and** confirmed absent from
+  19 added · the three withdrawn fields confirmed still present in Testing **and** confirmed absent from
   the LabOS read boundary itself · production **142**,
-  testing **162**, delta **20** · all **159** rows of `production-change-spec.csv` agree with the live bases,
+  testing **164**, delta **22** · all **161** rows of `production-change-spec.csv` agree with the live bases,
   0 disagreements · the fixture still reads back with its six sections and all six codes. So every number in
   this document is true of the bases as they stand today, not only as they stood when the snapshots were taken.
 
@@ -490,7 +493,7 @@ exactly one of them.
 
 ### ✅ Verified — read back from the live bases, today
 
-- **The schema.** 160 fields in Testing, 142 in production, 18 added, all correctly typed, all select
+- **The schema.** 164 fields in Testing, 142 in production, 22 added, all correctly typed, all select
   options as listed. Every one of the 142 pre-existing fields has the same type after as before; nothing was
   renamed, retyped, deleted or reordered, and no table, view, relationship or automation was touched.
 - **Production is untouched**, checked against the live base rather than assumed, with tooling that refuses
@@ -499,7 +502,7 @@ exactly one of them.
   *before*, so the three snapshots are one history.
 - **A requirement expressed in these fields is sufficient to drive a test programme** — an asymmetric 60/45
   pair derived all fourteen stages, and the pass/fail types carried a class with no numeric value.
-- **The attached CSVs agree with both live bases**, all 160 rows, 0 disagreements.
+- **The attached CSVs agree with both live bases**, all 161 rows, 0 disagreements.
 
 ### 🔧 Implemented in LabOS — and demonstrated end to end against the Testing base
 
@@ -596,8 +599,8 @@ it is not a claim that the integration is delivered.** Nothing is deployed.
 
 | File | What it is |
 |---|---|
-| `evidence/testing-base-changes-2026-09-06/production-change-spec.csv` | **The working sheet.** One row per field for all 160: `ADD`/`KEEP`, reads, writes, why. Regenerated 2026-09-08 — it carries all 160, not the 156 of the folder it sits in |
-| `evidence/testing-base-before-after-2026-09-08.csv` | **Before and after, as a spreadsheet.** All 160 fields: unchanged or added, the type either side, the field ID, and which of the two dates it was added on. **142 unchanged · 18 added · 0 removed · 0 retyped.** Generated, and it refuses to run if the three changes do not chain |
+| `evidence/testing-base-changes-2026-09-06/production-change-spec.csv` | **The working sheet.** One row per field for all 161: `ADD`/`KEEP`, reads, writes, why. Regenerated 2026-09-11 — it carries all 161, not the 156 of the folder it sits in, and it proposes **19 ADD** against production |
+| `evidence/testing-base-before-after-2026-09-08.csv` | **Before and after, as a spreadsheet.** The 160 fields as at 2026-09-08: unchanged or added, the type either side, the field ID, and which of the two dates it was added on. **142 unchanged · 18 added · 0 removed · 0 retyped.** Generated, and it refuses to run if the three changes do not chain. The four fields added on 2026-09-11 are in the two change folders of that date, not in this sheet |
 | `evidence/testing-base-changes-2026-09-06/` | The first 14 fields — before/after schema, field IDs, per-field reasons |
 | `evidence/testing-base-changes-2026-09-08/` | The three Impact **requirement** fields — `Missile Type`, `Missile Weight`, `Impact Velocity` — before/after schema, field IDs, per-field reasons, plus the fixture verification |
 | `evidence/testing-base-changes-2026-09-08-impact-number/` | **The eighteenth field.** `Impact Number` — before/after schema either side of it and the applied diff |

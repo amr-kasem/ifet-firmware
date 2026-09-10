@@ -1,0 +1,140 @@
+{
+ "mode": "APPLY",
+ "base": "app4oXS3Kd5IKWgJ7",
+ "utc": "20260910T234420Z",
+ "changes": [
+  {
+   "table": "Protocol Sections",
+   "field": "Requirement Code",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fld9Fzjj25ngrVIOB"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Requirement Kind",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldWGpL9gJh89wSK8"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Applicability",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldh3VS09fonTLHsS"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Value",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldpL2dyGzKj9xowY"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Value Inward",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fld1wR9ojdmESax0m"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Value Outward",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fld7GLStvnPnYJPpd"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Unit",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldTjNKeQe7oxxl33"
+  },
+  {
+   "table": "Protocol Sections",
+   "field": "Required Option",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldflOxCkAK1BkU9l"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Impact Number",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldk52wf0SO9zYDjB"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Impact Classification",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldMY7DiiuP9kbQbL"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Forced Entry Result",
+   "action": "created",
+   "type": "singleSelect",
+   "field_id": "fldAHuPzZHZEj0Cjt"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "ANSI Result",
+   "action": "created",
+   "type": "singleSelect",
+   "field_id": "fldmCKJV95N9uL7xt"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Target Impact Velocity",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldhywP9YpsmoWWT1"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Corrects Attempt ID",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldV4ucQNEA0gYfMc"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "LabOS Verdict By",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldVedw9cOgne8UeX"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "LabOS Verdict At",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldqCkqAh7aTckxSR"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Testing Start Date",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldYU1BtWVuWv5DBV"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "Testing End Date",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldTsjf78Y5fA85fz"
+  },
+  {
+   "table": "LabOS Raw Data Table",
+   "field": "LabOS Photos",
+   "action": "skipped",
+   "reason": "already exists",
+   "field_id": "fldsEfhtH9wXPAl1Y"
+  }
+ ]
+}

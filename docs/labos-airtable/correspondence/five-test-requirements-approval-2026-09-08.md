@@ -31,7 +31,7 @@ send back — per test. Not the screens, not the schedule, and not the Airtable 
 **What you are not approving:** anything that changes a production rig. None of the three new
 tests touch rig hardware, there is no firmware change in this work, and nothing is deployed.
 
-**Six answers are needed rather than a general yes** — **five still open** — listed after the five
+**Six answers are needed rather than a general yes** — **one still open** — listed after the five
 pages, and each is a place where we made a call you may not want.
 
 Approved by: ______________________________   Date: ______________
@@ -247,9 +247,9 @@ the times, the operator, the photographs, the full JSON — is on the last page.
 
 **Five impacts become five rows in the Airtable base**, each with its own verdict and photographs, where today they are one row with a summary line. This follows directly from attempts being the unit we publish.
 
-**The target impact velocity is read but never shown.** It comes across from the proposal and is frozen onto the attempt, so it is in the record — but it does not appear on the test the operator is looking at. Whether it should is question 3.
+**The target impact velocity is entered in LabOS, not read from the proposal.** Answer 3 was *"we will be entering it"*, and the remark above the numbered answers says why that is enough: the target follows from the classification — SMI has one, LMI is Level D or E — so the operator choosing the classification is already stating the target. It is published outbound as `Target Impact Velocity` and nothing derives it.
 
-**Impact location has no Airtable field, deliberately.** LabOS records where each impact landed; we did not create a field for it on their side, because location is an observation per impact and not a requirement.
+**Impact location has no Airtable field, deliberately.** LabOS records where each impact landed; we did not create a field for it on their side, because location is an observation per impact and not a requirement. **Confirmed 2026-09-10** — answer 4: the physical locations are in the test plans and appear in neither system.
 
 ---
 
@@ -287,7 +287,7 @@ the times, the operator, the photographs, the full JSON — is on the last page.
 
 ### What we cannot do yet, and why
 
-**There is no dedicated `Forced Entry Result` column in Airtable.** The verdict lands in the shared `Test Result`, with detail in `Notes` and the JSON. `Test Type` and `Test Result` are both single-selects, so their views still filter and group both workflows natively. We will add a dedicated column if you name the report that needs one — question 2.
+**Nothing outstanding.** A dedicated `Forced Entry Result` column was added on 2026-09-11, after answer 2 — *"they are different under different standards"*. It carries the same verdict as `Test Result`, gated to this test type and blank on the other four, so a report about Forced Entry alone no longer has to filter `Test Result` by `Test Type` first. `Test Result` is unchanged and still carries the lifecycle for all five types.
 
 ---
 
@@ -324,9 +324,9 @@ the times, the operator, the photographs, the full JSON — is on the last page.
 
 ### What we cannot do yet, and why
 
-**ANSI Z97.1 is normally performed first on a specimen, and LabOS does not enforce that.** The expectation is recorded; the other tests are not blocked if it has not been done. A hard block would eventually stop legitimate work and there is no override in this design — question 1.
+**ANSI Z97.1 is normally performed first on a specimen, and LabOS does not enforce that.** The expectation is recorded; the other tests are not blocked if it has not been done. A hard block would eventually stop legitimate work and there is no override in this design. **Approved 2026-09-10 — answer 1 was YES**, so this is a statement of an agreed design rather than an open question.
 
-As with Forced Entry, there is no dedicated `ANSI Result` column; the verdict is in `Test Result`.
+As with Forced Entry, a dedicated `ANSI Result` column was added on 2026-09-11 after answer 2, alongside `Test Result` rather than instead of it.
 
 ---
 
@@ -402,13 +402,21 @@ correction cannot be recorded as one.
 
 **1. ANSI ordering is recorded but not enforced.** ANSI Z97.1 is normally first on a specimen. LabOS records that and does not block the others. Is informational-only correct, or do you want it enforced — knowing a hard block has no override and will eventually stop legitimate work?
 
+> **Answered 2026-09-10 — YES**, recommended first and not blocking. No schema, no code and no document change; the design is approved as it stands.
+
 **2. Forced Entry and ANSI share one result column.** Both verdicts land in `Test Result`, with detail in `Notes` and the JSON, rather than in dedicated `Forced Entry Result` and `ANSI Result` columns. Is that enough, or does a named report need them separately?
+
+> **Answered 2026-09-10 — NO**: *"they are different under different standards"*. Both dedicated columns were built and applied to the Testing Base on 2026-09-11, **in addition to `Test Result`, not instead of it** — the shared column still carries create, terminal and verdict for all five types. `Failure Notes` was not added: he named two fields and we do not add a third on inference.
 
 **3. The target impact velocity is never shown to the operator.** It is read from the proposal and frozen onto the attempt, so it is in the record, but it is not on the screen at the rig. Does the operator need to see it?
 
+> **Answered 2026-09-10 — *"we will be entering it"***. It reverses direction: the target is no longer read from the proposal at all, it is LabOS-owned and operator-entered, and it is published outbound as `Target Impact Velocity`. Nothing is pushed at the operator because the classification they pick already determines it.
+
 **4. Impact location stays a LabOS-side observation.** LabOS records where each impact landed; Airtable has no field for it, because location is an observation and not a requirement — and an unwanted field in a shared base is much harder to remove than to add. Confirm that is right.
 
-**5. `Static / Type` is read and then changes nothing.** The proposal's static programme value — *Full* — is read and validated, but LabOS derives the same six-stage programme regardless. If a proposal ever specified a different programme, LabOS would run the full one without saying so. Is *Full* the only static programme in practice? If not, we should make LabOS refuse the others out loud rather than ignore them.
+> **Confirmed 2026-09-10** — *"the physical Locations … will not be shown on LabOS or Airtable, that is in the test plans"*. No Airtable field, and the per-impact `shots.area` observation stays LabOS-side evidence in the JSON.
+
+**5. `Static / Type` is read and then changes nothing.** The proposal's static programme value — *Full* — is read and validated, but LabOS derives the same six-stage programme regardless. If a proposal ever specified a different programme, LabOS would run the full one without saying so. Is *Full* the only static programme in practice? If not, we should make LabOS refuse the others out loud rather than ignore them. **Still open — this one was never actually asked**: it was in the unsent follow-up of 2026-09-08 and is re-asked in the 2026-09-10 reply. LabOS no longer ignores an unsupported programme in the meantime — it refuses to run rather than silently substituting *Full*, so an unanswered question cannot become a wrong test.
 
 **6. A five-impact test will appear as five records in the Airtable base.** This follows from one attempt per impact: attempts are what we publish, so five impacts are five rows, each with its own verdict and photographs, where today they are one row with a summary line. It changes what the Airtable team's views, groupings and automations see, and it needs one field added on their side — `Impact Number` — so a roll-up can count five impacts of one test rather than five tests. Confirm that is what you intend, because it is the half of the instruction that lands on somebody else's base.
 
