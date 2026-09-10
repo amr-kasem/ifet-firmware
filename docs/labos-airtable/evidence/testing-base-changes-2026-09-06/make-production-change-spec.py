@@ -1,23 +1,18 @@
 #!/usr/bin/env python3
 """Generate the production change specification CSV for the Airtable team.
 
-    ###################################################################
-    #  SUPERSEDED 2026-09-10 - DO NOT RUN THIS AND SEND THE RESULT.   #
-    ###################################################################
+    **Three actions, not two, since 2026-09-10.** This used to derive `ADD`
+    purely from base membership - in Testing, not in production - which meant
+    a field withdrawn from the read contract but deliberately left sitting in
+    the Testing Base came out as an `ADD` against production every single
+    time. `Missile Type`, `Missile Weight` and `Impact Velocity` are exactly
+    that: applied on 2026-09-08, withdrawn on 2026-09-10, and never to be
+    created in production. Emitting them would have asked the Airtable team to
+    create two permanently unread fields in their live base.
 
-    Running this today reproduces the hazard it is marked for. Lines 70-77
-    below derive `ADD` purely from base membership - in Testing, not in
-    production - so `Missile Type`, `Missile Weight` and `Impact Velocity`
-    come out as `ADD` against production every single time. The product owner
-    withdrew all three from the Airtable -> LabOS input contract on
-    2026-09-10; the Impact requirement is now the LabOS-owned **Impact
-    Classification**, published outbound.
-
-    This script needs a **third action** before it is correct: a field the
-    register marks deprecated must be omitted from the spec rather than
-    proposed for production. That change is part of TA7 and lands together
-    with the register flip and the code, because `check_register.py` binds
-    the three to each other.
+    So a field the register marks `DEPRECATED` is **omitted**, and one marked
+    `PENDING_SCHEMA` is omitted until it actually exists in Testing - there is
+    nothing to propose for a field that has not been created anywhere yet.
 
     Production is untouched and stays at 142 fields.
     See ../../correspondence/po-answers-and-impact-remap-2026-09-10.md.
@@ -91,6 +86,14 @@ def main():
     for r in rows:
         if r["labos_use"] == "not-a-field":
             continue                      # local queue metadata, never an Airtable field
+        if r["delivery_state"] == "DEPRECATED":
+            # Present in Testing, withdrawn from the read contract, and never
+            # to reach production. Base membership alone would have proposed
+            # it; the register is what knows better.
+            continue
+        if r["delivery_state"] == "PENDING_SCHEMA" and r["in_testing"] != "yes":
+            # Decided, not yet created anywhere. Nothing to propose.
+            continue
         if r["in_production"] == "yes":
             r["_action"] = "KEEP"
         elif r["in_testing"] == "yes":

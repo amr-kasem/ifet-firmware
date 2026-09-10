@@ -281,9 +281,29 @@ parsing the `Value` text field.
 | `Required Value` | number | The scalar for `Count`/`Magnitude` kinds — gauge count, impact count. **Blank is not zero** |
 | `Required Unit` | singleSelect | `PSF`, `in`, `s`, `cycles`, `impacts`. Validation only — LabOS refuses a value whose unit contradicts its kind |
 | `Required Option` | singleLineText | The named grade or class a pass/fail test is judged against — `ASTM F588 Grade 40`, `Class A`, `Full`. Free text, so an unrecognised option is shown but non-executable |
-| `Missile Type` | singleLineText | The missile the protocol specifies, e.g. `Large Missile D` |
-| `Missile Weight` | number | Missile mass, pounds |
-| `Impact Velocity` | number | **Target** velocity, ft/s. A requirement, never a measurement — LabOS does not write an achieved velocity back |
+| ~~`Missile Type`~~ | singleLineText | **Withdrawn — LabOS does not read this.** See below |
+| ~~`Missile Weight`~~ | number | **Withdrawn — LabOS does not read this.** See below |
+| ~~`Impact Velocity`~~ | number | **Withdrawn — LabOS does not read this.** See below |
+
+> ### These three exist in the Testing Base and LabOS does not read them
+>
+> We asked for them on 2026-09-08 and applied them to the Testing Base the same day. Two days later our
+> project owner changed the requirement, and we would rather tell you that plainly than leave three fields
+> in your base with an explanation that is no longer true.
+>
+> **The missile is now chosen in LabOS, not supplied by you.** One value — *SMI*, *LMI Level D* or
+> *LMI Level E* — covers the missile, its mass and the target velocity. Your `Requirement Code` already
+> says `IMPACT_SMI` or `IMPACT_LMI`, so the only thing it never carried was the level, and that is what our
+> operator picks. It then comes **back to you** with the result, as `Impact Classification`.
+>
+> So the impact requirement you own is exactly the **count** — `Required Value` plus `Requirement Code` —
+> which is unchanged and which you already had.
+>
+> **We have not deleted them, and we are not asking you to.** They are harmless where they are, deleting a
+> field in a shared base is not something we would do unilaterally, and if you have already built anything
+> against them we would rather hear it first. Say the word and they go in a cleanup we agree together.
+> **They were never created in production**, which stays at 142 fields, and our pre-send check asserts that
+> on every run.
 
 ### The single most important sentence in this document
 
@@ -318,6 +338,12 @@ These are things LabOS produces that had nowhere to go.
 | `Corrects Attempt ID` | singleLineText | The attempt this one supersedes. **Without it a correction is indistinguishable from a genuine retest**, so any roll-up counting attempts or computing a pass rate would be wrong — and would look right |
 | `LabOS Photos` | multipleAttachments | Downscaled previews. Originals stay in LabOS; the existing `Photos` URL field is unchanged |
 | `Impact Number` | number (integer) | **Added 2026-09-08.** Which impact of the test this row records — 1, 2, 3. Populated only for `Test Type = Impact`, where one attempt is one impact; **blank on the other four types**. Count tests by grouping on `LabOS Test ID`, and impacts with this. See §0.3 |
+| `Impact Classification` | singleSelect — `SMI` · `LMI Level D` · `LMI Level E` | **Added 2026-09-10, and the one genuinely new request in this revision.** Which missile classification an impact ran under. This is what replaces the three withdrawn `Protocol Sections` fields: instead of you supplying the missile, its mass and a target velocity, LabOS sends back the one value that means all three. For a job imported from your base the `SMI`/`LMI` half comes from your own `IMPACT_SMI` / `IMPACT_LMI` requirement code and cannot disagree with it — only the level is ours. **Blank on the other four test types** |
+| `Target Impact Velocity` | number, 2 dp | **Added 2026-09-10.** The target velocity the test was run against, in ft/s, entered by our operator. A **target**, never a measurement: the achieved velocity of each individual impact stays in LabOS and travels only inside `Complete LabOS JSON Response`. **Blank on the other four types** |
+
+**Two fields, and two fewer than we asked for on 2026-09-08.** The net effect of this revision on your base
+is that the impact requirement moves from four fields you fill in to one number you already had — the count
+— plus two result fields we populate. We read three fewer of your fields than we did last week.
 
 **A note on `Test Date`, because your automation depends on it.** LabOS writes `Test Date` as the
 **completion** instant and omits it while a test is running. `Testing Start Date` / `Testing End Date` carry
@@ -336,6 +362,7 @@ a speculative field propagates rather than sitting harmlessly in a sandbox.
 | `Impact Locations` | Location is a per-impact observation LabOS records locally, not a requirement |
 | `Forced Entry Result` · `ANSI Result` | No dedicated scalar needed: `Test Type` and `Test Result` are both single-selects, so your views filter and group both workflows natively. Sub-detail travels in the JSON field. **We will add one only if you name the report that needs it** |
 | `Failure Notes` | Carried inside `Notes` and the JSON for this release |
+| `Impact Locations` *(again)* | Confirmed by our project owner on 2026-09-10: impact location belongs to the test plan and is not shown in LabOS or Airtable |
 | Any new table, relationship, or delta-cursor field | Not needed |
 
 Three fields **exist and LabOS will not write them yet** — and they are waiting on **two different

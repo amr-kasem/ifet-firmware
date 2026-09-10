@@ -21,7 +21,7 @@ The five test types LabOS runs — the `Test Type` option set, verbatim: **Stati
 |---|---|---|
 | **Static Load** | one inward/outward design-pressure pair (PSF) | 6 stages, 30 s hold each, deflection readings per gauge |
 | **Cycles** | the same pair — nothing further | 8 stages, 9,000 cycles in total |
-| **Impact** | missile, missile weight, how many impacts, target velocity | one attempt per impact — each with its own pass/fail, photographs and verdict |
+| **Impact** | how many impacts — the classification is chosen in LabOS | one attempt per impact — each with its own pass/fail, photographs and verdict |
 | **Forced Entry** | the grade to judge against — no numbers | one pass/fail verdict per attempt, with notes and photographs |
 | **ANSI Z97.1** | the class to judge against — no numbers | one pass/fail verdict per attempt, with notes and photographs |
 
@@ -47,7 +47,7 @@ This is the principle these pages are built on, so it is worth stating what it a
 rather than in intent. **Every row marked *from the proposal* on the five pages that follow is a field
 the operator never types.**
 
-**17 fields are read from Airtable and pre-filled today**, out of 20 the
+**15 fields are read from Airtable and pre-filled today**, out of 17 the
 integration reads in total — and that total is the whole of it. The read boundary is a list in the
 code, not a convention: a field not on the list is not copied, which is also how the commercial
 fields stay out.
@@ -57,7 +57,7 @@ fields stay out.
 | Every test — the job, specimen, protocol and requirement identity | `IFET job number` · `Project name` · `Mock-up/specimen name` · `Protocol Name` · `Section Name` · `Requirement Code` · `Applicability` · `Requirement Kind` · `Required Unit` |
 | Static Load | `Required Value Inward` · `Required Value Outward` |
 | Cycles | `Required Value Inward/Outward` |
-| Impact | `Missile Type` · `Missile Weight` · `Impact Velocity` *(gap not surfaced)* · `Required Value` |
+| Impact | `Required Value` |
 | Forced Entry | `Required Option` |
 | ANSI Z97.1 | `Required Option` |
 | How many deflection gauges *(a parameter, not a test)* | `Required Value` *(gap unreconciled)* |
@@ -205,9 +205,6 @@ Fire a missile at the specimen a required number of times and record, for each i
 
 | Requirement | Airtable field | Where it lands in LabOS |
 |---|---|---|
-| Missile specified | `Missile Type` | `missile_impact_tests.missile` |
-| Missile mass | `Missile Weight` | `missile_impact_tests.missile_weight` |
-| Target velocity *(gap not surfaced)* | `Impact Velocity` | `at_mirror_sections.impact_velocity` |
 | How many impacts | `Required Value` | `projects.impact_count` |
 
 A requirement LabOS cannot read unambiguously is **refused and reported to the operator with
@@ -218,6 +215,10 @@ the requirement is treated as a different test rather than a typo.
 
 **One test type, not two.** Large missile and small missile are the same procedure with a different missile, so the missile is a field on the test and not a separate kind of test.
 
+**The impact classification is chosen in LabOS, not supplied by Airtable — your decision of 2026-09-10.** One value covers the missile, its weight and the target velocity: *SMI*, *LMI Level D* or *LMI Level E*. Airtable's requirement code already says whether a section is large missile or small, so that half is filled in for you and cannot be contradicted; the only thing anyone chooses is D or E, and only on a large-missile test. The classification is then sent back to Airtable with the result.
+
+**The target velocity is entered in LabOS too**, and it is not worked out from the classification: we hold no table that says which velocity each one means, and inventing one would put a number in every impact record that nobody had checked.
+
 **One attempt per impact — as you specified on 2026-09-08.** An impact test contains one or more attempts and each attempt is exactly one impact, with its own pass/fail, its own photographs and its own verdict. Impact 1, 2, 3 are three attempts, not one attempt holding three impacts, and none of them ever overwrites another.
 
 There is no separate notion of re-doing impact 3: a specimen already struck cannot have that impact repeated, so a further firing is impact 6, which is simply the next attempt. A result recorded *wrongly* is a different thing and is superseded rather than overwritten — see the last page.
@@ -226,7 +227,11 @@ There is no separate notion of re-doing impact 3: a specimen already struck cann
 
 | What | Kept in LabOS as | Sent to Airtable as | When |
 |---|---|---|---|
+| Missile, free text (history) | `missile_impact_tests.missile` | — *(stays in LabOS)* | n/a |
+| Missile mass (history) | `missile_impact_tests.missile_weight` | — *(stays in LabOS)* | n/a |
 | Per-impact observations | `shots.area/velocity/note` | *in the JSON response* | terminal |
+| Impact classification | `missile_impact_tests.impact_family + impact_level` | `Impact Classification` | terminal |
+| Target impact velocity | `missile_impact_tests.target_velocity` | `Target Impact Velocity` | terminal |
 | Each impact is its own attempt row | `test_results.trial_number` | `Impact Number` | create |
 | Outcome of that one impact | `test_results.test_result` | `Impact Result` | terminal |
 | Per-impact photographs | `test_photos.shot_id set` | `LabOS Photos` | attachment |

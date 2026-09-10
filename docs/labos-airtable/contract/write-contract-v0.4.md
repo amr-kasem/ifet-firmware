@@ -98,6 +98,21 @@ Conflicting parent links are rejected for import; the last consistent mirror rem
 
 Preserve `Section Name` and `Value` verbatim. Add these eight fields; their semantics are decided here.
 
+> **The eight are the whole read surface, and that is a correction as much as a statement.** Three more —
+> `Missile Type`, `Missile Weight` and `Impact Velocity` — were applied to the Testing Base on 2026-09-08 as
+> inbound impact requirements and were never written into this table. They were **withdrawn from the read
+> contract on 2026-09-10**, when the product owner made the impact classification LabOS-owned: LabOS chooses
+> *SMI*, *LMI Level D* or *LMI Level E*, and publishes it outbound with the result. Airtable's requirement
+> code already distinguishes large missile from small, so the only fact it never carried was the level.
+>
+> The three remain **physically present in the Testing Base and are deliberately not deleted** — removal is a
+> coordinated cleanup with the Airtable team, not a side effect. They are absent from `mirror.SECTION_FIELDS`,
+> absent from the requirement snapshot, and never created in production. `preflight.DEPRECATED_TESTING_ONLY`
+> asserts all three of those every run.
+>
+> So the impact requirement Airtable owns is exactly the **count**, through `Required Value` plus
+> `Requirement Code` — unchanged. §4 gains the two outbound fields that replace them.
+
 | Field | Airtable type | Rule |
 |---|---|---|
 | Requirement Code | singleSelect | Stable code from §3.2; names are display labels |
