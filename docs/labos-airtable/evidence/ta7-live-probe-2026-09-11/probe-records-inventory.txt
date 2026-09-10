@@ -1,0 +1,33 @@
+TA7 probe records left in the Testing Base for review — DO NOT DELETE YET
+Base app4oXS3Kd5IKWgJ7 · LabOS Raw Data Table tblnc9SsbXU0C0FWh
+Operator Name = LABOS-PROBE-TA7 · 11 rows
+
+record id            classification  tgt vel   #  created
+reczkHD1lSKs3IaKo    SMI                 130   1  2026-09-10T22:31:01.000Z
+rec0RPD3OSkTLWnTO    LMI Level D       50.25   1  2026-09-10T22:31:02.000Z
+recKLBKqNUPwkoRRd    SMI                 130   1  2026-09-10T22:32:30.000Z
+recOEJGEMEDNMc4dl    LMI Level E        55.5   1  2026-09-10T22:32:30.000Z
+recoGDua3C5Bmc8Ew    LMI Level D       50.25   1  2026-09-10T22:32:30.000Z
+rec5ChSjaqtYrLUe2    LMI Level E        55.5   1  2026-09-10T22:33:27.000Z
+recgh22UBGvNo2EHL    LMI Level D       50.25   1  2026-09-10T22:33:27.000Z
+reciHT0yV31UiYy7p    SMI                 130   1  2026-09-10T22:33:27.000Z
+recBJizDgkdAKOxFM    SMI                 130   1  2026-09-10T22:39:55.000Z
+rechRbmiYM7l2n313    LMI Level D       50.25   1  2026-09-10T22:39:55.000Z
+recpcZdj2rziymg7m    LMI Level E        55.5   1  2026-09-10T22:39:55.000Z
+
+Probe hierarchies (IFET Projects / Tests Protocols / Protocol Sections):
+  IFET Projects        recBkOq659riXmMEn  IFET-PROBE-TA7-0001-223938
+  IFET Projects        recBsD5CleUWSahK7  IFET-PROBE-TA7-0001-223313
+  IFET Projects        recRkejFXviCcml0I  IFET-PROBE-TA7-0001-223217
+  IFET Projects        recYF3bwwmy7ZLquo  IFET-PROBE-TA7-0001
+  IFET Projects        reczumrew5JeldcVf  IFET-PROBE-TA7-0001-223048
+  Mock-Ups/Specimens   rec1DtCc7Cr4N8LYt  TA7 probe specimen
+  Mock-Ups/Specimens   rec7KsuWiYpAtjyVC  TA7 probe specimen
+  Mock-Ups/Specimens   recVxRX5og3i3cWGF  TA7 probe specimen
+  Mock-Ups/Specimens   recYjiP794gL1B4P7  TA7 probe specimen
+  Mock-Ups/Specimens   recbFrErkVOOFXlQf  TA7 probe specimen
+  Tests Protocols      rec1uMYyZtLHip9S6  TA7 probe protocol
+  Tests Protocols      recIwSTUIm4UinpuN  TA7 probe protocol
+  Tests Protocols      recUzUe9zpPiahmAq  TA7 probe protocol
+  Tests Protocols      recZn3aSTHxpzI3io  TA7 probe protocol
+  Tests Protocols      recm3si3tNNlwn5p6  TA7 probe protocol

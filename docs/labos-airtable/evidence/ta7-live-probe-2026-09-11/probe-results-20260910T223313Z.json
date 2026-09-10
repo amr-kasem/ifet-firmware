@@ -1,0 +1,345 @@
+{
+ "created_airtable_records": {
+  "SMI": "reciHT0yV31UiYy7p",
+  "LMI-D": "recgh22UBGvNo2EHL",
+  "LMI-E": "rec5ChSjaqtYrLUe2"
+ },
+ "probe_hierarchy": {
+  "project": "recBsD5CleUWSahK7",
+  "mockup": "recVxRX5og3i3cWGF",
+  "protocol": "recZn3aSTHxpzI3io",
+  "sections": {
+   "IMPACT_SMI": "reckUB6zqGNlAHsF7",
+   "IMPACT_LMI": "rechqjAbGhNVjtYP7",
+   "STATIC_PRESSURE": "rec92PhEZpKbXNeI7"
+  },
+  "job_number": "IFET-PROBE-TA7-0001-223313"
+ },
+ "attempt_ids": {
+  "SMI": "d0ec547c-53a0-4b6e-a69b-bc37a161d7a1",
+  "LMI-D": "887884a0-330c-48fb-85e2-6f88e0d7ec6e",
+  "LMI-E": "d41dde9e-10dc-4ec1-8e3b-7ca7f03d1b8e"
+ },
+ "results": [
+  {
+   "assertion": "production schema before = 142",
+   "pass": true,
+   "detail": "142"
+  },
+  {
+   "assertion": "probe hierarchy created in Testing",
+   "pass": true,
+   "detail": "job=IFET-PROBE-TA7-0001-223313 recBsD5CleUWSahK7 protocol=recZn3aSTHxpzI3io sections=['reckUB6zqGNlAHsF7', 'rechqjAbGhNVjtYP7', 'rec92PhEZpKbXNeI7']"
+  },
+  {
+   "assertion": "mirror does not carry missile",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "mirror does not carry missile_weight",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "mirror does not carry impact_velocity",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "mirror did carry the count",
+   "pass": true,
+   "detail": "2.0"
+  },
+  {
+   "assertion": "import succeeded",
+   "pass": true,
+   "detail": "{\"name\":\"TA7 probe specimen\",\"inward_design_pressure\":60.0,\"outward_design_pressure\":45.0,\"parent_id\":1,\"has_water_infiltration\":false,\"id\":1,\"device_id\":1,\"sta"
+  },
+  {
+   "assertion": "two impact tests created (SMI + LMI)",
+   "pass": true,
+   "detail": "2"
+  },
+  {
+   "assertion": "families frozen from Requirement Code",
+   "pass": true,
+   "detail": "{'SMI', 'LMI'}"
+  },
+  {
+   "assertion": "missile NOT prefilled from the withdrawn field",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "missile_weight NOT prefilled",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "target_velocity NOT prefilled",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[SMI] PATCH set level/velocity",
+   "pass": true,
+   "detail": "{\"id\":2,\"project_id\":1,\"missile\":null,\"missile_weight\":null,\"finished\":false,\"airtable_protocol_id\":"
+  },
+  {
+   "assertion": "[SMI] derived classification is 'SMI'",
+   "pass": true,
+   "detail": "SMI"
+  },
+  {
+   "assertion": "[SMI] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":1,\"trial_number\":1,\"labos_attempt_id\":\"d0ec547c-53a0-4b6e-a69b-bc37a161d7a1\",\"labos_test_id\":\""
+  },
+  {
+   "assertion": "[LMI-D] PATCH set level/velocity",
+   "pass": true,
+   "detail": "{\"id\":1,\"project_id\":1,\"missile\":null,\"missile_weight\":null,\"finished\":false,\"airtable_protocol_id\":"
+  },
+  {
+   "assertion": "[LMI-D] derived classification is 'LMI Level D'",
+   "pass": true,
+   "detail": "LMI Level D"
+  },
+  {
+   "assertion": "[LMI-D] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":2,\"trial_number\":1,\"labos_attempt_id\":\"887884a0-330c-48fb-85e2-6f88e0d7ec6e\",\"labos_test_id\":\""
+  },
+  {
+   "assertion": "[LMI-E] PATCH set level/velocity",
+   "pass": true,
+   "detail": "{\"id\":3,\"project_id\":1,\"missile\":null,\"missile_weight\":null,\"finished\":false,\"airtable_protocol_id\":"
+  },
+  {
+   "assertion": "[LMI-E] derived classification is 'LMI Level E'",
+   "pass": true,
+   "detail": "LMI Level E"
+  },
+  {
+   "assertion": "[LMI-E] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":3,\"trial_number\":1,\"labos_attempt_id\":\"d41dde9e-10dc-4ec1-8e3b-7ca7f03d1b8e\",\"labos_test_id\":\""
+  },
+  {
+   "assertion": "[SMI] exactly one Raw Data row",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "[SMI] Impact Classification == 'SMI'",
+   "pass": true,
+   "detail": "'SMI'"
+  },
+  {
+   "assertion": "[SMI] Target Impact Velocity == 130.0",
+   "pass": true,
+   "detail": "130"
+  },
+  {
+   "assertion": "[SMI] Target Impact Velocity is a NUMBER not text",
+   "pass": true,
+   "detail": "int"
+  },
+  {
+   "assertion": "[SMI] value landed on the row for this attempt",
+   "pass": true,
+   "detail": "d0ec547c-53a0-4b6e-a69b-bc37a161d7a1"
+  },
+  {
+   "assertion": "[SMI] Impact Number == 1",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "assertion": "[SMI] Impact Result present",
+   "pass": true,
+   "detail": "'Pass - impact 1 resisted'"
+  },
+  {
+   "assertion": "[SMI] photo published via the real attachment path",
+   "pass": true,
+   "detail": "1 attachment(s)"
+  },
+  {
+   "assertion": "[SMI] Complete LabOS JSON is valid JSON",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[SMI] withdrawn values absent from the JSON",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[LMI-D] exactly one Raw Data row",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "[LMI-D] Impact Classification == 'LMI Level D'",
+   "pass": true,
+   "detail": "'LMI Level D'"
+  },
+  {
+   "assertion": "[LMI-D] Target Impact Velocity == 50.25",
+   "pass": true,
+   "detail": "50.25"
+  },
+  {
+   "assertion": "[LMI-D] Target Impact Velocity is a NUMBER not text",
+   "pass": true,
+   "detail": "float"
+  },
+  {
+   "assertion": "[LMI-D] value landed on the row for this attempt",
+   "pass": true,
+   "detail": "887884a0-330c-48fb-85e2-6f88e0d7ec6e"
+  },
+  {
+   "assertion": "[LMI-D] Impact Number == 1",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "assertion": "[LMI-D] Impact Result present",
+   "pass": true,
+   "detail": "'Pass - impact 1 resisted'"
+  },
+  {
+   "assertion": "[LMI-D] photo published via the real attachment path",
+   "pass": true,
+   "detail": "1 attachment(s)"
+  },
+  {
+   "assertion": "[LMI-D] Complete LabOS JSON is valid JSON",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[LMI-D] withdrawn values absent from the JSON",
+   "pass": false,
+   "detail": ""
+  },
+  {
+   "assertion": "[LMI-E] exactly one Raw Data row",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "[LMI-E] Impact Classification == 'LMI Level E'",
+   "pass": true,
+   "detail": "'LMI Level E'"
+  },
+  {
+   "assertion": "[LMI-E] Target Impact Velocity == 55.5",
+   "pass": true,
+   "detail": "55.5"
+  },
+  {
+   "assertion": "[LMI-E] Target Impact Velocity is a NUMBER not text",
+   "pass": true,
+   "detail": "float"
+  },
+  {
+   "assertion": "[LMI-E] value landed on the row for this attempt",
+   "pass": true,
+   "detail": "d41dde9e-10dc-4ec1-8e3b-7ca7f03d1b8e"
+  },
+  {
+   "assertion": "[LMI-E] Impact Number == 1",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "assertion": "[LMI-E] Impact Result present",
+   "pass": true,
+   "detail": "'Pass - impact 1 resisted'"
+  },
+  {
+   "assertion": "[LMI-E] photo published via the real attachment path",
+   "pass": true,
+   "detail": "1 attachment(s)"
+  },
+  {
+   "assertion": "[LMI-E] Complete LabOS JSON is valid JSON",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[LMI-E] withdrawn values absent from the JSON",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[retry] the queue refuses a phase already delivered",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[retry] direct re-upsert returns the same record id",
+   "pass": true,
+   "detail": "['recgh22UBGvNo2EHL'] vs ['recgh22UBGvNo2EHL']"
+  },
+  {
+   "assertion": "[retry] upsert updated rather than created",
+   "pass": true,
+   "detail": "createdRecords=[]"
+  },
+  {
+   "assertion": "[retry] still exactly one row for the attempt id",
+   "pass": true,
+   "detail": "1 -> 1"
+  },
+  {
+   "assertion": "[retry] same Airtable record id \u2014 updated, not duplicated",
+   "pass": true,
+   "detail": "recgh22UBGvNo2EHL -> recgh22UBGvNo2EHL"
+  },
+  {
+   "assertion": "[retry] no duplicate logical attempt across the probe",
+   "pass": true,
+   "detail": "8 rows, 8 distinct attempt ids"
+  },
+  {
+   "assertion": "no unexpected write to IFET Projects",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "no unexpected write to Mock-Ups/Specimens",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "no unexpected write to Tests Protocols",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "no unexpected write to Protocol Sections",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "production schema unchanged at 142",
+   "pass": true,
+   "detail": "142"
+  },
+  {
+   "assertion": "production record count unchanged",
+   "pass": true,
+   "detail": "1 -> 1"
+  },
+  {
+   "assertion": "production schema byte-identical before/after",
+   "pass": true,
+   "detail": ""
+  }
+ ]
+}

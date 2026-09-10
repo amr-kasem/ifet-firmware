@@ -1,0 +1,202 @@
+{
+ "project": {
+  "name": "TA7 probe specimen",
+  "inward_design_pressure": 60.0,
+  "outward_design_pressure": 45.0,
+  "parent_id": 1,
+  "has_water_infiltration": false,
+  "id": 1,
+  "device_id": 1,
+  "static_tests": [
+   {
+    "pressure": 45.0,
+    "duration": 30,
+    "type": "inward",
+    "id": 1,
+    "finished": false,
+    "index": 0,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "pressure": 33.75,
+    "duration": 30,
+    "type": "outward",
+    "id": 2,
+    "finished": false,
+    "index": 1,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "pressure": 60.0,
+    "duration": 30,
+    "type": "inward",
+    "id": 3,
+    "finished": false,
+    "index": 2,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "pressure": 45.0,
+    "duration": 30,
+    "type": "outward",
+    "id": 4,
+    "finished": false,
+    "index": 3,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "pressure": 90.0,
+    "duration": 30,
+    "type": "inward",
+    "id": 5,
+    "finished": false,
+    "index": 4,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "pressure": 67.5,
+    "duration": 30,
+    "type": "outward",
+    "id": 6,
+    "finished": false,
+    "index": 5,
+    "trials": [],
+    "preset": true
+   }
+  ],
+  "infiltration_tests": [],
+  "missile_impact_tests": [
+   {
+    "missile": null,
+    "missile_weight": null,
+    "id": 1,
+    "shots": [],
+    "airtable_section_id": "rechqjAbGhNVjtYP7",
+    "impact_family": "LMI",
+    "impact_level": null,
+    "target_velocity": null,
+    "impact_classification": null
+   },
+   {
+    "missile": null,
+    "missile_weight": null,
+    "id": 2,
+    "shots": [],
+    "airtable_section_id": "reckUB6zqGNlAHsF7",
+    "impact_family": "SMI",
+    "impact_level": null,
+    "target_velocity": null,
+    "impact_classification": "SMI"
+   }
+  ],
+  "manual_tests": [],
+  "cyclic_tests": [
+   {
+    "type": "inward",
+    "cycles": 3500,
+    "low_pressure": 12.0,
+    "high_pressure": 30.0,
+    "finished": false,
+    "index": 0,
+    "resume": false,
+    "current_cycle": 0,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "type": "inward",
+    "cycles": 300,
+    "low_pressure": 0.0,
+    "high_pressure": 36.0,
+    "finished": false,
+    "index": 1,
+    "resume": false,
+    "current_cycle": 0,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "type": "inward",
+    "cycles": 600,
+    "low_pressure": 30.0,
+    "high_pressure": 48.0,
+    "finished": false,
+    "index": 2,
+    "resume": false,
+    "current_cycle": 0,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "type": "inward",
+    "cycles": 100,
+    "low_pressure": 18.0,
+    "high_pressure": 60.0,
+    "finished": false,
+    "index": 3,
+    "resume": false,
+    "current_cycle": 0,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "type": "outward",
+    "cycles": 50,
+    "low_pressure": 13.5,
+    "high_pressure": 45.0,
+    "finished": false,
+    "index": 4,
+    "resume": false,
+    "current_cycle": 0,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "type": "outward",
+    "cycles": 1050,
+    "low_pressure": 22.5,
+    "high_pressure": 36.0,
+    "finished": false,
+    "index": 5,
+    "resume": false,
+    "current_cycle": 0,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "type": "outward",
+    "cycles": 50,
+    "low_pressure": 0.0,
+    "high_pressure": 27.0,
+    "finished": false,
+    "index": 6,
+    "resume": false,
+    "current_cycle": 0,
+    "trials": [],
+    "preset": true
+   },
+   {
+    "type": "outward",
+    "cycles": 3350,
+    "low_pressure": 9.0,
+    "high_pressure": 22.5,
+    "finished": false,
+    "index": 7,
+    "resume": false,
+    "current_cycle": 0,
+    "trials": [],
+    "preset": true
+   }
+  ],
+  "gauge_count": null,
+  "impact_count": 4,
+  "airtable_project_id": "recBsD5CleUWSahK7",
+  "airtable_mockup_id": "recVxRX5og3i3cWGF",
+  "airtable_mockup_name": "TA7 probe specimen"
+ }
+}
