@@ -345,6 +345,14 @@ These are things LabOS produces that had nowhere to go.
 | `Impact Number` | number (integer) | **Added 2026-09-08.** Which impact of the test this row records — 1, 2, 3. Populated only for `Test Type = Impact`, where one attempt is one impact; **blank on the other four types**. Count tests by grouping on `LabOS Test ID`, and impacts with this. See §0.3 |
 | `Impact Classification` | singleSelect — `SMI` · `LMI Level D` · `LMI Level E` | **Added 2026-09-10, and the one genuinely new request in this revision.** Which missile classification an impact ran under. This is what replaces the three withdrawn `Protocol Sections` fields: instead of you supplying the missile, its mass and a target velocity, LabOS sends back the one value that means all three. For a job imported from your base the `SMI`/`LMI` half comes from your own `IMPACT_SMI` / `IMPACT_LMI` requirement code and cannot disagree with it — only the level is ours. **Blank on the other four test types** |
 | `Target Impact Velocity` | number, 2 dp | **Added 2026-09-10.** The target velocity the test was run against, in ft/s, entered by our operator. A **target**, never a measurement: the achieved velocity of each individual impact stays in LabOS and travels only inside `Complete LabOS JSON Response`. **Blank on the other four types** |
+| `Forced Entry Result` | singleSelect — `Pending` · `Passed` · `Failed` · `Inconclusive` | **Added 2026-09-11.** The Forced Entry verdict on its own axis, so a report or view about that standard does not have to filter `Test Result` by `Test Type` first. Blank on every other type |
+| `ANSI Result` | singleSelect — same four options | **Added 2026-09-11.** The same for ANSI Z97.1 |
+
+**These two are the same value as `Test Result`, not a second one.** An attempt is `Pending` from the moment
+it is created until somebody reviews it, and the dedicated field says exactly what `Test Result` says at
+every point in that lifecycle — it is simply blank on the four test types it does not describe. **`Test
+Result` is unchanged**, still written on every attempt of all five types, and every view and automation you
+have built on it keeps working. Nothing here asks you to migrate anything.
 
 **Two fields, and two fewer than we asked for on 2026-09-08.** The net effect of this revision on your base
 is that the impact requirement moves from four fields you fill in to one number you already had — the count
@@ -365,7 +373,7 @@ a speculative field propagates rather than sitting harmlessly in a sandbox.
 | Not created | Why |
 |---|---|
 | `Impact Locations` | Location is a per-impact observation LabOS records locally, not a requirement |
-| `Forced Entry Result` · `ANSI Result` | No dedicated scalar needed: `Test Type` and `Test Result` are both single-selects, so your views filter and group both workflows natively. Sub-detail travels in the JSON field. **We will add one only if you name the report that needs it** |
+| ~~`Forced Entry Result` · `ANSI Result`~~ | **Now requested — see the additions table above.** This row previously said we would add them only if you named a report that needed them. Our project owner answered that question on 2026-09-10: Forced Entry and ANSI Z97.1 are judged under **different standards**, so their results must be distinguishable rather than sharing one column |
 | `Failure Notes` | Carried inside `Notes` and the JSON for this release |
 | `Impact Locations` *(again)* | Confirmed by our project owner on 2026-09-10: impact location belongs to the test plan and is not shown in LabOS or Airtable |
 | Any new table, relationship, or delta-cursor field | Not needed |
