@@ -10,6 +10,12 @@ forward on its original wording. Four classifications, and the third is not a eu
 | **NOT RELEASE-RELEVANT** | still true, and this release neither causes it nor is affected by it |
 | **DEPLOYMENT-WINDOW VERIFICATION** | can only be checked against the live fleet or the deployment database. **Not assumed either way** |
 
+> **Re-verified against the live fleet later the same day.** The cross-system alignment pass reached
+> `management`, `system-1`, `system-2` and both Airtable bases read-only and settled the two items below
+> that this file could not check — **§3.7 and §3.8 are now confirmed STILL ACTIVE from live evidence, not
+> carried forward** — and found one new finding, **§2.4**. Record:
+> [`cross-system-alignment-2026-09-11/`](cross-system-alignment-2026-09-11/).
+
 ---
 
 ## 1. Airtable and contract
@@ -62,15 +68,35 @@ now **applies migrations and never invents them**, and a failure is fatal rather
 
 ### 2.2 `alembic/versions` gitignored, chain only on the node — **RESOLVED**
 
-All **38** revisions are tracked in git today (`git ls-files … | wc -l` → 38, and `git check-ignore` does
+All **39** revisions are tracked in git today (`git ls-files … | wc -l` → 39, and `git check-ignore` does
 not match). The directory is still bind-mounted, so the files must be in the node's working tree at
 container start — the runbook says so.
 
+**Resolved in the repository, not on the node.** `.gitignore` on `latest` @ `90f9595` still carries
+`**/alembic/versions/*`, so revisions the node writes for itself remain invisible to git until the merge
+lands. That is §2.4.
+
 ### 2.3 The repo is not ground truth for the deployed revision — **ACTIVE, by design**
 
-Still true and still the rule: `SELECT * FROM alembic_version;` **on the node**. Recorded as
-`3a65a83e0463`, which is position 29 of 38, so a deploy applies nine migrations. First item of the
-runbook's pre-deploy checklist.
+Still true and still the rule: `SELECT * FROM alembic_version;` **on the node** — and §2.4 is what happens
+when you do it rather than quote it. It was `3a65a83e0463` for months; on 2026-09-11 it reads
+`7ed2a670841e`. A deploy applies **ten** migrations. First item of the runbook's pre-deploy checklist, and
+the reason §1.2a now exists.
+
+### 2.4 The node mints its own revisions, and one now branches against the release — **ACTIVE, found 2026-09-11, LIVE**
+
+New, and the one finding of this pass that changes a deployment step rather than a document.
+
+The **deployed** `startup.sh` still autogenerates a revision at every container start — §2.1 is resolved in
+the repository and has not reached the node. On 2026-09-09 a restart minted
+`7ed2a670841e` (`revises 3a65a83e0463`, `def upgrade(): pass`) and advanced `alembic_version` to it. It is
+`.gitignore`d on the node, so it exists nowhere in git.
+
+**`b7c2e9a41d38`, the release's first migration, also revises `3a65a83e0463`.** Two heads; `alembic upgrade
+head` refuses; `startup.sh` makes that fatal. This is Case B of `../runbooks/p0-p1-deploy-2026-08-28.md` §2,
+and it is now `../runbooks/production-deploy-2026-09-11.md` **§1.2a**.
+
+It recurs on every restart of the current stack, so the reconciliation is a window step, not a one-off fix.
 
 ---
 
@@ -113,36 +139,61 @@ management deployment.
 Measured 2.021 s/cycle against two 1.0 s sleeps; `low_pressure` affects only the initial ramp. Same
 classification and same reason as §3.5.
 
-### 3.7 The two production rigs run different firmware, and `system-1` is misconfigured — **DEPLOYMENT-WINDOW VERIFICATION**
+### 3.7 The two production rigs run different firmware, and `system-1` is misconfigured — **STILL ACTIVE, verified live 2026-09-11**
 
 As at 2026-08-31: `states/idle.py` differed on `system-2` (the RELIEF guard — the valve-3 stuck-open fix —
 had not reached it), and on `system-1` `state_machine`/`valves_service` were bind-mounted on
-`config1-site-b.json` while `serial_service` used `config1.json`. The valve-3 fix is recorded as deployed
-to `system-1` only. **Not verified from this session** — it needs the fleet, and this release does not
-touch rig code.
+`config1-site-b.json` while `serial_service` used `config1.json`.
+
+**Verified live on 2026-09-11, and every part of it still holds:**
+
+| | `system-1` | `system-2` |
+|---|---|---|
+| firmware | `dev` @ `b009bca` (= `dev` head) | `dev` @ `5048d9a`, **4 commits behind** |
+| `md5sum /app/states/idle.py`, in the running container | `010df207669c17b525d363065496753b` | `74ac7969d211024abf5a0754065df5fa` |
+
+Both hashes match `git show <commit>:src/state_machine/states/idle.py` exactly, so **the RELIEF guard is on
+`system-1` only** — thirteen days on, and four weeks after the customer report. `system-1`'s split mount is
+unchanged too: `state_machine` and `valves` on `config1-site-b.json`, `serial` on `config1.json`;
+`system-2` is on `config2.json` throughout, plus the standalone turbo controller's own config.
+
+Still **not release-relevant** — no rig code changes here, and neither rig carries
+`feature/labos-firmware-p3` — but it is a firmware deploy decision of its own, and `system-2` is the rig
+that drives the turbo valves.
 
 ```bash
-# at the window, read-only, per rig
-docker inspect --format '{{json .Mounts}}' <container> | jq .
+# read-only, per rig
+docker inspect --format '{{range .Mounts}}{{.Source}}=>{{.Destination}} {{end}}' <container>
 docker exec <container> md5sum /app/states/idle.py
 git -C /home/labadm/ifet-firmware log -1 --format='%H %s'
 ```
 
-### 3.8 Deflection acquisition down fleet-wide since 2026-08-29 — **DEPLOYMENT-WINDOW VERIFICATION**
+### 3.8 Deflection acquisition down fleet-wide since 2026-08-29 — **STILL ACTIVE, verified live 2026-09-11**
 
-Both SICK masters unreachable, 45 861 consecutive failures, no success in the retained log. Any test run
-since records `deflections: []`. **Not verified from this session.** It does not affect what this release
-publishes — deflections are withheld — but a static or cyclic test that records no deflections produces
-very little local evidence, so its current state belongs in the deployment record.
+Both SICK masters unreachable, no success in the retained log.
+
+**Confirmed still down at 14:32 UTC on 2026-09-11**, from both gateway containers on `management`:
+
+```
+sick_gateway-1 -> 10.1.10.229 : [Errno 113] No route to host, on every port
+sick_gateway-2 -> 10.1.10.85  : [Errno 113] No route to host, on every port
+```
+
+The production data agrees: attempts **647–655 have zero deflection rows**, 641–646 have five each, and 35
+of the 55 attempts above id 600 have none. Thirteen days — and production has run 15 further tests in that
+time.
+
+It does not affect what this release publishes — deflections are withheld — but a static or cyclic test run
+today produces very little local evidence, and that belongs in the deployment record.
 
 ### 3.9 VFD Modbus address is per-rig (`system-1` = 12, `system-2` = 5) — **RESOLVED, and the correction stands**
 
 An earlier note generalised `12` to the fleet. Verified per-rig live on 2026-09-08. Recorded here because
 the generalised version is still quotable from older documents.
 
-### 3.10 The `test` node has been offline since ~2026-07-24 — **ACTIVE, external**
+### 3.10 The `test` node has been offline since ~2026-07-24 — **ACTIVE, external, verified live 2026-09-11**
 
-There is **no non-production rig** to rehearse a rig-affecting change on. This release does not change rig
+SSH to its remote.it proxy returns `Connection refused`. Seven weeks. There is **no non-production rig** to rehearse a rig-affecting change on. This release does not change rig
 code, so it is not a blocker for it — but it is why the migration rehearsal runs on a disposable Postgres
 rather than on a test node, and it remains an open ask to the manager.
 
