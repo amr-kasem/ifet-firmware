@@ -13,7 +13,7 @@
 > |---|---|
 > | Where the work stands | `status/delivery-plan.md` — and its **DG14**, which is the one finding of the readiness pass that changed a decision |
 > | How this is deployed | `runbooks/production-deploy-2026-09-11.md` |
-> | What the Airtable team must do | `runbooks/production-airtable-promotion-2026-09-11.md` · `correspondence/airtable-team-actions-2026-09-11.md` |
+> | What the Airtable team must do | `correspondence/LabOS-Airtable-Production-Schema-Requirements-2026-09-11.md` + its generated CSV |
 > | What is still true of the old findings | `evidence/historical-findings-reassessment-2026-09-11.md` |
 >
 > §2 (the TA7 contract), §5 (production boundaries), §8 (the optimization-loop guard) and §9 (paths) are

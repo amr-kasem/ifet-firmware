@@ -358,11 +358,12 @@ would not send, and it is visible in `GET /sync/failures` by design.
 > change document has been sent and acknowledged. It is not part of the application deployment above, and
 > the application is designed to be correct on either side of it.
 
-Spec: **`production-airtable-promotion-2026-09-11.md`** — 19 ADD, 0 rename, 0 retype, 0 delete;
-142 → **161**.
+**Authoritative field contract:** `../correspondence/LabOS-Airtable-Production-Schema-Requirements-2026-09-11.md`
+and its generated CSV `LabOS-Airtable-Production-Schema-Changes-2026-09-11.csv` — 19 ADD, 0 rename, 0 retype,
+0 option change, 0 delete; 142 → **161**. Our own execution notes are in
+`production-airtable-promotion-2026-09-11.md`, which does **not** restate the field list.
 
-1. Send `../correspondence/testing-base-change-document-2026-09-08.md` and the promotion spec. Wait for
-   acknowledgement.
+1. Send the two canonical artefacts above. Wait for acknowledgement.
 2. `python3 -m app.airtable.apply_schema --out-dir <evidence> --env ../../.env` — **dry run, Testing only.**
    It cannot target production; that refusal is unconditional and has no override. It is run here to confirm
    Testing is still exactly as documented, not to promote anything.
@@ -376,7 +377,7 @@ Spec: **`production-airtable-promotion-2026-09-11.md`** — 19 ADD, 0 rename, 0 
    production, which is what makes today's "untouched" a fact. Rewriting it to assert 19 present and 3 still
    absent is part of the promotion.
 7. Regenerate `interface-schema.csv` to fill in `field_id_production`.
-8. Airtable automations and roll-ups — see `../correspondence/airtable-team-actions-2026-09-11.md`.
+8. Airtable automations and roll-ups — §6 of the schema requirements document.
 
 ---
 

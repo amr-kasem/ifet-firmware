@@ -1,93 +1,40 @@
-# Production Airtable promotion spec — 2026-09-11
+# Production Airtable promotion — internal execution notes, 2026-09-11
 
-> **DO NOT APPLY FROM THIS REPOSITORY.** `apply_schema.py` refuses the production base unconditionally
-> and has no flag that overrides it — that refusal is deliberate and must not be removed. This document
-> is what the **Airtable team** works from, after explicit approval. Everything below is derived from the
-> two live bases read read-only on 2026-09-11, the field register and the write contract; nothing here is
-> a stale count.
+> **INTERNAL. This is not the document we send.**
+>
+> The **authoritative field contract** is
+> `../correspondence/LabOS-Airtable-Production-Schema-Requirements-2026-09-11.md` and its generated
+> companion `../correspondence/LabOS-Airtable-Production-Schema-Changes-2026-09-11.csv`. That pair is what
+> the Airtable team works from, and it is the only place the field list lives.
+>
+> **This file deliberately does not restate the field list.** It used to, and a second copy of a field
+> list is a second thing to forget to regenerate. What is here is the part the external document should
+> not carry: our own ordering, verification and remediation procedure for the window.
 
-## The delta, in one line
+## The delta, as the generated CSV computes it
 
-**Production `app0OCunbmuXl7Hc9` is at 142 fields. This proposes 19 additions and nothing else.**
-Expected count after promotion: **142 + 19 = 161**.
+Do not transcribe these numbers — read them from the CSV, or regenerate it:
 
-| Action | Count | Meaning |
-|---|---|---|
-| **ADD** | **19** | create in production; present in Testing and verified there |
-| **KEEP** | **142** | already in production, unchanged — **type as well as presence** |
-| **OPTION CHANGE** | **0** | no existing single-select gains, loses or renames a choice |
-| **RENAME** | **0** | nothing is renamed. A rename needs its own explicit approval and there is none |
-| **OMIT / DEPRECATED** | **3** | present in Testing, withdrawn from the contract, **never to be created here** |
-| **DELETE** | **0** | nothing is removed from production. Ever, in this change |
+```bash
+python3 ../evidence/testing-base-changes-2026-09-06/make-production-change-spec.py
+```
+
+As at 2026-09-11 that prints **19 ADD · 0 CHANGE TYPE · 0 CHANGE OPTIONS · 3 DO NOT PROMOTE · 142 KEEP**,
+and `production 142 today + 19 ADD = 161 after promotion`. The generator reads the live bases through
+`interface-schema.csv`, so a rerun is the check.
 
 ## ⚠️ Field IDs do not travel between bases
 
-Every `fld…` below is the **Testing Base** id, given so a reviewer can find the field and compare it.
-Airtable mints a new id when the field is created in production, and **the two will not match**. Nothing in
-LabOS depends on a production field id: the contract keys on the field *name*, and
-`interface-schema.csv` carries `field_id_production` as a separate column that is filled in after the fact,
-not assumed. Do not copy a Testing id into anything that expects a production one.
+Every `fld…` in the external document is a **Testing** ID. Airtable mints a new one on create and they
+will not match. Nothing in LabOS depends on a production field ID — the contract keys on the field *name* —
+and `interface-schema.csv` carries `field_id_production` as a column filled in after the fact, never
+assumed.
 
-## The additions
+## We cannot apply it, by construction
 
-### `Protocol Sections` — 8 fields
-
-| Field | Type | Choices | Precision | Direction | LabOS source | Testing field ID | In production |
-|---|---|---|---|---|---|---|---|
-| `Applicability` | singleSelect | Required · Not Required · Unconfirmed | — | IN — LabOS reads | `at_mirror_sections.applicability` | `fldh3VS09fonTLHsS` | absent |
-| `Required Option` | singleLineText | — | — | IN — LabOS reads | `manual_tests.required_option` | `fldflOxCkAK1BkU9l` | absent |
-| `Required Unit` | singleSelect | PSF · in · s · cycles · impacts | — | IN — LabOS reads | `(validation)` | `fldTjNKeQe7oxxl33` | absent |
-| `Required Value` | number | — | 0 | IN — LabOS reads | `projects.gauge_count / projects.impact_count` | `fldpL2dyGzKj9xowY` | absent |
-| `Required Value Inward` | number | — | 0 | IN — LabOS reads | `projects.inward_design_pressure` | `fld1wR9ojdmESax0m` | absent |
-| `Required Value Outward` | number | — | 0 | IN — LabOS reads | `projects.outward_design_pressure` | `fld7GLStvnPnYJPpd` | absent |
-| `Requirement Code` | singleSelect | STATIC_PRESSURE · CYCLIC_PRESSURE · IMPACT_LMI · IMPACT_SMI · FORCED_ENTRY · ANSI_IMPACT · GAUGE_COUNT · STATIC_PROGRAMME · WATER_PRESSURE | — | IN — LabOS reads | `at_mirror_sections.requirement_code` | `fld9Fzjj25ngrVIOB` | absent |
-| `Requirement Kind` | singleSelect | Magnitude · Directional Pair · Count · Enum · Not Applicable | — | IN — LabOS reads | `(interpretation)` | `fldWGpL9gJh89wSK8` | absent |
-
-### `LabOS Raw Data Table` — 11 fields
-
-| Field | Type | Choices | Precision | Direction | LabOS source | Testing field ID | In production |
-|---|---|---|---|---|---|---|---|
-| `ANSI Result` | singleSelect | Pending · Passed · Failed · Inconclusive | — | OUT — LabOS writes | `test_results.test_result` | `fldmCKJV95N9uL7xt` | absent |
-| `Corrects Attempt ID` | singleLineText | — | — | OUT — LabOS writes | `test_results.corrects_attempt_id` | `fldV4ucQNEA0gYfMc` | absent |
-| `Forced Entry Result` | singleSelect | Pending · Passed · Failed · Inconclusive | — | OUT — LabOS writes | `test_results.test_result` | `fldAHuPzZHZEj0Cjt` | absent |
-| `Impact Classification` | singleSelect | SMI · LMI Level D · LMI Level E | — | OUT — LabOS writes | `derived from missile_impact_tests.impact_family + impact_level` | `fldMY7DiiuP9kbQbL` | absent |
-| `Impact Number` | number | — | 0 | OUT — LabOS writes | `test_results.trial_number` | `fldk52wf0SO9zYDjB` | absent |
-| `LabOS Photos` | multipleAttachments | — | — | OUT — LabOS writes | `uploads/ downscaled copy` | `fldsEfhtH9wXPAl1Y` | absent |
-| `LabOS Verdict At` | dateTime | — | — | OUT — LabOS writes | `test_results.verdict_at` | `fldqCkqAh7aTckxSR` | absent |
-| `LabOS Verdict By` | singleLineText | — | — | OUT — LabOS writes | `test_results.verdict_by` | `fldVedw9cOgne8UeX` | absent |
-| `Target Impact Velocity` | number | — | 2 | OUT — LabOS writes | `missile_impact_tests.target_velocity` | `fldhywP9YpsmoWWT1` | absent |
-| `Testing End Date` | dateTime | — | — | OUT — LabOS writes | `test_results.testing_end_date` | `fldTsjf78Y5fA85fz` | absent |
-| `Testing Start Date` | dateTime | — | — | OUT — LabOS writes | `test_results.testing_start_date` | `fldYU1BtWVuWv5DBV` | absent |
-
-**Datetime shape.** `Testing Start Date`, `Testing End Date` and `LabOS Verdict At` are created
-**ISO, 24-hour, UTC** — the shape `apply_schema` used in Testing. Their existing `Test Date` is
-`local`/`client` and stays exactly as it is; these are new columns LabOS owns, and a UTC instant that
-renders in a viewer's own zone is what a certification record needs.
-
-**Number precision.** `Target Impact Velocity` is precision **2** and this is not cosmetic — precision 0
-silently truncates 50.25 ft/s, and it would pass a type check while doing it. `Impact Number` is an
-integer ordinal, precision 0.
-
-**Select choices are exact, and the spelling is theirs.** `Forced Entry Result` and `ANSI Result` must be
-created as `Pending` · `Passed` · `Failed` · `Inconclusive`. A select created with LabOS's own `Pass`/`Fail`
-would accept nothing LabOS sends. `Impact Classification` is exactly `SMI` · `LMI Level D` · `LMI Level E`.
-
-## What must NOT be created
-
-These three were added to the **Testing** Base on 2026-09-08 and withdrawn from the contract on
-2026-09-10, when the product owner made the impact classification LabOS-owned. They are deliberately left
-in Testing rather than deleted — removing a field from a shared base is a coordinated cleanup, not a side
-effect — and they must **never** reach production, where they have never existed.
-
-| Field | Table | Testing field ID | Why not |
-|---|---|---|---|
-| `Impact Velocity` | Protocol Sections | `fldJNfUVyqQEFOVWx` | WITHDRAWN from the read contract 2026-09-10. |
-| `Missile Type` | Protocol Sections | `fld5Bs0aQXXeVso2y` | WITHDRAWN from the read contract 2026-09-10. |
-| `Missile Weight` | Protocol Sections | `fldmhdhonyyLcx4Ex` | WITHDRAWN from the read contract 2026-09-10. |
-
-This is enforced, not remembered: `make-production-change-spec.py` omits any register row marked
-`DEPRECATED`, and `preflight.py` check 2 asserts all 22 guarded fields — the 19 additions **and** these
-three — are absent from production on every run.
+`apply_schema.py` refuses `app0OCunbmuXl7Hc9` unconditionally. There is no flag, argument or environment
+variable that overrides it, and **that refusal must not be removed to make a promotion easier.** The
+Airtable team applies these in their own base.
 
 ## Verification, before and after
 
