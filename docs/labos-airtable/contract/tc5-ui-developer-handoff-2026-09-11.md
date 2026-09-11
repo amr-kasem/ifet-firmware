@@ -6,7 +6,9 @@
 **Every route, payload and error in this document was verified against the running application on
 2026-09-11**, not against a description of it: all 28 cited routes resolve against `openapi.json`, which is
 itself gated — `TheCommittedApiContractIsCurrent` fails the test suite if the committed snapshot drifts
-from the app. One defect was found and fixed during that pass and is called out in §7.
+from the app. A second pass the same day re-audited every domain claim against the code, the tests and the
+generated OpenAPI after TA6, TA7 and DG14; the eight corrections it produced are in §7. **This document is
+the canonical UI implementation contract** — where any other document disagrees, this one is right.
 
 **The backend is feature-frozen.** Nothing here is planned; all of it is live and proven end to end on the
 real wire. If something you need is genuinely missing, say so and we will classify it before changing
@@ -15,7 +17,7 @@ anything — but the five workflows are each demonstrated against the live Testi
 | Reference | What it is |
 |---|---|
 | `ifet-management/src/management_service/openapi.json` | **generated and gated.** The last word on any shape |
-| `ifet-management/MANUAL_TESTS_API.md` | prose and reasoning behind the manual-test routes |
+| `ifet-management/MANUAL_TESTS_API.md` | prose and reasoning behind the manual-test routes. **Subordinate to this document on any domain question** — it is the deeper API reference, not a second model |
 | `tests/test_manual_tests.py` (91) · `tests/test_requirement_release.py` (24) | executable behaviour. Read them as specification |
 | `docs/labos-airtable/testing/five-workflow-e2e-acceptance-2026-09-11.md` | the acceptance run your screens will be signed off against |
 
@@ -34,12 +36,47 @@ anything — but the five workflows are each demonstrated against the live Testi
 Screens 3 and 4 share one **attempt component**. Start → evidence → finish/abort → verdict is the same
 lifecycle on the same `/test-results/{id}` routes for all three types. Build it once.
 
-**Two rules that hold across every screen:**
+**Three rules that hold across every screen:**
 
 - **Backend is authoritative. Do not port domain validation into JavaScript.** Mirror the server's refusal,
   do not pre-empt it. Every rule below is enforced server-side and will be enforced whatever the UI does.
 - **Never compute a derived value.** `impact_classification`, the fourteen static/cyclic stages,
   `Cycles Completed`, `Impact Result` and both per-standard results are derived server-side. Render them.
+- **⚠️ For an imported job, never create a test.** The import already made it. §0.1 — this is the one rule
+  whose breach is a data-model bug rather than a cosmetic one, and the API will not stop you.
+
+### 0.1 ⚠️ Where the test object comes from — read this before Screens 3 and 4
+
+**`POST /airtable/import` already creates the Forced Entry, ANSI Z97.1 and Impact tests**, one per
+executable Protocol Section (`importer.bind`). They return on the import response as `manual_tests[]`
+and `missile_impact_tests[]`, already carrying their `airtable_*` ids, `required_option`, and — for
+Impact — a frozen `impact_family`.
+
+| Workflow | Airtable-bound job | LabOS-only job |
+|---|---|---|
+| Impact | **select** the imported test; `PATCH` it to add level / velocity | **`POST /projects/{pid}/impact-tests/`** |
+| Forced Entry | **select** the imported test | **`POST /projects/{pid}/manual-tests/`** with `type` |
+| ANSI Z97.1 | **select** the imported test | **`POST /projects/{pid}/manual-tests/`** with `type` |
+
+**Calling `POST` on an imported job is not refused.** It creates a *second* test with its own
+`labos_test_id`, which publishes to Airtable as an unrelated group of rows against the same section —
+and nothing downstream can tell that group from a real one. The `POST` routes exist for LabOS-only
+work, where there is no import to have made the test.
+
+Reload with `GET /devices/{id}/projects/` to list them. **There is no `GET /projects/{id}`** — the only
+method on that path is `PUT`.
+
+### 0.2 Status language, stated once
+
+| | |
+|---|---|
+| **Implemented in `feature/labos-airtable`** | everything in this document |
+| **Verified against the live Testing base** | TA6 probe 97/97, TA7 probe 64/64, both 2026-09-11 |
+| **Deployed to the `management` node** | **no** |
+| **Applied to the Production Airtable base** | **no** — Production is untouched at 142 fields |
+
+Where this document says "not deployed" it means **not deployed to Production**. The Testing base
+carries all 164 fields today, including both TA6 result columns and both TA7 Impact columns.
 
 ---
 
@@ -170,16 +207,26 @@ One screen. The only differences are the `type` value and the word used for `req
 
 | Step | Method | Route | Request |
 |---|---|---|---|
-| create test | `POST` | `/projects/{pid}/manual-tests/` | `{type, required_option?, airtable_protocol_id?, airtable_section_id?, airtable_section_name?}` |
-| list | `GET` | `/projects/{pid}/manual-tests/` | `?type=` optional |
+| **imported job: select the test** | `GET` | `/projects/{pid}/manual-tests/` | `?type=` optional. **The import already created it — §0.1** |
+| **LabOS-only job: create it** | `POST` | `/projects/{pid}/manual-tests/` | `{type, required_option?, airtable_protocol_id?, airtable_section_id?, airtable_section_name?}` |
 | **start attempt** | `POST` | `/projects/{pid}/manual-tests/{id}/trials` | `{operator_name}` |
-| finish the **test** | `PUT` | `/projects/{pid}/manual-tests/{id}/finish` | — |
+| finish the **attempt** | `PUT` | `/test-results/{aid}/finish` | `{result, …}` — **`result` is required here.** §5 |
+| finish the **test** | `PUT` | `/projects/{pid}/manual-tests/{id}/finish` | — closes it to further attempts |
 
 `type` is exactly `"Forced Entry"` or `"ANSI Z97.1"` — anything else is `422`.
 
 **Pre-filled / read-only:** `required_option` — the grade (`"ASTM F588 Grade 40"`) or class (`"Class A"`)
-— comes from the section's `Required Option` when the job was imported. **Show it as the requirement.**
-Typed by the operator only on a LabOS-only test.
+— is copied **verbatim** from the section's `Required Option` when the job was imported. **Show it as the
+requirement.** Typed by the operator only on a LabOS-only test.
+
+⚠️ **It is free text, it is optional, and nothing validates it.** `FORCED_ENTRY` and `ANSI_IMPACT` carry
+requirement kind **`Not Applicable`**, so `requirements.validate` does not require an option at all —
+a section with a blank `Required Option` imports and is executable. There is no vocabulary anywhere in the
+code for grades or classes: LabOS does not recognise `Grade 40`, does not rank it, and does not refuse an
+unfamiliar string. **Do not build a picker, and do not mark a test non-executable because a grade looks
+wrong** — that behaviour belongs to `STATIC_PROGRAMME`, which is the only `Enum` requirement and the only
+one with a supported-values list. What *is* refused is a `Not Applicable` section carrying a numeric
+`Required Value`, because that means the section is describing a different test.
 
 **Operator-entered:** `operator_name` at start; then result, note and photographs; then the verdict.
 
@@ -187,16 +234,20 @@ Then the shared attempt lifecycle in §5.
 
 **What the screen must convey that is not obvious:**
 
-- **There is no numeric requirement.** The grade or class is the whole requirement. A grade LabOS does not
-  recognise is displayed and the test stays non-executable rather than being guessed at.
+- **There is no numeric requirement.** The grade or class is the whole requirement, it is free text, and
+  a blank one is legal. Display whatever arrived.
 - **ANSI Z97.1 is recommended first on a specimen and is deliberately not enforced** — approved by the
   product owner on 2026-09-10. Show it as guidance; do not block.
 - **The result lands in two columns.** `Test Result` as always, **and** `Forced Entry Result` or
   `ANSI Result` — the same value on its own axis. The UI sends one verdict; the backend projects it. Do not
   offer two result controls.
 
-**Acceptance:** create → start → photo → finish → verdict; exactly one Airtable row; `Test Result` and the
-type's own result column both carry the verdict; the other type's column is **absent**, not blank.
+**No photograph is required** to finish a Forced Entry or ANSI attempt — only `result`. That gate is
+Impact's alone.
+
+**Acceptance:** select (imported) or create (LabOS-only) → start → photo → finish → verdict; exactly one
+Airtable row; `Test Result` and the type's own result column both carry the verdict; the other type's
+column is **absent**, not blank.
 
 ---
 
@@ -206,12 +257,41 @@ type's own result column both carry the verdict; the other type's column is **ab
 
 | Step | Method | Route | Request |
 |---|---|---|---|
-| create test | `POST` | `/projects/{pid}/impact-tests/` | `{}` is valid — everything optional |
+| **imported job: select the test** | `GET` | `/projects/{pid}/impact-tests/` | **the import already created it, with `impact_family` frozen — §0.1** |
+| **LabOS-only job: create it** | `POST` | `/projects/{pid}/impact-tests/` | `{}` is valid — everything optional |
 | set the operator's values | `PATCH` | `/projects/{pid}/impact-tests/{id}` | `{impact_level?, target_velocity?, impact_family?}` |
 | **start one impact** | `POST` | `/projects/{pid}/impact-tests/{id}/trials` | `{operator_name}` |
 | record the impact | `POST` | `/test-results/{aid}/shots` | `{result, area?, velocity?, note?}` — `result` required |
 | photograph it | `POST` | `/shots/{sid}/photos` | multipart, once per photograph |
-| finish the test | `PUT` | `/projects/{pid}/impact-tests/{id}/finish` | — |
+| **finish this impact** | `PUT` | `/test-results/{aid}/finish` | — then review it, then loop back to "start one impact" |
+| finish the **whole test** | `PUT` | `/projects/{pid}/impact-tests/{id}/finish` | once, at the end. Closes it to further impacts |
+
+### ⚠️ Two operations are called "Finish" and they are not interchangeable
+
+| Button | Route | Means | How often |
+|---|---|---|---|
+| **Finish impact** | `PUT /test-results/{aid}/finish` | this impact is done | once per impact |
+| **Finish test** | `PUT /projects/{pid}/impact-tests/{id}/finish` | the sequence is over | once, at the very end |
+
+After the test-level finish, `POST …/trials` returns **400**. Do not offer both under the same word.
+
+**The required impact count is not enforced.** `impact_count` is accumulated at import from the
+`IMPACT_LMI` / `IMPACT_SMI` sections' `Required Value` and published as a requirement, but **no route
+compares it to the number of attempts** — finishing after three of five is accepted. Show the operator
+`3 of 5` and warn if they finish early; the API will not.
+
+### The per-impact loop, in order
+
+```
+select/create test → PATCH level + target velocity        (once, before the first impact)
+  └─ start attempt → record shot → photograph → finish attempt → verdict     (impact 1)
+  └─ start attempt → record shot → photograph → finish attempt → verdict     (impact 2)
+  └─ …
+finish test                                               (once, at the end)
+```
+
+`impact_level` and `target_velocity` must be set before the **first** attempt completes — after that
+they are `409`. The level is per *test*, not per impact.
 
 ### The classification control — this shape is required
 
@@ -241,7 +321,27 @@ one impact and stays per shot, inside the JSON. Different fields, different mean
 | `400` on `PATCH` | `impact_family` on an Airtable-bound test; or any unexpected key is `422` |
 | `409` on `PATCH` | `impact_level` / `target_velocity` after an attempt has **completed** |
 | `400` on finish | no resolvable classification, or no `target_velocity`. **An abort needs neither** |
-| `400` on finish | **"A completed impact attempt requires at least one photograph."** Evidence cannot be added after review |
+| `400` on finish | **"A completed impact attempt requires at least one photograph."** A per-impact photograph counts; evidence cannot be added after review |
+| `400` on finish | **exactly one impact**, not "at least one" — zero has nothing to report |
+| `409` on a second `POST …/shots` | *"One attempt is one impact — start a new attempt on this test to record the next one."* This is the sequence working, not an error to hide |
+
+### ⚠️ Next impact, retest, correction — three buttons, and Impact blurs two of them
+
+| The operator means | Do this | `Impact Number` | `Corrects Attempt ID` |
+|---|---|---|---|
+| fire the next impact | `POST …/trials` | next (3 → 4) | blank |
+| re-run an impact that went wrong physically | `POST …/trials` | next (3 → 4) | blank |
+| the *record* of an impact is wrong | `POST /test-results/{aid}/correct` | **next (3 → 4)** | set |
+
+**Under one-impact-per-attempt, "next impact" and "retest" are the same call and are indistinguishable in
+the data.** That is by design — a re-fired impact *is* another impact — but it means a "Retest" button on
+this screen is just the next impact, and should be labelled that way rather than implying it replaces
+anything.
+
+**A correction also takes the next ordinal**, because `Impact Number` *is* `Attempt Number` by
+construction. So correcting impact 3 publishes a row with `Impact Number` 4 carrying
+`Corrects Attempt ID` → impact 3. Render the correction chain, not the ordinal, when showing what
+supersedes what — the numbers alone will read as six impacts when five were fired.
 
 **Acceptance:** five impacts produce five attempts and five Airtable rows with `Impact Number` 1–5, each
 with its own photograph and verdict; an `IMPACT_SMI` section offers no family control; a re-publish of the
@@ -266,6 +366,36 @@ same attempt updates the same row.
 | `Completed` / `Aborted`, not yet reviewed | **Review** · **Correct** |
 | reviewed | **Retest** (a new attempt) · **Correct**. **Nothing is editable** |
 
+### ⚠️ Operator outcome and reviewer verdict are two different fields
+
+Both are called "result" in casual speech. **Do not use one word for them in the UI.**
+
+| | Operator outcome | Reviewer verdict |
+|---|---|---|
+| Field | `result` | `test_result` |
+| Type | boolean | `Pass` · `Fail` · `Inconclusive` |
+| Who | the **operator**, named in `operator_name` | the **reviewer**, named in `verdict_by` |
+| When | at `finish` | at `verdict`, afterwards |
+| Where it is entered | FE / ANSI: the finish body. **Impact: on the shot** — `POST …/shots` `{result}`, and the attempt copies it | the verdict body |
+| Required? | yes for FE / ANSI; for Impact it is derived from the shot rather than sent | yes, once |
+| Suggested label | **"Operator outcome"** — *the specimen resisted / it did not* | **"Reviewer verdict"** |
+
+They are separate columns so that an operator cannot certify their own work, and `operator_name` /
+`verdict_by` are stored separately even when the same person does both. Neither is authenticated — LabOS
+has no user table — so remember the last name per device, but never imply proof.
+
+**What Airtable receives, by phase:**
+
+| Phase | `Test Result` | `Forced Entry Result` / `ANSI Result` | `Impact Classification` / `Target Impact Velocity` |
+|---|---|---|---|
+| create | `Pending` | `Pending`, own type only | — |
+| **terminal** (finish) | **still `Pending`** | **still `Pending`**, own type only | sent, Impact only |
+| **first review** (verdict) | `Passed` · `Failed` · `Inconclusive` | same value, own type only | unchanged |
+
+`Pass` → `Passed` and `Fail` → `Failed` on the wire; `Inconclusive` is unmapped and goes as-is. The
+per-standard column is **omitted entirely** on the other four types — an absent key, never a blank cell.
+The operator's boolean `result` is **not** published as a scalar at all; it travels inside the JSON.
+
 - `test_result` is `Pass` · `Fail` · `Inconclusive`. At terminal the published `Test Result` is `Pending`;
   the first review replaces it. Show `Pending` as a real state, not as missing data.
 - **`retest_required` is required and not defaulted.** An unchecked box is not a decision.
@@ -273,7 +403,9 @@ same attempt updates the same row.
   double-click cannot become two certification records. A "Retest" button must finish or abort first.
 - **One active run per rig → `409`**, naming the blocking attempt and its type: *"This rig is already
   running attempt N of another test (Cycles). One rig runs one test at a time; finish or abort that attempt
-  first."* Surface it.
+  first."* Surface it. **This applies to the manual tests too.** They command no hardware — `report-api`
+  has no MQTT client — but they hold the same per-`device_id` lock as Static Load and Cycles, so an Impact
+  attempt blocks a Cycles one and vice versa. They are forms that occupy the rig.
 
 **Photographs:** `POST`-only, one call per photograph, `multipart/form-data`. **There is no delete** —
 evidence is append-only until review, and cannot be added after it. Impact photographs attach to a *shot*;
@@ -334,17 +466,51 @@ result that failed, and a parked attachment must not drag the headline to `Retry
 
 ---
 
+## 6a. The whole thing on one page
+
+| | Impact — SMI | Impact — LMI | Forced Entry | ANSI Z97.1 |
+|---|---|---|---|---|
+| **Test object** | imported → **select**; LabOS-only → `POST …/impact-tests/` | same | imported → **select**; LabOS-only → `POST …/manual-tests/` | same |
+| **Family / type** | `impact_family = SMI`, **frozen by the importer. No control** | `LMI` frozen; operator picks **level D or E** (required) | `type = "Forced Entry"` | `type = "ANSI Z97.1"` |
+| **Operator inputs** | `target_velocity`, `operator_name`, per-impact `result` (+ `area`/`velocity`/`note`) | same, **plus `impact_level`** | `required_option` (LabOS-only), `operator_name`, `result`, note | same |
+| **Start** | `POST …/impact-tests/{id}/trials` — **once per physical impact** | same | `POST …/manual-tests/{id}/trials` | same |
+| **Evidence** | `POST /shots/{sid}/photos` — **≥1 required** | same | `POST /test-results/{aid}/photos` — optional | optional |
+| **Attempt finish** | `PUT /test-results/{aid}/finish` — needs exactly 1 impact, ≥1 photo, classification, target velocity. `result` derived from the shot | same | `PUT /test-results/{aid}/finish` — **`result` required** | same |
+| **Review** | `PUT /test-results/{aid}/verdict` — once, `verdict_by` + `retest_required` required | same | same | same |
+| **Logical-test finish** | `PUT …/impact-tests/{id}/finish` — once, after the last impact. **Count not enforced** | same | `PUT …/manual-tests/{id}/finish` | same |
+| **Airtable-bound restrictions** | no family control; `impact_family` is `400` on `PATCH`; do not create the test | same | do not create the test; `required_option` is read-only | same |
+| **Airtable row** | one per impact; `Impact Number`, `Impact Result`, `Impact Classification`, `Target Impact Velocity` | same | one; **`Forced Entry Result`** beside `Test Result` | one; **`ANSI Result`** beside `Test Result` |
+| **Important errors** | `409` second shot · `409` `PATCH` after a completed attempt · `400` finish gates | same · `400` level on SMI | `422` bad `type` · `400` finish without `result` | same |
+
+**LabOS-only work differs in exactly three ways**, and nowhere else: the test is created by `POST` instead
+of selected; `impact_family` is the operator's (write-once, fixed by the first attempt of any kind,
+aborted included); and `required_option` is typed rather than pre-filled. The attempt lifecycle,
+the gates, the verdict and the Airtable projection are identical — an unbound test simply publishes
+nothing.
+
+---
+
 ## 7. Backend findings from this verification pass
+
+Re-run 2026-09-11 as a contract-alignment audit against code, tests and generated OpenAPI.
 
 | Finding | Classification | Action |
 |---|---|---|
 | `/sync/status` documented as returning `worker_heartbeat_at`; it returns `worker_alive` + `heartbeat_age_seconds` | **documentation defect** — the API was always right | Fixed in `MANUAL_TESTS_API.md` and stated above |
-| All 28 routes cited in the previous contract resolve against the live app | — | No change |
-| Every behavioural claim re-verified in code: start idempotency, busy-rig `409`, import idempotent on the mock-up, `refused` / `executable` / `mirrored_at` / `imported_project_id` all present | — | No change |
+| **Neither UI document said the importer already creates the FE / ANSI / Impact tests.** Both presented `POST` as the way to obtain one | **documentation defect, highest consequence** — following it on an imported job creates a duplicate test and a parallel group of Airtable rows | §0.1 added here; §7 rewritten in `MANUAL_TESTS_API.md` |
+| `MANUAL_TESTS_API.md` §4 still described **one attempt containing several impacts**, with `shot_number` restarting at 1 per attempt and "at least one impact" at finish | **documentation defect** — code has enforced exactly one since TC1h | §4 rewritten |
+| `MANUAL_TESTS_API.md` §9 still said **no dedicated Airtable scalar** exists for Forced Entry or ANSI | **documentation defect** — reversed by the product owner 2026-09-10, built as TA6 | §9 rewritten |
+| This document claimed an unrecognised grade leaves a Forced Entry / ANSI test **non-executable** | **documentation defect** — `FORCED_ENTRY` / `ANSI_IMPACT` are kind `Not Applicable`; `required_option` is optional free text and no vocabulary exists | §3 corrected |
+| `MANUAL_TESTS_API.md` carried **"not yet deployed"** and "the fields do not exist in any base" | **stale temporal language** — both TA7 fields are live in the Testing base | §0.2 here; §7 there |
+| `projects.impact_count` gates nothing — the logical-test finish accepts any number of impacts | **behaviour, correctly implemented, previously undocumented** | Stated in §4; the warning is the screen's |
+| A correction of impact *N* publishes as `Impact Number` *N+1* | **consequence of `Impact Number` = `Attempt Number` (§4.5a), not a defect** | Stated in §4 |
+| All 28 routes cited resolve against the live app; the manual-test surface is now **20 routes**, not the 18 of 2026-09-08 | — | Count corrected in `MANUAL_TESTS_API.md` |
+| Running all 14 suites in one pytest process exhausts `postgres:13`'s connections and fails ~45 unrelated tests | **test-harness limitation, not product** | Run per file; noted in `MANUAL_TESTS_API.md` |
 
-**No REQUIRED INTEGRATION GAP was found.** Every capability the five screens need already exists. If you
-hit one that does not, raise it and we will classify it as **REQUIRED INTEGRATION GAP** or **UI
-CONVENIENCE** before any code changes — convenience goes to backlog while the backend stays frozen.
+**No REQUIRED INTEGRATION GAP was found. The backend remains frozen — nothing in this pass changed code.**
+Every capability the five screens need already exists. If you hit one that does not, raise it and we will
+classify it as **REQUIRED INTEGRATION GAP** or **UI CONVENIENCE** before any code changes — convenience
+goes to backlog while the backend stays frozen.
 
 ---
 
