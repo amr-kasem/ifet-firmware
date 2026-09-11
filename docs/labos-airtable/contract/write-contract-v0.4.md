@@ -37,21 +37,46 @@ functional without Airtable and stays so. The integration exists so that managem
 reports without chasing the lab; it is **not** a dependency of testing. Two consequences bind the rest of
 this document:
 
-1. **LabOS reads the minimum needed to identify work, and no requirement values at all.** The operator sets
-   a test up in LabOS exactly as today. Fourteen inbound fields — record IDs, the job number, the display
-   names, `Requirement Code` and `Applicability` — are the whole read surface. Those last two are the only
-   non-identity fields: `Requirement Code` says *which of the five tests* a section is, and `Applicability`
-   says whether it is assigned, explicitly unneeded or still unconfirmed.
+1. **LabOS reads the minimum needed to identify work, and — since 2026-09-08 — the typed requirement
+   values as well.** ⚠️ **Corrected 2026-09-11.** This clause said "no requirement values at all", which
+   was true on 2026-09-06 and stopped being true two days later, when the eight typed fields were applied
+   to `Protocol Sections` and `mirror.py` was wired to them. **The read surface is 17 fields**, of which
+   the ten on `Protocol Sections` are `mirror.SECTION_FIELDS`:
+
+   | | |
+   |---|---|
+   | Identity | record IDs, the job number, the display names, the two link fields |
+   | Routing | `Requirement Code` — which of the five tests a section is · `Applicability` — assigned, explicitly unneeded, or still unconfirmed |
+   | **Requirement values** | **`Required Value Inward` · `Required Value Outward`** — the design-pressure pair, from which LabOS derives **all fourteen** static and cyclic stages · `Required Value` — the gauge and impact counts · `Required Unit` — validation only · `Required Option` — the named grade or class |
+
+   The register has said `READ` on all five of those since they were applied, and `check_register.py`
+   check 1 asserts the register and the allowlist agree. What was wrong was this sentence.
 2. **The join is `IFET job number` for humans and the `rec…` record ID for machines.** The job number is
    hand-entered text, so a renumber or a typo would silently re-point a job's results if it were the only
    key. Names and numbers are for display and reconciliation; permanent record IDs route everything.
 
-**This removes the extraction defect from the execution path entirely.** §3.3 exists because LabOS once
-planned to pre-fill requirements from Airtable; under A9 no Airtable value can reach a rig, because none is
-read. §3.3's verification requirement therefore applies to nothing in this release and is retained only for
-the day a future release consumes requirement values again — at which point it applies in full and
-unchanged. Fields such as `Required Value Inward` remain in both bases and are marked `IGNORED` in the
-register: **they exist, and LabOS does not read them.**
+⚠️ **This does NOT remove the extraction defect from the execution path, and the previous wording here
+said it did.** Corrected 2026-09-11. The claim was that no Airtable value could reach a rig because none
+was read; that ceased to hold on 2026-09-08. `POST /airtable/import` takes `Required Value Inward` and
+`Required Value Outward` from the section, stores them as the project's design pressures, and LabOS
+derives the six static and eight cyclic stages from that pair. **A shifted pair is therefore a shifted
+test.**
+
+**So §3.3 applies in full, now, and it is not satisfied.** It requires the operator to enter the
+independently verified pair with its reference, verifier and time. `POST /airtable/import/plan` shows
+`design_pressures` before anything is created, and `refused` explains what LabOS will not run — but
+nothing *requires* a human to confirm the pair, nothing records who did, and there is no screen on which
+to do it (DG5 / TC5). Legacy item 19's disposition — *"independently verified local requirements remain
+mandatory for rig execution"* — is a rule with no enforcement point.
+
+**What is genuinely out of the blast radius is Impact, and only Impact.** TA7 made the classification
+LabOS-owned and a pick from a closed set of three, which cannot shift a column. Static Load and Cycles are
+not: their requirement is two numbers on the extractor's path.
+
+Nothing in LabOS may compensate by guessing. A shifted value is individually plausible — 9 PSF where the
+proposal says 60 — so there is no range check, no sanity heuristic and no "looks wrong" rule that would be
+anything but a new way to be confidently incorrect. The fix is upstream, at the extractor, or in front of
+it, by a person who has read the proposal.
 
 HubSpot supplies approved commercial scope. Airtable owns the assigned project/specimen/protocol hierarchy,
 requirements and operational roll-ups. LabOS owns executable procedures, hardware, local attempts,
@@ -382,7 +407,7 @@ The full pre-closure wording is retained in `../evidence/write-contract-v0.3-sup
 | 11 | Pending Testing Base verification of actual types, blanks, schema mismatch and retry behavior |
 | 16, 18 | Existing Passed/Failed and Abborted wire spellings retained; no runtime typecasting |
 | 17, 20 | CLOSED by September 5 baseline: all five test types and datetime Test Date delivered in both bases |
-| 19 | Extractor defect unresolved; independently verified local requirements remain mandatory for rig execution |
+| 19 | ⚠️ **ACTIVE, and escalated 2026-09-11.** Extractor defect unresolved *and back on the execution path*: LabOS has read the typed design-pressure pair since 2026-09-08 and derives all fourteen static and cyclic stages from it. Independently verified local requirements remain mandatory for rig execution — and there is **no route that records that verification and no screen on which to perform it** (DG5 / TC5). Impact is out of the blast radius since TA7; Static Load and Cycles are not. See §1 |
 | 21, 22, 25, 26 | Decided: raw table only, UUIDs, version 0.4 JSON, explicit review/disposition; validate automation compatibility |
 | 27 | Deflection calibration unresolved; quarantined measurements omitted from all outbound payloads. **Tracked as milestone M6** |
 | G4 | Actual pressure acquisition unimplemented; omitted for rig runs. **Tracked as milestone M7**, not left unscheduled |
