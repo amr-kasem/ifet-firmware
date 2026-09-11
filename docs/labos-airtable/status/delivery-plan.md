@@ -4,14 +4,42 @@
 **Authority split:** `../contract/write-contract-v0.4.md` governs *meaning* (identity, envelope, semantics,
 concurrency guarantees). This file governs *delivery* (state, sequence, gaps, ownership, asks). On a conflict
 about what a field or a guarantee means, the contract wins; on a conflict about what is built or scheduled,
-this file wins. Machine-readable mapping: `../contract/field-register.csv` (73 rows).
+this file wins. Machine-readable mapping: `../contract/field-register.csv` (76 rows).
 
 Dated files belong in `evidence/` and `correspondence/` only — those are point-in-time artifacts. Status,
 design and roadmap are one document, this one. Superseded snapshots live in git history, not in the tree.
 
 ---
 
-## 0. State — probed 2026-09-07, not asserted
+## 0. State — probed, not asserted
+
+### 0.0 Verified live 2026-09-11 — this supersedes any number below it
+
+**`../CURRENT.md` is the session entry point.** This section is what changed since §0.3 and §0.4 were
+probed; where they disagree with it, it wins. Full record:
+`../evidence/cross-system-alignment-2026-09-11/`.
+
+| | |
+|---|---|
+| **Live alembic head on `management`** | **`7ed2a670841e`**, not `3a65a83e0463`. An empty no-op the node minted itself on 2026-09-09, `.gitignore`d there, existing nowhere in git — and it **branches against `b7c2e9a41d38`**, which declares the same parent. Two heads, `upgrade head` refuses, `startup.sh` makes that fatal. Runbook **§1.2a**; reassessment **§2.4**. It moves on every restart of the current stack |
+| `management` | `latest` @ `90f9595`, worktree clean, 7 containers up 2 days. **13 legacy tables**; `test_results` has **5** columns and `projects` **6**; the running image carries **no `app/airtable/`, no `app/sync/`**; the app serves **25** routes. Nothing of this integration is deployed |
+| Production data | **655** attempts (was 640) · 80 projects · 33 parents · 39 impact tests · 114 shots · **1124** deflections · 37 water. **Production is still running tests** — 15 new attempts since 2026-09-07, all static/cyclic. The P1 backfill keys on `airtable_sync_state IS NULL`, so growth is harmless to it |
+| `system-1` · `system-2` | `dev` @ `b009bca` · `dev` @ `5048d9a`. **The valve-3 RELIEF fix is on `system-1` only**, confirmed by `md5sum` of the running `idle.py`. Neither rig carries `feature/labos-firmware-p3` |
+| Deflection acquisition | **Still down fleet-wide.** Both SICK masters `No route to host` at 14:32 UTC; attempts 647–655 have no deflection rows |
+| `test` node | **Still offline.** Connection refused |
+| **Airtable Testing** `app4oXS3Kd5IKWgJ7` | **164 fields.** All **19** additions present and correctly typed — choices and precision asserted. Fixture present, 75 protocol sections, all 7 requirement codes |
+| **Airtable Production** `app0OCunbmuXl7Hc9` | **142 fields**, none of the 22 guarded fields present, never written by LabOS |
+| Register · generated CSVs | **76 rows** (44 BASELINE · **19 APPLIED** · 4 CONDITIONAL · 5 OMITTED · 3 DEPRECATED · 1 PLANNED). `interface-schema.csv` **171 rows** and the change CSV **164 rows**, both regenerated today and byte-identical |
+| Gates | `check_register.py` PASS · `preflight.py` "safe to send" against both live bases · **433 tests + 108 subtests green** on PostgreSQL 13 · `openapi.json` current · acceptance baseline **60/60** |
+| `ifet-management` | `feature/labos-airtable` @ **`ea3464e`** |
+
+**One new rollout limitation, and it is not a defect.** Rig Static Load and Cycles cannot publish a
+**terminal** until an operator is declared at run start — firmware has no `start_static_test` call at all
+and sends no body on cyclic start, and `PUT …/static_tests/{idx}/start` is not among the 25 deployed
+routes. Until TC5 screen 3 exists, those rows are created in Airtable and stay `In Progress` / `Pending`,
+with the reason visible in `GET /sync/failures`. Runbook **§2.2**.
+
+### 0.3-prior State — probed 2026-09-07
 
 ### 0.1 "Production" means two different things — always say which
 
@@ -65,17 +93,17 @@ per table.
 | | |
 |---|---|
 | **Deployed** | **Nothing of this integration.** `management` runs branch `latest` @ `90f9595` |
-| Live alembic head | `3a65a83e0463` — **P1 (`b7c2e9a41d38`) not applied**, and M2 (`c4e1f8a92b07`) queued behind it |
+| Live alembic head | `3a65a83e0463` at the time of this probe — **now `7ed2a670841e`, see §0.0.** P1 (`b7c2e9a41d38`) still not applied, and M2 (`c4e1f8a92b07`) queued behind it |
 | Live tables | 13, all legacy. No `sync_outbox`, `sync_state`, `test_programmes`, `test_programme_runs`, `at_mirror_*` |
 | Live columns matching `airtable\|labos\|attempt` | **zero** |
 | Code in the running `report-api` image | `app/{data,domain,utils}` only — **no `app/airtable/`, no `app/sync/`** |
 | Live routes | 25 **on the node**; the branch now has 18 more for manual test capture. **None** for airtable, sync or import |
 | `test_results` rows | 640 |
-| `ifet-management` | `feature/labos-airtable` @ `e99c77b` — all integration code, unmerged, **still unwired** (`main.py` imports nothing from `app.sync`). Carries the sync migration, the §7.1 mechanisms, the enforced single-worker service and its compose entry, the v0.4 contract view with its omission guard, and the Postgres harness. **Eight §8 deviations closed; the ninth is partial** because the envelope/lifecycle behind `contract.py` still implements v0.3 timing and review phases |
+| `ifet-management` | `feature/labos-airtable` @ `e99c77b` at this probe, **`ea3464e` today** — all integration code, unmerged, **still unwired** (`main.py` imports nothing from `app.sync`). Carries the sync migration, the §7.1 mechanisms, the enforced single-worker service and its compose entry, the v0.4 contract view with its omission guard, and the Postgres harness. **Eight §8 deviations closed; the ninth is partial** because the envelope/lifecycle behind `contract.py` still implements v0.3 timing and review phases |
 | `ifet-firmware` | `feature/labos-firmware-p3` — docs, **plus the MF firmware change and the isolated simulation harness** (`simulation/mf_harness/`, `src/fake_sick_service/`). Not deployed to any rig |
 | Committed envelope code | **v0.4 throughout.** `contract.py`, `envelope.py` and `mapping.py` now implement create → terminal → **first review** as three phases: create sends `Pending`, terminal stays `Pending`, `build_verdict()` writes the verdict with a named reviewer. `Test Date` is the completion instant. 238 tests + 84 subtests on `postgres:13` |
-| **Testing Base schema** | **159 fields.** 14 applied 2026-09-06, 3 more 2026-09-08; the before/after chain is hash-verified and carries 0 removals and 0 retypes. **No longer empty** — the fixture `IFET-FIXTURE-0001` was seeded 2026-09-08. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
-| Production Base schema | Unchanged at 142 fields, **re-verified live 2026-09-08 by `app/airtable/preflight.py`**, which also confirms none of the 17 has leaked into it. The generated 168-row interface remains an exact match and the 14 above are exactly the production delta |
+| **Testing Base schema** | **159 fields at this probe — 164 today, 19 additions, see §0.0.** 14 applied 2026-09-06, 3 more 2026-09-08; the before/after chain is hash-verified and carries 0 removals and 0 retypes. **No longer empty** — the fixture `IFET-FIXTURE-0001` was seeded 2026-09-08. Evidence and reasons: `../evidence/testing-base-changes-2026-09-06/` |
+| Production Base schema | Unchanged at 142 fields, **re-verified live 2026-09-08 by `app/airtable/preflight.py`**, which also confirms none of the 17 has leaked into it. The generated interface (171 rows today) remains an exact match, and the 19 additions are exactly the production delta |
 
 Nothing above is a blocker on its own. Together they mean: **every leg of this integration is greenfield
 against production, and no code has ever carried a result end to end.**
@@ -108,7 +136,7 @@ below elaborates it.
 | The §6 detailed JSON body, including the nine JSON-only fields and `data_quality` | `mapping.result_detail` |
 | A transport-free boundary: `report-api` can queue without importing anything that opens a socket | `app/retry_budget.py`; `tests/test_report_api_isolation.py` |
 | `GET /sync/status` · `/sync/queue` · `POST /sync/queue/{id}/retry` | the worker's only liveness surface |
-| **339 tests** on PostgreSQL · **24/24 routes** · **5 migration rehearsals** on populated tables, forward and back | `../evidence/business-io-reconciliation-2026-09-08/` |
+| **339 tests** on PostgreSQL (**433 + 108 subtests today**) · **24/24 routes** · **5 migration rehearsals** on populated tables, forward and back | `../evidence/business-io-reconciliation-2026-09-08/` |
 | Photograph delivery: preview, direct upload, returned attachment id, ambiguous-response reconciliation | `sync/artifacts.py`; `service.make_sender` |
 | **The inbound half**: allowlisted mirror with no column for `Value`, hierarchy selection served locally, duplicate-safe import through the *same* create path a typed project uses, pre-fill, and the kind/unit validator contract §3.2 specifies | `airtable/{mirror,requirements,importer}.py`; `b9c1f60d4e27` |
 | **The requirement frozen at attempt start**, so an upstream edit cannot change what a finished test claims | `test_results.requirement_snapshot` |
@@ -160,7 +188,7 @@ Run before committing to a migration, because a migration written against `model
 | system-1 | 3 containers up 7d · `config1-site-b.json` · `device1` · **VFD address 12** · 5 × `pressure2` + Flow |
 | system-2 | 4 containers up 13h (incl. the standalone turbo controller) · `config2.json` · `device2` · **VFD address 5** · 5 × `pressure2`, scale 144 → PSF |
 | **`CLAUDE.md` is wrong on the VFD address** | It says "12, not 5 on the production rigs". system-2 is genuinely on **5**. The address is **per-rig**, and that line has already cost time once |
-| **Airtable Testing Base** | 8 tables, 156 fields — **0 records in all five tables.** A structural clone of production plus our 14 additions, with no data in it at all |
+| **Airtable Testing Base** | 8 tables, 156 fields at this probe — **164 fields today, and no longer empty**: the fixture `IFET-FIXTURE-0001` was seeded 2026-09-08 and the acceptance runs have added their own marked records. **0 records in all five tables** when this was written. A structural clone of production plus our 14 additions, with no data in it at all |
 | **Airtable Production Base** | 1 project · 6 mock-ups · 24 protocols · **54 Protocol Sections** · 1 raw-data row |
 | **The eight typed fields do not exist in production** | The `Protocol Sections` delta is exactly those eight. In production `Requirement Code` and `Applicability` are absent, and the legacy `Value` text field is populated on **24 of 54** rows — blank on `# Dials`, `Impact` and `Forced Entry (*)` |
 | Source data that already exists and we do not read | `Product Type` (Projects) · `Height (Inches)`, `Width (Inches)`, `Service line` (Mock-Ups) — all populated. Four free fields that answer the product owner's "product information" |
@@ -1110,7 +1138,7 @@ almost certainly `Deflection Value` and `Deflection Unit`, which makes them **M6
 
 | | Gap | State | Owner | Blocks | What actually unblocks it |
 |---|---|---|---|---|---|
-| **DG3** | Impact / Forced Entry / ANSI have no backend | 🔴 **OPEN — the largest piece of work left** | LabOS | M3, MU | nobody else. Ours to build |
+| **DG3** | Impact / Forced Entry / ANSI have no backend | ✅ **CLOSED 2026-09-08, re-verified 2026-09-11** | LabOS | — | built: models, routes, tests and live proof for all five types. What remains of the original scope is the *operator surface*, which is DG5 / TC5 |
 | **DG1** | Work order never reaches the rig | 🟡 **Decided · firmware landed** | LabOS + firmware | MF, M3 | backend: mint `run` on the two GETs |
 | **DG2** | Callback has no run / stage / event ID | 🟡 **Decided · firmware landed** | LabOS + firmware | MF, M3 | backend: key `/trials` on `event_id`; record unbound as unmapped |
 | **DG5** | No operator surface | 🟡 **Scoped as MU** | LabOS | whether the release is usable | M3, plus DG7/DG8 decided |
@@ -1129,6 +1157,9 @@ exists. Every remaining item is 🔴 or 🟡 and entirely ours.
 ---
 
 ## 5a. Open — all of them ours, none blocked externally
+
+*Items closed after they were written are kept in place, marked CLOSED, rather than moved: a gap that
+vanishes from where somebody last read it gets rediscovered and rebuilt.*
 
 ### DG14 · The extraction defect is back on the execution path — **found 2026-09-11, ACTIVE**
 
@@ -1172,18 +1203,27 @@ cyclic work on a rig. A LabOS-only job, set up by an operator as today, is unaff
 what A9 promised and is still true of everything except the imported pair.
 
 
-### DG3 · Three of five test types have no backend at all — **critical**
+### DG3 · Three of five test types have no backend at all — **CLOSED 2026-09-08, re-verified 2026-09-11**
 
-| Type | Model | Route | Table |
+Written when it was true. It is not any more, and leaving it under *Open* is how a closed item gets rebuilt.
+
+| Type | Model | Routes | Tests |
 |---|---|---|---|
 | Static Load, Cycles | ✔ | ✔ | ✔ |
-| Impact | `MissileImpactTest` / `Shot` exist — **read-only, report generation only** (`main.py:992-1009`) | ✗ | ✔ |
-| Forced Entry | ✗ | ✗ | ✗ |
-| ANSI Z97.1 | ✗ | ✗ | ✗ |
+| **Impact** | `MissileImpactTest` / `ImpactTestResult` / `Shot`, with `impact_family`, `impact_level`, `target_velocity` | `POST` · `PATCH` · `GET /projects/{id}/impact-tests/`, `…/trials`, `…/finish`, `POST /test-results/{id}/shots`, `POST /shots/{id}/photos` | `test_manual_tests.py` (91) · `test_five_test_types.py` (22 + 78 subtests) |
+| **Forced Entry** | `ManualTest` / `ManualTestResult`, with `required_option` | `POST` · `GET /projects/{id}/manual-tests/`, `…/trials`, `…/finish` | as above |
+| **ANSI Z97.1** | same | same | as above |
 
-`grep -rniE 'forced.?entry|ansi' app/` hits only the unwired v0.3 `contract.py` and the LaTeX template.
-Against that, the plan gives Static/Cycles a full identity design and gives these three one sentence.
-Neither Forced Entry nor ANSI appears in any acceptance check as a **capture** case.
+The original evidence for the gap was `grep -rniE 'forced.?entry|ansi' app/` hitting only the unwired
+`contract.py` and a LaTeX template. Re-run 2026-09-11, it hits **16 files** across `main.py`, `models.py`,
+`schema.py`, `attempts.py`, the importer, the mapping, the requirements validator and the sync state.
+Migration `d1a6b93f2e57` carries the capture tables and `c7e4a2b81f56` the one-attempt-per-impact split.
+All five types are proven on the real wire — `../evidence/live-write-proof-2026-09-08/` — and in the
+acceptance baseline, 60/60.
+
+**What was genuinely left of this gap is the operator surface**, and that is DG5 / TC5 — a different gap
+with a different owner. Closing DG3 does not make the release usable; TC5 does.
+
 
 ### DG1 · The work order never reaches the rig — **DECIDED; firmware half landed**
 
@@ -1273,7 +1313,7 @@ the interface.
 |---|---|
 | `completion_source` | Required by contract §2; absent from the register **and** from §4.1's run columns (now added above) |
 | `identity_assurance = declared` | Required by contract §4; same absence (now added above) |
-| Sync service deployment | ✅ **CLOSED 2026-09-07. Exactly one worker, enforced.** `app/sync/service.py` is the runnable process; `app/sync/singleton.py` holds a Postgres advisory lock so a second instance **refuses to start** rather than racing. Chosen for how it releases — the lock lives on one connection and vanishes when that connection does, so a SIGKILLed worker leaves nothing to clean up. Liveness is **intended** to be the heartbeat row `report-api` serves, because a worker answering its own health check would report healthy from inside a process whose database connection had gone — but ⚠️ **that route does not exist** (see §4.7), so the worker currently has no liveness surface at all. ✅ The `sync-worker` compose service and `SYNC_LOG_LEVEL` landed 2026-09-07 | ⚠️ **Corrected 2026-09-08: the process is closed, the pipeline is not.** Nothing calls `outbox.enqueue()`, so the queue is permanently empty, and the three `/sync` routes are unbuilt. §4.7 owns the wiring.
+| Sync service deployment | ✅ **CLOSED 2026-09-07. Exactly one worker, enforced.** `app/sync/service.py` is the runnable process; `app/sync/singleton.py` holds a Postgres advisory lock so a second instance **refuses to start** rather than racing. Chosen for how it releases — the lock lives on one connection and vanishes when that connection does, so a SIGKILLed worker leaves nothing to clean up. Liveness is **intended** to be the heartbeat row `report-api` serves, because a worker answering its own health check would report healthy from inside a process whose database connection had gone — but ⚠️ **that route does not exist** (see §4.7), so the worker currently has no liveness surface at all. ✅ The `sync-worker` compose service and `SYNC_LOG_LEVEL` landed 2026-09-07 | ⚠️ Corrected 2026-09-08, and **corrected again 2026-09-11: the pipeline is wired too.** `app/sync/publish.py` calls `outbox.enqueue()` at four call sites — `create`, `terminal`, `verdict` and `attachment` — and `GET /sync/status`, `/sync/queue`, `/sync/failures`, `POST /sync/queue/{id}/retry` and `/sync/failures/{id}/repair` all exist. The worker has its liveness surface. §4.7 records the wiring; nothing here is outstanding.
 | Gauge selection | `GAUGE_COUNT` is a snapshotted programme parameter (contract §3.2); firmware takes `selectedSensors[]` live at MQTT start. Never reconciled; a mismatch at start has no defined behaviour |
 | **Nine JSON-only fields, not two** | `Test Name` and `Abort Reason` are JSON-only by contract §6 and have no register row, so a register-vs-base diff reports them missing. **Counted 2026-09-07: there are nine** — those two plus `Required Value`, `Required Unit`, `Cycles Required`, `Cycles Completed`, `Test Rig`, `LabOS Version` and `Result Rationale`. They are absent by decision (§10.15), not by oversight. Note the whole set in the register header; `tests/test_five_test_types.py::JsonOnlyFieldsSurvive` pins it so the list cannot drift silently |
 
@@ -1323,7 +1363,7 @@ database primary key leaking into a customer's system.
 **Still verify the head on the node, not the repo**, before deploying: that caution is what produced this
 entry's own correction.
 
-### DG13 · `Corrects Attempt ID` has no route — **found 2026-09-08**
+### DG13 · `Corrects Attempt ID` has no route — **CLOSED 2026-09-08**
 
 `corrects_attempt_id` and `correction_reason` are columns (`models.py:362-363`), `is_correction` reads them
 (`models.py:457`), the envelope maps them, and contract §4 specifies the whole correction semantics. There

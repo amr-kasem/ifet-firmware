@@ -16,7 +16,7 @@ person, with the deployment owner informed.
 | `ifet-management` | branch `feature/labos-airtable`, **local only — must be pushed and merged into `latest` before the window** |
 | `ifet-firmware` | branch `feature/labos-firmware-p3`, docs and evidence only; no rig code changes in this release |
 | Alembic head | **`e2b9d4c70a15`** (`requirement_source_verification`) |
-| Migrations to apply | **10**, from `3a65a83e0463` — see §2 |
+| Migrations to apply | **10**, **from the node's head — which is `7ed2a670841e`, not `3a65a83e0463`.** See §1.2a before §2 |
 | Image | one image, `build: ./src/management_service/`, used by **both** `report-api` and `sync-worker` |
 | Airtable Testing | `app4oXS3Kd5IKWgJ7`, **164** fields |
 | Airtable Production | `app0OCunbmuXl7Hc9`, **142** fields — unchanged by this deployment |
@@ -56,8 +56,52 @@ docker compose exec -T db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
   -c 'SELECT * FROM alembic_version;'
 ```
 
-Expected: **`3a65a83e0463`**. If it is anything else, **stop** and reconcile before going further — the
-migration list in §2 is computed from that starting point.
+**As at 2026-09-11 this returns `7ed2a670841e`, not `3a65a83e0463`.** Whatever it returns, record it and
+go to §1.2a: the migration list in §2 is computed from that starting point, and the release's first
+migration declares `3a65a83e0463` as its parent.
+
+### ⚠️ 1.2a The node mints its own revisions — reconcile the branch point first
+
+**This is a prerequisite, not a check.** It was found on 2026-09-11 and it will recur.
+
+The **deployed** `startup.sh` (branch `latest` @ `90f9595`) still calls
+`command.revision(..., autogenerate=True)` at every container start, so each restart writes an **empty
+no-op** into `alembic/versions` on the node and advances `alembic_version`. Those files are `.gitignore`d
+there, so they exist nowhere in git. The repository's `startup.sh` stopped doing this on 2026-08-23 — the
+node has not received that change yet, which is the whole point.
+
+As at 2026-09-11 there is exactly one such revision:
+
+```
+7ed2a670841e   revises 3a65a83e0463   created 2026-09-09 12:30   def upgrade(): pass
+```
+
+**And `b7c2e9a41d38` — the release's first migration — also revises `3a65a83e0463`.** Put both in one
+`versions` directory and Alembic sees **two heads**, `alembic upgrade head` refuses, and `startup.sh` makes
+that fatal, so `report-api` never serves. This is Case B of `p0-p1-deploy-2026-08-28.md` §2.
+
+**Enumerate the node-only revisions** (read-only, on the node). Note that `git ls-files --others
+--exclude-standard` will **not** list them — they are ignored, not merely untracked:
+
+```bash
+cd ~/ifet-management/src/management_service/alembic/versions
+ls *.py | sort > /tmp/node-versions.txt
+# in a clean clone, on feature/labos-airtable
+git ls-files src/management_service/alembic/versions/ | xargs -n1 basename | sort > /tmp/repo-versions.txt
+comm -23 /tmp/node-versions.txt /tmp/repo-versions.txt      # the node-only files
+```
+
+**Then, off the node, in the clone:**
+
+1. copy each node-only revision file into `feature/labos-airtable` and commit it, so the chain resolves
+   everywhere;
+2. re-point `b7c2e9a41d38.down_revision` to the node's **current** head;
+3. re-run the rehearsal (`tests/rehearse_p1_migration.py`) and regenerate the revision graph — confirm one
+   head, no branch points, all revisions reachable, both directions;
+4. push, merge into `latest`, and **restart this runbook from §1.1**.
+
+**Do it as late as possible, and do not restart the current stack in between** — another restart mints
+another no-op and invalidates step 2. If the head has moved again when you reach §2, go back to step 1.
 
 ```bash
 # how much real data is about to be migrated
@@ -166,7 +210,8 @@ curl -s localhost:8000/sync/status | jq .     # before the deploy, for compariso
 | # | Check | GO when |
 |---|---|---|
 | 1 | Both working trees clean, branches pushed and merged to `latest` | yes |
-| 2 | `alembic_version` on the node is `3a65a83e0463` | yes |
+| 2 | `alembic_version` on the node **read today**, and the branch point reconciled per §1.2a | the chain resolves to **one** head with the node's own no-ops included |
+| 2a | No further no-op minted since that reconciliation | `comm -23` of the node's and the repo's revision lists is empty |
 | 3 | `pg_dump` taken, non-trivial, readable | yes |
 | 4 | Chain rehearsed against a restore of **this** dump, up and down | yes |
 | 5 | `check_open_impact_attempts.py` run and its output recorded | **exit 0**, or exit 1 with every open attempt explicitly resolved |
@@ -174,6 +219,8 @@ curl -s localhost:8000/sync/status | jq .     # before the deploy, for compariso
 | 7 | `check-secrets.sh` PASS and the five variables above confirmed | yes |
 | 8 | `preflight.py` and `check_register.py` clean | yes |
 | 9 | Deployment owner informed, window agreed | yes |
+| 10 | §2.1 agreed — who verifies the design-pressure pair for open imported jobs, and how | yes |
+| 11 | §2.2 agreed — what happens to rig Static Load and Cycles rows until an operator is declared at run start | yes |
 
 **Any NO ⇒ do not proceed.**
 
@@ -181,7 +228,7 @@ curl -s localhost:8000/sync/status | jq .     # before the deploy, for compariso
 
 ## 2. DATABASE
 
-Nine migrations, in this order, from `3a65a83e0463`:
+Ten migrations, in this order, from the node's head as reconciled in **§1.2a** — `3a65a83e0463` plus whatever no-ops the node has minted since (`7ed2a670841e` as at 2026-09-11):
 
 ```
 b7c2e9a41d38  P1 — Airtable identity and attempts
@@ -209,7 +256,7 @@ Verify:
 
 ```bash
 docker compose exec -T db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
-  -c 'SELECT * FROM alembic_version;'        # expect a4f18c2d3b90
+  -c 'SELECT * FROM alembic_version;'        # expect e2b9d4c70a15
 
 docker compose exec -T db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "
   SELECT count(*) AS impact_tests,
@@ -253,11 +300,46 @@ docker compose exec -T db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "
   ORDER BY p.id;"
 ```
 
-`alembic/versions` is bind-mounted from the node's checkout, so the nine files must be **in the node's
+`alembic/versions` is bind-mounted from the node's checkout, so the ten files must be **in the node's
 working tree** before the container starts. All 38 revisions are tracked in git as of this release — they
 were gitignored historically, which is how the repo and the node diverged in the first place.
 
 ---
+
+### ⚠️ 2.2 Rig Static Load and Cycles cannot publish a terminal without a declared operator
+
+A rollout limitation of this release, not a defect — but it decides what the Airtable rows look like on day
+one, so agree it before the window rather than discovering it from an operator.
+
+`attempts.complete_rig_trial` terminates a rig-posted stage **only if an operator is known**, either from
+the callback body or from `test.operator_name` declared at run start. Contract §4.5 requires an operator on a
+terminal write and LabOS does not invent one.
+
+Neither source exists today:
+
+- firmware's `Api` class has **no `start_static_test` method at all**, and its `start_cyclic_test` sends
+  **no body** — verified against `feature/labos-firmware-p3`, which is itself not deployed;
+- `PUT /projects/{id}/static_tests/{idx}/start` is **not among the 25 routes the deployed app serves**, so
+  nothing calls it today;
+- the operator declaration is **TC5 screen 3**, and the UI does not exist yet.
+
+**What happens without it.** The attempt stays `In Progress`. The `create` phase publishes, so an Airtable
+row appears and stays at `In Progress` / `Pending`; the terminal phase is never queued. The refusal is
+**visible** in `GET /sync/failures`, not silent — which is the designed behaviour.
+
+**So, before the window, decide which is true for the first rig runs after deployment:**
+
+| Option | Consequence |
+|---|---|
+| Call `PUT …/{static,cyclic}_tests/{idx}/start` with `{"operator_name": …}` from whatever drives the rig | rows complete normally |
+| Accept it until TC5 lands | rig rows sit at `In Progress` in Airtable, and `/sync/failures` shows why. Nothing is lost; the attempt completes when an operator is supplied |
+
+**Do not** default an operator name to get past it. A declared identity nobody declared is exactly what
+contract §4's separate reviewer identity exists to prevent, and it would be indistinguishable from a real
+one afterwards.
+
+Impact, Forced Entry and ANSI Z97.1 are unaffected: they go through `PUT /test-results/{id}/finish`, which
+carries the operator.
 
 ## 3. APPLICATION
 
@@ -397,14 +479,14 @@ checkout plus a restart, and a rebuild is belt and braces rather than the mechan
 
 ### 6.2 Database — prefer forward, not down
 
-**Do not run `alembic downgrade` on production as a first response.** Two of the nine migrations rewrite
+**Do not run `alembic downgrade` on production as a first response.** Two of the ten migrations rewrite
 existing rows, and their downgrades are rehearsed but destructive in the sense that matters: they
 un-normalise and re-merge evidence.
 
 | Situation | Action |
 |---|---|
 | The requirement gate is stopping legitimate work and nobody can verify | **Roll the app back**, which removes the gate; the six columns are additive and harmless to an older app. Do **not** patch the gate out of a running deployment, and do not verify from the imported value to get past it |
-| App fails, schema fine | Roll back the **app only**. The old code runs against the new schema: all nine migrations are additive from its point of view — new columns and new tables it does not read, plus `labos_test_id` values it does not interpret. `a4f18c2d3b90` in particular adds three nullable columns and one CHECK |
+| App fails, schema fine | Roll back the **app only**. The old code runs against the new schema: all ten migrations are additive from its point of view — new columns and new tables it does not read, plus `labos_test_id` values it does not interpret. `a4f18c2d3b90` in particular adds three nullable columns and one CHECK |
 | Migration fails part-way | Alembic is transactional per revision on PostgreSQL, so the failed revision is rolled back and the ones before it are applied. `alembic_version` tells you exactly where it stopped. Fix forward from there; restore from §1.3 only if the state is not one the chain can continue from |
 | Data is wrong after a rewriting migration | **Restore §1.3's dump.** That is what it is for. Do not attempt a partial repair on certification evidence |
 
