@@ -1,0 +1,47 @@
+Alembic revision graph — computed from the files, 2026-09-11
+total revisions: 38
+heads: ['a4f18c2d3b90']
+bases: ['886f54aa575c']
+branch points: none
+chain length base -> head: 38
+every revision reachable from the head: True
+
+base -> head:
+   1. 886f54aa575c  886f54aa575c_auto_generated_migration.py
+   2. 7c3866a81820  7c3866a81820_auto_generated_migration.py
+   3. 348d5245e1e7  348d5245e1e7_auto_generated_migration.py
+   4. eb03d573f874  eb03d573f874_auto_generated_migration.py
+   5. 5346d030f3c5  5346d030f3c5_auto_generated_migration.py
+   6. 7e26b9dbe652  7e26b9dbe652_auto_generated_migration.py
+   7. 8ac7f8e60420  8ac7f8e60420_auto_generated_migration.py
+   8. f6acd7d0a7bc  f6acd7d0a7bc_auto_generated_migration.py
+   9. 9f02a9af0fa8  9f02a9af0fa8_auto_generated_migration.py
+  10. eed040329fc8  eed040329fc8_auto_generated_migration.py
+  11. 569d6a12589b  569d6a12589b_auto_generated_migration.py
+  12. 921b6f5230f5  921b6f5230f5_auto_generated_migration.py
+  13. f69e1eff0c40  f69e1eff0c40_auto_generated_migration.py
+  14. d500ef66e207  d500ef66e207_auto_generated_migration.py
+  15. f9d7cd34992a  f9d7cd34992a_auto_generated_migration.py
+  16. d2ce735f826e  d2ce735f826e_auto_generated_migration.py
+  17. 8f284f4ce21a  8f284f4ce21a_auto_generated_migration.py
+  18. a4b1d0ccfc84  a4b1d0ccfc84_auto_generated_migration.py
+  19. 7e823c9c69e7  7e823c9c69e7_auto_generated_migration.py
+  20. 201adda7d846  201adda7d846_auto_generated_migration.py
+  21. 52b449cbc56e  52b449cbc56e_auto_generated_migration.py
+  22. a19536f5ee80  a19536f5ee80_auto_generated_migration.py
+  23. 5299a866852e  5299a866852e_auto_generated_migration.py
+  24. e3aabb037243  e3aabb037243_auto_generated_migration.py
+  25. 4478d8173a64  4478d8173a64_auto_generated_migration.py
+  26. 2d5bdedc86f2  2d5bdedc86f2_auto_generated_migration.py
+  27. 0954521d3a6f  0954521d3a6f_auto_generated_migration.py
+  28. 35b3567319e9  35b3567319e9_auto_generated_migration.py
+  29. 3a65a83e0463  3a65a83e0463_auto_generated_migration.py
+  30. b7c2e9a41d38  b7c2e9a41d38_p1_airtable_identity_and_attempts.py
+  31. c4e1f8a92b07  c4e1f8a92b07_m2_sync_outbox_and_fencing.py
+  32. d1a6b93f2e57  d1a6b93f2e57_manual_test_capture.py
+  33. e5f3a71c8d92  e5f3a71c8d92_attempt_number_uniqueness.py
+  34. f7b2c04e19a5  f7b2c04e19a5_artifact_delivery.py
+  35. a3d8e5c71f04  a3d8e5c71f04_run_start_operator.py
+  36. b9c1f60d4e27  b9c1f60d4e27_mirror_and_requirement_freeze.py
+  37. c7e4a2b81f56  c7e4a2b81f56_impact_one_attempt_per_impact.py
+  38. a4f18c2d3b90  a4f18c2d3b90_impact_classification.py
