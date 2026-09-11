@@ -1,0 +1,46 @@
+ Container ifet-m2-harness-postgres-1 Running 
+ Container ifet-m2-harness-postgres-1 Waiting 
+ Container ifet-m2-harness-postgres-1 Healthy 
+ Container ifet-m2-harness-tests-run-28b3d7c57711 Creating 
+ Container ifet-m2-harness-tests-run-28b3d7c57711 Created 
+ordering OK: b7c2e9a41d38 -> c4e1f8a92b07 -> d1a6b93f2e57 -> e5f3a71c8d92 -> f7b2c04e19a5 -> a3d8e5c71f04 -> b9c1f60d4e27 -> c7e4a2b81f56 -> a4f18c2d3b90 -> e2b9d4c70a15
+P1 b7c2e9a41d38 upgraded
+M2 c4e1f8a92b07 upgraded
+manual-tests d1a6b93f2e57 upgraded
+seeded 5 attempts across all four parent types, carrying all three labos_test_id formats
+  labos_test_id normalised on 4 row(s)
+attempt-uniqueness e5f3a71c8d92 upgraded
+all five ids normalised to the derived form; the constraint refuses a duplicate
+  labos_test_id normalised on 1 row(s)
+and it refuses to run at all over a genuine duplicate
+  labos_test_id normalised on 0 row(s)
+artifact-delivery f7b2c04e19a5 upgraded
+run-start-operator a3d8e5c71f04 upgraded
+mirror-and-freeze b9c1f60d4e27 upgraded
+seeded the old impact shape: 3 tests, 8 impacts across 4 attempts, one attempt with no impact, evidence on both photo columns
+  emptied parent attempts removed: 1
+  impact tests split: 2
+  attempts kept: 2, attempts created: 6
+  impact attempts with no impact, left alone: 3
+impact-split c7e4a2b81f56 upgraded
+each impact is its own attempt, renumbered across the test, outcomes taken from the impacts, evidence followed
+  impact tests split: 0
+  attempts kept: 8, attempts created: 0
+  impact attempts with no impact, left alone: 3
+impact-classification a4f18c2d3b90 upgraded
+three nullable columns, every historical row still NULL in all three, and the CHECK refuses SMI-with-a-level and nothing else
+artifact delivery keyed on the photograph, publication failures unique per (attempt, phase), operator_name on all four tables, mirror present with no column for `Value`
+requirement-verification e2b9d4c70a15 upgraded — THE DEPLOYMENT HEAD
+six nullable columns on projects, and every existing project still NULL in all six
+requirement-verification e2b9d4c70a15 downgraded
+impact-classification a4f18c2d3b90 downgraded
+impact-split downgraded
+mirror-and-freeze downgraded
+run-start-operator downgraded
+artifact-delivery downgraded
+attempt-uniqueness downgraded
+manual-tests downgraded
+M2 downgraded
+P1 downgraded
+
+REHEARSAL PASSED — populated tables, forward and back.

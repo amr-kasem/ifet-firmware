@@ -1,4 +1,4 @@
-# Migration rehearsal to the deployment head `a4f18c2d3b90`, 2026-09-11
+# Migration rehearsal to the deployment head `e2b9d4c70a15`, 2026-09-11
 
 **REHEARSAL PASSED — populated tables, forward and back, on PostgreSQL 13.**
 
@@ -12,14 +12,14 @@ run against any real database.
 
 | | |
 |---|---|
-| Revisions | **38** |
-| Heads | **`a4f18c2d3b90`** — exactly one |
+| Revisions | **39** |
+| Heads | **`e2b9d4c70a15`** — exactly one |
 | Bases | `886f54aa575c` — exactly one |
 | Branch points | **none** |
 | Every revision reachable from the head | **yes** |
 
-**The live `management` node is recorded as `3a65a83e0463`, which is position 29 of 38.** So a deploy
-applies **nine** migrations, in this order:
+**The live `management` node is recorded as `3a65a83e0463`, which is position 29 of 39.** So a deploy
+applies **ten** migrations, in this order:
 
 ```
 b7c2e9a41d38  P1 — Airtable identity and attempts
@@ -30,7 +30,8 @@ f7b2c04e19a5  artifact delivery
 a3d8e5c71f04  run-start operator
 b9c1f60d4e27  mirror and requirement freeze
 c7e4a2b81f56  impact — one attempt per impact
-a4f18c2d3b90  impact classification            <- head
+a4f18c2d3b90  impact classification
+e2b9d4c70a15  requirement source verification  <- head
 ```
 
 **Confirm that starting revision on the node, not from this repo** — `SELECT * FROM alembic_version;`.
@@ -47,9 +48,24 @@ the reason it exists rather than a unit test:
 - `c7e4a2b81f56` splits existing impact attempts one-per-impact and renumbers them under a uniqueness
   constraint that the renumbering itself can violate.
 
-## The deployment head, added to the chain on 2026-09-11
+## `e2b9d4c70a15` — requirement source verification, the new head
 
-`a4f18c2d3b90` was previously rehearsed alone. It is now the last link of this chain, so it runs against a
+Six nullable columns on `projects` holding the design-pressure pair as read off the trusted proposal by a
+named person, with the document reference and the time. DG14 / contract §3.3.
+
+The assertions are the same two that matter for any additive migration meeting real rows:
+
+- all six are **nullable**, because historical projects cannot satisfy anything else;
+- **no backfill** — every pre-existing project still has NULL in all six after the upgrade. These columns
+  assert that a person read a document at a time, and there is no evidence for that claim about the past;
+- and the downgrade removes all six.
+
+**What it changes operationally is not additive, and the runbook says so:** an Airtable-imported static or
+cyclic test becomes non-executable until its pair is verified. A LabOS-only job is untouched.
+
+## `a4f18c2d3b90` — impact classification, added to the chain on 2026-09-11
+
+`a4f18c2d3b90` was previously rehearsed alone. It is now in the middle of this chain, so it runs against a
 database that already holds the split impact shape **with rows in it** — the shape the node will be in.
 A migration that has only ever met an empty table has not been rehearsed.
 
@@ -71,5 +87,6 @@ database, are **deployment-window prerequisites** — see the runbook. Neither c
 
 ## Files
 
-`rehearsal-a4f18c2d3b90.txt` — the full run output, ending `REHEARSAL PASSED`.
+`rehearsal-e2b9d4c70a15.txt` — the current run, to the present head, ending `REHEARSAL PASSED`.
+`rehearsal-a4f18c2d3b90.txt` — the run as at the previous head, kept.
 `revision-graph.txt` — the computed graph, base to head.

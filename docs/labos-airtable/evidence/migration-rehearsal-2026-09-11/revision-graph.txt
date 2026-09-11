@@ -1,9 +1,9 @@
 Alembic revision graph — computed from the files, 2026-09-11
-total revisions: 38
-heads: ['a4f18c2d3b90']
+total revisions: 39
+heads: ['e2b9d4c70a15']
 bases: ['886f54aa575c']
 branch points: none
-chain length base -> head: 38
+chain length base -> head: 39
 every revision reachable from the head: True
 
 base -> head:
@@ -45,3 +45,4 @@ base -> head:
   36. b9c1f60d4e27  b9c1f60d4e27_mirror_and_requirement_freeze.py
   37. c7e4a2b81f56  c7e4a2b81f56_impact_one_attempt_per_impact.py
   38. a4f18c2d3b90  a4f18c2d3b90_impact_classification.py
+  39. e2b9d4c70a15  e2b9d4c70a15_requirement_source_verification.py

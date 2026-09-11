@@ -15,8 +15,8 @@ person, with the deployment owner informed.
 |---|---|
 | `ifet-management` | branch `feature/labos-airtable`, **local only — must be pushed and merged into `latest` before the window** |
 | `ifet-firmware` | branch `feature/labos-firmware-p3`, docs and evidence only; no rig code changes in this release |
-| Alembic head | **`a4f18c2d3b90`** (`impact_classification`) |
-| Migrations to apply | **9**, from `3a65a83e0463` — see §2 |
+| Alembic head | **`e2b9d4c70a15`** (`requirement_source_verification`) |
+| Migrations to apply | **10**, from `3a65a83e0463` — see §2 |
 | Image | one image, `build: ./src/management_service/`, used by **both** `report-api` and `sync-worker` |
 | Airtable Testing | `app4oXS3Kd5IKWgJ7`, **164** fields |
 | Airtable Production | `app0OCunbmuXl7Hc9`, **142** fields — unchanged by this deployment |
@@ -192,7 +192,8 @@ f7b2c04e19a5  artifact delivery
 a3d8e5c71f04  run-start operator
 b9c1f60d4e27  mirror and requirement freeze
 c7e4a2b81f56  impact — one attempt per impact  ← splits existing impact attempts and renumbers
-a4f18c2d3b90  impact classification            ← head; additive, three nullable columns + one CHECK
+a4f18c2d3b90  impact classification            ← additive, three nullable columns + one CHECK
+e2b9d4c70a15  requirement source verification  ← head; additive, six nullable columns on `projects`
 ```
 
 **Two of them rewrite existing rows** (marked above). That is why §1.4 exists.
@@ -214,10 +215,43 @@ docker compose exec -T db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "
   SELECT count(*) AS impact_tests,
          count(*) FILTER (WHERE impact_family IS NOT NULL) AS backfilled
   FROM missile_impact_tests;"                # backfilled MUST be 0
+
+docker compose exec -T db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "
+  SELECT count(*) AS projects,
+         count(*) FILTER (WHERE requirement_verified_at IS NOT NULL) AS verified
+  FROM projects;"                            # verified MUST be 0
 ```
 
-**`backfilled` must be 0.** A non-zero value means something inferred a classification, which nothing is
-allowed to do.
+**Both must be 0.** A non-zero `backfilled` means something inferred an impact classification. A non-zero
+`verified` means something asserted that a named person read a named document about a job that ran before
+the column existed. Nothing is allowed to do either.
+
+### ⚠️ 2.1 What the requirement gate changes on the day it lands
+
+`e2b9d4c70a15` plus its code make **every Airtable-imported static or cyclic test non-executable until its
+design-pressure pair is verified** — contract §3.3, DG14. This is deliberate and it is the point, but it
+means the deployment changes operator-visible behaviour rather than only adding fields:
+
+- **a job imported before the deploy, whose stages have not all run, will stop.** `PUT …/start` and
+  `POST …/trials` return `409` with the §3.3 reason until somebody verifies the pair;
+- **LabOS-only jobs are unaffected** — the operator typed those pressures, and there is no second source;
+- **there is no screen for the verification yet** (TC5 screen 2), so until the UI lands it can only be done
+  through `POST /projects/{id}/requirement-verification`. **Confirm before the window who will do that, and
+  how**, for every open imported job;
+- **do not work around it** by verifying on the operator's behalf from the imported value. That records one
+  reading as if it were two and removes the only control there is.
+
+List what will be affected before deploying:
+
+```bash
+docker compose exec -T db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "
+  SELECT p.id, p.name, p.inward_design_pressure, p.outward_design_pressure
+  FROM projects p
+  WHERE p.airtable_project_id IS NOT NULL
+    AND EXISTS (SELECT 1 FROM static_tests s
+                WHERE s.project_id = p.id AND s.finished = false)
+  ORDER BY p.id;"
+```
 
 `alembic/versions` is bind-mounted from the node's checkout, so the nine files must be **in the node's
 working tree** before the container starts. All 38 revisions are tracked in git as of this release — they
@@ -368,6 +402,7 @@ un-normalise and re-merge evidence.
 
 | Situation | Action |
 |---|---|
+| The requirement gate is stopping legitimate work and nobody can verify | **Roll the app back**, which removes the gate; the six columns are additive and harmless to an older app. Do **not** patch the gate out of a running deployment, and do not verify from the imported value to get past it |
 | App fails, schema fine | Roll back the **app only**. The old code runs against the new schema: all nine migrations are additive from its point of view — new columns and new tables it does not read, plus `labos_test_id` values it does not interpret. `a4f18c2d3b90` in particular adds three nullable columns and one CHECK |
 | Migration fails part-way | Alembic is transactional per revision on PostgreSQL, so the failed revision is rolled back and the ones before it are applied. `alembic_version` tells you exactly where it stopped. Fix forward from there; restore from §1.3 only if the state is not one the chain can continue from |
 | Data is wrong after a rewriting migration | **Restore §1.3's dump.** That is what it is for. Do not attempt a partial repair on certification evidence |
