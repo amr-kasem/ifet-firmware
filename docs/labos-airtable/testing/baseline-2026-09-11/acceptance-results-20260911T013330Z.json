@@ -1,0 +1,336 @@
+{
+ "run_tag": "2026-09-11-BASELINE",
+ "operator_name": "LABOS-E2E-2026-09-11-BASELINE",
+ "created_airtable_records": {
+  "W4 Forced Entry": "recnvPA1Ub5H2MvxZ",
+  "W5 ANSI Z97.1": "recBxfbBvAKfWle8a",
+  "W3 SMI": "recGS7OfZxAd7MVYI",
+  "W3 LMI-D": "reckdX6Pp0uijc5cv",
+  "W3 LMI-E": "rec8zvkxZ5YK3TItr",
+  "W1 Static Load": "recrB5K94mQf892QM",
+  "W2 Cycles": "recxoy8J6WSDHJt1j"
+ },
+ "hierarchy": {
+  "project": "recyWDrmy6xjx8zhl",
+  "mockup": "recnrVSd8wYIwmHK1",
+  "protocol": "receMcWfzF9Ba1sLM",
+  "sections": {
+   "STATIC_PRESSURE": "recx38IDnwtC5Oc0n",
+   "CYCLIC_PRESSURE": "recdJAgjQe34W8hQR",
+   "IMPACT_SMI": "recjIvkj3GSnxswaq",
+   "IMPACT_LMI": "recrew39P5bzEQ0rl",
+   "FORCED_ENTRY": "recMZ8fW17ONIiWrX",
+   "ANSI_IMPACT": "recHdtYsABNNzvzVa"
+  },
+  "job_number": "IFET-E2E-2026-09-11-BASELINE"
+ },
+ "attempt_ids": {
+  "W4 Forced Entry": "c2ed56c9-4e90-4bcb-9d39-98995aecb3c6",
+  "W5 ANSI Z97.1": "c529f36e-7b3f-4ac5-90e6-d896d4fb2334",
+  "W3 SMI": "b828f895-be00-475b-98f1-42ca5b67fd25",
+  "W3 LMI-D": "da1361ac-16fd-421d-9f8c-ce2b5ec3df63",
+  "W3 LMI-E": "c3902d7d-7947-4c8f-adf0-849e7a251a8d"
+ },
+ "results": [
+  {
+   "assertion": "production schema before = 142",
+   "pass": true,
+   "detail": "142"
+  },
+  {
+   "assertion": "hierarchy created, all five requirement codes",
+   "pass": true,
+   "detail": "job=IFET-E2E-2026-09-11-BASELINE recyWDrmy6xjx8zhl"
+  },
+  {
+   "assertion": "W0 import succeeded",
+   "pass": true,
+   "detail": "{\"name\":\"E2E specimen 2026-09-11-BASELINE\",\"inward_design_pressure\":60.0,\"outward_design_pressure\":45.0,\"parent_id\":1,\"has_water_infiltration\":false,\"id\":1,\"device_id\":1,\"static_tests\":[{\"pressure\":45"
+  },
+  {
+   "assertion": "W0 six static + eight cyclic derived from the pair",
+   "pass": true,
+   "detail": "6/8"
+  },
+  {
+   "assertion": "W0 two impact tests and two manual tests created",
+   "pass": true,
+   "detail": "impact=2 manual=['ANSI Z97.1', 'Forced Entry']"
+  },
+  {
+   "assertion": "DG14 unverified imported requirement cannot start a rig",
+   "pass": true,
+   "detail": "409"
+  },
+  {
+   "assertion": "DG14 a pair disagreeing with the mirrored Airtable row is refused",
+   "pass": true,
+   "detail": "409"
+  },
+  {
+   "assertion": "DG14 the agreeing pair releases the job",
+   "pass": true,
+   "detail": "200"
+  },
+  {
+   "assertion": "W1 Static Load trial accepted",
+   "pass": true,
+   "detail": "{\"deflections\":[{\"deflection_gauge\":\"g1\",\"max_deflection\":1234.0,\"permanent_deflection\":12.0,\"recovery\":60.0}],\"operator"
+  },
+  {
+   "assertion": "W2 Cycles trial accepted",
+   "pass": true,
+   "detail": "{\"deflections\":[{\"deflection_gauge\":\"g1\",\"max_deflection\":1000.0,\"permanent_deflection\":8.0,\"recovery\":60.0}],\"operator_"
+  },
+  {
+   "assertion": "W3 [SMI] classification derives to 'SMI'",
+   "pass": true,
+   "detail": "SMI"
+  },
+  {
+   "assertion": "W3 [SMI] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":3,\"trial_number\":1,\"labos_attempt_id\":\"b828f895-be00-475b-98f1-42ca5b67fd25\",\"labos_test_id\":\"623b723a-4065-5abf-8"
+  },
+  {
+   "assertion": "W3 [LMI-D] classification derives to 'LMI Level D'",
+   "pass": true,
+   "detail": "LMI Level D"
+  },
+  {
+   "assertion": "W3 [LMI-D] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":4,\"trial_number\":1,\"labos_attempt_id\":\"da1361ac-16fd-421d-9f8c-ce2b5ec3df63\",\"labos_test_id\":\"2bfd43bc-5e57-5589-a"
+  },
+  {
+   "assertion": "W3 [LMI-E] classification derives to 'LMI Level E'",
+   "pass": true,
+   "detail": "LMI Level E"
+  },
+  {
+   "assertion": "W3 [LMI-E] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":5,\"trial_number\":1,\"labos_attempt_id\":\"c3902d7d-7947-4c8f-adf0-849e7a251a8d\",\"labos_test_id\":\"b0d85e60-2382-5c37-a"
+  },
+  {
+   "assertion": "W4 Forced Entry terminal: Test Result and Forced Entry Result both 'Pending'",
+   "pass": true,
+   "detail": "'Pending'/'Pending'"
+  },
+  {
+   "assertion": "W4 Forced Entry terminal: ANSI Result absent, not blank",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "W5 ANSI Z97.1 terminal: Test Result and ANSI Result both 'Pending'",
+   "pass": true,
+   "detail": "'Pending'/'Pending'"
+  },
+  {
+   "assertion": "W5 ANSI Z97.1 terminal: Forced Entry Result absent, not blank",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "W4 Forced Entry exactly one row after the verdict",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "W4 Forced Entry Test Result == Forced Entry Result == 'Passed'",
+   "pass": true,
+   "detail": "'Passed'/'Passed'"
+  },
+  {
+   "assertion": "W4 Forced Entry ANSI Result still absent",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "W4 Forced Entry photo published",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "assertion": "W5 ANSI Z97.1 exactly one row after the verdict",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "W5 ANSI Z97.1 Test Result == ANSI Result == 'Failed'",
+   "pass": true,
+   "detail": "'Failed'/'Failed'"
+  },
+  {
+   "assertion": "W5 ANSI Z97.1 Forced Entry Result still absent",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "W5 ANSI Z97.1 photo published",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "assertion": "W3 [SMI] exactly one row",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "W3 [SMI] Impact Classification == 'SMI'",
+   "pass": true,
+   "detail": "'SMI'"
+  },
+  {
+   "assertion": "W3 [SMI] Target Impact Velocity == 130.0 as a number",
+   "pass": true,
+   "detail": "130"
+  },
+  {
+   "assertion": "W3 [SMI] Impact Number present",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "assertion": "W3 [SMI] neither dedicated result field",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "W3 [LMI-D] exactly one row",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "W3 [LMI-D] Impact Classification == 'LMI Level D'",
+   "pass": true,
+   "detail": "'LMI Level D'"
+  },
+  {
+   "assertion": "W3 [LMI-D] Target Impact Velocity == 50.25 as a number",
+   "pass": true,
+   "detail": "50.25"
+  },
+  {
+   "assertion": "W3 [LMI-D] Impact Number present",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "assertion": "W3 [LMI-D] neither dedicated result field",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "W3 [LMI-E] exactly one row",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "W3 [LMI-E] Impact Classification == 'LMI Level E'",
+   "pass": true,
+   "detail": "'LMI Level E'"
+  },
+  {
+   "assertion": "W3 [LMI-E] Target Impact Velocity == 55.5 as a number",
+   "pass": true,
+   "detail": "55.5"
+  },
+  {
+   "assertion": "W3 [LMI-E] Impact Number present",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "assertion": "W3 [LMI-E] neither dedicated result field",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "W1 Static Load reached the base",
+   "pass": true,
+   "detail": "1 row(s)"
+  },
+  {
+   "assertion": "W1 Static Load neither dedicated result field",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "W2 Cycles reached the base",
+   "pass": true,
+   "detail": "1 row(s)"
+  },
+  {
+   "assertion": "W2 Cycles neither dedicated result field",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "W3 Impact produced one row per physical impact",
+   "pass": true,
+   "detail": "3 of 3"
+  },
+  {
+   "assertion": "all five test types present in this run",
+   "pass": true,
+   "detail": "['ANSI Z97.1', 'Cycles', 'Forced Entry', 'Impact', 'Static Load']"
+  },
+  {
+   "assertion": "one row per attempt, no duplicates",
+   "pass": true,
+   "detail": "7 rows"
+  },
+  {
+   "assertion": "retry: re-upsert returns the same record id",
+   "pass": true,
+   "detail": "['recnvPA1Ub5H2MvxZ']"
+  },
+  {
+   "assertion": "retry: updated rather than created",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "assertion": "retry: still exactly one row for the attempt id",
+   "pass": true,
+   "detail": "1 -> 1"
+  },
+  {
+   "assertion": "no unexpected write to IFET Projects",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "no unexpected write to Mock-Ups/Specimens",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "no unexpected write to Tests Protocols",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "no unexpected write to Protocol Sections",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "production schema unchanged at 142",
+   "pass": true,
+   "detail": "142"
+  },
+  {
+   "assertion": "production record count unchanged",
+   "pass": true,
+   "detail": "1 -> 1"
+  },
+  {
+   "assertion": "production schema byte-identical before/after",
+   "pass": true,
+   "detail": ""
+  }
+ ]
+}
