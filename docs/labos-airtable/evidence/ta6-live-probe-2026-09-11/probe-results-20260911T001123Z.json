@@ -1,0 +1,526 @@
+{
+ "created_airtable_records": {
+  "FE-pass": "recRPZ7ewYEk88sxm",
+  "FE-incon": "recSzWzXzDBx4u3T1",
+  "ANSI-fail": "recn3AAzmKc4RKGbL",
+  "Static Load": [
+   "recsNGmMfnquPq7dA"
+  ],
+  "Cycles": [
+   "recXB7zLjQJorgS7K"
+  ],
+  "Impact": [
+   "recH3YSthTwcGHjWd"
+  ]
+ },
+ "probe_hierarchy": {
+  "project": "recT9lhVYMv6mWpX3",
+  "mockup": "recxjTlxApG3voPAa",
+  "protocol": "recdkxKG63I0zC4Vs",
+  "sections": {
+   "STATIC_PRESSURE": "recIQgjIC4SGwZiJ1",
+   "CYCLIC_PRESSURE": "recLFhyK5uI42qqSN",
+   "IMPACT_SMI": "recWZsGCm82sPPwws",
+   "FORCED_ENTRY": "rechUijk04AnSkxJG",
+   "ANSI_IMPACT": "recTrPKaMGeYwJvP3"
+  },
+  "job_number": "IFET-PROBE-TA6-0001-001123"
+ },
+ "attempt_ids": {
+  "FE-pass": "c0a6620b-15d9-4e24-b54b-6145272da7ee",
+  "FE-incon": "60a33b49-476c-4620-9775-8d8a43aa2325",
+  "ANSI-fail": "0d1f2e1c-8dd8-4ed2-bd3f-67cc84cc05a0"
+ },
+ "labos_test_ids": {
+  "FE-pass": "b8d22467-10ef-51dd-b5af-28d056e371e1",
+  "FE-incon": "b8d22467-10ef-51dd-b5af-28d056e371e1",
+  "ANSI-fail": "36bd7069-8a69-5f97-be3d-7488e4d440fb"
+ },
+ "results": [
+  {
+   "assertion": "contract: Forced Entry Result is PRESENT, not pending",
+   "pass": true,
+   "detail": "v2=present pending=False"
+  },
+  {
+   "assertion": "contract: Forced Entry Result translates Pass->Passed, Fail->Failed",
+   "pass": true,
+   "detail": "{'Pass': 'Passed', 'Fail': 'Failed'}"
+  },
+  {
+   "assertion": "contract: Forced Entry Result field id recorded as fldAHuPzZHZEj0Cjt",
+   "pass": true,
+   "detail": "APPLIED 2026-09-11 fldAHuPzZHZEj0Cjt \u2014 test_results.test_res"
+  },
+  {
+   "assertion": "contract: ANSI Result is PRESENT, not pending",
+   "pass": true,
+   "detail": "v2=present pending=False"
+  },
+  {
+   "assertion": "contract: ANSI Result translates Pass->Passed, Fail->Failed",
+   "pass": true,
+   "detail": "{'Pass': 'Passed', 'Fail': 'Failed'}"
+  },
+  {
+   "assertion": "contract: ANSI Result field id recorded as fldmCKJV95N9uL7xt",
+   "pass": true,
+   "detail": "APPLIED 2026-09-11 fldmCKJV95N9uL7xt \u2014 test_results.test_res"
+  },
+  {
+   "assertion": "contract: nothing is left pending_schema",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "production schema before = 142",
+   "pass": true,
+   "detail": "142"
+  },
+  {
+   "assertion": "production does not have Forced Entry Result",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "production does not have ANSI Result",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "testing schema = 164",
+   "pass": true,
+   "detail": "164"
+  },
+  {
+   "assertion": "Forced Entry Result exists on the Raw Data table",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "Forced Entry Result is singleSelect",
+   "pass": true,
+   "detail": "singleSelect"
+  },
+  {
+   "assertion": "Forced Entry Result choices are exactly the wire vocabulary",
+   "pass": true,
+   "detail": "['Pending', 'Passed', 'Failed', 'Inconclusive']"
+  },
+  {
+   "assertion": "ANSI Result exists on the Raw Data table",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "ANSI Result is singleSelect",
+   "pass": true,
+   "detail": "singleSelect"
+  },
+  {
+   "assertion": "ANSI Result choices are exactly the wire vocabulary",
+   "pass": true,
+   "detail": "['Pending', 'Passed', 'Failed', 'Inconclusive']"
+  },
+  {
+   "assertion": "probe hierarchy created in Testing",
+   "pass": true,
+   "detail": "job=IFET-PROBE-TA6-0001-001123 recT9lhVYMv6mWpX3 protocol=recdkxKG63I0zC4Vs sections=['recIQgjIC4SGwZiJ1', 'recLFhyK5uI42qqSN', 'recWZsGCm82sPPwws', 'rechUijk04AnSkxJG', 'recTrPKaMGeYwJvP3']"
+  },
+  {
+   "assertion": "import succeeded",
+   "pass": true,
+   "detail": "{\"name\":\"TA6 probe specimen\",\"inward_design_pressure\":60.0,\"outward_design_pressure\":45.0,\"parent_id\":1,\"has_water_infiltration\":false,\"id\":1,\"device_id\":1,\"static_tests\":[{\"pressure\":45.0,\"duration\":"
+  },
+  {
+   "assertion": "both manual tests created from their requirement codes",
+   "pass": true,
+   "detail": "['ANSI Z97.1', 'Forced Entry']"
+  },
+  {
+   "assertion": "six static stages derived from the design pressure",
+   "pass": true,
+   "detail": "6"
+  },
+  {
+   "assertion": "eight cyclic stages derived from the design pressure",
+   "pass": true,
+   "detail": "8"
+  },
+  {
+   "assertion": "one impact test created",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "assertion": "[FE-pass] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":1,\"trial_number\":1,\"labos_attempt_id\":\"c0a6620b-15d9-4e24-b54b-6145272da7ee\",\"labos_test_id\":\"b8d22467-10ef-51dd-b"
+  },
+  {
+   "assertion": "[FE-pass] exactly one Raw Data row at terminal",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "[FE-pass] terminal Test Result == 'Pending'",
+   "pass": true,
+   "detail": "'Pending'"
+  },
+  {
+   "assertion": "[FE-pass] terminal Forced Entry Result == 'Pending'",
+   "pass": true,
+   "detail": "'Pending'"
+  },
+  {
+   "assertion": "[FE-pass] terminal ANSI Result is absent, not blank",
+   "pass": true,
+   "detail": "None"
+  },
+  {
+   "assertion": "[FE-pass] Test Type is 'Forced Entry'",
+   "pass": true,
+   "detail": "'Forced Entry'"
+  },
+  {
+   "assertion": "[FE-pass] the value is NOT in the JSON valve any more",
+   "pass": true,
+   "detail": "['duration_s', 'test_name', 'testing_end_date', 'testing_start_date']"
+  },
+  {
+   "assertion": "[FE-pass] still exactly one row after the verdict",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "[FE-pass] verdict Test Result == 'Passed'",
+   "pass": true,
+   "detail": "'Passed'"
+  },
+  {
+   "assertion": "[FE-pass] verdict Forced Entry Result == 'Passed'",
+   "pass": true,
+   "detail": "'Passed'"
+  },
+  {
+   "assertion": "[FE-pass] Test Result == Forced Entry Result \u2014 one value, two columns",
+   "pass": true,
+   "detail": "'Passed' vs 'Passed'"
+  },
+  {
+   "assertion": "[FE-pass] ANSI Result still absent after the verdict",
+   "pass": true,
+   "detail": "None"
+  },
+  {
+   "assertion": "[FE-pass] photo published via the real attachment path",
+   "pass": true,
+   "detail": "1 attachment(s)"
+  },
+  {
+   "assertion": "[FE-pass] Complete LabOS JSON is valid JSON",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[FE-incon] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":2,\"trial_number\":2,\"labos_attempt_id\":\"60a33b49-476c-4620-9775-8d8a43aa2325\",\"labos_test_id\":\"b8d22467-10ef-51dd-b"
+  },
+  {
+   "assertion": "[FE-incon] exactly one Raw Data row at terminal",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "[FE-incon] terminal Test Result == 'Pending'",
+   "pass": true,
+   "detail": "'Pending'"
+  },
+  {
+   "assertion": "[FE-incon] terminal Forced Entry Result == 'Pending'",
+   "pass": true,
+   "detail": "'Pending'"
+  },
+  {
+   "assertion": "[FE-incon] terminal ANSI Result is absent, not blank",
+   "pass": true,
+   "detail": "None"
+  },
+  {
+   "assertion": "[FE-incon] Test Type is 'Forced Entry'",
+   "pass": true,
+   "detail": "'Forced Entry'"
+  },
+  {
+   "assertion": "[FE-incon] the value is NOT in the JSON valve any more",
+   "pass": true,
+   "detail": "['duration_s', 'test_name', 'testing_end_date', 'testing_start_date']"
+  },
+  {
+   "assertion": "[FE-incon] still exactly one row after the verdict",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "[FE-incon] verdict Test Result == 'Inconclusive'",
+   "pass": true,
+   "detail": "'Inconclusive'"
+  },
+  {
+   "assertion": "[FE-incon] verdict Forced Entry Result == 'Inconclusive'",
+   "pass": true,
+   "detail": "'Inconclusive'"
+  },
+  {
+   "assertion": "[FE-incon] Test Result == Forced Entry Result \u2014 one value, two columns",
+   "pass": true,
+   "detail": "'Inconclusive' vs 'Inconclusive'"
+  },
+  {
+   "assertion": "[FE-incon] ANSI Result still absent after the verdict",
+   "pass": true,
+   "detail": "None"
+  },
+  {
+   "assertion": "[FE-incon] photo published via the real attachment path",
+   "pass": true,
+   "detail": "1 attachment(s)"
+  },
+  {
+   "assertion": "[FE-incon] Complete LabOS JSON is valid JSON",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[ANSI-fail] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":3,\"trial_number\":1,\"labos_attempt_id\":\"0d1f2e1c-8dd8-4ed2-bd3f-67cc84cc05a0\",\"labos_test_id\":\"36bd7069-8a69-5f97-b"
+  },
+  {
+   "assertion": "[ANSI-fail] exactly one Raw Data row at terminal",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "[ANSI-fail] terminal Test Result == 'Pending'",
+   "pass": true,
+   "detail": "'Pending'"
+  },
+  {
+   "assertion": "[ANSI-fail] terminal ANSI Result == 'Pending'",
+   "pass": true,
+   "detail": "'Pending'"
+  },
+  {
+   "assertion": "[ANSI-fail] terminal Forced Entry Result is absent, not blank",
+   "pass": true,
+   "detail": "None"
+  },
+  {
+   "assertion": "[ANSI-fail] Test Type is 'ANSI Z97.1'",
+   "pass": true,
+   "detail": "'ANSI Z97.1'"
+  },
+  {
+   "assertion": "[ANSI-fail] the value is NOT in the JSON valve any more",
+   "pass": true,
+   "detail": "['duration_s', 'test_name', 'testing_end_date', 'testing_start_date']"
+  },
+  {
+   "assertion": "[ANSI-fail] still exactly one row after the verdict",
+   "pass": true,
+   "detail": "1 rows"
+  },
+  {
+   "assertion": "[ANSI-fail] verdict Test Result == 'Failed'",
+   "pass": true,
+   "detail": "'Failed'"
+  },
+  {
+   "assertion": "[ANSI-fail] verdict ANSI Result == 'Failed'",
+   "pass": true,
+   "detail": "'Failed'"
+  },
+  {
+   "assertion": "[ANSI-fail] Test Result == ANSI Result \u2014 one value, two columns",
+   "pass": true,
+   "detail": "'Failed' vs 'Failed'"
+  },
+  {
+   "assertion": "[ANSI-fail] Forced Entry Result still absent after the verdict",
+   "pass": true,
+   "detail": "None"
+  },
+  {
+   "assertion": "[ANSI-fail] photo published via the real attachment path",
+   "pass": true,
+   "detail": "1 attachment(s)"
+  },
+  {
+   "assertion": "[ANSI-fail] Complete LabOS JSON is valid JSON",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[Static Load] trial accepted",
+   "pass": true,
+   "detail": "{\"deflections\":[{\"deflection_gauge\":\"g1\",\"max_deflection\":1234.0,\"permanent_deflection\":12.0,\"recovery\":60.0}],\"operator"
+  },
+  {
+   "assertion": "[Cycles] rig-reported progress accepted",
+   "pass": true,
+   "detail": "{\"type\":\"inward\",\"cycles\":3500,\"low_pressure\":12.0,\"high_pressure\":30.0,\"finished\":false,\"index\":0,\"resume\":false,\"curre"
+  },
+  {
+   "assertion": "[Cycles] trial accepted",
+   "pass": true,
+   "detail": "{\"deflections\":[{\"deflection_gauge\":\"g1\",\"max_deflection\":1000.0,\"permanent_deflection\":8.0,\"recovery\":60.0}],\"operator_"
+  },
+  {
+   "assertion": "[Impact] finish accepted",
+   "pass": true,
+   "detail": "{\"id\":6,\"trial_number\":1,\"labos_attempt_id\":\"b20df9dd-0838-4e45-a63b-35ed461412ff\",\"labos_test_id\":\"623b723a-4065-5abf-8"
+  },
+  {
+   "assertion": "this run's rows are distinguishable from earlier runs'",
+   "pass": true,
+   "detail": "6 row(s) for recT9lhVYMv6mWpX3"
+  },
+  {
+   "assertion": "[Static Load] reached the base",
+   "pass": true,
+   "detail": "1 row(s)"
+  },
+  {
+   "assertion": "[Static Load] emits neither dedicated field",
+   "pass": true,
+   "detail": "Forced Entry Result=None ANSI Result=None"
+  },
+  {
+   "assertion": "[Cycles] reached the base",
+   "pass": true,
+   "detail": "1 row(s)"
+  },
+  {
+   "assertion": "[Cycles] emits neither dedicated field",
+   "pass": true,
+   "detail": "Forced Entry Result=None ANSI Result=None"
+  },
+  {
+   "assertion": "[Impact] reached the base",
+   "pass": true,
+   "detail": "1 row(s)"
+  },
+  {
+   "assertion": "[Impact] emits neither dedicated field",
+   "pass": true,
+   "detail": "Forced Entry Result=None ANSI Result=None"
+  },
+  {
+   "assertion": "[valve] mapping still produces the dedicated key",
+   "pass": true,
+   "detail": "'Pass'"
+  },
+  {
+   "assertion": "[valve] PRESENT -> the value is a column",
+   "pass": true,
+   "detail": "'Passed'"
+  },
+  {
+   "assertion": "[valve] PRESENT -> and is NOT in labos_extra",
+   "pass": true,
+   "detail": "['duration_s', 'test_name', 'testing_end_date', 'testing_start_date']"
+  },
+  {
+   "assertion": "[valve] ABSENT -> the column is not sent",
+   "pass": true,
+   "detail": "None"
+  },
+  {
+   "assertion": "[valve] ABSENT -> the value is preserved in labos_extra",
+   "pass": true,
+   "detail": "'Passed'"
+  },
+  {
+   "assertion": "[valve] the contract is back to PRESENT after the check",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[retry] the verdict is the delivered watermark",
+   "pass": true,
+   "detail": "delivered_seq=4"
+  },
+  {
+   "assertion": "[retry] a phase behind the watermark is superseded",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[retry] re-queuing the current phase is allowed",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "assertion": "[retry] direct re-upsert returns the same record id",
+   "pass": true,
+   "detail": "['recRPZ7ewYEk88sxm'] vs [recRPZ7ewYEk88sxm]"
+  },
+  {
+   "assertion": "[retry] upsert updated rather than created",
+   "pass": true,
+   "detail": "createdRecords=[]"
+  },
+  {
+   "assertion": "[retry] still exactly one row for the attempt id",
+   "pass": true,
+   "detail": "1 -> 1"
+  },
+  {
+   "assertion": "[retry] the dedicated value survived the re-send",
+   "pass": true,
+   "detail": "'Passed'"
+  },
+  {
+   "assertion": "no duplicate logical attempt across the probe",
+   "pass": true,
+   "detail": "25 rows, 25 distinct attempt ids"
+  },
+  {
+   "assertion": "no unexpected write to IFET Projects",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "no unexpected write to Mock-Ups/Specimens",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "no unexpected write to Tests Protocols",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "no unexpected write to Protocol Sections",
+   "pass": true,
+   "detail": "set()"
+  },
+  {
+   "assertion": "production schema unchanged at 142",
+   "pass": true,
+   "detail": "142"
+  },
+  {
+   "assertion": "production record count unchanged",
+   "pass": true,
+   "detail": "1 -> 1"
+  },
+  {
+   "assertion": "production schema byte-identical before/after",
+   "pass": true,
+   "detail": ""
+  }
+ ]
+}
