@@ -308,20 +308,35 @@ were gitignored historically, which is how the repo and the node diverged in the
 
 ### ⚠️ 2.2 Rig Static Load and Cycles cannot publish a terminal without a declared operator
 
-A rollout limitation of this release, not a defect — but it decides what the Airtable rows look like on day
-one, so agree it before the window rather than discovering it from an operator.
+A **rollout limitation** of this release, not a defect — but it decides what the Airtable rows look like on
+day one, so agree it before the window rather than discovering it from an operator.
 
 `attempts.complete_rig_trial` terminates a rig-posted stage **only if an operator is known**, either from
-the callback body or from `test.operator_name` declared at run start. Contract §4.5 requires an operator on a
-terminal write and LabOS does not invent one.
+the callback body or from `test.operator_name` declared at run start. Contract §4.5 requires an operator on
+a terminal write and LabOS does not invent one.
 
-Neither source exists today:
+**The two routes that declare it** — both `IMPLEMENTED ON FEATURE BRANCH`, both `VERIFIED IN TESTING`, both
+`NOT YET DEPLOYED TO PRODUCTION`:
+
+```
+PUT /projects/{project_id}/static_tests/{static_test_index}/start   body {"operator_name": "…"}
+PUT /projects/{project_id}/cyclic_tests/{cyclic_test_index}/start   body {"operator_name": "…"}
+```
+
+The body is `RunStartSchema` and is **optional**, so a caller that omits it still starts the run — and the
+attempt is then completable only if the trial callback carries an operator, which no rig sends.
+
+**Nothing supplies it today:**
 
 - firmware's `Api` class has **no `start_static_test` method at all**, and its `start_cyclic_test` sends
-  **no body** — verified against `feature/labos-firmware-p3`, which is itself not deployed;
-- `PUT /projects/{id}/static_tests/{idx}/start` is **not among the 25 routes the deployed app serves**, so
-  nothing calls it today;
-- the operator declaration is **TC5 screen 3**, and the UI does not exist yet.
+  **no body** — `feature/labos-firmware-p3`, itself `NOT YET DEPLOYED TO PRODUCTION`;
+- `PUT …/static_tests/{index}/start` is **not among the 25 routes the deployed app serves** — it arrives
+  with this release. `…/cyclic_tests/{index}/start` does exist in production, but the deployed version
+  accepts no body;
+- **this is a change to the existing Static Load and Cycles run screens, not a TC5 screen.** TC5's five
+  screens are job picker, requirement release, manual test (Forced Entry + ANSI), impact, and sync status —
+  and its §9 is explicit that no second interface for Static Load and Cycles is to be built. What those
+  existing screens need is to send `{"operator_name": …}` on the start call they already make.
 
 **What happens without it.** The attempt stays `In Progress`. The `create` phase publishes, so an Airtable
 row appears and stays at `In Progress` / `Pending`; the terminal phase is never queued. The refusal is
@@ -331,8 +346,8 @@ row appears and stays at `In Progress` / `Pending`; the terminal phase is never 
 
 | Option | Consequence |
 |---|---|
-| Call `PUT …/{static,cyclic}_tests/{idx}/start` with `{"operator_name": …}` from whatever drives the rig | rows complete normally |
-| Accept it until TC5 lands | rig rows sit at `In Progress` in Airtable, and `/sync/failures` shows why. Nothing is lost; the attempt completes when an operator is supplied |
+| The existing Static/Cycles screens send `{"operator_name": …}` on start | rows complete normally. A small change to an existing screen, not a new one |
+| Accept it until that lands | rig rows sit at `In Progress` in Airtable, and `/sync/failures` shows why. **Nothing is lost** — the attempt completes as soon as an operator is supplied |
 
 **Do not** default an operator name to get past it. A declared identity nobody declared is exactly what
 contract §4's separate reviewer identity exists to prevent, and it would be indistinguishable from a real
@@ -340,6 +355,7 @@ one afterwards.
 
 Impact, Forced Entry and ANSI Z97.1 are unaffected: they go through `PUT /test-results/{id}/finish`, which
 carries the operator.
+
 
 ## 3. APPLICATION
 

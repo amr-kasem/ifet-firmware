@@ -33,6 +33,11 @@ anything — but the five workflows are each demonstrated against the live Testi
 | 4 | Impact | classification, target velocity, one attempt per impact |
 | 5 | Sync status | did it reach Airtable, and what to do if not |
 
+**Plus one field on an existing screen, and it is not a sixth screen.** The Static Load and Cycles run
+screens already exist and are not rebuilt — but they must start sending `{"operator_name": …}` on the start
+call they already make, or a rig attempt can never be completed. **§9.1**, and it is the smallest change in
+this document with the largest consequence if it is missed.
+
 Screens 3 and 4 share one **attempt component**. Start → evidence → finish/abort → verdict is the same
 lifecycle on the same `/test-results/{id}` routes for all three types. Build it once.
 
@@ -539,8 +544,8 @@ calls and pass conditions are in
 
 ## 9. What not to build
 
-- **No second interface for Static Load and Cycles.** Those screens exist. Screen 2 is the only addition
-  they need.
+- **No second interface for Static Load and Cycles.** Those screens exist. Screen 2 is the only *new
+  screen* they need — but see §9.1: they do need one field added to a call they already make.
 - **No verification pre-fill and no override.** §2.
 - **No client-side derivation.** §0.
 - **No editing after review.** Terminal measurements, identities and requirement snapshots are immutable by
@@ -548,3 +553,31 @@ calls and pass conditions are in
 - **No credential in `config.json`.** Both `deployment/config/config.json` and
   `src/ifet_ui_react/config.json` are served to the browser. The Airtable token is server-side only, and
   the UI never talks to Airtable — it talks to LabOS.
+
+---
+
+### 9.1 ⚠️ The one change the existing Static Load and Cycles screens do need
+
+**Send the operator on the start call.** Both start routes now accept an optional `RunStartSchema` body:
+
+| Step | Method | Route | Request |
+|---|---|---|---|
+| Start a static stage | `PUT` | `/projects/{project_id}/static_tests/{static_test_index}/start` | `{"operator_name": "…"}` |
+| Start a cyclic stage | `PUT` | `/projects/{project_id}/cyclic_tests/{cyclic_test_index}/start` | `{"operator_name": "…"}` |
+
+`static_tests/…/start` is **new in this release**; `cyclic_tests/…/start` already exists but accepts no body
+in the deployed app.
+
+**Why it is not optional in practice, even though the body is.** The rig's trial callback carries
+`deflections` and nothing else — the operator is not a fact the rig has, which is why capturing it needs no
+firmware change. `attempts.complete_rig_trial` will not terminate an attempt with no operator from either
+source, because contract §4.5 requires one on a terminal write and LabOS does not invent one. Without this
+field the attempt stays `In Progress` for ever: the row is created in Airtable and sits at `Pending`, the
+terminal write is never queued, and the reason shows in `GET /sync/failures` — visible, but never resolved.
+
+**Do not default it.** A declared identity nobody declared is indistinguishable from a real one afterwards,
+and it is exactly what contract §4's separate reviewer identity exists to prevent. Ask the operator, as
+Screens 3 and 4 do at their own run start.
+
+Impact, Forced Entry and ANSI Z97.1 need nothing here: they carry the operator through
+`PUT /test-results/{id}/finish`.

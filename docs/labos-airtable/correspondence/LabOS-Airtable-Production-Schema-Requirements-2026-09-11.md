@@ -12,6 +12,7 @@ integration contract.** It is written for whoever edits the schema. It is not a 
 | **Requested** | **19 ADD** · 0 rename · 0 retype · 0 option change · 0 delete |
 | **Production after** | **161 fields** |
 | **Working sheet** | `LabOS-Airtable-Production-Schema-Changes-2026-09-11.csv` — one row per field for all 164, **generated** from the two live bases and never hand-edited |
+| **When LabOS starts writing them** | **not yet.** The integration is built and proven against the Testing base; it has **not been released to our production system**. Creating these fields is safe and changes nothing on your side until we tell you we are live — see §6 for what changes when we are |
 
 Every number above was read from the live Meta API on 2026-09-11 and re-verified by our pre-send check,
 which compares every row of the CSV against both bases and fails if any of them disagrees.
@@ -151,7 +152,7 @@ is withdrawn; the rule was ours.
 | | |
 |---|---|
 | **You still supply** | how many impacts — `Required Value` with `Requirement Code` `IMPACT_SMI` or `IMPACT_LMI`. **Unchanged** |
-| **LabOS now sends back** | `Impact Classification` · `Target Impact Velocity` · `Impact Number` · `Impact Result` |
+| **LabOS will send back**, once the fields exist | `Impact Classification` · `Target Impact Velocity` · `Impact Number` · `Impact Result` |
 
 Your `Requirement Code` already distinguishes large missile from small, so the only fact it never carried
 was Level D versus Level E — and that is our operator's. Nothing about the missile is asked of you any
@@ -262,12 +263,12 @@ right kind. It validates. Every shifted value is individually plausible — that
 defect — so no range check, sanity band or heuristic on our side could distinguish it from a real
 requirement without becoming a new way to be confidently wrong. We have deliberately not built one.
 
-**What LabOS has already done, so you know what is and is not covered.** As of 2026-09-11 an
-Airtable-imported Static Load or Cycles job is **non-executable** in LabOS until a named person has read
-the design-pressure pair off the trusted proposal and it **agrees** with what we mirrored from your base.
-A disagreement is refused and nothing is recorded; LabOS does not choose between two sources that
-contradict each other. **This makes an affected job stop rather than run wrong. It is a safe failure, not
-a fix** — and it costs an operator a manual verification on every imported job for as long as the defect
+**What LabOS has built, so you know what is and is not covered — and when it takes effect.** The control
+is written and proven, and it **goes live with our next release, not today**: an Airtable-imported Static
+Load or Cycles job becomes **non-executable** in LabOS until a named person has read the design-pressure
+pair off the trusted proposal and it **agrees** with what we mirrored from your base. A disagreement is
+refused and nothing is recorded; LabOS does not choose between two sources that contradict each other.
+**This makes an affected job stop rather than run wrong. It is a safe failure, not a fix** — and it costs an operator a manual verification on every imported job for as long as the defect
 exists.
 
 **What we need from the ingestion owner**, and none of it is a schema edit:

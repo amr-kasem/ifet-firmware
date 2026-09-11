@@ -35,9 +35,12 @@ probed; where they disagree with it, it wins. Full record:
 
 **One new rollout limitation, and it is not a defect.** Rig Static Load and Cycles cannot publish a
 **terminal** until an operator is declared at run start — firmware has no `start_static_test` call at all
-and sends no body on cyclic start, and `PUT …/static_tests/{idx}/start` is not among the 25 deployed
-routes. Until TC5 screen 3 exists, those rows are created in Airtable and stay `In Progress` / `Pending`,
-with the reason visible in `GET /sync/failures`. Runbook **§2.2**.
+and sends no body on cyclic start, and `PUT /projects/{project_id}/static_tests/{static_test_index}/start`
+is not among the 25 deployed routes. The declaration belongs to **the existing Static Load and Cycles run
+screens** — one optional `{"operator_name": …}` body on the start call they already make — and **not** to
+TC5, whose §9 says no second interface for those two workflows is to be built. Until that lands, those rows
+are created in Airtable and stay `In Progress` / `Pending`, with the reason visible in `GET /sync/failures`.
+Runbook **§2.2**.
 
 ### 0.3-prior State — probed 2026-09-07
 

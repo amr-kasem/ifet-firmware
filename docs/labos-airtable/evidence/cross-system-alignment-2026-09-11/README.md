@@ -307,8 +307,21 @@ backend half is not required by anything in this release.
 `attempts.complete_rig_trial` terminates a rig-posted stage only when an operator is known, from the callback
 or from `test.operator_name` declared at run start. Firmware's `Api` class has **no** `start_static_test`
 method at all, and its `start_cyclic_test` sends **no body**. So for Static Load and Cycles the operator can
-only come from a UI call to `PUT …/{static,cyclic}_tests/{idx}/start` with `{"operator_name": …}` —
-TC5 screen 3.
+only come from a UI call to one of:
+
+```
+PUT /projects/{project_id}/static_tests/{static_test_index}/start   body {"operator_name": "…"}
+PUT /projects/{project_id}/cyclic_tests/{cyclic_test_index}/start   body {"operator_name": "…"}
+```
+
+Both take `RunStartSchema`, and the body is **optional** — omitting it starts the run and leaves the attempt
+uncompletable. Both are `IMPLEMENTED ON FEATURE BRANCH` and `VERIFIED IN TESTING`; neither is
+`DEPLOYED TO PRODUCTION`, and the static one does not exist in the deployed route set at all.
+
+**This belongs to the existing Static Load and Cycles run screens, not to TC5.** TC5's five screens are job
+picker · requirement release · manual test (Forced Entry + ANSI) · impact · sync status, and its §9 says in
+terms that no second interface for Static Load and Cycles is to be built — screen 2 is the only *new* screen
+those workflows need. What the existing screens need is one field on a call they already make.
 
 Without it the attempt stays `In Progress`: the `create` phase publishes, the terminal phase never does, the
 Airtable row sits at `In Progress` / `Pending`, and the refusal is visible in `GET /sync/failures` rather
