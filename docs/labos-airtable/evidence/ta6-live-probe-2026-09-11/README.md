@@ -1,7 +1,14 @@
 # TA6 live probe — the per-standard result pair, on the real wire, 2026-09-11
 
-**Result: 97/97 assertions passed, in one clean run — `20260911T001123Z`.**
-Read `probe-results-20260911T001123Z.json`; it is the authoritative artifact.
+**Result: 101/101 assertions passed, in one clean run — `20260911T010333Z`.**
+Read `probe-results-20260911T010333Z.json`; it is the authoritative artifact.
+
+**Re-run after DG14.** The first authoritative run was 97/97 at
+`20260911T001123Z`. The requirement release gate landed the same day and adds
+four assertions to this probe, so it was re-run rather than left claiming a
+count from before a gate that sits directly on the static and cyclic path it
+exercises. Nothing about TA6 changed; the TA7 probe was re-run too and is
+unchanged at 64/64.
 
 Run by `ifet-management` `src/management_service/tests/ta6_probe_live.py` against the **Testing** Base
 `app4oXS3Kd5IKWgJ7`. Production `app0OCunbmuXl7Hc9` was read for comparison and never written.
@@ -51,6 +58,20 @@ not exist the envelope carried the value through `Complete LabOS JSON Response` 
 The live rows confirm the first half independently: every `Complete LabOS JSON Response` in this run has
 `labos_extra` limited to `duration_s`, `test_name`, `testing_start_date`, `testing_end_date`.
 
+**And DG14, on the real wire** — the requirement release gate, because this
+probe drives static and cyclic stages on an Airtable-imported job and is
+therefore the only place it can be exercised end to end:
+
+- an unverified imported requirement **cannot start a rig** — `409` from
+  `PUT /projects/{id}/static_tests/0/start`;
+- a verification of `9.0/9.0` against a mirrored `60.0/45.0` is **refused**,
+  which is the production defect in miniature — *"the pair you verified,
+  [9.0, 9.0] PSF, does not match what LabOS mirrored from Airtable,
+  [60.0, 45.0] PSF. Nothing has been recorded."*;
+- the agreeing pair releases the job, and only then does the stage run;
+- and the verification is **frozen onto the attempt** — `verified_by`,
+  `reference`, both values and the time, inside `requirement_snapshot`.
+
 **Everything the pair had to not break:** one Raw Data row per attempt · the correct `Test Type` ·
 photographs through the real attachment path · valid `Complete LabOS JSON Response` · a re-queued current
 phase upserting onto the **same record id** with no `createdRecords` · a phase behind the delivered
@@ -58,16 +79,13 @@ watermark reported superseded · 25 probe rows and 25 distinct attempt ids, so n
 attempt · no write to any of the four hierarchy tables · production schema byte-identical and its record
 count unchanged before and after.
 
-## Identifiers — the authoritative run `20260911T001123Z`
+## Identifiers — the authoritative run `20260911T010333Z`
 
 | | |
 |---|---|
-| Job | `IFET-PROBE-TA6-0001-001123` · project `recT9lhVYMv6mWpX3` |
-| Mock-up · protocol | `recxjTlxApG3voPAa` · `recdkxKG63I0zC4Vs` |
-| Sections | STATIC_PRESSURE `recIQgjIC4SGwZiJ1` · CYCLIC_PRESSURE `recLFhyK5uI42qqSN` · IMPACT_SMI `recWZsGCm82sPPwws` · FORCED_ENTRY `rechUijk04AnSkxJG` · ANSI_IMPACT `recTrPKaMGeYwJvP3` |
-| Raw Data rows | FE pass `recRPZ7ewYEk88sxm` · FE inconclusive `recSzWzXzDBx4u3T1` · ANSI fail `recn3AAzmKc4RKGbL` · Static `recsNGmMfnquPq7dA` · Cycles `recXB7zLjQJorgS7K` · Impact `recH3YSthTwcGHjWd` |
-| LabOS Test IDs | Forced Entry `b8d22467-10ef-51dd-b5af-28d056e371e1` · ANSI `36bd7069-8a69-5f97-be3d-7488e4d440fb` |
-| LabOS Attempt IDs | `c0a6620b-15d9-4e24-b54b-6145272da7ee` · `60a33b49-476c-4620-9775-8d8a43aa2325` · `0d1f2e1c-8dd8-4ed2-bd3f-67cc84cc05a0` |
+| Job | `IFET-PROBE-TA6-0001-010333` · project `recQ2ZTonl6qaU3fI` |
+| Raw Data rows | FE pass `reciMH1VqUVC9074b` · FE inconclusive `recIo74BY0V9S1pUQ` · ANSI fail `recEBb8oGaOX75ea6` · Static `recwA4mfTErtWCbdS` · Cycles `recIZvqVzDU3BlW3Q` · Impact `recjlMRSRRnV6UGgW` |
+| Full identifier set | `probe-results-20260911T010333Z.json` — hierarchy, section ids, attempt ids and LabOS test ids for the run |
 
 ## Probe history — four earlier runs, and what each one caught
 
@@ -97,7 +115,7 @@ previous run's evidence. It does not any more.
 
 ## Synthetic records
 
-**25 rows remain in the Testing Base**, tagged `Operator Name = LABOS-PROBE-TA6`, with their hierarchy.
+**37 rows remain in the Testing Base**, tagged `Operator Name = LABOS-PROBE-TA6`, with their hierarchy.
 They are listed in `probe-records-inventory.txt`. **Retained deliberately, not deleted**: the probe only
 ever creates, LabOS has no delete path, and removing records from a base shared with the Airtable team is
 a separate operation that needs its own approval and its own record. See the delivery plan's cleanup item.

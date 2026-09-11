@@ -1,10 +1,10 @@
 TA6 probe — synthetic records left in the Testing Base app4oXS3Kd5IKWgJ7
-listed 2026-09-11T00:12:51Z
+listed 2026-09-11T01:05:46Z
 
 RETAINED, NOT DELETED. LabOS has no delete path and this probe creates only.
 Removal is a separate, explicitly approved and separately recorded operation.
 
-== LabOS Raw Data Table — 25 rows, Operator Name = LABOS-PROBE-TA6 ==
+== LabOS Raw Data Table — 37 rows, Operator Name = LABOS-PROBE-TA6 ==
   recfYmmOxolADiaN2  2026-09-11T00:03:49.000Z  Forced Entry  TR=Passed        FE=Passed        ANSI=-             attempt=b07c73cb-43fe-40ef-9693-3c2839b932e6
   recE0QY9Zvzfq32DL  2026-09-11T00:03:55.000Z  Forced Entry  TR=Inconclusive  FE=Inconclusive  ANSI=-             attempt=38839f0b-641f-44c8-a8d4-452b1c8be856
   rec7zqyfXsi0bk72R  2026-09-11T00:04:03.000Z  ANSI Z97.1    TR=Failed        FE=-             ANSI=Failed        attempt=3cebf173-f084-4633-8212-efc19fd069dc
@@ -30,32 +30,50 @@ Removal is a separate, explicitly approved and separately recorded operation.
   recsNGmMfnquPq7dA  2026-09-11T00:12:00.000Z  Static Load   TR=Pending       FE=-             ANSI=-             attempt=4d6415ec-8242-4b5c-bd92-baa2e2983110
   recH3YSthTwcGHjWd  2026-09-11T00:12:01.000Z  Impact        TR=Passed        FE=-             ANSI=-             attempt=b20df9dd-0838-4e45-a63b-35ed461412ff
   recXB7zLjQJorgS7K  2026-09-11T00:12:04.000Z  Cycles        TR=Pending       FE=-             ANSI=-             attempt=d67aa904-2fab-443d-85e9-9f08394121e4
+  recT2cS8cYboCCzZh  2026-09-11T01:02:38.000Z  Forced Entry  TR=Passed        FE=Passed        ANSI=-             attempt=8ea5a3e3-8a48-4c52-a5d0-fafd98e539f0
+  recMZcNtAcxgOCqAQ  2026-09-11T01:02:45.000Z  Forced Entry  TR=Inconclusive  FE=Inconclusive  ANSI=-             attempt=fde6e8c3-19a0-4b2d-b5af-2c8d0ff5eee3
+  recRnwAOO5HQ6sR1n  2026-09-11T01:02:54.000Z  ANSI Z97.1    TR=Failed        FE=-             ANSI=Failed        attempt=c96173de-2dac-44ac-9456-014ae35d86f8
+  recmCRx3KPGbwObRe  2026-09-11T01:03:01.000Z  Impact        TR=Passed        FE=-             ANSI=-             attempt=3be6390c-8688-4c0a-8c01-023eb07b5acd
+  rec3muqNpDubvnqGU  2026-09-11T01:03:04.000Z  Cycles        TR=Pending       FE=-             ANSI=-             attempt=a11a7c18-02e8-45e6-b840-a88e7b681c0c
+  rec9oW9nX3Z4UTHHQ  2026-09-11T01:03:05.000Z  Static Load   TR=Pending       FE=-             ANSI=-             attempt=c37063e4-ba2c-4275-8abe-42afbb815730
+  reciMH1VqUVC9074b  2026-09-11T01:03:52.000Z  Forced Entry  TR=Passed        FE=Passed        ANSI=-             attempt=56f3cee5-37a0-4d66-8e18-fb87081e4d18
+  recIo74BY0V9S1pUQ  2026-09-11T01:03:58.000Z  Forced Entry  TR=Inconclusive  FE=Inconclusive  ANSI=-             attempt=5fb74bb3-58b5-4dea-8803-81ac5733cef2
+  recEBb8oGaOX75ea6  2026-09-11T01:04:05.000Z  ANSI Z97.1    TR=Failed        FE=-             ANSI=Failed        attempt=c6efba04-a453-4079-a25b-28edc3b94aae
+  recwA4mfTErtWCbdS  2026-09-11T01:04:11.000Z  Static Load   TR=Pending       FE=-             ANSI=-             attempt=1f415056-3b3f-4775-941a-91cbe5899a7c
+  recIZvqVzDU3BlW3Q  2026-09-11T01:04:12.000Z  Cycles        TR=Pending       FE=-             ANSI=-             attempt=65c37b65-b3d2-47f3-b452-0fea9d6af33f
+  recjlMRSRRnV6UGgW  2026-09-11T01:04:14.000Z  Impact        TR=Passed        FE=-             ANSI=-             attempt=9f61cef1-8c97-48d5-a2a4-a78014702b3b
 
-== IFET Projects — 6 probe records ==
+== IFET Projects — 8 probe records ==
   recQb3pn9IA11iiB0  2026-09-11T00:02:41.000Z  IFET-PROBE-TA6-0001-000233
   recASkFdNAk13IGeH  2026-09-11T00:03:39.000Z  IFET-PROBE-TA6-0001-000329
   recKKgqQ5zj0iJ2ow  2026-09-11T00:04:36.000Z  IFET-PROBE-TA6-0001-000429
   recyGRradAGwk3TCh  2026-09-11T00:07:20.000Z  IFET-PROBE-TA6-0001-000712
   rec5KvoTVdlEY5avo  2026-09-11T00:10:17.000Z  IFET-PROBE-TA6-0001-001010
   recT9lhVYMv6mWpX3  2026-09-11T00:11:31.000Z  IFET-PROBE-TA6-0001-001123
+  recDxnKnv3GuNWeL6  2026-09-11T01:02:27.000Z  IFET-PROBE-TA6-0001-010215
+  recQ2ZTonl6qaU3fI  2026-09-11T01:03:40.000Z  IFET-PROBE-TA6-0001-010333
 
-== Mock-Ups/Specimens — 6 probe records ==
+== Mock-Ups/Specimens — 8 probe records ==
   recn1suKEHDDnjbD4  2026-09-11T00:02:42.000Z  TA6 probe specimen
   receQPsVENUyBQUyT  2026-09-11T00:03:39.000Z  TA6 probe specimen
   recfnut0GmRHKnatn  2026-09-11T00:04:37.000Z  TA6 probe specimen
   recRFa7jYXAeZo0cU  2026-09-11T00:07:20.000Z  TA6 probe specimen
   recf5Pm0f6u5o8u4p  2026-09-11T00:10:18.000Z  TA6 probe specimen
   recxjTlxApG3voPAa  2026-09-11T00:11:32.000Z  TA6 probe specimen
+  recUz3jZKc1HRmdNm  2026-09-11T01:02:28.000Z  TA6 probe specimen
+  rec4ZnDjafTnEC8pt  2026-09-11T01:03:41.000Z  TA6 probe specimen
 
-== Tests Protocols — 6 probe records ==
+== Tests Protocols — 8 probe records ==
   recqgG2NOqRQqFp3m  2026-09-11T00:02:43.000Z  TA6 probe protocol
   rec66cuPEP1C6xidG  2026-09-11T00:03:40.000Z  TA6 probe protocol
   recifmi9QvwvwawpY  2026-09-11T00:04:38.000Z  TA6 probe protocol
   recYpkZ677kvVdmP7  2026-09-11T00:07:21.000Z  TA6 probe protocol
   recyk3OOkqus0qIbi  2026-09-11T00:10:19.000Z  TA6 probe protocol
   recdkxKG63I0zC4Vs  2026-09-11T00:11:33.000Z  TA6 probe protocol
+  recSCi1IGaL4ZxaO5  2026-09-11T01:02:29.000Z  TA6 probe protocol
+  rechSOtjuwAQjGIc9  2026-09-11T01:03:42.000Z  TA6 probe protocol
 
-== Protocol Sections — 44 probe records ==
+== Protocol Sections — 57 probe records ==
   recPX1q2X7OA6CA0M  2026-09-10T22:30:12.000Z  IMPACT_SMI (probe)
   recRFFhCV9W7wfdwY  2026-09-10T22:30:13.000Z  IMPACT_LMI (probe)
   recRf0Dgbn8LNAVCf  2026-09-10T22:30:57.000Z  IMPACT_LMI (probe)
@@ -100,4 +118,17 @@ Removal is a separate, explicitly approved and separately recorded operation.
   recWZsGCm82sPPwws  2026-09-11T00:11:35.000Z  IMPACT_SMI (probe)
   rechUijk04AnSkxJG  2026-09-11T00:11:36.000Z  Forced Entry (probe)
   recTrPKaMGeYwJvP3  2026-09-11T00:11:37.000Z  ANSI Z97.1 (probe)
+  rec2U9oEdvs4waEj8  2026-09-11T01:02:29.000Z  DP probe (PSF)
+  rec5LeXFxjzc9enTj  2026-09-11T01:02:30.000Z  Cycles probe (PSF)
+  reccyiaXRYUUl53uk  2026-09-11T01:02:31.000Z  IMPACT_SMI (probe)
+  recLnU2dNyzz4oxD2  2026-09-11T01:02:32.000Z  Forced Entry (probe)
+  recR0qKwLtAUFc0tm  2026-09-11T01:02:33.000Z  ANSI Z97.1 (probe)
+  recuqx47WoB3XikbI  2026-09-11T01:03:43.000Z  DP probe (PSF)
+  recWPfXWALZax3KNc  2026-09-11T01:03:44.000Z  Cycles probe (PSF)
+  rec8IRAw9SZkvcZJu  2026-09-11T01:03:45.000Z  IMPACT_SMI (probe)
+  rech8WGg8E82QuuUk  2026-09-11T01:03:46.000Z  Forced Entry (probe)
+  recTZy8ctDMVDDCBK  2026-09-11T01:03:47.000Z  ANSI Z97.1 (probe)
+  recw7Db69thAw5jE5  2026-09-11T01:04:40.000Z  IMPACT_SMI (probe)
+  recn5hbUFcxnX3I9J  2026-09-11T01:04:41.000Z  IMPACT_LMI (probe)
+  recbV59k9X1sI09lu  2026-09-11T01:04:42.000Z  DP probe (PSF)
 

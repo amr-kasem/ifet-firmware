@@ -1,35 +1,35 @@
 {
  "created_airtable_records": {
-  "FE-pass": "recRPZ7ewYEk88sxm",
-  "FE-incon": "recSzWzXzDBx4u3T1",
-  "ANSI-fail": "recn3AAzmKc4RKGbL",
+  "FE-pass": "reciMH1VqUVC9074b",
+  "FE-incon": "recIo74BY0V9S1pUQ",
+  "ANSI-fail": "recEBb8oGaOX75ea6",
   "Static Load": [
-   "recsNGmMfnquPq7dA"
+   "recwA4mfTErtWCbdS"
   ],
   "Cycles": [
-   "recXB7zLjQJorgS7K"
+   "recIZvqVzDU3BlW3Q"
   ],
   "Impact": [
-   "recH3YSthTwcGHjWd"
+   "recjlMRSRRnV6UGgW"
   ]
  },
  "probe_hierarchy": {
-  "project": "recT9lhVYMv6mWpX3",
-  "mockup": "recxjTlxApG3voPAa",
-  "protocol": "recdkxKG63I0zC4Vs",
+  "project": "recQ2ZTonl6qaU3fI",
+  "mockup": "rec4ZnDjafTnEC8pt",
+  "protocol": "rechSOtjuwAQjGIc9",
   "sections": {
-   "STATIC_PRESSURE": "recIQgjIC4SGwZiJ1",
-   "CYCLIC_PRESSURE": "recLFhyK5uI42qqSN",
-   "IMPACT_SMI": "recWZsGCm82sPPwws",
-   "FORCED_ENTRY": "rechUijk04AnSkxJG",
-   "ANSI_IMPACT": "recTrPKaMGeYwJvP3"
+   "STATIC_PRESSURE": "recuqx47WoB3XikbI",
+   "CYCLIC_PRESSURE": "recWPfXWALZax3KNc",
+   "IMPACT_SMI": "rec8IRAw9SZkvcZJu",
+   "FORCED_ENTRY": "rech8WGg8E82QuuUk",
+   "ANSI_IMPACT": "recTZy8ctDMVDDCBK"
   },
-  "job_number": "IFET-PROBE-TA6-0001-001123"
+  "job_number": "IFET-PROBE-TA6-0001-010333"
  },
  "attempt_ids": {
-  "FE-pass": "c0a6620b-15d9-4e24-b54b-6145272da7ee",
-  "FE-incon": "60a33b49-476c-4620-9775-8d8a43aa2325",
-  "ANSI-fail": "0d1f2e1c-8dd8-4ed2-bd3f-67cc84cc05a0"
+  "FE-pass": "56f3cee5-37a0-4d66-8e18-fb87081e4d18",
+  "FE-incon": "5fb74bb3-58b5-4dea-8803-81ac5733cef2",
+  "ANSI-fail": "c6efba04-a453-4079-a25b-28edc3b94aae"
  },
  "labos_test_ids": {
   "FE-pass": "b8d22467-10ef-51dd-b5af-28d056e371e1",
@@ -125,7 +125,7 @@
   {
    "assertion": "probe hierarchy created in Testing",
    "pass": true,
-   "detail": "job=IFET-PROBE-TA6-0001-001123 recT9lhVYMv6mWpX3 protocol=recdkxKG63I0zC4Vs sections=['recIQgjIC4SGwZiJ1', 'recLFhyK5uI42qqSN', 'recWZsGCm82sPPwws', 'rechUijk04AnSkxJG', 'recTrPKaMGeYwJvP3']"
+   "detail": "job=IFET-PROBE-TA6-0001-010333 recQ2ZTonl6qaU3fI protocol=rechSOtjuwAQjGIc9 sections=['recuqx47WoB3XikbI', 'recWPfXWALZax3KNc', 'rec8IRAw9SZkvcZJu', 'rech8WGg8E82QuuUk', 'recTZy8ctDMVDDCBK']"
   },
   {
    "assertion": "import succeeded",
@@ -155,7 +155,7 @@
   {
    "assertion": "[FE-pass] finish accepted",
    "pass": true,
-   "detail": "{\"id\":1,\"trial_number\":1,\"labos_attempt_id\":\"c0a6620b-15d9-4e24-b54b-6145272da7ee\",\"labos_test_id\":\"b8d22467-10ef-51dd-b"
+   "detail": "{\"id\":1,\"trial_number\":1,\"labos_attempt_id\":\"56f3cee5-37a0-4d66-8e18-fb87081e4d18\",\"labos_test_id\":\"b8d22467-10ef-51dd-b"
   },
   {
    "assertion": "[FE-pass] exactly one Raw Data row at terminal",
@@ -225,7 +225,7 @@
   {
    "assertion": "[FE-incon] finish accepted",
    "pass": true,
-   "detail": "{\"id\":2,\"trial_number\":2,\"labos_attempt_id\":\"60a33b49-476c-4620-9775-8d8a43aa2325\",\"labos_test_id\":\"b8d22467-10ef-51dd-b"
+   "detail": "{\"id\":2,\"trial_number\":2,\"labos_attempt_id\":\"5fb74bb3-58b5-4dea-8803-81ac5733cef2\",\"labos_test_id\":\"b8d22467-10ef-51dd-b"
   },
   {
    "assertion": "[FE-incon] exactly one Raw Data row at terminal",
@@ -295,7 +295,7 @@
   {
    "assertion": "[ANSI-fail] finish accepted",
    "pass": true,
-   "detail": "{\"id\":3,\"trial_number\":1,\"labos_attempt_id\":\"0d1f2e1c-8dd8-4ed2-bd3f-67cc84cc05a0\",\"labos_test_id\":\"36bd7069-8a69-5f97-b"
+   "detail": "{\"id\":3,\"trial_number\":1,\"labos_attempt_id\":\"c6efba04-a453-4079-a25b-28edc3b94aae\",\"labos_test_id\":\"36bd7069-8a69-5f97-b"
   },
   {
    "assertion": "[ANSI-fail] exactly one Raw Data row at terminal",
@@ -363,6 +363,21 @@
    "detail": ""
   },
   {
+   "assertion": "[DG14] an unverified imported requirement cannot start a rig",
+   "pass": true,
+   "detail": "409 {\"detail\":\"this requirement came from Airtable and has not been independently verified against the proposal. Contract \u00a73"
+  },
+  {
+   "assertion": "[DG14] a pair that disagrees with Airtable is refused",
+   "pass": true,
+   "detail": "409 {\"detail\":\"the pair you verified, [9.0, 9.0] PSF, does not match what LabOS mirrored from Airtable, [60.0, 45.0] PSF. Nothing has been recorded. This is exactly"
+  },
+  {
+   "assertion": "[DG14] the agreeing pair releases the job",
+   "pass": true,
+   "detail": "200 {\"executable\":true,\"code\":\"released\",\"reason\":\"verified against the proposal by LABOS-PROBE-TA6 (Proposal (probe) rev A)\",\"airtable_section_id\":\"recuqx47WoB3Xik"
+  },
+  {
    "assertion": "[Static Load] trial accepted",
    "pass": true,
    "detail": "{\"deflections\":[{\"deflection_gauge\":\"g1\",\"max_deflection\":1234.0,\"permanent_deflection\":12.0,\"recovery\":60.0}],\"operator"
@@ -378,14 +393,19 @@
    "detail": "{\"deflections\":[{\"deflection_gauge\":\"g1\",\"max_deflection\":1000.0,\"permanent_deflection\":8.0,\"recovery\":60.0}],\"operator_"
   },
   {
+   "assertion": "[DG14] the verification is frozen onto the rig attempt",
+   "pass": true,
+   "detail": "{'verified_inward_psf': 60.0, 'verified_outward_psf': 45.0, 'verified_unit': 'PSF', 'reference': 'Proposal (probe) rev A', 'verified_by': 'LABOS-PROBE-TA6', 've"
+  },
+  {
    "assertion": "[Impact] finish accepted",
    "pass": true,
-   "detail": "{\"id\":6,\"trial_number\":1,\"labos_attempt_id\":\"b20df9dd-0838-4e45-a63b-35ed461412ff\",\"labos_test_id\":\"623b723a-4065-5abf-8"
+   "detail": "{\"id\":6,\"trial_number\":1,\"labos_attempt_id\":\"9f61cef1-8c97-48d5-a2a4-a78014702b3b\",\"labos_test_id\":\"623b723a-4065-5abf-8"
   },
   {
    "assertion": "this run's rows are distinguishable from earlier runs'",
    "pass": true,
-   "detail": "6 row(s) for recT9lhVYMv6mWpX3"
+   "detail": "6 row(s) for recQ2ZTonl6qaU3fI"
   },
   {
    "assertion": "[Static Load] reached the base",
@@ -465,7 +485,7 @@
   {
    "assertion": "[retry] direct re-upsert returns the same record id",
    "pass": true,
-   "detail": "['recRPZ7ewYEk88sxm'] vs [recRPZ7ewYEk88sxm]"
+   "detail": "['reciMH1VqUVC9074b'] vs [reciMH1VqUVC9074b]"
   },
   {
    "assertion": "[retry] upsert updated rather than created",
@@ -485,7 +505,7 @@
   {
    "assertion": "no duplicate logical attempt across the probe",
    "pass": true,
-   "detail": "25 rows, 25 distinct attempt ids"
+   "detail": "37 rows, 37 distinct attempt ids"
   },
   {
    "assertion": "no unexpected write to IFET Projects",
