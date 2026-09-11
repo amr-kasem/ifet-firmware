@@ -1,5 +1,24 @@
 # Handoff — LabOS ↔ Airtable production readiness, 2026-09-11
 
+> ## ⚠️ SUPERSEDED the same day — §3 and §4 are done
+>
+> This was written before the TA6 cutover and its §4 step list has been executed in full. **TA6 is
+> CLOSED / VERIFIED IN TESTING**: both fields applied to the Testing Base (`Forced Entry Result`
+> `fldAHuPzZHZEj0Cjt`, `ANSI Result` `fldmCKJV95N9uL7xt`), Testing **162 → 164**, production untouched at
+> **142**, and the real-wire probe green at **97/97** in one clean run. Do **not** re-run §4.
+>
+> **Start instead at:**
+>
+> | | |
+> |---|---|
+> | Where the work stands | `status/delivery-plan.md` — and its **DG14**, which is the one finding of the readiness pass that changed a decision |
+> | How this is deployed | `runbooks/production-deploy-2026-09-11.md` |
+> | What the Airtable team must do | `runbooks/production-airtable-promotion-2026-09-11.md` · `correspondence/airtable-team-actions-2026-09-11.md` |
+> | What is still true of the old findings | `evidence/historical-findings-reassessment-2026-09-11.md` |
+>
+> §2 (the TA7 contract), §5 (production boundaries), §8 (the optimization-loop guard) and §9 (paths) are
+> **still current**. §1's commit list and §6's gate list are historical.
+
 **For a fresh session.** Derived from the repository, git history and committed evidence as of this date.
 Where this document and the repository disagree, **the repository and the live bases win** — see §10.
 
