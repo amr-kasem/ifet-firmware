@@ -1,5 +1,11 @@
 # Handoff — LabOS ↔ Airtable production readiness, 2026-09-11
 
+> ## ⚠️ SUPERSEDED — historical. Start at `../CURRENT.md`
+>
+> Filed in `evidence/` on 2026-09-11: it is a dated point-in-time artifact, and the tree root is not a
+> folder documents live in. **`../CURRENT.md` is the session entry point now** — this file is kept for the
+> reasoning it records, not as a step list. Its §4 was executed in full; do not re-run it.
+>
 > ## ⚠️ SUPERSEDED the same day — §3 and §4 are done
 >
 > This was written before the TA6 cutover and its §4 step list has been executed in full. **TA6 is

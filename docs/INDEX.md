@@ -8,6 +8,10 @@ nothing else. Status lives in the delivery plan.
 
 ## 0. Resume here
 
+**Start at `labos-airtable/CURRENT.md`.** It is the session entry point: release identity, the live
+environment state, the closed decisions, the remaining deployment gates and the session rules — with links
+to everything below and no restatement of it. Read it before anything else in this tree.
+
 **Two documents carry everything current:**
 
 | | |
@@ -20,9 +24,10 @@ evidence, correspondence or a runbook.
 
 **Five things that outlive any session:**
 
-1. **Nothing is deployed.** Production `management` runs `latest`; live alembic head is `3a65a83e0463`, so
-   even P1 is unapplied — **confirm that on the node, not from this repo.** Both integration branches are
-   unmerged. `app/sync` **is** wired now (as of 2026-09-08) and proven against the live Testing base; what
+1. **Nothing is deployed.** Production `management` runs `latest` @ `90f9595`; the live alembic head is
+   **`7ed2a670841e`** as at 2026-09-11 — an empty no-op the node minted itself, so even P1 is unapplied.
+   It was `3a65a83e0463` until 2026-09-09 and **it moves on every restart of the current stack**, so
+   **confirm it on the node, not from this repo.** Both integration branches are unmerged. `app/sync` **is** wired now (as of 2026-09-08) and proven against the live Testing base; what
    does not exist is the **inbound** half — no mirror, no importer.
 2. **Do not drive a rig from Airtable requirement values — and as of 2026-09-08 LabOS reads them.** Their
    PDF extractor shifts columns, so a 60 PSF requirement reads as 9, and every shifted value is
@@ -46,10 +51,10 @@ evidence, correspondence or a runbook.
 
 | Subject | **Authoritative document** | Views that must follow it |
 |---|---|---|
-| **What a field, guarantee or state means** — envelope, identity, immutability, upsert, §7.1 concurrency | `labos-airtable/contract/write-contract-v0.4.md` | `labos-airtable/contract/field-register.csv` · `ifet-management` `app/airtable/contract.py` — **a view, and currently stale at v0.3; the prose wins** |
+| **What a field, guarantee or state means** — envelope, identity, immutability, upsert, §7.1 concurrency | `labos-airtable/contract/write-contract-v0.4.md` | `labos-airtable/contract/field-register.csv` · `ifet-management` `app/airtable/contract.py` — **a view: the prose wins on any disagreement.** It carries v0.4 as of 2026-09-07 (`envelope.py`'s module header still says v0.3 and is the docstring, not the behaviour) |
 | **Open integration items and what blocks what** | `labos-airtable/contract/write-contract-v0.4.md` **§10** | the plan's §4 and §8 · Notion *Field Mapping* §5 |
 | **Airtable environments, base and table IDs, PAT scope** | `labos-airtable/contract/write-contract-v0.4.md` **§0** | `ifet-management` `app/config.py` · §4 below |
-| **Field mapping and delivery state** | `labos-airtable/contract/field-register.csv` (76 rows) | `labos-airtable/contract/interface-schema.csv` (generated) · Notion *Field Mapping* |
+| **Field mapping and delivery state** | `labos-airtable/contract/field-register.csv` (76 rows) | `labos-airtable/contract/interface-schema.csv` (generated, 171 rows) · Notion *Field Mapping* |
 | **What each base actually holds, per field, both bases** | `labos-airtable/contract/interface-schema.csv` — **generated, never hand-edited** by `ifet-management` `app/airtable/interface_schema.py` | the saved baselines in `labos-airtable/schema/` |
 | **What we changed in the Testing Base, and why** | `labos-airtable/evidence/testing-base-changes-2026-09-06/` | the register's APPLIED rows |
 | **Where the project stands · gaps · dates · asks** | `labos-airtable/status/delivery-plan.md` | Notion *Project Status & Revised Timeline* (**the page management holds**) · *Delivery Status* · *Internal Engineering Plan* · *5-Week Plan* |
@@ -66,7 +71,9 @@ evidence, correspondence or a runbook.
 | **What LabOS really stores — types, derivations, units** | `labos-airtable/evidence/labos-real-data-types-2026-08-31.md` | contract §10.3 · §10.19 · §10.24 · §10.25 |
 | **How our envelope compares to their own sample row** | `labos-airtable/evidence/reference-row-reconciliation-2026-08-28.md` | contract §10.24–§10.26 |
 | **What the rigs actually receive, do and return** — the Management ↔ Firmware execution contract | `labos-airtable/evidence/firmware-production-runtime-contract-2026-08-31.md` | the plan's §5 gaps DG1–DG4 · contract §10.19 · §10.27 · `hardware/README.md` |
-| **How a schema change reaches production** (alembic, bind mounts, autogenerate-at-boot) | `labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` | `ifet-management` `startup.sh` + `compose.yaml` are the mechanism it documents |
+| **How a schema change reaches production** (alembic, bind mounts, autogenerate-at-boot) | **`labos-airtable/evidence/cross-system-alignment-2026-09-11/`** | **The final contract ↔ production-runtime alignment pass.** Read-only. Deployed state of `management` and both rigs, current production data, both Airtable bases, every gate re-run, the 19 fields traced to a real producer or consumer, and the one finding that changes a deployment step: **the live Alembic head moved to `7ed2a670841e`, which branches against the release's first migration** |
+| `labos-airtable/evidence/handoff-production-readiness-2026-09-11.md` | **SUPERSEDED the day it was written**, and filed here rather than at the tree root. Its §4 step list was executed in full; `CURRENT.md` replaced it as the session entry point |
+| `labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` | `ifet-management` `startup.sh` + `compose.yaml` are the mechanism it documents |
 | **How to deploy to `management`** | `labos-airtable/runbooks/p0-p1-deploy-2026-08-28.md` — **§2 is the decision point** | `ifet-management/deployment/SECRETS.md` §2 |
 | **What the Airtable team actually received** | `labos-airtable/correspondence/sent/` — **the artifacts they hold** | every draft in `correspondence/` |
 | **Secret handling** | `ifet-management/deployment/SECRETS.md` | this index |
@@ -86,6 +93,7 @@ Folders encode **what a document is for**. A file's location tells you how much 
 docs/
   INDEX.md                     the map - start here, the only path referenced from outside docs/
   labos-airtable/              the integration (Epic IFET-32)
+    CURRENT.md                 THE SESSION ENTRY POINT - identity, live state, gates, rules. Read first
     contract/                  THE SPEC + its machine-readable register. Authoritative
     status/                    THE PLAN. One living document: state, gaps, milestones, asks
     evidence/                  what we verified, and how. Records, not opinions
@@ -101,8 +109,11 @@ docs/
 
 - **A document is filed by role, not by topic.** A status page about the contract belongs in `status/`, not
   `contract/`. If you cannot tell which folder something goes in, it is probably two documents.
-- **`contract/` holds one prose spec**, plus the register CSV the spec itself names as its companion.
-  A second prose spec would mean one of them is a view and is misfiled.
+- **`contract/` holds one prose spec per interface**, plus the register CSV the spec itself names as its
+  companion. There are two interfaces and so two specs: `write-contract-v0.4.md` binds **LabOS ↔ Airtable**,
+  and `tc5-ui-developer-handoff-2026-09-11.md` binds **LabOS ↔ the operator UI**. A third spec of either
+  would mean one of them is a view and is misfiled — which is why
+  `tc5-operator-interface-contract-2026-09-11.md` is a pointer rather than a document.
 - **`status/` holds one file — the delivery plan — and it is edited in place.** Do not fork it, do not date
   it, do not add a second status document. That is how this tree sprawled to 25 files once already.
 - **New dated `.md` files belong in `evidence/` and `correspondence/` only.** Those are genuinely
@@ -115,9 +126,10 @@ docs/
 
 | Document | Purpose |
 |---|---|
+| **`labos-airtable/CURRENT.md`** | **The entry point.** Release identity, live environment state, the closed decisions, the remaining deployment-window gates, the active production cautions, and the session rules. Links to everything; restates nothing. Re-verified against the live systems rather than edited from memory |
 | **`labos-airtable/contract/write-contract-v0.4.md`** | **The spec.** Environments (§0), ownership (§1), identity (§2), requirements (§3), review/measurements/envelope (§§4–6), sync and §7.1 concurrency mechanisms, legacy dispositions and release checks (§10) |
-| **`labos-airtable/contract/field-register.csv`** | 73 mapping rows — **all 73 DECIDED** (44 BASELINE, **14 APPLIED**, 4 CONDITIONAL, 10 OMITTED, 1 PLANNED local-only). The seven former OPEN/PROPOSED rows were closed by A9 and are now OMITTED. **14 decided field additions** were applied. BASELINE means the field exists, never that mapping code exists. One LOCAL_ONLY row is queue metadata and is never created in Airtable |
-| **`labos-airtable/contract/interface-schema.csv`** | **Generated.** 168 rows joining both live base schemas to the register: per-base field IDs, `in_testing`/`in_production`, and `labos_use` — including the 114 real fields LabOS deliberately ignores, which is the machine-readable form of "no billing, pricing, invoices or scheduling". Regenerate rather than edit |
+| **`labos-airtable/contract/field-register.csv`** | **76 mapping rows, all DECIDED** — 44 BASELINE, **19 APPLIED**, 4 CONDITIONAL, 5 OMITTED, 3 DEPRECATED, 1 PLANNED local-only. The 19 APPLIED rows are exactly the 19 fields production must be given, and exactly the 19 assertions `preflight.py` makes; the 3 DEPRECATED rows are the withdrawn impact fields, left in Testing and never created in production. BASELINE means the field exists, never that mapping code exists |
+| **`labos-airtable/contract/interface-schema.csv`** | **Generated.** 171 rows joining both live base schemas to the register: per-base field IDs, `in_testing`/`in_production`, and `labos_use` — including the 108 real fields LabOS deliberately ignores, which is the machine-readable form of "no billing, pricing, invoices or scheduling". Regenerate rather than edit |
 | `labos-airtable/evidence/testing-base-changes-2026-09-06/` | **The change document IFET asked for.** 14 fields added 2026-09-06, 142 → 156, with before/after schema, field IDs and the reason for each. Also records the 7 fields deliberately not created, and the three things to settle before production |
 | **`labos-airtable/status/delivery-plan.md`** | **The plan.** Probed state, the ten-leg data path, A1–A8, entities/API/concurrency/envelope, the ordered next-actions list (§6.0), gaps DG1–DG11 grouped by state (§5, with the legacy `G*` crosswalk), milestones M1–M7 + MF + MU, acceptance, committed-groundwork deviations, Airtable and IFET asks, operating rules |
 | `labos-airtable/evidence/design-closure-2026-09-06.md` | Register/contract consistency checks and verified Notion updates at design closure |
@@ -132,7 +144,7 @@ docs/
 | `labos-airtable/evidence/firmware-production-probe-2026-08-31.txt` · `probe-real-data-2026-08-31.sql` | Command and SELECT-only logs for the two audits above, including what was deliberately **not** run |
 | `labos-airtable/evidence/p1-schema-and-migration-mechanism-2026-08-23.md` | The attempt schema, and the discovery that migrations were gitignored, bind-mounted from the node and autogenerated at every container boot |
 | **`labos-airtable/correspondence/five-test-requirements-approval-2026-09-08.md`** | 🖊️ **What each of the five tests requires and produces — the project owner's approval document.** One page per test, five answers requested. **Generated** by `app/airtable/test_requirements_doc.py` from the calculators, the importer's routing and the two CSVs — regenerate, never edit; `check_register.py` check 7 fails when it is stale. **NOT SENT.** TA5a, and it gates TA5b |
-| **`labos-airtable/correspondence/testing-base-change-document-2026-09-08.md`** | **What we changed in the Testing Base and why, plus answers to their three clarifications.** 142 → 159, +17. Preflighted clean against both live bases 2026-09-08. **NOT SENT — held until the approval above comes back** (decided 2026-09-08). TA5b |
+| `labos-airtable/correspondence/testing-base-change-document-2026-09-08.md` | **SUPERSEDED by the 2026-09-11 requirements document; kept for its reasoning, and because `preflight.py` check 5 still reads its counts.** What we changed in the Testing Base and why, plus answers to their three clarifications. Its own totals (`+17`, 20 guarded, 161 rows) are the 2026-09-08 figures and are no longer current — 19 ADD, 22 guarded, 164 rows. **NOT SENT** |
 | **`labos-airtable/correspondence/po-followup-2026-09-08.md`** | 🖊️ **Two corrections and two missed questions.** The first message told him Airtable receives deflection data — it does not, and the Airtable team is told the opposite. And its list numbered 2–4, so ANSI ordering and `STATIC_PROGRAMME` were never asked. **NOT SENT** |
 | `labos-airtable/correspondence/po-update-and-test-node-request-2026-09-08.md` | The product owner update: WhatsApp message plus the confirmation sheet for the three new tests, and the test-node ask. **NOT SENT** |
 | **`labos-airtable/correspondence/airtable-team-questions-2026-09-06.md`** | Planned-change notice: the Testing Base additions, ownership, validation and the later actual-change document. **NOT SENT** |

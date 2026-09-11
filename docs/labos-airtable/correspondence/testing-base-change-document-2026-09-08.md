@@ -1,5 +1,18 @@
 # Testing Base — your three questions, and the changes made
 
+> ## ⚠️ SUPERSEDED as a schema request — historical
+>
+> **The canonical external contract is
+> [`LabOS-Airtable-Production-Schema-Requirements-2026-09-11.md`](LabOS-Airtable-Production-Schema-Requirements-2026-09-11.md)**
+> and its generated sheet `LabOS-Airtable-Production-Schema-Changes-2026-09-11.csv`. That document, and only
+> that document, says what production must be given. **Do not work from the field list below.**
+>
+> This one is kept for two reasons: the reasoning behind each change, which is not restated anywhere else;
+> and `preflight.py` check 5, which still reads its counts. **Its own totals are the 2026-09-08 figures and
+> are no longer current** — it says `142 → 164, +17` and "20 guarded fields" and "161 rows"; today it is
+> **19 ADD** (three of the 22 applied fields were withdrawn on 2026-09-10 and must never reach production),
+> **22 guarded**, **164 rows**. It was never sent.
+
 **From:** LabOS (Abdelrahman) · **To:** the Airtable team · **Date:** 2026-09-08
 **Base changed:** Testing `app4oXS3Kd5IKWgJ7` — **142 → 164 fields**
 **Base NOT changed:** Production `app0OCunbmuXl7Hc9` — **unchanged at 142, verified live**
