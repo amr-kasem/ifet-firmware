@@ -24,8 +24,12 @@ evidence, correspondence or a runbook.
    even P1 is unapplied — **confirm that on the node, not from this repo.** Both integration branches are
    unmerged. `app/sync` **is** wired now (as of 2026-09-08) and proven against the live Testing base; what
    does not exist is the **inbound** half — no mirror, no importer.
-2. **Do not drive a rig from Airtable requirement values.** Their PDF extractor shifts columns, so a 60 PSF
-   requirement reads as 9, and every shifted value is individually plausible. Contract §10.19.
+2. **Do not drive a rig from Airtable requirement values — and as of 2026-09-08 LabOS reads them.** Their
+   PDF extractor shifts columns, so a 60 PSF requirement reads as 9, and every shifted value is
+   individually plausible. A9 used to say no requirement value could reach a rig; that stopped being true
+   when the typed fields were wired, and the contract was corrected on 2026-09-11. **Static Load and
+   Cycles derive all fourteen stages from the imported design-pressure pair.** Impact is out of it since
+   TA7. Contract §1 · legacy item 19 · plan **DG14**.
 3. **The node is ground truth for migrations, not the repo.** Check `SELECT * FROM alembic_version;` on the
    live database before any schema work.
 4. **A simulated rig must never be able to reach a real broker.** With `ifet-management-tunnel.service`
@@ -45,12 +49,15 @@ evidence, correspondence or a runbook.
 | **What a field, guarantee or state means** — envelope, identity, immutability, upsert, §7.1 concurrency | `labos-airtable/contract/write-contract-v0.4.md` | `labos-airtable/contract/field-register.csv` · `ifet-management` `app/airtable/contract.py` — **a view, and currently stale at v0.3; the prose wins** |
 | **Open integration items and what blocks what** | `labos-airtable/contract/write-contract-v0.4.md` **§10** | the plan's §4 and §8 · Notion *Field Mapping* §5 |
 | **Airtable environments, base and table IDs, PAT scope** | `labos-airtable/contract/write-contract-v0.4.md` **§0** | `ifet-management` `app/config.py` · §4 below |
-| **Field mapping and delivery state** | `labos-airtable/contract/field-register.csv` (73 rows) | `labos-airtable/contract/interface-schema.csv` (generated) · Notion *Field Mapping* |
+| **Field mapping and delivery state** | `labos-airtable/contract/field-register.csv` (76 rows) | `labos-airtable/contract/interface-schema.csv` (generated) · Notion *Field Mapping* |
 | **What each base actually holds, per field, both bases** | `labos-airtable/contract/interface-schema.csv` — **generated, never hand-edited** by `ifet-management` `app/airtable/interface_schema.py` | the saved baselines in `labos-airtable/schema/` |
 | **What we changed in the Testing Base, and why** | `labos-airtable/evidence/testing-base-changes-2026-09-06/` | the register's APPLIED rows |
 | **Where the project stands · gaps · dates · asks** | `labos-airtable/status/delivery-plan.md` | Notion *Project Status & Revised Timeline* (**the page management holds**) · *Delivery Status* · *Internal Engineering Plan* · *5-Week Plan* |
 | **What to do next, and what remains** | `labos-airtable/status/delivery-plan.md` **§6.0** — the ordered remaining work, keyed to milestone and `DG` IDs. It owns sequence; state stays in §5 and §8 | the milestone table (§6) · §10 asks |
 | **What we verified against the live bases** | `labos-airtable/evidence/live-probe-findings-2026-08-23.md` | Notion *Verification Report* |
+| **Which old findings still matter, and which do not** | `labos-airtable/evidence/historical-findings-reassessment-2026-09-11.md` — every release-relevant finding classified RESOLVED / ACTIVE / NOT RELEASE-RELEVANT / DEPLOYMENT-WINDOW VERIFICATION | the plan's §5 · §8 |
+| **How this release is deployed, and rolled back** | `labos-airtable/runbooks/production-deploy-2026-09-11.md` | `labos-airtable/runbooks/p0-p1-deploy-2026-08-28.md` (superseded from its §3) |
+| **What the Airtable team must create in production** | `labos-airtable/runbooks/production-airtable-promotion-2026-09-11.md` — 19 ADD, 142 → 161 | `labos-airtable/evidence/testing-base-changes-2026-09-06/production-change-spec.csv` (generated) · `labos-airtable/correspondence/airtable-team-actions-2026-09-11.md` |
 | **Every business input and output, per test type** — Airtable field → local storage → source or calculation → outbound field and phase, **including the requirements the 17 additions do not cover** | `labos-airtable/evidence/business-io-reconciliation-2026-09-08/` — 64 rows, the gap and unmet tallies | the plan's §0.3a · §5 |
 | **That the wire actually works** — upsert merge semantics, all five types, the whole pipeline through the real worker | `labos-airtable/evidence/live-write-proof-2026-09-08/` — stages 3, 4 and 5 | the plan's §0.3b verification layers |
 | **The pre-change schema baseline of both bases** | `labos-airtable/schema/baseline-2026-09-05/` | diffed by `ifet-management` `app/airtable/baseline.py` |

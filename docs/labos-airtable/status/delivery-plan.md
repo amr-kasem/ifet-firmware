@@ -1693,10 +1693,16 @@ refused and schema drift fails loudly · existing legacy reports and local stati
 intact, run/stage association is explicit, duplicate stage events replay safely, and missing telemetry can
 never imply a passing test · migration rehearsal covers constraints, leases, P1 ancestry and restart.
 
-**Forced Entry and ANSI Z97.1 outcome visibility — decided, not deferred by accident.** `Test Type` and
-`Test Result` are both `singleSelect`, so Airtable filters and groups both workflows natively; sub-detail
-lives in the JSON. **No dedicated scalar fields are added** — add one only when a named operational report
-requires it, not because `Impact Result` happens to exist.
+**Forced Entry and ANSI Z97.1 outcome visibility — ⚠️ REVERSED by the product owner 2026-09-10, built as
+TA6, live in Testing 2026-09-11.** This used to read *"no dedicated scalar fields are added — add one only
+when a named operational report requires it"*. He did not name a report; he named a reason — *"they are
+different under different standards"* — and the rule was ours, not his. `Forced Entry Result`
+`fldAHuPzZHZEj0Cjt` and `ANSI Result` `fldmCKJV95N9uL7xt` now exist on the `LabOS Raw Data Table`, each
+populated only for its own `Test Type` and **omitted, never blank**, on the other four. `Test Result` is
+unchanged and still carries create, terminal and verdict for all five types: these are additions beside it,
+the same shape `Impact Result` already had. **The acceptance criterion is now that both are written, that
+each equals `Test Result` whenever both are emitted, and that neither appears on Static Load, Cycles or
+Impact** — all three proven on the real wire, 97/97.
 
 ---
 
